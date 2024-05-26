@@ -8,7 +8,7 @@
   # monitorsXmlContent = builtins.readFile /home/mar/.config/monitors.xml;
   # monitorsConfig = pkgs.writeText "gdm_monitors.xml" monitorsXmlContent;
   # monitorsConfig = pkgs.writeText "gdm_monitors.xml" (builtins.readFile /home/${username}/.config/monitors.xml);
-  monitorsConfig = pkgs.writeText "gdm_monitors.xml" (builtins.readFile ~/.config/monitors.xml);
+  monitorsConfig = pkgs.writeText "gdm_monitors.xml" (builtins.readFile ./monitors.xml);
 in {
   imports = [
     ./hardware-configuration.nix
