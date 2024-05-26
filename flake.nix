@@ -111,6 +111,22 @@
           user = "mirza";
         };
       };
+      mar = home-manager.lib.homeManagerConfiguration {
+        inherit pkgs;
+        modules = [
+          nixvim.homeManagerModules.nixvim
+          stylix.homeManagerModules.stylix
+          {
+            stylix.image = nixpkgs.lib.mkDefault ./home-manager/desktop/default-wallpaper.png;
+            stylix.targets.nixvim.enable = nixpkgs.lib.mkDefault false;
+          }
+          ./home-manager/home.nix
+          ./nixos/hosts/kyuubi/home.nix
+        ];
+        extraSpecialArgs = {
+          user = "mar";
+        };
+      };
     };
   };
 }
