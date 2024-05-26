@@ -15,7 +15,7 @@
       drivers = with pkgs; [
         brlaser
         brgenml1lpr
-        brgenml1cpuswrapper
+        brgenml1cupswrapper
       ];
     };
   };
