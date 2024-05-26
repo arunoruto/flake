@@ -4,27 +4,25 @@
   lib,
   ...
 }: let
-  monitorsXmlContent = builtins.readFile /home/mar/.config/monitors.xml;
-  monitorsConfig = pkgs.writeText "gdm_monitors.xml" monitorsXmlContent;
+  # monitorsXmlContent = builtins.readFile /home/mar/.config/monitors.xml;
+  # monitorsConfig = pkgs.writeText "gdm_monitors.xml" monitorsXmlContent;
+  monitorsConfig = pkgs.writeText "gdm_monitors.xml" (builtins.readFile /home/mar/.config/monitors.xml);
 in {
-  # Disable Autosuspend for USB Bluetooth dongles
-  boot.extraModprobeConfig = ''
-    options btusb enable_autosuspend=n
-  '';
+  imports = [
+    ./hardware-configuration.nix
+    ../..
+  ];
+
+  printing.enable = true;
+  scanning.enable = true;
 
   # Define your hostname.
   networking.hostName = lib.mkForce "kyuubi";
 
-  users.users.mar = {
-    isNormalUser = true;
-    shell = pkgs.zsh;
-    description = "Mirza";
-    extraGroups = ["dialout" "networkmanager" "wheel" "scanner" "lp" "video"];
-    packages = with pkgs; [
-      #  firefox
-      #  thunderbird
-    ];
-  };
+  # Disable Autosuspend for USB Bluetooth dongles
+  boot.extraModprobeConfig = ''
+    options btusb enable_autosuspend=n
+  '';
 
   # Enable SSH Daemon
   services = {
@@ -43,30 +41,34 @@ in {
     gnome.gnome-remote-desktop.enable = true;
   };
 
-  # Make logitech devices work easier
-  hardware.logitech.wireless = {
-    enable = true;
-    enableGraphical = true;
+  hardware = {
+    # Make logitech devices work easier
+    logitech.wireless = {
+      enable = true;
+      enableGraphical = true;
+    };
+
+    # Tweaks for keychron
+    bluetooth.settings = {
+      General = {
+        FastConnect = true;
+      };
+      Policy = {
+        ReconnectAttempts = 7;
+        ReconnectIntervals = "1, 2, 3";
+      };
+    };
   };
 
-  # Tweaks for keychron
-  hardware.bluetooth.settings = {
-    General = {
-      FastConnect = true;
-    };
-    Policy = {
-      ReconnectAttempts = 7;
-      ReconnectIntervals = "1, 2, 3";
-    };
-  };
+  systemd = {
+    tmpfiles.rules = [
+      "L+ /run/gdm/.config/monitors.xml - - - - ${monitorsConfig}"
+    ];
 
-  systemd.tmpfiles.rules = [
-    "L+ /run/gdm/.config/monitors.xml - - - - ${monitorsConfig}"
-  ];
-
-  systemd.services.NetworkManager-wait-online = {
-    serviceConfig = {
-      ExecStart = ["" "${pkgs.networkmanager}/bin/nm-online -q"];
+    services.NetworkManager-wait-online = {
+      serviceConfig = {
+        ExecStart = ["" "${pkgs.networkmanager}/bin/nm-online -q"];
+      };
     };
   };
 }
