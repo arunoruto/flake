@@ -1,4 +1,4 @@
-{
+{pkgs, ...}: {
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It‘s perfectly fine and recommended to leave
@@ -12,6 +12,13 @@
   #   enable = true;
   #   channel = "https://nixos.org/channels/nixos-${config.system.stateVersion}";
   # };
+
+  environment.systemPackages = with pkgs; [
+    unstable.nh
+    nix-tree
+    nix-output-monitor
+    nvd
+  ];
 
   # Auto clean system
   nix = {

@@ -17,7 +17,7 @@
     ./vial.nix
   ];
 
-  avahi.enable = lib.mkDefault true;
+  local-resolv.enable = lib.mkDefault true;
   fingerprint.enable = lib.mkDefault false;
   flatpak.enable = lib.mkDefault false;
   fwupd.enable = lib.mkDefault true;

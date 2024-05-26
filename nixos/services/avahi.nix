@@ -8,7 +8,7 @@
     local-resolv.enable = lib.mkEnableOption "Enable local resolution";
   };
 
-  config = lib.mkIf config.local-resolv.eanble {
+  config = lib.mkIf config.local-resolv.enable {
     # Resolve .local
     services.avahi = {
       enable = true;

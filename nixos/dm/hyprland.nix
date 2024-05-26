@@ -1,5 +1,4 @@
-{ config, pkgs, lib, ... }:
-{
+{pkgs, ...}: {
   #environment.systemPackages = with pkgs; [
   #  dbus   # make dbus-update-activation-environment available in the path
   #  dbus-sway-environment
@@ -22,6 +21,7 @@
   # enable sway window manager
   programs.hyprland = {
     enable = true;
+    package = pkgs.unstable.hyprland;
     xwayland.enable = true;
   };
 

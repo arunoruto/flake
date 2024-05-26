@@ -1,35 +1,43 @@
-# New Setup
-With a fresh install, delete all the contents under `/etc/nixos/configuration.nix` and include an aditional import for the `config/configuration.nix` file. In the end, it should look like this:
-```nix
-{ ... }:
+# Mirza's Awesome Nix Config
 
-{
-  imports =
-    [
-      ./hardware-configuration.nix
-      ./config/configuration.nix
-    ];
-}
-```
-Now we need to create a symlink to the contents of this repo to the folder `/etc/nixos/config`. Either execute the `link.sh` file (`./link.sh` or `bash link.sh`) or execute the command:
+<!-- https://www.reddit.com/r/NixOS/comments/16ky6ez/nixos_logo_variations/ -->
+
+![alternative nixos logo](https://preview.redd.it/nixos-logo-variations-v0-yr95r3otvsob1.png?width=1024&format=png&auto=webp&s=d0a14a613101103a31844ab60a711128286468a2)
+
+## Initial setup
+
+### NixOS
+
+When first time trying to install the flake, you need to run:
+
 ```sh
-sudo ln -s $PWD /etc/nixos/config
+sudo nixos-rebuild switch --flake './#<device-name>'
 ```
 
-Now you can sync the contents of this repo with your system config without using `sudo git ...`.
+### Home Manager
 
-# Install home manager [standalone](https://nix-community.github.io/home-manager/index.xhtml#sec-install-standalone)
+Like NixOS, home-manager can be also updated from the flake file like follows:
+
 ```sh
-sudo nix-channel --add https://github.com/nix-community/home-manager/archive/release-23.11.tar.gz home-manager
-sudo nix-channel --update
-```
-After adding the home manager channel, install it and create the first generation with
-```sh
-nix-shell '<home-manager' -A install
+home-manager switch --flake "./#<username>"
 ```
 
-# Add unstable for bleeding edge packages
+The flake specifications are surrounded by quotes, since some shells (e.g. zsh) are complaining due to the # symbol.
+
+## Nix Helper
+
+After the initial setup, the system can be configured using the `nh` command. It is important to provide the `FLAKE` variable in the system and it needs to point to the flake's repository. This can be specified per system in its `configuration.nix` under `environment.sessionVariables`. If not, it can be appended to the commands.
+
+### NixOS
+
 ```sh
-sudo nix-channel --add https://nixos.org/channels/nixos-unstable nixpkgs-unstable
-sudo nix-channel --update
+nh os switch # if the FLAKE variable is set, or
+nh os switch ./#<device-name>
+```
+
+### Home Manager
+
+```sh
+nh home switch # if the FLAKE variable is set, or
+nh home switch ./#<username>
 ```

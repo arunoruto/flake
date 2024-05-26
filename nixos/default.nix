@@ -1,8 +1,8 @@
 {
   imports = [
+    ./environment
     ./services
 
-    ./environment.nix
     ./network.nix
     # ./systemd.nix
     ./pr.nix
@@ -13,5 +13,7 @@
     ./suid.nix
     ./security.nix
     ./system.nix
+
+    ./user.nix
   ];
 }

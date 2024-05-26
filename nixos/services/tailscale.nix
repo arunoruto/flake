@@ -7,7 +7,7 @@
   tailscale-port = 41641;
 in {
   options = {
-    tailscale.eable = lib.mkEnableOption "tailscale";
+    tailscale.enable = lib.mkEnableOption "tailscale";
   };
 
   config = lib.mkIf config.tailscale.enable {

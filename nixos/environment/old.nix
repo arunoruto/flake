@@ -5,17 +5,17 @@
   ...
 }: {
   # Allow unfree packages
-  nixpkgs.config = {
-    allowUnfree = true;
-    packageOverrides = pkgs: {
-      unstable = import <nixpkgs-unstable> {
-        config = config.nixpkgs.config;
-      };
-      nur = import (builtins.fetchTarball "https://github.com/nix-community/NUR/archive/master.tar.gz") {
-        inherit pkgs;
-      };
-    };
-  };
+  # nixpkgs.config = {
+  #   allowUnfree = true;
+  #   packageOverrides = pkgs: {
+  #     unstable = import <nixpkgs-unstable> {
+  #       config = config.nixpkgs.config;
+  #     };
+  #     nur = import (builtins.fetchTarball "https://github.com/nix-community/NUR/archive/master.tar.gz") {
+  #       inherit pkgs;
+  #     };
+  #   };
+  # };
 
   # Fonts
   fonts.packages = with pkgs; [
@@ -125,28 +125,6 @@
       gnome.gnome-remote-desktop
       gnome3.gnome-tweaks
     ];
-
-    # Excluding some GNOME applications from the default install
-    gnome.excludePackages =
-      (with pkgs; [
-        gnome-photos
-        gnome-tour
-      ])
-      ++ (with pkgs.gnome; [
-        #cheese # webcam tool
-        gnome-music
-        gnome-terminal
-        #gedit # text editor
-        epiphany # web browser
-        geary # email reader
-        #evince # document viewer
-        #gnome-characters
-        totem # video player
-        tali # poker game
-        iagno # go game
-        hitori # sudoku game
-        atomix # puzzle game
-      ]);
   };
 
   #programs.nix-ld = {
