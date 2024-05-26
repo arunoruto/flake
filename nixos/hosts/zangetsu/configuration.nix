@@ -15,17 +15,7 @@
   # Set hostname
   networking.hostName = lib.mkForce "zangetsu"; # Define your hostname.
 
-  # User
-  # users.users.${username} = {
-  #   isNormalUser = true;
-  #   shell = pkgs.zsh;
-  #   description = "Mirza";
-  #   extraGroups = ["dialout" "networkmanager" "wheel" "scanner" "lp" "video" "render"];
-  #   packages = with pkgs; [
-  #     #  firefox
-  #     #  thunderbird
-  #   ];
-  # };
+  environment.sessionVariables.FLAKE = "/home/${username}/Projects/nix";
 
   # Framework specific kernel Params
   boot = {
@@ -72,7 +62,6 @@
     ];
   };
   environment.sessionVariables = {
-    FLAKE = "/home/${username}/Projects/nix";
     LIBVA_DRIVER_NAME = "iHD";
   }; # Force intel-media-driver
 }
