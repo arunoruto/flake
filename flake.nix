@@ -77,16 +77,16 @@
       };
 
       # Work PC
-      # kyuubi = nixpkgs.lib.nixosSystem {
-      #   inherit system;
-      #   specialArgs = {
-      #     username = "mar";
-      #   };
-      #   modules = [
-      #     ./nixos/hosts/kyuubi/configuration.nix
-      #     nixpkgs-config
-      #   ];
-      # };
+      kyuubi = nixpkgs.lib.nixosSystem {
+        inherit system;
+        specialArgs = {
+          username = "mar";
+        };
+        modules = [
+          ./nixos/hosts/kyuubi/configuration.nix
+          nixpkgs-config
+        ];
+      };
     };
 
     homeConfigurations = {
