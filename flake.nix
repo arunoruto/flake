@@ -14,7 +14,7 @@
     nixosConfigurations.zangetsu = nixpkgs.lib.nixosSystem {
       inherit system;
       modules = [
-        ./configuration.nix
+        ./nisox/hosts/zangetsu/configuration.nix
       ];
     };
   };
