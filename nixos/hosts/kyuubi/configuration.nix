@@ -2,6 +2,7 @@
   config,
   pkgs,
   lib,
+  username,
   ...
 }: let
   # monitorsXmlContent = builtins.readFile /home/mar/.config/monitors.xml;
@@ -18,6 +19,8 @@ in {
 
   # Define your hostname.
   networking.hostName = lib.mkForce "kyuubi";
+
+  environment.sessionVariables.FLAKE = "/home/${username}/Development/nix";
 
   # Disable Autosuspend for USB Bluetooth dongles
   boot.extraModprobeConfig = ''
