@@ -42,7 +42,7 @@ nh home switch "./#<username>"
 
 ## Nixvim
 
-Nixvim is the nix way to configure neovim. More information can be found in the [nvim README](./../home-manager/shell/nvim/README.md)
+Nixvim is the nix way to configure neovim. More information can be found in the [nvim README](./../home-manager/shell/nvim/README.md).
 
 # Helpful Material
 
