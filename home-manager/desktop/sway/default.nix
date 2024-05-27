@@ -3,10 +3,10 @@
   lockscreen = "${pkgs.swaylock}/bin/swaylock --image ${image}";
 in {
   imports = [
+    ./waybar
     ./services.nix
     ./theme.nix
     ./keybindings.nix
-    ./waybar.nix
     # ./swaync.nix
     ./swaylock.nix
   ];
@@ -54,6 +54,24 @@ in {
       keybindings = {
         "${modifier}+Shift+l" = "exec ${lockscreen}";
       };
+      bars = [
+        {
+          position = "top";
+          mode = "dock";
+          hiddenState = "hide";
+          command = "${pkgs.waybar}/bin/waybar";
+          #command = "${pkgs.sway}/bin/swaybar";
+          #statusCommand = "${pkgs.i3status}/bin/i3status";
+          workspaceButtons = true;
+          workspaceNumbers = false;
+          trayOutput = "primary";
+          fonts = {
+            names = ["FiraCode Nerd Font Mono"];
+            style = "Regular";
+            size = 11.0;
+          };
+        }
+      ];
     };
   };
 }
