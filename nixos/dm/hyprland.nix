@@ -21,7 +21,7 @@
   # enable sway window manager
   programs.hyprland = {
     enable = true;
-    package = pkgs.unstable.hyprland;
+    # package = pkgs.unstable.hyprland;
     xwayland.enable = true;
   };
 
