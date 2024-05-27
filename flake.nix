@@ -61,6 +61,9 @@
         # })
       ];
     };
+    stylix-config = {
+      stylix.image = nixpkgs.lib.mkDefault ./home-manager/desktop/default-wallpaper.png;
+    };
   in {
     nixosConfigurations = {
       # Framework Laptop
@@ -71,8 +74,10 @@
         };
         modules = [
           nixos-hardware.nixosModules.framework-11th-gen-intel
-          ./nixos/hosts/zangetsu/configuration.nix
+          stylix.nixosModules.stylix
+          stylix-config
           nixpkgs-config
+          ./nixos/hosts/zangetsu/configuration.nix
         ];
       };
 
@@ -83,8 +88,9 @@
           username = "mar";
         };
         modules = [
-          ./nixos/hosts/kyuubi/configuration.nix
+          stylix.nixosModules.stylix
           nixpkgs-config
+          ./nixos/hosts/kyuubi/configuration.nix
         ];
       };
     };
