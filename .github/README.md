@@ -40,6 +40,10 @@ nh home switch # if the FLAKE variable is set, or
 nh home switch "./#<username>"
 ```
 
+## Nixvim
+
+Nixvim is the nix way to configure neovim. More information can be found in the [nvim README](./home-manager/shell/nvim/README.md)
+
 # Helpful Material
 
 Some nice intro is provided by [thiscute.world](https://nixos-and-flakes.thiscute.world/).
