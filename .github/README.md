@@ -39,3 +39,16 @@ nh os switch "./#<device-name>"
 nh home switch # if the FLAKE variable is set, or
 nh home switch "./#<username>"
 ```
+
+# Helpful Material
+
+Some nice intro is provided by [thiscute.world](https://nixos-and-flakes.thiscute.world/).
+
+[vimjoyer](https://www.youtube.com/@vimjoyer) has some amazing videos about nix and other nix related stuff:
+
+- [Ultimate NixOS Guide | Flakes | Home-manager](https://www.youtube.com/watch?v=a67Sv4Mbxmc) gives a good introduction for beginners, and introduces flakes and how to use them to configure the system
+- [Modularize NixOS and Home Manager | Great Practices](https://www.youtube.com/watch?v=vYc6IzKvAJQ) shows how to organize the files and make them easier to manage
+- [Nixvim: Neovim Distro Powered By Nix](https://www.youtube.com/watch?v=b641h63lqy0): configure neovim the nix way!
+- [Is NixOS The Best Gaming Distro | Linux Gaming Setup]: nix can be used for gaming too! This video gives nice tips to configure your system for a specific hardware too
+
+[Ampersand](https://www.youtube.com/watch?v=nLwbNhSxLd4) has a nice video about configuring a NixOS system similar to vimjoyer's `Ultimate NixOS Guide | Flakes | Home-Manager`
