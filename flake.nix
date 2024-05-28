@@ -117,6 +117,7 @@
           user = "mirza";
         };
       };
+
       mar = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
         modules = [
