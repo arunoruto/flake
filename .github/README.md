@@ -24,7 +24,7 @@ The flake specifications are surrounded by quotes, since some shells (e.g. zsh) 
 
 ## Nix Helper
 
-After the initial setup, the system can be configured using the `nh` command. It is important to provide the `FLAKE` variable in the system and it needs to point to the flake's repository. This can be specified per system in its `configuration.nix` under `environment.sessionVariables`. If not, it can be appended to the commands.
+After the initial setup, the system can be configured using the [`nh`](https://github.com/viperML/nh) command. It is important to provide the `FLAKE` variable in the system and it needs to point to the flake's repository. This can be specified per system in its `configuration.nix` under `environment.sessionVariables`. If not, it can be appended to the commands.
 
 ### NixOS
 
