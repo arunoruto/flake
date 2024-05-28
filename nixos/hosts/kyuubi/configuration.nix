@@ -24,9 +24,12 @@ in {
   environment.sessionVariables.FLAKE = "/home/${username}/Development/nix";
 
   # Disable Autosuspend for USB Bluetooth dongles
-  boot.extraModprobeConfig = ''
-    options btusb enable_autosuspend=n
-  '';
+  boot = {
+    kernelModules = ["snd-hda-intel "];
+    extraModprobeConfig = ''
+      options btusb enable_autosuspend=n
+    '';
+  };
 
   # Enable SSH Daemon
   services = {
