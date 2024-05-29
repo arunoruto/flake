@@ -104,7 +104,8 @@
           username = "mar";
         };
         modules = [
-          stylix.nixosModules.stylix
+          # stylix.nixosModules.stylix
+          # stylix-config
           nixpkgs-config
           ./nixos/hosts/kyuubi/configuration.nix
         ];
