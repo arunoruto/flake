@@ -15,7 +15,7 @@
   # Set hostname
   networking.hostName = lib.mkForce "zangetsu"; # Define your hostname.
 
-  environment.sessionVariables.FLAKE = "/home/${username}/Projects/nix";
+  # environment.sessionVariables.FLAKE = "/home/${username}/Projects/nix";
 
   # Framework specific kernel Params
   boot = {

@@ -12,5 +12,7 @@
 
   programs.zsh.enable = true;
 
+  environment.sessionVariables.FLAKE = "/home/${username}/.config/nix";
+
   stylix.base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-macchiato.yaml";
 }
