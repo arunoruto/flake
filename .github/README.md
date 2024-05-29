@@ -7,7 +7,7 @@
 Clone the repository into your local `.config` directory.
 
 ```sh
-git clone https://github.com/arunoruto/nix ~/.config/flake
+git clone https://github.com/arunoruto/flake ~/.config/flake
 ```
 
 If it deviates from this, set the env-variable `FLAKE` to the new path.
