@@ -14,5 +14,5 @@
 
   environment.sessionVariables.FLAKE = "/home/${username}/.config/flake";
 
-  stylix.base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-macchiato.yaml";
+  # stylix.base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-macchiato.yaml";
 }

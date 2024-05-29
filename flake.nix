@@ -90,8 +90,8 @@
         };
         modules = [
           nixos-hardware.nixosModules.framework-11th-gen-intel
-          stylix.nixosModules.stylix
-          stylix-config
+          # stylix.nixosModules.stylix
+          # stylix-config
           nixpkgs-config
           ./nixos/hosts/zangetsu/configuration.nix
         ];
