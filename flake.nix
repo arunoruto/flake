@@ -22,6 +22,7 @@
       url = "github:danth/stylix/release-23.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    neorg-overlay.url = "github:nvim-neorg/nixpkgs-neorg-overlay";
   };
 
   outputs = {
@@ -33,6 +34,7 @@
     home-manager,
     nixvim,
     stylix,
+    neorg-overlay,
   }: let
     system = "x86_64-linux";
     overlay-unstable = final: prev: {
