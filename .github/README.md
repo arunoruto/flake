@@ -4,6 +4,14 @@
 
 ## Initial setup
 
+Clone the repository into your local `.config` directory.
+
+```sh
+git clone https://github.com/arunoruto/nix ~/.config/nix
+```
+
+If it deviates from this, set the env-variable `FLAKE` to the new path.
+
 ### NixOS
 
 When first time trying to install the flake, you need to run:
