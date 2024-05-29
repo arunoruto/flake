@@ -66,6 +66,20 @@
     stylix-config = {
       stylix.image = nixpkgs.lib.mkDefault ./home-manager/desktop/default-wallpaper.png;
     };
+    home-manager-modules = [
+      # {
+      #   nixpkgs.overlays = [
+      #     neorg-overlay.overlays.default
+      #   ];
+      # }
+      nixvim.homeManagerModules.nixvim
+      stylix.homeManagerModules.stylix
+      {
+        stylix.image = nixpkgs.lib.mkDefault ./home-manager/desktop/default-wallpaper.png;
+        stylix.targets.nixvim.enable = nixpkgs.lib.mkDefault false;
+      }
+      ./home-manager/home.nix
+    ];
   in {
     nixosConfigurations = {
       # Framework Laptop
@@ -103,15 +117,7 @@
 
         # Specify your home configuration modules here, for example,
         # the path to your home.nix.
-        modules = [
-          nixvim.homeManagerModules.nixvim
-          stylix.homeManagerModules.stylix
-          {
-            stylix.image = nixpkgs.lib.mkDefault ./home-manager/desktop/default-wallpaper.png;
-            stylix.targets.nixvim.enable = nixpkgs.lib.mkDefault false;
-          }
-          ./home-manager/home.nix
-        ];
+        modules = home-manager-modules;
 
         # Optionally use extraSpecialArgs
         # to pass through arguments to home.nix
@@ -122,16 +128,11 @@
 
       mar = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
-        modules = [
-          nixvim.homeManagerModules.nixvim
-          stylix.homeManagerModules.stylix
-          {
-            stylix.image = nixpkgs.lib.mkDefault ./home-manager/desktop/default-wallpaper.png;
-            stylix.targets.nixvim.enable = nixpkgs.lib.mkDefault false;
-          }
-          ./home-manager/home.nix
-          ./nixos/hosts/kyuubi/home.nix
-        ];
+        modules =
+          home-manager-modules
+          ++ [
+            ./nixos/hosts/kyuubi/home.nix
+          ];
         extraSpecialArgs = {
           user = "mar";
         };
