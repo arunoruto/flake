@@ -105,5 +105,6 @@
   home.sessionVariables = {
     EDITOR = "nvim";
     WINIT_UNIX_BACKEND = "x11";
+    FLAKE = "/home/${user}/.config/flake";
   };
 }
