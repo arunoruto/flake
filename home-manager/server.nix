@@ -21,5 +21,11 @@
 
     # zsh-autosuggestions
     # zsh-syntax-highlighting
+
+    # nix
+    unstable.nh
+    nix-tree
+    nix-output-monitor
+    nvd
   ];
 }
