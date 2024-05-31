@@ -11,5 +11,6 @@
     ./nushell.nix
     ./yazi.nix
     ./zsh.nix
+    ./zellij.nix
   ];
 }

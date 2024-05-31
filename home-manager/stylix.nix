@@ -35,9 +35,10 @@
       terminal = 0.975;
     };
     targets = {
+      helix.enable = false;
       kde.enable = false;
-      nixvim.enable = false;
       mako.enable = false;
+      nixvim.enable = false;
     };
   };
 }
