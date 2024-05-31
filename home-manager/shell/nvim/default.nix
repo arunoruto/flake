@@ -8,7 +8,7 @@
 
   programs.nixvim = {
     enable = true;
-    vimAlias = true;
+    vimAlias = false;
     editorconfig.enable = true;
     colorschemes.catppuccin = {
       enable = true;
