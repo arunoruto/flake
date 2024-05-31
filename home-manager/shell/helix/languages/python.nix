@@ -13,7 +13,7 @@
           };
         }
       ];
-      language-servers = {
+      language-server = {
         pyright.config.python.analysis.typeCheckingMode = "basic";
         ruff-lsp = {
           command = "ruff-lsp";
