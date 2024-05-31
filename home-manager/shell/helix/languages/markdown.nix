@@ -10,11 +10,21 @@
           rulers = [120];
           # formatter.command = "alejandra";
           # formatter.command = "${pkgs.alejandra}/bin/alejandra";
+          language-servers = ["marksman" "ltex"];
         }
       ];
+      language-server = {
+        ltex = {
+          command = "ltex-ls";
+          config.ltex.dictionary = {
+            "en-US" = [];
+          };
+        };
+      };
     };
     extraPackages = with pkgs; [
       marksman
+      ltex-ls
     ];
   };
 }
