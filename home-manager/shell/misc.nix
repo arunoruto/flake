@@ -3,6 +3,9 @@
     # Bash
     bash.initExtra = ''eval "$(direnv hook bash)"'';
 
+    # Htop alternative
+    btop.enable = true;
+
     # lsd is an ls replacement
     lsd = {
       enable = true;

@@ -5,6 +5,7 @@
     ./starship
     ./tmux
     ./bat.nix
+    # ./btop.nix
     ./editorconfig.nix
     ./fzf.nix
     ./misc.nix
