@@ -3,7 +3,7 @@
 
   inputs = {
     # Nixpkgs
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     # NixOS
     nixos-hardware.url = "github:nixos/nixos-hardware";
@@ -11,15 +11,17 @@
     nur.url = "github:nix-community/NUR";
     # Home Manager
     home-manager = {
-      url = "github:nix-community/home-manager/release-23.11";
+      url = "github:nix-community/home-manager/release-24.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixvim = {
-      url = "github:nix-community/nixvim/nixos-23.11";
+      url = "github:nix-community/nixvim";
+      # url = "github:nix-community/nixvim/nixos-24.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     stylix = {
-      url = "github:danth/stylix/release-23.11";
+      url = "github:danth/stylix";
+      # url = "github:danth/stylix/release-24.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     neorg-overlay.url = "github:nvim-neorg/nixpkgs-neorg-overlay";
@@ -67,11 +69,11 @@
       stylix.image = nixpkgs.lib.mkDefault ./home-manager/desktop/default-wallpaper.png;
     };
     home-manager-modules = [
-      # {
-      #   nixpkgs.overlays = [
-      #     neorg-overlay.overlays.default
-      #   ];
-      # }
+      {
+        nixpkgs.overlays = [
+          neorg-overlay.overlays.default
+        ];
+      }
       nixvim.homeManagerModules.nixvim
       stylix.homeManagerModules.stylix
       {
