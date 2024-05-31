@@ -10,7 +10,6 @@ in {
       enable = true;
       dotDir = ".config/zsh";
       shellAliases = {
-        vim = "hx";
         grep = "rg";
         update = ''bash -c "sudo nixos-rebuild switch"'';
         update-channel = ''bash -c "sudo nix-channel --update"'';
