@@ -1,8 +1,8 @@
 # Install on non NixOS system
 
-Follow the steps on the [official nix](https://nixos.org/download/) website. Multi-user is prefered!
+Follow the steps on the [official nix](https://nixos.org/download/) website. Multi-user is preferred!
 
-Afterwards, home-manager needs to be installed. But before that, some directory changes have to be done (for now it only applies for ubuntu, not debian):
+Afterward, home-manager needs to be installed. But before that, some directory changes have to be done (for now it only applies for ubuntu, not debian):
 
 ```sh
 sudo chown $USER:nixbld /nix/var/nix/{profiles,gcroots}/per-user/$USER
