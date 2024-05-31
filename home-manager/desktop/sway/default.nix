@@ -12,6 +12,8 @@ in {
   ];
   wayland.windowManager.sway = {
     enable = true;
+    # https://www.reddit.com/r/NixOS/comments/1c9n1qk/nixosrebuild_of_sway_failing_with_unable_to/
+    checkConfig = false;
     config = rec {
       modifier = "Mod4";
       terminal = "wezterm";
