@@ -3,7 +3,7 @@
     plugins = {
       alpha = {
         enable = true;
-        iconsEnabled = true;
+        iconsEnabled = false;
 
         layout = [
           {
@@ -42,78 +42,56 @@
             type = "group";
             val = [
               {
-                val = "   New File";
-                on_press = "<cmd>ene <cr>";
-                type = "button";
-                opts = {
-                  shortcut = "e";
-                  position = "center";
-                  cursor = 3;
-                  width = 50;
-                  align_shortcut = "right";
-                };
+                shortcut = "e";
+                desc = "  > New File";
+                command = "<cmd>ene <cr>";
               }
               {
-                val = "   Toggle file explorer";
-                on_press = "<cmd>NvimTreeToggle<CR>";
-                type = "button";
-                opts = {
-                  shortcut = "SPC ee";
-                  position = "center";
-                  cursor = 3;
-                  width = 50;
-                  align_shortcut = "right";
-                };
+                shortcut = "SPC ee";
+                desc = "  > Toggle file explorer";
+                command = "<cmd>NvimTreeToggle<CR>";
               }
               {
-                val = "󰱼   Find File";
-                on_press = "<cmd>Telescope find_files<CR>";
-                type = "button";
-                opts = {
-                  shortcut = "SPC ff";
-                  position = "center";
-                  cursor = 3;
-                  width = 50;
-                  align_shortcut = "right";
-                };
+                shortcut = "SPC ff";
+                desc = "󰱼  > Find File";
+                command = "<cmd>Telescope find_files<CR>";
               }
               {
-                val = "   Find Word";
-                on_press = "<cmd>Telescope live_grep<CR>";
-                type = "button";
-                opts = {
-                  shortcut = "SPC fs";
-                  position = "center";
-                  cursor = 3;
-                  width = 50;
-                  align_shortcut = "right";
-                };
+                shortcut = "SPC fs";
+                desc = "  > Find Word";
+                command = "<cmd>Telescope live_grep<CR>";
               }
               {
-                val = "󰁯   Restore Session For Current Directory";
-                on_press = "<cmd>SessionRestore<CR>";
-                type = "button";
-                opts = {
-                  shortcut = "SPC wr";
-                  position = "center";
-                  cursor = 3;
-                  width = 50;
-                  align_shortcut = "right";
-                };
+                shortcut = "SPC wr";
+                desc = "󰁯  > Restore Session For Current Directory";
+                command = "<cmd>SessionRestore<CR>";
               }
               {
-                val = "   Quit NVIM";
-                on_press = "<cmd>qa<CR>";
-                type = "button";
+                shortcut = "SPC q";
+                desc = "  > Quit NVIM";
+                command = ":qa<cr>";
+              }
 
-                opts = {
-                  shortcut = "SPC q";
-                  position = "center";
-                  cursor = 3;
-                  width = 50;
-                  align_shortcut = "right";
-                };
-              }
+              # {
+              #   on_press = {
+              #     __raw = "function() vim.cmd[[ene]] end";
+              #   };
+              #   opts = {
+              #     shortcut = "n";
+              #   };
+              #   type = "button";
+              #   val = "  New file";
+              # }
+              # {
+              #   on_press = {
+              #     __raw = "function() vim.cmd[[qa]] end";
+              #   };
+              #   opts = {
+              #     shortcut = "q";
+              #   };
+              #   type = "button";
+              #   val = " Quit Neovim";
+              # }
             ];
           }
           {

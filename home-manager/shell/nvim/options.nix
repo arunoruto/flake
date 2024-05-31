@@ -1,6 +1,6 @@
 {
   programs.nixvim = {
-    options = {
+    opts = {
       # tabs & indent
       tabstop = 2;
       softtabstop = 2;

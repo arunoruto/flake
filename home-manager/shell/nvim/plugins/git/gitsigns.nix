@@ -3,7 +3,7 @@
     plugins = {
       gitsigns = {
         enable = true;
-        onAttach.function = ''
+        settings.on_attach = ''
           function(bufnr)
             -- Navigation
             vim.keymap.set("n", "]h", require("gitsigns").next_hunk, { buffer = bufnr, desc = "Next hunk"})

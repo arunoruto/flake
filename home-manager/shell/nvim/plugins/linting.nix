@@ -24,8 +24,7 @@
       {
         mode = "n";
         key = "<leader>l";
-        action = ''function() require("lint").try_lint() end'';
-        lua = true;
+        action.__raw = ''function() require("lint").try_lint() end'';
         options = {
           silent = true;
           desc = "Trigger linting for current file";

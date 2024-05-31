@@ -7,8 +7,7 @@
       {
         mode = ["n" "v"];
         key = "<leader>fa";
-        action = ''require("actions-preview").code_actions'';
-        lua = true;
+        action.__raw = ''require("actions-preview").code_actions'';
         options = {
           desc = "Display code actions in telescope";
           silent = true;

@@ -11,6 +11,7 @@
     ./linting.nix
     ./nvim-tree.nix
     ./substitute.nix
+    ./treesitter.nix
     ./trouble.nix
     ./vim-maximizer.nix
   ];
@@ -22,15 +23,7 @@
         mode = "tabs";
         separatorStyle = "slant";
       };
-      nvim-cmp = {
-        enable = true;
-        autoEnableSources = true;
-      };
       #dressing.enable = true;
-      indent-blankline = {
-        enable = true;
-        indent.char = "┊";
-      };
       surround.enable = true;
       #startup-nvim.enable = true;
       tmux-navigator.enable = true;

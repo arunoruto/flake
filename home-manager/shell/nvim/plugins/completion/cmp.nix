@@ -7,74 +7,76 @@
       cmp-path.enable = true;
       cmp_luasnip.enable = true;
       cmp-cmdline.enable = true;
-      nvim-cmp = {
+      cmp = {
         enable = true;
         autoEnableSources = true;
-        experimental.ghost_text = true;
-        performance = {
-          debounce = 60;
-          fetchingTimeout = 200;
-          #maxViewEntries = 30;
-        };
-        snippet.expand = "luasnip";
-        formatting.fields = ["kind" "abbr" "menu"];
-        sources = [
-          {name = "nvim_lsp";}
-          {name = "emoji";}
-          {
-            name = "buffer";
-            keywordLength = 3;
-            option.get_bufnrs.__raw = "vim.api.nvim_list_bufs";
-          }
-          {
-            name = "path";
-            keywordLength = 3;
-          }
-          {
-            name = "luasnip";
-            keywordLength = 3;
-          }
-          {name = "copilot";}
-        ];
-        #settings = {
-        #  completion.completeopt = "menu,menuone,preview,noselect";
-        #  snippet.expand = ''
-        #    function(args)
-        #      require('luasnip').lsp_expand(args.body)
-        #    end
-        #  '';
-        #};
-        completion.completeopt = "menu,menuone,preview,noselect";
-        #snippet.expand = {
-        #  __raw = ''
-        #    function(args)
-        #      require('luasnip').lsp_expand(args.body)
-        #    end
-        #  '';
-        #};
+        settings = {
+          experimental.ghost_text = true;
+          performance = {
+            debounce = 60;
+            fetchingTimeout = 200;
+            #maxViewEntries = 30;
+          };
+          snippet.expand = "luasnip";
+          formatting.fields = ["kind" "abbr" "menu"];
+          sources = [
+            {name = "nvim_lsp";}
+            {name = "emoji";}
+            {
+              name = "buffer";
+              keywordLength = 3;
+              option.get_bufnrs.__raw = "vim.api.nvim_list_bufs";
+            }
+            {
+              name = "path";
+              keywordLength = 3;
+            }
+            {
+              name = "luasnip";
+              keywordLength = 3;
+            }
+            {name = "copilot";}
+          ];
+          #settings = {
+          #  completion.completeopt = "menu,menuone,preview,noselect";
+          #  snippet.expand = ''
+          #    function(args)
+          #      require('luasnip').lsp_expand(args.body)
+          #    end
+          #  '';
+          #};
+          completion.completeopt = "menu,menuone,preview,noselect";
+          #snippet.expand = {
+          #  __raw = ''
+          #    function(args)
+          #      require('luasnip').lsp_expand(args.body)
+          #    end
+          #  '';
+          #};
 
-        window = {
-          completion.border = "solid";
-          documentation.border = "solid";
-        };
+          window = {
+            completion.border = "solid";
+            documentation.border = "solid";
+          };
 
-        mapping = {
-          "<Tab>" = "cmp.mapping(cmp.mapping.select_next_item(), {'i', 's'})";
-          "<C-k>" = "cmp.mapping.select_prev_item()"; # previous suggestion
-          "<C-j>" = "cmp.mapping.select_next_item()"; # next suggestion
-          "<C-b>" = "cmp.mapping.scroll_docs(-4)";
-          "<C-f>" = "cmp.mapping.scroll_docs(4)";
-          "<C-e>" = "cmp.mapping.abort()";
-          "<CR>" = "cmp.mapping.confirm({ select = true })"; # close completion window
-          "<S-CR>" = "cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true })";
-          "<C-Space>" = "cmp.mapping.complete()"; # show completion suggestions
+          mapping = {
+            "<Tab>" = "cmp.mapping(cmp.mapping.select_next_item(), {'i', 's'})";
+            "<C-k>" = "cmp.mapping.select_prev_item()"; # previous suggestion
+            "<C-j>" = "cmp.mapping.select_next_item()"; # next suggestion
+            "<C-b>" = "cmp.mapping.scroll_docs(-4)";
+            "<C-f>" = "cmp.mapping.scroll_docs(4)";
+            "<C-e>" = "cmp.mapping.abort()";
+            "<CR>" = "cmp.mapping.confirm({ select = true })"; # close completion window
+            "<S-CR>" = "cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true })";
+            "<C-Space>" = "cmp.mapping.complete()"; # show completion suggestions
+          };
+          #formatting.format = ''
+          #  require("lspkind").cmp_format({
+          #    maxwidth = 50,
+          #    ellipsis_char = "...",
+          #  })
+          #'';
         };
-        #formatting.format = ''
-        #  require("lspkind").cmp_format({
-        #    maxwidth = 50,
-        #    ellipsis_char = "...",
-        #  })
-        #'';
       };
     };
     extraPlugins = with pkgs.vimPlugins; [

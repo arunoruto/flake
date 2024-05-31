@@ -1,15 +1,14 @@
 {
   programs.nixvim = {
     plugins = {
-      comment-nvim.enable = true;
+      comment.enable = true;
       todo-comments.enable = true;
     };
     keymaps = [
       {
         mode = "n";
         key = "<leader>cn";
-        action = ''function() require("todo-comments").jump_next() end'';
-        lua = true;
+        action.__raw = ''function() require("todo-comments").jump_next() end'';
         options = {
           silent = true;
           desc = "Next todo comment";
@@ -18,8 +17,7 @@
       {
         mode = "n";
         key = "<leader>cp";
-        action = ''function() require("todo-comments").jump_prev() end'';
-        lua = true;
+        action.__raw = ''function() require("todo-comments").jump_prev() end'';
         options = {
           silent = true;
           desc = "Previous todo comment";

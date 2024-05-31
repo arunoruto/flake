@@ -1,9 +1,9 @@
-{
+{lib, ...}: {
   programs.nixvim = {
     plugins = {
       treesitter-context.enable = true;
       treesitter = {
-        enable = true;
+        enable = lib.mkForce true;
         ensureInstalled = "all";
         disabledLanguages = [
           "latex"
@@ -16,7 +16,7 @@
           keymaps = {
             initSelection = "<C-space>";
             nodeIncremental = "<C-space>";
-            scopeIncremental = false;
+            # scopeIncremental = false;
             nodeDecremental = "<bs>";
           };
         };
