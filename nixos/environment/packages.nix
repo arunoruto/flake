@@ -1,7 +1,4 @@
-{
-  pkgs,
-  ...
-}: {
+{pkgs, ...}: {
   imports = [
     ./chrome.nix
   ];
@@ -70,6 +67,7 @@
       jabref
       libreoffice-qt
       libsForQt5.kdenlive
+      libsForQt5.okular
       #mailspring
       masterpdfeditor
       mprime
