@@ -1,6 +1,7 @@
 # https://github.com/helix-editor/helix/wiki/Migrating-from-Vim
 {
   imports = [
+    ./keys.nix
     ./languages
   ];
 
