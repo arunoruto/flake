@@ -31,8 +31,10 @@
 
   services.xserver = {
     enable = true;
-    layout = "de";
-    xkbVariant = "";
+    xkb = {
+      layout = "de";
+      variant = "";
+    };
     excludePackages = with pkgs; [
       xterm
     ];
