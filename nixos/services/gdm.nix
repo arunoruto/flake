@@ -4,11 +4,13 @@
   };
 
   config = {
-    services.xserver = {
-      displayManager = {
-        gdm.enable = true;
-        job.preStart = "sleep 3";
+    services = {
+      xserver = {
+        displayManager = {
+          gdm.enable = true;
+        };
       };
+      displayManager.preStart = "sleep 3";
     };
   };
 }
