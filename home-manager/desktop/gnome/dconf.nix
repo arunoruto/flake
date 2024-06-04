@@ -1,10 +1,14 @@
-{lib, ...}: let
+{
+  config,
+  lib,
+  ...
+}: let
   # wallpaper = "file://${builtins.getEnv "HOME"}/.local/share/backgrounds/komet/komet.xml";
   # wallpaper = "file://${builtins.getEnv "HOME"}/Pictures/wallpapers/art/kanagawa/kanagawa-van-gogh.jpg";
 in {
   dconf.settings = {
     # Time zone settings
-    "org/gnome/desktop/datetime" = {automatic-timezone = true;};
+    # "org/gnome/desktop/datetime" = {automatic-timezone = true;};
     "org/gnome/system/location" = {enabled = true;};
     # Wallpaper settings
     "org/gnome/desktop/background" = {
