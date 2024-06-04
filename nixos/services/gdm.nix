@@ -1,4 +1,8 @@
-{lib, ...}: {
+{
+  pkgs,
+  lib,
+  ...
+}: {
   options = {
     gdm.enable = lib.mkEnableOption "Use gnome display manager";
   };
@@ -12,5 +16,7 @@
       };
       displayManager.preStart = "sleep 3";
     };
+
+    programs.ssh.askPassword = lib.mkForce "${pkgs.gnome.seahorse.out}/bin/seahorse";
   };
 }

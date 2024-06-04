@@ -64,7 +64,7 @@
   # started in user sessions.
   programs.mtr.enable = true;
   programs.gnupg.agent = {
-    enable = true;
+    enable = lib.mkDefault true;
     enableSSHSupport = true;
   };
 

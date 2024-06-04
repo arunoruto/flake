@@ -29,6 +29,7 @@
       powertop
       tlrc
       traceroute
+      unzip
 
       cargo
       gcc
