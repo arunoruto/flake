@@ -17,6 +17,7 @@
     julia
     miller
     ouch
+    slides
     vivid
 
     # zsh-autosuggestions
