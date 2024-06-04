@@ -5,7 +5,7 @@
     ./gnome
     ./sway
     ./hyprland
-    ./kde.nix
+    # ./kde.nix
   ];
 
   home.packages = with pkgs; [
