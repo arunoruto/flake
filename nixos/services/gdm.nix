@@ -14,7 +14,7 @@
           gdm.enable = true;
         };
       };
-      displayManager.preStart = "sleep 3";
+      displayManager.preStart = "sleep 1";
     };
 
     programs.ssh.askPassword = lib.mkForce "${pkgs.gnome.seahorse.out}/bin/seahorse";
