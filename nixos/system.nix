@@ -28,7 +28,7 @@
         "nix-command"
         "flakes"
       ];
-      # warn-dirty = false;
+      warn-dirty = false;
     };
     gc = {
       automatic = true;
