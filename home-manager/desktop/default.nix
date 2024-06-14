@@ -12,6 +12,7 @@
     gimp
     inkscape
     #jabref
+    obs-studio
     #obsidian
     #okular
     rnote
