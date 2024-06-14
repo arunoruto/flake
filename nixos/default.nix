@@ -1,12 +1,13 @@
 {
   imports = [
+    ./desktop
+    ./display
     ./environment
+    ./network
     ./services
 
-    ./network.nix
     # ./systemd.nix
     ./pr.nix
-    ./dm
 
     ./boot.nix
     ./locale.nix
