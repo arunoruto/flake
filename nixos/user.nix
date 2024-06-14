@@ -14,5 +14,12 @@
 
   environment.sessionVariables.FLAKE = "/home/${username}/.config/flake";
 
-  stylix.base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-macchiato.yaml";
+  stylix = {
+    enable = true;
+    base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-macchiato.yaml";
+    cursor = {
+      name = "Catppuccin-Macchiato-Dark-Cursors";
+      package = pkgs.catppuccin-cursors.macchiatoDark;
+    };
+  };
 }
