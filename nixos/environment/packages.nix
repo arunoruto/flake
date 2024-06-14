@@ -64,7 +64,7 @@
       hunspell
       hunspellDicts.de_DE
       hunspellDicts.en_US
-      jabref
+      # jabref
       libreoffice-qt
       libsForQt5.kdenlive
       libsForQt5.okular
