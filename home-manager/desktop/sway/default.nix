@@ -75,5 +75,8 @@ in {
         }
       ];
     };
+    extraConfig = ''
+      #blur enable
+    '';
   };
 }
