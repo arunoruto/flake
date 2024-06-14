@@ -15,13 +15,13 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixvim = {
-      url = "github:nix-community/nixvim";
-      # url = "github:nix-community/nixvim/nixos-24.05";
+      # url = "github:nix-community/nixvim";
+      url = "github:nix-community/nixvim/nixos-24.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     stylix = {
-      url = "github:danth/stylix";
-      # url = "github:danth/stylix/release-24.05";
+      # url = "github:danth/stylix";
+      url = "github:danth/stylix/release-24.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     neorg-overlay.url = "github:nvim-neorg/nixpkgs-neorg-overlay";
@@ -51,7 +51,7 @@
         config.allowUnfree = true;
         overlays = [
           overlay-unstable
-          nur.overlay
+          # nur.overlay
         ];
       };
     };
@@ -95,6 +95,7 @@
           stylix.nixosModules.stylix
           stylix-config
           nixpkgs-config
+          nur.nixosModules.nur
           ./nixos/hosts/zangetsu/configuration.nix
         ];
       };
@@ -109,6 +110,7 @@
           # stylix.nixosModules.stylix
           # stylix-config
           nixpkgs-config
+          nur.nixosModules.nur
           ./nixos/hosts/kyuubi/configuration.nix
         ];
       };
