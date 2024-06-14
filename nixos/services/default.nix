@@ -8,7 +8,6 @@
     ./fingerprint.nix
     ./flatpak.nix
     ./fwupd.nix
-    ./gdm.nix
     ./printing.nix
     ./scanning.nix
     ./sound.nix
@@ -21,7 +20,6 @@
   fingerprint.enable = lib.mkDefault false;
   flatpak.enable = lib.mkDefault false;
   fwupd.enable = lib.mkDefault true;
-  gdm.enable = lib.mkDefault true;
   printing.enable = lib.mkDefault false;
   scanning.enable = lib.mkDefault false;
   sound.enable = lib.mkDefault true;
