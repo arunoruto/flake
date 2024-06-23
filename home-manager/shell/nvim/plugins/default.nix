@@ -1,13 +1,14 @@
 {pkgs, ...}: {
   imports = [
     ./completion
+    ./debug
     ./git
     ./notes
     ./lsp
     ./research
     ./ui
     ./utils
-    ./auto-session.nix
+    # ./auto-session.nix
     ./linting.nix
     ./nvim-tree.nix
     ./substitute.nix
@@ -34,7 +35,7 @@
     extraPlugins = with pkgs.vimPlugins; [
       nvim-web-devicons
       cheatsheet-nvim
-      plenary-nvim # User by many plugins as dependency
+      # plenary-nvim # Used by many plugins as dependency
     ];
   };
 }
