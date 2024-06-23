@@ -36,6 +36,8 @@
       terminal = 0.975;
     };
     targets = {
+      hyprland.enable = true;
+      # hyprpaper.enable = true;
       helix.enable = false;
       kde.enable = false;
       mako.enable = false;
