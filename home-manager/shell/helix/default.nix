@@ -29,6 +29,6 @@
         };
       };
     };
-    zsh.shellAliases.vim = "hx";
+    # zsh.shellAliases.vim = "hx";
   };
 }
