@@ -1,14 +1,21 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  lib,
+  ...
+}: {
   imports = [
     ./binds.nix
+    ./plugins
     #  ./services.nix
     #  ./theme.nix
     #  ./waybar
+    ./wallpaper.nix
   ];
   wayland.windowManager.hyprland = {
     enable = true;
     settings = {
-      monitor = ",preferred,auto,1";
+      monitor = ",preferred,auto,1.175";
+      # monitor = ",preferred,auto,1";
 
       general = {
         # See https://wiki.hyprland.org/Configuring/Variables/ for more
@@ -19,7 +26,7 @@
         # "col.active_border" = "rgba(33ccffee) rgba(00ff99ee) 45deg";
         # "col.inactive_border" = "rgba(595959aa)";
 
-        layout = "dwindle";
+        layout = lib.mkDefault "dwindle";
 
         # Please see https://wiki.hyprland.org/Configuring/Tearing/ before you turn this on
         allow_tearing = false;
@@ -77,7 +84,8 @@
       };
 
       exec-once = [
-        "waybar"
+        "ags"
+        # "waybar"
         # ''mpvpaper -o "no-audio --loop-playlist --video-aspect-override=3:2" '*' $HOME/Videos/TBATE_AnimDesktop_Vol08.mp4''
         # ''mpvpaper -o "no-audio --loop-playlist panscan=1.0 '*' $HOME/Videos/TBATE_AnimDesktop_Vol08.mp4''
       ];
@@ -95,11 +103,19 @@
         "10,defautName:9"
       ];
     };
-    xwayland.enable = true;
+    xwayland = {
+      enable = true;
+    };
+    extraConfig = ''
+      xwayland {
+        force_zero_scaling = true
+      }
+    '';
   };
 
-  # home.packages = with pkgs; [
-  #   wofi
-  #   mpvpaper
-  # ];
+  home.packages = with pkgs; [
+    hyprshot
+    #   wofi
+    #   mpvpaper
+  ];
 }

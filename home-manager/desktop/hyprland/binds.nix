@@ -1,24 +1,43 @@
-{ config, pkgs, ... }:
-let
-  terminal = "wezterm";
-  menu  = "${pkgs.wofi}/bin/wofi --show drun --normal-window";
-in
 {
+  config,
+  pkgs,
+  ...
+}: let
+  terminal = "wezterm";
+  menu = "${pkgs.wofi}/bin/wofi --show drun --normal-window";
+
+  # left = "left";
+  # right = "right";
+  # up = "up";
+  # down = "down";
+  left = "H";
+  right = "L";
+  up = "K";
+  down = "J";
+in {
   wayland.windowManager.hyprland.settings = {
     "$mod" = "SUPER";
     bind = [
       "$mod, Return, exec, ${terminal}"
+      "$mod, SPACE, togglefloating"
       "$mod, D, exec, ${menu}"
-      "$mod, F, togglefloating"
+      "$mod, F, fullscreen"
 
       "$mod SHIFT, Q, killactive"
       "$mod SHIFT, E, exit"
+      "$mod SHIFT, R, exec, ${pkgs.hyprland}/bin/hyprctl reload"
 
       # Move focus with mod + arrow keys
-      "$mod, left,  movefocus, l"
-      "$mod, right, movefocus, r"
-      "$mod, up,    movefocus, u"
-      "$mod, down,  movefocus, d"
+      "$mod, ${left},  movefocus, l"
+      "$mod, ${right}, movefocus, r"
+      "$mod, ${up},    movefocus, u"
+      "$mod, ${down},  movefocus, d"
+
+      # Move focused window with mod + shift + arrow keys
+      "$mod SHIFT, ${left},  movewindow, l"
+      "$mod SHIFT, ${right}, movewindow, r"
+      "$mod SHIFT, ${up},    movewindow, u"
+      "$mod SHIFT, ${down},  movewindow, d"
 
       # Switch workspace with mod + [0-9]
       "$mod, 1, workspace, 1"
@@ -51,6 +70,28 @@ in
       # Scroll through existing workspace with mod + scroll
       "$mod, mouse_down, workspace, e+1"
       "$mod, mouse_up,   workspace, e-1"
+
+      # Brightness
+      ",XF86MonBrightnessDown, exec, light -U 5"
+      ",XF86MonBrightnessUp, exec, light -A 5"
+
+      # Volume
+      ", XF86AudioRaiseVolume, exec, wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%+"
+      ", XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
+      ", XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+
+      # Media
+      ", XF86AudioPlay, exec, playerctl play-pause"
+      ", XF86AudioPause, exec, playerctl play-pause"
+      ", XF86AudioNext, exec, playerctl next"
+      ", XF86AudioPrev, exec, playerctl previous"
+
+      # Screenshot
+      # '', Print, exec, grim -g "$(slurp -d)" - | wl-copy''
+      ", Print, exec, hyprshot --clipboard-only -m region"
+
+      # Shortcuts
+      "$mod, F1, exec, google-chrome-stable"
     ];
 
     bindm = [
