@@ -3,7 +3,6 @@
   lockscreen = "${pkgs.swaylock}/bin/swaylock --image ${image}";
 in {
   imports = [
-    ./waybar
     ./services.nix
     ./theme.nix
     ./keybindings.nix

@@ -16,11 +16,11 @@
     # theme = "${catppuccin-rofi}/basic/.local/share/rofi/themes/catppuccin-${flavor}.rasi";
   };
 
-  services.mako = {
-    enable = true;
-    defaultTimeout = 10000;
-    # extraConfig = builtins.readFile "${catppuccin-mako}/src/${flavor}";
-  };
+  # services.mako = {
+  #   enable = true;
+  #   defaultTimeout = 10000;
+  #   # extraConfig = builtins.readFile "${catppuccin-mako}/src/${flavor}";
+  # };
 
   #services.wob = {
   #  enable = true;
