@@ -19,11 +19,14 @@
       url = "github:nix-community/nixvim/nixos-24.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # Styling
     stylix = {
-      # url = "github:danth/stylix";
-      url = "github:danth/stylix/release-24.05";
+      url = "github:danth/stylix";
+      # url = "github:danth/stylix/release-24.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    ags.url = "github:Aylur/ags";
+    # Misc
     neorg-overlay.url = "github:nvim-neorg/nixpkgs-neorg-overlay";
   };
 
@@ -36,6 +39,7 @@
     home-manager,
     nixvim,
     stylix,
+    ags,
     neorg-overlay,
   }: let
     system = "x86_64-linux";
@@ -68,6 +72,12 @@
     stylix-config = {
       stylix.image = nixpkgs.lib.mkDefault ./home-manager/desktop/default-wallpaper.png;
     };
+    nixos-modules = [
+      nixpkgs-config
+      nur.nixosModules.nur
+      stylix.nixosModules.stylix
+      stylix-config
+    ];
     home-manager-modules = [
       {
         nixpkgs.overlays = [
@@ -76,6 +86,7 @@
       }
       nixvim.homeManagerModules.nixvim
       stylix.homeManagerModules.stylix
+      ags.homeManagerModules.default
       {
         stylix.image = nixpkgs.lib.mkDefault ./home-manager/desktop/default-wallpaper.png;
         stylix.targets.nixvim.enable = nixpkgs.lib.mkDefault false;
@@ -90,14 +101,12 @@
         specialArgs = {
           username = "mirza";
         };
-        modules = [
-          nixos-hardware.nixosModules.framework-11th-gen-intel
-          stylix.nixosModules.stylix
-          stylix-config
-          nixpkgs-config
-          nur.nixosModules.nur
-          ./nixos/hosts/zangetsu/configuration.nix
-        ];
+        modules =
+          nixos-modules
+          ++ [
+            nixos-hardware.nixosModules.framework-11th-gen-intel
+            ./nixos/hosts/zangetsu/configuration.nix
+          ];
       };
 
       # Work PC
@@ -106,13 +115,11 @@
         specialArgs = {
           username = "mar";
         };
-        modules = [
-          # stylix.nixosModules.stylix
-          # stylix-config
-          nixpkgs-config
-          nur.nixosModules.nur
-          ./nixos/hosts/kyuubi/configuration.nix
-        ];
+        modules =
+          nixos-modules
+          ++ [
+            ./nixos/hosts/kyuubi/configuration.nix
+          ];
       };
     };
 
