@@ -12,22 +12,26 @@
         servers = {
           bashls.enable = true;
           julials.enable = true;
-          #marksman.enable = true;
+          marksman.enable = true;
           lua-ls.enable = true;
           # Docker
-          # dockerls.enable = true;
-          # docker-compose-language-service.enable = true;
+          dockerls.enable = true;
+          docker-compose-language-service.enable = true;
           # Python
           pyright.enable = true;
-          ruff-lsp.enable = true;
+          ruff.enable = true;
+          # ruff-lsp.enable = true;
           # Web & co.
+          tsserver.enable = true;
+          eslint.enable = true;
           html.enable = true;
           cssls.enable = true;
+          tailwindcss.enable = true;
           # Markups
           jsonls.enable = true;
           yamlls.enable = true;
           # Nix
-          nil_ls.enable = true;
+          nil-ls.enable = true;
           nixd.enable = true;
           # Tex
           ltex = {
@@ -160,14 +164,14 @@
     ];
 
     file = {
-     ".cache/ngrams/de".source = pkgs.fetchzip {
-       url = "https://languagetool.org/download/ngram-data/ngrams-de-20150819.zip";
-       hash = "sha256-b+dPqDhXZQpVOGwDJOO4bFTQ15hhOSG6WPCx8RApfNg=";
-     };
-     ".cache/ngrams/en".source = pkgs.fetchzip {
-       url = "https://languagetool.org/download/ngram-data/ngrams-en-20150817.zip";
-       hash = "sha256-v3Ym6CBJftQCY5FuY6s5ziFvHKAyYD3fTHr99i6N8sE=";
-     };
+      ".cache/ngrams/de".source = pkgs.fetchzip {
+        url = "https://languagetool.org/download/ngram-data/ngrams-de-20150819.zip";
+        hash = "sha256-b+dPqDhXZQpVOGwDJOO4bFTQ15hhOSG6WPCx8RApfNg=";
+      };
+      ".cache/ngrams/en".source = pkgs.fetchzip {
+        url = "https://languagetool.org/download/ngram-data/ngrams-en-20150817.zip";
+        hash = "sha256-v3Ym6CBJftQCY5FuY6s5ziFvHKAyYD3fTHr99i6N8sE=";
+      };
     };
   };
 }

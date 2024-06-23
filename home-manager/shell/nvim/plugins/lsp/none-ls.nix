@@ -10,23 +10,23 @@
           statix.enable = true;
         };
         diagnostics = {
-          # pylint.enable = true;
+          pylint.enable = true;
           statix.enable = true;
-          #yamllint.enable = true;
+          yamllint.enable = true;
         };
         formatting = {
           alejandra.enable = true;
-          # black = {
-          #   enable = true;
-          #   withArgs = ''
-          #     {
-          #       extra_args = { "--fast" },
-          #     }
-          #   '';
-          # };
-          prettier = {
+          black = {
             enable = true;
-            #disableTsServerFormatter = true;
+            withArgs = ''
+              {
+                extra_args = { "--fast" },
+              }
+            '';
+          };
+          prettierd = {
+            enable = true;
+            # disableTsServerFormatter = true;
             withArgs = ''
               {
                 extra_args = { "--no-semi", "--single-quote" },
@@ -34,7 +34,7 @@
             '';
           };
           stylua.enable = true;
-          #yamlfmt.enable = true;
+          yamlfmt.enable = true;
         };
       };
     };
