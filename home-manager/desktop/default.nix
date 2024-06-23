@@ -2,6 +2,7 @@
   imports = [
     #./programs/steam.nix
 
+    ./bars
     ./gnome
     ./sway
     ./hyprland
