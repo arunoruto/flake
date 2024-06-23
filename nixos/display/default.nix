@@ -1,9 +1,9 @@
 {
   imports = [
     ./gdm.nix
-    ./lightdm.nix
+    # ./lightdm.nix
   ];
 
-  gdm.enbale = false;
-  lightdm.enable = true;
+  gdm.enable = false;
+  # lightdm.enable = true;
 }
