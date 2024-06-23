@@ -18,13 +18,18 @@
   #  #extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
   #};
 
-  # enable sway window manager
-  programs.hyprland = {
-    enable = true;
-    # package = pkgs.unstable.hyprland;
-    xwayland.enable = true;
+  programs = {
+    # Enable hyprland and xwayland
+    hyprland = {
+      enable = true;
+      # package = pkgs.unstable.hyprland;
+      xwayland.enable = true;
+    };
+    # If you are on a laptop, you can set up brightness and volume function keys as follows:
+    light.enable = true;
   };
 
-  # If you are on a laptop, you can set up brightness and volume function keys as follows:
-  programs.light.enable = true;
+  environment.systemPackages = with pkgs; [
+    hyprpaper
+  ];
 }
