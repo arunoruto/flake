@@ -8,7 +8,7 @@
   programs.nixvim = {
     plugins = {
       # lazygit.enable = true;
-      neogit.enable = true;
+      # neogit.enable = true;
     };
   };
 }
