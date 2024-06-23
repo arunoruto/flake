@@ -31,16 +31,6 @@
       traceroute
       unzip
 
-      cargo
-      gcc
-      gcc-unwrapped
-      gnumake
-      julia-bin
-      python3
-      #unstable.ruff
-      rustc
-      #ruff
-
       bat
       du-dust
       eza
