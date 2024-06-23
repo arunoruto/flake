@@ -1,4 +1,4 @@
-{
+{pkgs, ...}: {
   programs.nixvim = {
     plugins = {
       lint = {
@@ -30,6 +30,11 @@
           desc = "Trigger linting for current file";
         };
       }
+    ];
+
+    extraPackages = with pkgs; [
+      ruff
+      deadnix
     ];
   };
 }
