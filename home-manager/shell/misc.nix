@@ -30,9 +30,9 @@
       };
     };
 
-    #fd = {
-    #  enable = true;
-    #};
+    fd = {
+      enable = true;
+    };
 
     atuin = {
       enable = true;
