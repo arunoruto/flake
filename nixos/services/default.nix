@@ -22,7 +22,7 @@
   fwupd.enable = lib.mkDefault true;
   printing.enable = lib.mkDefault false;
   scanning.enable = lib.mkDefault false;
-  sound.enable = lib.mkDefault true;
+  pipewire.enable = lib.mkDefault true;
   drive-optimizations.enable = lib.mkDefault true;
   tailscale.enable = lib.mkDefault true;
   vial.enable = lib.mkDefault true;
