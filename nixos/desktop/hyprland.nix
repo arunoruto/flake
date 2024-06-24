@@ -31,5 +31,6 @@
 
   environment.systemPackages = with pkgs; [
     hyprpaper
+    hyprlock
   ];
 }

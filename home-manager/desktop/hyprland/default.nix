@@ -5,6 +5,7 @@
 }: {
   imports = [
     ./binds.nix
+    ./lock.nix
     ./plugins
     #  ./services.nix
     #  ./theme.nix
