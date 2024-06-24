@@ -22,9 +22,9 @@
     };
 
     home = {
-      packages = with pkgs; [
-        bun
-      ];
+      # packages = with pkgs; [
+      #   bun
+      # ];
 
       file = {
         ".config/ags" = {
