@@ -60,7 +60,7 @@
       libsForQt5.okular
       #mailspring
       masterpdfeditor
-      mprime
+      # mprime
       remmina
       thunderbird
       zoom-us
