@@ -38,7 +38,7 @@
     targets = {
       hyprland.enable = true;
       # hyprpaper.enable = true;
-      helix.enable = false;
+      # helix.enable = false;
       kde.enable = false;
       mako.enable = false;
       nixvim.enable = false;

@@ -9,7 +9,7 @@
     helix = {
       enable = true;
       settings = {
-        theme = "catppuccin_macchiato";
+        # theme = "catppuccin_macchiato";
         # theme = "base16_transparent";
         editor = {
           true-color = true;
