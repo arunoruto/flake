@@ -14,8 +14,8 @@
   wayland.windowManager.hyprland = {
     enable = true;
     settings = {
-      monitor = ",preferred,auto,1.175";
-      # monitor = ",preferred,auto,1";
+      # monitor = ",preferred,auto,1.175";
+      monitor = lib.mkDefault ",preferred,auto,1";
 
       general = {
         # See https://wiki.hyprland.org/Configuring/Variables/ for more
