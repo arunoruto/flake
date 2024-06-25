@@ -3,7 +3,7 @@
     ".config/monitors.xml".source = ./monitors.xml;
   };
 
-  wayland.windowManager.hyprland.settings.general = {
+  wayland.windowManager.hyprland.settings = {
     monitor = [
       "DP-1,   1920x1080,0x0,1"
       "DVI-I-1,1920x1200,-1200x-420,1,transform,1"
