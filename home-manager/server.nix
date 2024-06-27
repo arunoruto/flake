@@ -11,6 +11,7 @@
   home.packages = with pkgs; [
     speedtest-cli
 
+    dust
     glow
     hexyl
     hugo
