@@ -6,6 +6,7 @@
     ./tmux
     ./bat.nix
     # ./btop.nix
+    ./dprint.nix
     ./editorconfig.nix
     ./fzf.nix
     ./misc.nix

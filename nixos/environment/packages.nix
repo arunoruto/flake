@@ -32,7 +32,7 @@
       unzip
 
       bat
-      du-dust
+      dust
       eza
       linuxPackages_latest.perf
       lsd

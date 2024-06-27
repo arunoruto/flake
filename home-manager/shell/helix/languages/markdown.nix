@@ -6,11 +6,14 @@
       language = [
         {
           name = "markdown";
-          auto-format = true;
+          # auto-format = true;
           rulers = [120];
-          # formatter.command = "alejandra";
-          # formatter.command = "${pkgs.alejandra}/bin/alejandra";
-          language-servers = ["marksman" "ltex"];
+          # language-servers = ["marksman" "ltex"];
+          # language-servers = ["marksman"];
+          formatter = {
+            command = "dprint";
+            args = ["fmt" "--stdin" "md"];
+          };
         }
       ];
       language-server = {
@@ -23,8 +26,9 @@
       };
     };
     extraPackages = with pkgs; [
-      marksman
+      dprint
       ltex-ls
+      # marksman
     ];
   };
 }
