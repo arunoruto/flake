@@ -4,4 +4,9 @@
       pipewireSupport = true;
     }) {})
   ];
+
+  programs.firefox = {
+    enable = true;
+    languagePacks = ["de" "en-US"];
+  };
 }

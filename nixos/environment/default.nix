@@ -7,7 +7,7 @@
     ./chrome.nix
     ./programming.nix
 
-    ./wayland.nix
+    # ./wayland.nix
   ];
 
   chrome.enable = lib.mkDefault true;
