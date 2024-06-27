@@ -1,7 +1,6 @@
-{ ... }:
-{
+{...}: {
   imports = [
-    ./server.nix
-    ./desktop
+    # ./pc
+    ./server
   ];
 }

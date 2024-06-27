@@ -26,6 +26,7 @@
 
     # nix
     unstable.nh
+    nix-du
     nix-tree
     nix-output-monitor
     nvd
