@@ -28,6 +28,9 @@
           lsp.display-messages = true;
         };
       };
+      ignores = [
+        ".build/"
+      ];
     };
     # zsh.shellAliases.vim = "hx";
   };
