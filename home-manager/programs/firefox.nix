@@ -17,6 +17,10 @@
         protondb-for-steam
         steam-database
       ];
+
+      settings = {
+        "browser.startup.page" = 3;
+      };
     };
   };
 }
