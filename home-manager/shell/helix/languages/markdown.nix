@@ -6,14 +6,18 @@
       language = [
         {
           name = "markdown";
-          # auto-format = true;
+          auto-format = true;
           rulers = [120];
           # language-servers = ["marksman" "ltex"];
-          # language-servers = ["marksman"];
+          language-servers = ["marksman"];
           formatter = {
-            command = "dprint";
-            args = ["fmt" "--stdin" "md"];
+            command = "prettier";
+            args = ["--parser" "markdown"];
           };
+          # formatter = {
+          #   command = "dprint";
+          #   args = ["--config" "~/.config/dprint.jsonc" "fmt" "--stdin" "md"];
+          # };
         }
       ];
       language-server = {
@@ -26,9 +30,9 @@
       };
     };
     extraPackages = with pkgs; [
-      dprint
-      ltex-ls
-      # marksman
+      # ltex-ls
+      marksman
+      nodePackages.prettier
     ];
   };
 }
