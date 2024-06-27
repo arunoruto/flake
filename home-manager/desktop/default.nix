@@ -7,6 +7,8 @@
     ./sway
     ./hyprland
     # ./kde.nix
+
+    ../gui
   ];
 
   home.packages = with pkgs; [
