@@ -36,6 +36,10 @@
       terminal = 0.975;
     };
     targets = {
+      firefox = {
+        enable = true;
+        profileNames = ["mirza"];
+      };
       hyprland.enable = true;
       # hyprpaper.enable = true;
       # helix.enable = false;

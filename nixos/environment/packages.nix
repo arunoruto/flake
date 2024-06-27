@@ -49,7 +49,6 @@
       unstable.zed-editor
 
       discord
-      firefox
       gthumb
       hunspell
       hunspellDicts.de_DE

@@ -14,6 +14,8 @@
         commandLineArgs = [
           "--enable-features=TouchpadOverscrollHistoryNavigation,UseOzonePlatform"
           "--ozone-platform=wayland"
+          # "--disable-features=WaylandFractionalScaleV1"
+          # "--use-gl=egl" # Disable GPU/HW acceleration
           #"--enable-gpu-rasterization"
           #"--ignore-gpu-blacklist"
           #"--disable-gpu-driver-workarounds"
