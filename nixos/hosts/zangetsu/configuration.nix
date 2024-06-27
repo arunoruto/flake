@@ -1,8 +1,6 @@
 {
-  config,
   pkgs,
   lib,
-  username,
   ...
 }: {
   imports = [
@@ -10,12 +8,10 @@
     ../..
   ];
 
-  fingerprint.enable = true;
-
   # Set hostname
   networking.hostName = lib.mkForce "zangetsu"; # Define your hostname.
 
-  # environment.sessionVariables.FLAKE = "/home/${username}/Projects/nix";
+  fingerprint.enable = true;
 
   # Framework specific kernel Params
   boot = {
@@ -31,17 +27,19 @@
   };
 
   # Enable TLP and powertop for better battery life
-  services.power-profiles-daemon.enable = false;
-  services.tlp = {
-    enable = true;
-    settings = {
-      CPU_BOOST_ON_AC = 1;
-      CPU_BOOST_ON_BAT = 0;
-      CPU_SCALING_GOVERNOR_ON_AC = "performance";
-      CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
-      PCIE_ASPM_ON_BAT = "powersupersave";
-      RESTORE_DEVICE_STATE_ON_STARTUP = 1;
-      RUNTIME_PM_ON_BAT = "auto";
+  services = {
+    power-profiles-daemon.enable = false;
+    tlp = {
+      enable = true;
+      settings = {
+        CPU_BOOST_ON_AC = 1;
+        CPU_BOOST_ON_BAT = 0;
+        CPU_SCALING_GOVERNOR_ON_AC = "performance";
+        CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
+        PCIE_ASPM_ON_BAT = "powersupersave";
+        RESTORE_DEVICE_STATE_ON_STARTUP = 1;
+        RUNTIME_PM_ON_BAT = "auto";
+      };
     };
   };
   powerManagement.powertop.enable = true;
