@@ -84,6 +84,7 @@
           neorg-overlay.overlays.default
         ];
       }
+      nur.hmModules.nur
       nixvim.homeManagerModules.nixvim
       stylix.homeManagerModules.stylix
       ags.homeManagerModules.default
