@@ -56,13 +56,17 @@ in {
     };
 
     # Tweaks for keychron
-    bluetooth.settings = {
-      General = {
-        FastConnect = true;
-      };
-      Policy = {
-        ReconnectAttempts = 7;
-        ReconnectIntervals = "1, 2, 3";
+    bluetooth = {
+      enable = true;
+      settings = {
+        General = {
+          FastConnect = true;
+          Experimental = true;
+        };
+        Policy = {
+          ReconnectAttempts = 7;
+          ReconnectIntervals = "1, 2, 3";
+        };
       };
     };
   };
