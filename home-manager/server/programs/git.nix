@@ -1,7 +1,6 @@
-{pkgs, ...}:
-{
+{pkgs, ...}: {
   home.packages = with pkgs; [
-    glab # Gitlab CLI tool
+    unstable.glab # Gitlab CLI tool
   ];
 
   programs = {
