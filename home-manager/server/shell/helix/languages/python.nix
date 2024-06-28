@@ -13,6 +13,13 @@
             command = "ruff";
             args = ["format" "--line-length" "88" "--quiet" "-"];
           };
+          roots = [
+            "setup.py"
+            "setup.cfg"
+            "pyproject.toml"
+            "pyrightconfig.json"
+            "Poetry.lock"
+          ];
         }
       ];
       language-server = {
