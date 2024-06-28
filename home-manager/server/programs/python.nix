@@ -37,10 +37,17 @@
       # )
     ];
 in {
-  home.packages = with pkgs; [
-    (python3.withPackages packages)
-    poetry
-    mkdocs
-    #pkgs.streamlit
-  ];
+  home = {
+    packages = with pkgs; [
+      (python3.withPackages packages)
+      poetry
+      mkdocs
+      #pkgs.streamlit
+    ];
+
+    sessionVariables = {
+      # https://github.com/python-poetry/poetry/issues/8623#issuecomment-1793624371
+      PYTHON_KEYRING_BACKEND = "keyring.backends.null.Keyring";
+    };
+  };
 }
