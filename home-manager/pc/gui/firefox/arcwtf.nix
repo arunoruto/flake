@@ -3,7 +3,7 @@
     owner = "KiKaraage";
     repo = "ArcWTF";
     rev = "v1.2-firefox";
-    hash = "";
+    hash = "sha256-c1md5erWAqfmpizNz2TrM1QyUnnkbi47thDBMjHB4H0=";
   };
 in {
   programs.firefox = {

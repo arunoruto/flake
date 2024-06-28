@@ -1,6 +1,6 @@
 {
   imports = [
-    ./firefox.nix
+    ./firefox
     # ./steam.nix
     ./zathura.nix
   ];
