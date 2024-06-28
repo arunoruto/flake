@@ -20,3 +20,7 @@ venv = ".venv"
 ```
 
 Now helix should have no problem finding the correct dependencies in your project!
+
+Sources:
+
+- [Pyright can't see Poetry dependencies](https://stackoverflow.com/questions/74510279/pyright-cant-see-poetry-dependencies)
