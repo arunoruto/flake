@@ -20,6 +20,29 @@
             "pyrightconfig.json"
             "Poetry.lock"
           ];
+          debugger = {
+            name = "debugpy";
+            command = "python";
+            args = ["-m" "debugpy.adapter"];
+            transport = "stdio";
+            templates = [
+              {
+                name = "source";
+                request = "launch";
+                completion = [
+                  {
+                    name = "entrypoint";
+                    completion = "filename";
+                    default = ".";
+                  }
+                ];
+                args = {
+                  mode = "debug";
+                  program = "{0}";
+                };
+              }
+            ];
+          };
         }
       ];
       language-server = {
@@ -35,6 +58,7 @@
       };
     };
     extraPackages = with pkgs; [
+      python311Packages.debugpy
       pyright
       unstable.ruff
     ];
