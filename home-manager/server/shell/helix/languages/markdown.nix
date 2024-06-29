@@ -9,7 +9,7 @@
           auto-format = true;
           rulers = [120];
           # language-servers = ["marksman" "ltex"];
-          language-servers = ["marksman"];
+          language-servers = ["marksman" "oxide"];
           formatter = {
             command = "prettier";
             args = ["--parser" "markdown"];
@@ -27,10 +27,14 @@
             "en-US" = [];
           };
         };
+        oxide = {
+          command = "markdown-oxide";
+        };
       };
     };
     extraPackages = with pkgs; [
       # ltex-ls
+      markdown-oxide
       marksman
       nodePackages.prettier
     ];
