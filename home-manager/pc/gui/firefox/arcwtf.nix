@@ -2,19 +2,22 @@
   arcwtf = pkgs.fetchFromGitHub {
     owner = "KiKaraage";
     repo = "ArcWTF";
-    rev = "v1.2-firefox";
-    hash = "sha256-c1md5erWAqfmpizNz2TrM1QyUnnkbi47thDBMjHB4H0=";
+    # rev = "v1.2-firefox";
+    rev = "bb6f2b7ef7e3d201e23d86bf8636e5d0ea4bd68b";
+    hash = "sha256-gyJiIVnyZOYVX6G3m4SSbsb7K9g4zKZWlrHphEIQwsY=";
   };
+  profile = "mirza";
 in {
   programs.firefox = {
-    profiles.mirza.settings = {
+    profiles.${profile}.settings = {
       "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
+      "svg.context-properties.content.enabled" = true;
       "uc.tweak.popup-search" = true;
     };
   };
 
   home.file = {
-    ".mozilla/firefox/mirza/chrome" = {
+    ".mozilla/firefox/${profile}/chrome" = {
       source = arcwtf;
       recursive = true;
     };
