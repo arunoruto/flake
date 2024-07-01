@@ -1,9 +1,12 @@
-{
+{pkgs, ...}: {
   imports = [
-    ./terminal
     ./git.nix
     ./newsboat.nix
     ./papis.nix
     ./python.nix
+  ];
+
+  home.packages = with pkgs; [
+    bws
   ];
 }
