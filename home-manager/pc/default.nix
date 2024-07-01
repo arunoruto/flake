@@ -2,5 +2,6 @@
   imports = [
     ./desktop
     ./gui
+    ./terminal
   ];
 }
