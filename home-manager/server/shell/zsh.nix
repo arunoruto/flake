@@ -53,8 +53,13 @@ in {
 
         export LS_COLORS="$(vivid generate catppuccin-macchiato)";
 
+        ## Autocompletions
+        # tailscale
         eval "tailscale completion zsh &> ~/.config/zsh/_tailscale"
         source ~/.config/zsh/_tailscale
+        # bws
+        eval "bws completions zsh &> ~/.config/zsh/_bws"
+        source ~/.config/zsh/_bws
 
         #source ${zsh-sh-catppuccin}/themes/catppuccin_macchiato-zsh-syntax-highlighting.zsh
 
