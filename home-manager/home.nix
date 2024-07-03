@@ -103,7 +103,8 @@
   #
   # if you don't want to manage your shell through Home Manager.
   home.sessionVariables = {
-    EDITOR = "nvim";
+    # EDITOR = "nvim";
+    EDITOR = "hx";
     WINIT_UNIX_BACKEND = "x11";
     FLAKE = "/home/${user}/.config/flake";
   };
