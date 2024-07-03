@@ -20,8 +20,8 @@
     spotify
     telegram-desktop
     #ultrastardx
-    #via
-    #vial
+    via
+    vial
     #qbittorrent
 
     exercism
