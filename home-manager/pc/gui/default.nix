@@ -1,8 +1,16 @@
-{config, ...}: {
+{
+  config,
+  pkgs,
+  ...
+}: {
   imports = [
     ./firefox
     # ./steam.nix
     ./zathura.nix
+  ];
+
+  home.packages = with pkgs; [
+    ladybird
   ];
 
   # home.sessionVariables = {
