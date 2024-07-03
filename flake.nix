@@ -7,6 +7,10 @@
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     # NixOS
     nixos-hardware.url = "github:nixos/nixos-hardware";
+    lanzaboote = {
+      url = "github:nix-community/lanzaboote/v0.4.1";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
     # Enable nur in the future
     nur.url = "github:nix-community/NUR";
     # Home Manager
@@ -35,6 +39,7 @@
     nixpkgs,
     nixpkgs-unstable,
     nixos-hardware,
+    lanzaboote,
     nur,
     home-manager,
     nixvim,
@@ -43,6 +48,23 @@
     neorg-overlay,
   }: let
     system = "x86_64-linux";
+    secure-boot = [
+      lanzaboote.nixosModules.lanzaboote
+      ({
+        pkgs,
+        lib,
+        ...
+      }: {
+        environment.systemPackages = [pkgs.sbctl];
+        boot = {
+          loader.systemd-boot.enable = lib.mkForce false;
+          lanzaboote = {
+            enable = true;
+            pkiBundle = "/etc/secureboot";
+          };
+        };
+      })
+    ];
     overlay-unstable = final: prev: {
       unstable = import nixpkgs-unstable {
         inherit system;
