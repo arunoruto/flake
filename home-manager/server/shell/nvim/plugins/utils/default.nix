@@ -2,12 +2,13 @@
   imports = [
     ./actions-preview.nix
     ./comment.nix
-    ./hardtime.nix
+    # ./hardtime.nix
     ./indent-blankline.nix
     ./leap.nix
     ./telescope.nix
-    ./ufo.nix
+    # ./ufo.nix
     ./which-key.nix
+    ./vim-maximizer.nix
   ];
 
   programs.nixvim = {

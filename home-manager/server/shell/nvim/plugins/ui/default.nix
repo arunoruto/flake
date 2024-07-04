@@ -4,7 +4,7 @@
     #./baleia.nix
     ./lualine.nix
     # ./noice.nix
-    ./notify.nix
+    # ./notify.nix
   ];
 
   programs.nixvim = {

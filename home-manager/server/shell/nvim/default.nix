@@ -1,6 +1,6 @@
-{
+{pkgs, ...}: {
   imports = [
-    ./auto.nix
+    # ./auto.nix
     ./options.nix
     ./keymaps.nix
     ./plugins
@@ -8,6 +8,7 @@
 
   programs.nixvim = {
     enable = true;
+    package = pkgs.unstable.neovim-unwrapped;
     # vimAlias = true;
     editorconfig.enable = true;
     colorschemes.catppuccin = {

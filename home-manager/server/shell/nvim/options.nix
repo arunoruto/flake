@@ -36,7 +36,8 @@
     };
     globals = {
       mapleader = " ";
-      maplocalleader = ",";
+      maplocalleader = " ";
+      # maplocalleader = ",";
     };
   };
 }

@@ -1,20 +1,21 @@
 {pkgs, ...}: {
   imports = [
-    ./completion
-    ./debug
-    ./git
-    ./notes
-    ./lsp
-    ./research
+    ./coding
+    # ./completion
+    # ./debug
+    # ./git
+    # ./notes
+    # ./lsp
+    # ./research
     ./ui
     ./utils
+
     # ./auto-session.nix
-    ./linting.nix
-    ./nvim-tree.nix
-    ./substitute.nix
-    ./treesitter.nix
-    ./trouble.nix
-    ./vim-maximizer.nix
+    # ./linting.nix
+    # ./nvim-tree.nix
+    # ./substitute.nix
+    # ./treesitter.nix
+    # ./trouble.nix
   ];
 
   programs.nixvim = {
@@ -29,8 +30,8 @@
       #startup-nvim.enable = true;
       tmux-navigator.enable = true;
       # https://ejmastnak.com/tutorials/vim-latex/vimscript/
-      vimtex.enable = true;
-      nix.enable = true;
+      # vimtex.enable = true;
+      # nix.enable = true;
     };
     extraPlugins = with pkgs.vimPlugins; [
       nvim-web-devicons

@@ -35,7 +35,7 @@
               name = "luasnip";
               keywordLength = 3;
             }
-            {name = "copilot";}
+            # {name = "copilot";}
           ];
           #settings = {
           #  completion.completeopt = "menu,menuone,preview,noselect";
