@@ -3,6 +3,7 @@
 {
   imports = [
     # ./gpt.nix
+    ./matlab.nix
     ./markdown.nix
     ./markup.nix
     ./nix.nix
