@@ -9,7 +9,7 @@
           "latex"
         ];
         indent = true;
-        folding = true;
+        folding = false;
         nixvimInjections = true;
         incrementalSelection = {
           enable = true;
