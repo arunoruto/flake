@@ -5,7 +5,6 @@
   ...
 }: {
   stylix = {
-    image = "${config.home.homeDirectory}/Pictures/wallpapers/art/kanagawa/kanagawa-van-gogh.jpg";
     cursor = {
       name = "Catppuccin-Macchiato-Dark-Cursors";
       package = pkgs.catppuccin-cursors.macchiatoDark;
