@@ -1,6 +1,6 @@
 {
   imports = [
-    #./autopairs.nix
+    ./autopairs.nix
     ./cmp.nix
     #./copilot.nix
     #./lspkind.nix

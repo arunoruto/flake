@@ -12,6 +12,7 @@
 
     # ./auto-session.nix
     # ./linting.nix
+    ./lz-n.nix
     # ./nvim-tree.nix
     # ./substitute.nix
     # ./treesitter.nix
