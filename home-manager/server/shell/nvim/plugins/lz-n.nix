@@ -2,7 +2,7 @@
   programs.nixvim = {
     extraPlugins = with pkgs; [
       (vimUtils.buildVimPlugin {
-        name = "lz.n";
+        name = "lz-n";
         src = fetchFromGitHub {
           owner = "nvim-neorocks";
           repo = "lz.n";
