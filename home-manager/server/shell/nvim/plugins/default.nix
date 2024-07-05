@@ -15,7 +15,7 @@
     ./lz-n.nix
     # ./nvim-tree.nix
     # ./substitute.nix
-    # ./treesitter.nix
+    ./treesitter.nix
     # ./trouble.nix
   ];
 
