@@ -41,7 +41,7 @@
       }
       + "/art/kanagawa/kanagawa-van-gogh.jpg";
     cursor = {
-      name = "Catppuccin-Macchiato-Dark-Cursors";
+      name = "catppuccin-macchiato-dark-cursors";
       package = pkgs.catppuccin-cursors.macchiatoDark;
     };
     targets = {

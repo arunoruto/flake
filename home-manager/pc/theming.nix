@@ -6,7 +6,7 @@
 }: {
   stylix = {
     cursor = {
-      name = "Catppuccin-Macchiato-Dark-Cursors";
+      name = "catppuccin-macchiato-dark-cursors";
       package = pkgs.catppuccin-cursors.macchiatoDark;
       size = 24;
     };
