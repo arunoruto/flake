@@ -8,6 +8,7 @@
     ./fingerprint.nix
     ./flatpak.nix
     ./fwupd.nix
+    ./oneapi.nix
     ./printing.nix
     ./scanning.nix
     ./sound.nix
@@ -22,6 +23,8 @@
   fwupd.enable = lib.mkDefault true;
   printing.enable = lib.mkDefault false;
   scanning.enable = lib.mkDefault false;
+  oneapi.enable = lib.mkDefault false;
+  # oneapi.enable = lib.mkDefault true;
   pipewire.enable = lib.mkDefault true;
   drive-optimizations.enable = lib.mkDefault true;
   tailscale.enable = lib.mkDefault true;
