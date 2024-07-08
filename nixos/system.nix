@@ -23,6 +23,8 @@
   # Auto clean system
   nix = {
     settings = {
+      # build in a sandbox
+      sandbox = true;
       # auto-optimise-store = true;
       experimental-features = [
         "nix-command"
