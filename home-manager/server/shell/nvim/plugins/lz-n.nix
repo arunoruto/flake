@@ -12,6 +12,13 @@
       })
     ];
 
+    extraConfigLuaPre = ''
+      vim.g.lz_n = {
+          ---@type fun(name: string)
+          load = vim.cmd.packadd,
+      }
+    '';
+
     extraConfigLua = ''
     '';
   };
