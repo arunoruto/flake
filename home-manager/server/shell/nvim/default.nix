@@ -20,4 +20,8 @@
     '';
     clipboard.providers.wl-copy.enable = true;
   };
+
+  home.packages = with pkgs; [
+    unstable.vim-startuptime
+  ];
 }

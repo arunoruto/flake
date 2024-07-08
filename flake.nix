@@ -7,6 +7,10 @@
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     # NixOS
     nixos-hardware.url = "github:nixos/nixos-hardware";
+    nix-ld = {
+      url = "github:Mic92/nix-ld";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     lanzaboote = {
       url = "github:nix-community/lanzaboote/v0.4.1";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
@@ -40,6 +44,7 @@
     nixpkgs,
     nixpkgs-unstable,
     nixos-hardware,
+    nix-ld,
     lanzaboote,
     nur,
     home-manager,
@@ -97,6 +102,7 @@
     };
     nixos-modules = [
       nixpkgs-config
+      nix-ld.nixosModules.nix-ld
       nur.nixosModules.nur
       stylix.nixosModules.stylix
       stylix-config

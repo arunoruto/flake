@@ -3,6 +3,7 @@
     ./packages.nix
     ./firefox.nix
     ./fonts.nix
+    ./ld.nix
     ./steam.nix
     ./chrome.nix
     ./programming.nix
