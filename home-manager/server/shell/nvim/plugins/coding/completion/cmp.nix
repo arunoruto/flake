@@ -84,13 +84,13 @@
     ];
     extraConfigLua = ''
       -- lazy load
-      require("lz.n").load({
+      require("lz.n").load {
         {
           "nvim-cmp",
           -- load cmp on InsertEnter
           event = "InsertEnter",
         }
-      })
+      }
 
       -- require("cmp").event:on("confirm_done", require("nvim-autopairs.completion.cmp").on_confirm_done())
       -- luasnip = require("luasnip")

@@ -56,12 +56,12 @@
     #];
     extraConfigLua = ''
       -- lazy load
-      require("lz.n").load({
+      require("lz.n").load {
         {
           "telescope.nvim",
           cmd = "Telescope",
         }
-      })
+      }
     '';
   };
 }
