@@ -46,7 +46,6 @@
       wezterm
       wget
       wl-clipboard
-      unstable.zed-editor
 
       discord
       gthumb

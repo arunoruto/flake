@@ -7,10 +7,12 @@
     ./firefox
     # ./steam.nix
     ./zathura.nix
+    # ./zed.nix
   ];
 
   home.packages = with pkgs; [
     ladybird
+    unstable.zed-editor
   ];
 
   # home.sessionVariables = {
