@@ -1,5 +1,10 @@
-{pkgs, ...}: {
+{
+  inputs,
+  pkgs,
+  ...
+}: {
   imports = [
+    inputs.nixvim.homeManagerModules.nixvim
     # ./auto.nix
     ./options.nix
     ./keymaps.nix
@@ -12,7 +17,7 @@
     # vimAlias = true;
     editorconfig.enable = true;
     colorschemes.catppuccin = {
-      enable = true;
+      enable = false;
       settings.flavour = "macchiato";
     };
     extraConfigLua = ''
