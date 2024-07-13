@@ -19,7 +19,7 @@
     miller
     ouch
     slides
-    vivid
+    unstable.vivid
 
     # zsh-autosuggestions
     # zsh-syntax-highlighting
