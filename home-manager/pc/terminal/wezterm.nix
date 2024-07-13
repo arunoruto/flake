@@ -5,7 +5,8 @@
       local wezterm = require 'wezterm'
       local config = {}
       config.enable_wayland = false
-      config.color_scheme = 'Catppuccin Macchiato'
+      -- config.color_scheme = 'Catppuccin Macchiato'
+      config.color_scheme = 'stylix'
       config.hide_tab_bar_if_only_one_tab = true
       -- config.window_decorations = 'TITLE | RESIZE'
       config.window_decorations = 'RESIZE'
