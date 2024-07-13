@@ -73,7 +73,7 @@ in {
 
       # Brightness
       ",XF86MonBrightnessDown, exec, light -U 5"
-      ",XF86MonBrightnessUp, exec, light -A 5"
+      ",XF86MonBrightnessUp,   exec, light -A 5"
 
       # Volume
       ", XF86AudioRaiseVolume, exec, wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%+"
@@ -91,7 +91,9 @@ in {
       ", Print, exec, hyprshot --clipboard-only -m region"
 
       # Shortcuts
-      "$mod, F1, exec, google-chrome-stable"
+      # "$mod, F1, exec, \${BROWSER}"
+      # "$mod, F1, exec, google-chrome-stable"
+      "$mod, F1, exec, firefox"
     ];
 
     bindm = [
