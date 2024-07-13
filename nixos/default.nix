@@ -5,6 +5,7 @@
     ./environment
     ./network
     ./services
+    ./system
 
     # ./systemd.nix
     ./pr.nix
@@ -13,7 +14,6 @@
     ./locale.nix
     ./suid.nix
     ./security.nix
-    ./system.nix
 
     ./user.nix
   ];

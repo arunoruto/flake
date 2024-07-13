@@ -52,24 +52,25 @@
     system = "x86_64-linux";
     # theme = "catppuccin-macchiato";
     theme = "tokyo-night-dark";
-    secure-boot = [
-      lanzaboote.nixosModules.lanzaboote
-      ({
-        pkgs,
-        lib,
-        ...
-      }: {
-        environment.systemPackages = [pkgs.sbctl];
-        boot = {
-          loader.systemd-boot.enable = lib.mkForce false;
-          lanzaboote = {
-            enable = true;
-            pkiBundle = "/etc/secureboot";
-          };
-        };
-      })
-    ];
-    overlay-unstable = final: prev: {
+    image = "anime/jjk/satoru-gojo-jujutsu-kaisen-5k-ac.jpg";
+    # secure-boot = [
+    #   lanzaboote.nixosModules.lanzaboote
+    #   ({
+    #     pkgs,
+    #     lib,
+    #     ...
+    #   }: {
+    #     environment.systemPackages = [pkgs.sbctl];
+    #     boot = {
+    #       loader.systemd-boot.enable = lib.mkForce false;
+    #       lanzaboote = {
+    #         enable = true;
+    #         pkiBundle = "/etc/secureboot";
+    #       };
+    #     };
+    #   })
+    # ];
+    # overlay-unstable = final: prev: {
       unstable = import nixpkgs-unstable {
         inherit system;
         config.allowUnfree = true;
