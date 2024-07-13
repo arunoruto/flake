@@ -16,9 +16,15 @@
     package = pkgs.unstable.neovim-unwrapped;
     # vimAlias = true;
     editorconfig.enable = true;
-    colorschemes.catppuccin = {
-      enable = false;
-      settings.flavour = "macchiato";
+    colorschemes = {
+      tokyonight = {
+        enable = true;
+        settings.style = "night";
+      };
+      catppuccin = {
+        enable = false;
+        settings.flavour = "macchiato";
+      };
     };
     extraConfigLua = ''
       vim.cmd("let g:netrw_liststyle = 3")
