@@ -1,4 +1,8 @@
-{
+{inputs, ...}: {
+  nixpkgs.overlays = [
+    inputs.neorg-overlay.overlays.default
+  ];
+
   programs.nixvim = {
     plugins = {
       neorg = {

@@ -1,10 +1,12 @@
 {
+  inputs,
   pkgs,
   lib,
   ...
 }: {
   imports = [
     ./hardware-configuration.nix
+    inputs.nixos-hardware.nixosModules.framework-11th-gen-intel
     ../..
   ];
 

@@ -1,6 +1,9 @@
 {
+  inputs,
   pkgs,
+  lib,
   username,
+  theme,
   ...
 }: {
   users.users.${username} = {
@@ -29,9 +32,13 @@
   #   flavor = "macchiato";
   #   accent = "green";
   # };
+  imports = [
+    inputs.stylix.nixosModules.stylix
+  ];
+
   stylix = {
     enable = true;
-    base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-macchiato.yaml";
+    base16Scheme = lib.mkDefault "${pkgs.base16-schemes}/share/themes/${theme}.yaml";
     image =
       pkgs.fetchFromGitHub {
         owner = "arunoruto";

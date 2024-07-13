@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}: {
+{inputs, ...}: {
+  nixpkgs.overlays = [
+    inputs.nil.overlays.nil
+  ];
+
   programs.nixvim = {
     plugins = {
       lsp = {

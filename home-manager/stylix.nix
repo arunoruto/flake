@@ -1,7 +1,10 @@
 # https://danth.github.io/stylix/
 {
+  inputs,
   config,
   pkgs,
+  lib,
+  theme,
   ...
 }: let
   wallpapers = pkgs.fetchFromGitHub {
@@ -11,9 +14,13 @@
     hash = "sha256-sCVHHUK13BiN6c+13Ca1wQidmBvrDoGBuJGlg2pXuo4=";
   };
 in {
+  imports = [
+    inputs.stylix.homeManagerModules.stylix
+  ];
+
   stylix = {
     enable = true;
-    base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-macchiato.yaml";
+    base16Scheme = lib.mkDefault "${pkgs.base16-schemes}/share/themes/${theme}.yaml";
     image = "${wallpapers}/art/kanagawa/kanagawa-van-gogh.jpg";
     targets = {
       # nixvim.enable = false;

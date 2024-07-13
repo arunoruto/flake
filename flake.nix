@@ -28,6 +28,7 @@
       url = "github:nix-community/nixvim/nixos-24.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nil.url = "github:oxalica/nil";
     # Styling
     stylix = {
       url = "github:danth/stylix";
@@ -43,17 +44,14 @@
     self,
     nixpkgs,
     nixpkgs-unstable,
-    nixos-hardware,
-    nix-ld,
     lanzaboote,
     nur,
     home-manager,
-    nixvim,
-    stylix,
-    ags,
-    neorg-overlay,
-  }: let
+    ...
+  } @ inputs: let
     system = "x86_64-linux";
+    # theme = "catppuccin-macchiato";
+    theme = "tokyo-night-dark";
     secure-boot = [
       lanzaboote.nixosModules.lanzaboote
       ({
@@ -102,25 +100,25 @@
     };
     nixos-modules = [
       nixpkgs-config
-      nix-ld.nixosModules.nix-ld
+      # nix-ld.nixosModules.nix-ld
       nur.nixosModules.nur
-      stylix.nixosModules.stylix
+      # stylix.nixosModules.stylix
       stylix-config
     ];
     home-manager-modules = [
-      {
-        nixpkgs.overlays = [
-          neorg-overlay.overlays.default
-        ];
-      }
+      # {
+      #   nixpkgs.overlays = [
+      #     neorg-overlay.overlays.default
+      #   ];
+      # }
       nur.hmModules.nur
-      nixvim.homeManagerModules.nixvim
-      stylix.homeManagerModules.stylix
-      ags.homeManagerModules.default
-      {
-        stylix.image = nixpkgs.lib.mkDefault ./home-manager/desktop/default-wallpaper.png;
-        stylix.targets.nixvim.enable = nixpkgs.lib.mkDefault false;
-      }
+      # nixvim.homeManagerModules.nixvim
+      # stylix.homeManagerModules.stylix
+      stylix-config
+      # {
+      #   stylix.image = nixpkgs.lib.mkDefault ./home-manager/desktop/default-wallpaper.png;
+      #   #stylix.targets.nixvim.enable = nixpkgs.lib.mkDefault false;
+      # }
       ./home-manager/home.nix
     ];
   in {
@@ -129,12 +127,13 @@
       zangetsu = nixpkgs.lib.nixosSystem {
         inherit system;
         specialArgs = {
+          inherit inputs;
+          inherit theme;
           username = "mirza";
         };
         modules =
           nixos-modules
           ++ [
-            nixos-hardware.nixosModules.framework-11th-gen-intel
             ./nixos/hosts/zangetsu/configuration.nix
           ];
       };
@@ -143,6 +142,8 @@
       kyuubi = nixpkgs.lib.nixosSystem {
         inherit system;
         specialArgs = {
+          inherit inputs;
+          inherit theme;
           username = "mar";
         };
         modules =
@@ -168,6 +169,8 @@
         # Optionally use extraSpecialArgs
         # to pass through arguments to home.nix
         extraSpecialArgs = {
+          inherit inputs;
+          inherit theme;
           user = "mirza";
         };
       };
@@ -180,6 +183,8 @@
             ./nixos/hosts/kyuubi/home.nix
           ];
         extraSpecialArgs = {
+          inherit inputs;
+          inherit theme;
           user = "mar";
         };
       };
