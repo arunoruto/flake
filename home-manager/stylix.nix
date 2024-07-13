@@ -1,10 +1,10 @@
 # https://danth.github.io/stylix/
 {
   inputs,
-  config,
   pkgs,
   lib,
   theme,
+  stylix-config,
   ...
 }: let
   wallpapers = pkgs.fetchFromGitHub {
@@ -20,10 +20,12 @@ in {
 
   stylix = {
     enable = true;
-    base16Scheme = lib.mkDefault "${pkgs.base16-schemes}/share/themes/${theme}.yaml";
-    image = "${wallpapers}/art/kanagawa/kanagawa-van-gogh.jpg";
+    # base16Scheme = lib.mkDefault "${pkgs.base16-schemes}/share/themes/${theme}.yaml";
+    # image = "${wallpapers}/art/kanagawa/kanagawa-van-gogh.jpg";
+    base16Scheme = lib.mkDefault "${pkgs.base16-schemes}/share/themes/${stylix-config.theme}.yaml";
+    image = "${wallpapers}/${stylix-config.image}";
     targets = {
-      # nixvim.enable = false;
+      nixvim.enable = false;
     };
   };
 }
