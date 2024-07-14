@@ -98,8 +98,8 @@
     };
     stylix-config = {
       stylix.image = nixpkgs.lib.mkDefault ./home-manager/desktop/default-wallpaper.png;
-      theme = "tokyo-night-dark";
-      image = "anime/jjk/satoru-gojo-jujutsu-kaisen-5k-ac.jpg";
+      # theme = "tokyo-night-dark";
+      # image = "anime/jjk/satoru-gojo-jujutsu-kaisen-5k-ac.jpg";
     };
     nixos-modules = [
       nixpkgs-config
@@ -132,7 +132,7 @@
         specialArgs = {
           inherit inputs;
           inherit theme;
-          inherit stylix-config;
+          inherit image;
           username = "mirza";
         };
         modules =
@@ -148,7 +148,7 @@
         specialArgs = {
           inherit inputs;
           inherit theme;
-          inherit stylix-config;
+          inherit image;
           username = "mar";
         };
         modules =
@@ -176,7 +176,7 @@
         extraSpecialArgs = {
           inherit inputs;
           inherit theme;
-          inherit stylix-config;
+          inherit image;
           user = "mirza";
         };
       };
@@ -191,7 +191,7 @@
         extraSpecialArgs = {
           inherit inputs;
           inherit theme;
-          inherit stylix-config;
+          inherit image;
           user = "mar";
         };
       };
