@@ -16,7 +16,7 @@ in {
         # plugin = tmuxPlugins.catppuccin;
         plugin = tmux-catpuccin;
         extraConfig = ''
-          set -g @catppuccin_flavour "macchiato"
+          #set -g @catppuccin_flavour "macchiato"
           set -g @catppuccin_custom_plugin_dir "~/.tmux/plugins/tmux/custom"
 
           set -g @catppuccin_window_left_separator ""
