@@ -4,7 +4,7 @@
   lib,
   username,
   theme,
-  stylix-config,
+  image,
   ...
 }: {
   users.users.${username} = {
@@ -39,16 +39,15 @@
 
   stylix = {
     enable = true;
-    # base16Scheme = lib.mkDefault "${pkgs.base16-schemes}/share/themes/${theme}.yaml";
-    base16Scheme = lib.mkDefault "${pkgs.base16-schemes}/share/themes/${stylix-config.theme}.yaml";
+    base16Scheme = lib.mkDefault "${pkgs.base16-schemes}/share/themes/${theme}.yaml";
     image =
       pkgs.fetchFromGitHub {
         owner = "arunoruto";
         repo = "wallpapers";
-        rev = "0814f66ec93e546c57bef0bdf5bf60cde401cf32";
-        hash = "sha256-sCVHHUK13BiN6c+13Ca1wQidmBvrDoGBuJGlg2pXuo4=";
+        rev = "fbc9afaaac0fb40ac81ff054ddae9660a7716574";
+        hash = "sha256-DQGrrFDSAHLJMj26inTxk7jiLFm3cLI4jgCZX1mNZhA=";
       }
-      + "/${stylix-config.image}";
+      + "/${image}";
     # + "/art/kanagawa/kanagawa-van-gogh.jpg";
     cursor = {
       name = "catppuccin-macchiato-dark-cursors";
