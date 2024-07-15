@@ -17,7 +17,7 @@
       # wallpaper = "${pkgs.kdePackages.plasma-workspace-wallpapers}/share/wallpapers/Patak/contents/images/1080x1920.png";
     };
 
-    hotkeys.commands."launch-konsole" = {
+    hotkeys.commands."launch-wezterm" = {
       name = "Launch WezTerm";
       key = "Meta+Enter";
       command = "wezterm";
