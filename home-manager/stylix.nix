@@ -25,7 +25,7 @@ in {
     image = "${wallpapers}/${image}";
     targets = {
       nixvim.enable = false;
-      vscode.enable = false;
+      vscode.enable = true;
     };
   };
 }
