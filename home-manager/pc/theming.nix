@@ -30,7 +30,7 @@
       };
     };
     opacity = {
-      terminal = 0.975;
+      terminal = 0.95;
     };
     targets = {
       firefox = {
