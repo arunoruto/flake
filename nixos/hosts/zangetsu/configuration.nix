@@ -52,6 +52,7 @@
 
   hardware.opengl = {
     enable = true;
+    # package = pkgs.unstable.mesa.drivers;
     extraPackages = with pkgs; [
       intel-compute-runtime
       intel-ocl
