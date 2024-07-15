@@ -16,9 +16,13 @@
     package = pkgs.unstable.neovim-unwrapped;
     # vimAlias = true;
     editorconfig.enable = true;
+    opts.background = "dark";
     colorschemes = {
-      tokyonight = {
+      gruvbox = {
         enable = true;
+      };
+      tokyonight = {
+        enable = false;
         settings.style = "night";
       };
       catppuccin = {

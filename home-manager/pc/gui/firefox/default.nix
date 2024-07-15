@@ -2,6 +2,7 @@
 {config, ...}: {
   imports = [
     ./arcwtf.nix
+    ./pwa.nix
   ];
   programs.firefox = {
     enable = true;

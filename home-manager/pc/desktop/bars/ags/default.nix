@@ -27,15 +27,24 @@
     };
 
     home = {
-      # packages = with pkgs; [
-      #   bun
-      # ];
+      packages = with pkgs; [
+        brightnessctl
+        ddcutil
+        unstable.bun
+      ];
 
       file = {
         ".config/ags" = {
           recursive = true;
           source = ./config;
         };
+        ".config/ags/css/ags-variables.scss".text = ''
+          $backgroundColor: rgba(${config.lib.stylix.colors.withHashtag.base00}, 0.7);
+          $backgroundColor2: rgba(${config.lib.stylix.colors.withHashtag.base00}, 0.7);
+          $highlightColor: ${config.lib.stylix.colors.withHashtag.base08};
+          $foregroundColor: ${config.lib.stylix.colors.withHashtag.base05};
+          $foregroundColor2: ${config.lib.stylix.colors.withHashtag.base05};
+        '';
         ".config/ags/types" = {
           recursive = true;
           source = config.lib.file.mkOutOfStoreSymlink "${config.programs.ags.finalPackage}/share/com.github.Aylur.ags/types";

@@ -25,7 +25,8 @@ in {
 
       "$mod SHIFT, Q, killactive"
       "$mod SHIFT, E, exit"
-      "$mod SHIFT, R, exec, ${pkgs.hyprland}/bin/hyprctl reload"
+      "$mod SHIFT, R, exec, hyprctl reload"
+      # "$mod SHIFT, R, exec, ${pkgs.hyprland}/bin/hyprctl reload"
 
       # Move focus with mod + arrow keys
       "$mod, ${left},  movefocus, l"
@@ -93,7 +94,8 @@ in {
       # Shortcuts
       # "$mod, F1, exec, \${BROWSER}"
       # "$mod, F1, exec, google-chrome-stable"
-      "$mod, F1, exec, firefox"
+      # "$mod, F1, exec, firefox"
+      "$mod, F1, exec, ${config.home.sessionVariables.BROWSER}"
     ];
 
     bindm = [

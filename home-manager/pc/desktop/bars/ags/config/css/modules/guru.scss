@@ -1,0 +1,31 @@
+@use "../ags-variables.scss" as *;
+
+.key-combination {
+  color: $highlightColor;
+  font-weight: bold;
+  font-family: monospace;
+}
+
+.emacs-key-combination {
+  color: fuchsia;
+  font-weight: bold;
+  font-family: monospace;
+}
+
+.guru-box {
+  padding: 6px;
+}
+
+.key-description {
+  color: $foregroundColor;
+  margin-left: 8px;
+  font-style: oblique;
+  font-family: monospace;
+}
+
+.guru-window {
+  border: 3px solid $highlightColor;
+  background-color: $backgroundColor;
+  border-radius: 12px;
+  color: $foregroundColor;
+}

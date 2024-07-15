@@ -35,7 +35,7 @@
     targets = {
       firefox = {
         enable = false;
-        profileNames = ["mirza"];
+        # profileNames = ["mirza"];
       };
       # hyprland.enable = true;
       # hyprpaper.enable = true;

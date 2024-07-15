@@ -51,7 +51,7 @@ in {
           echo "    { config = config.nixpkgs.config; };"
         }
 
-        export LS_COLORS="$(vivid generate tokyonight-night)";
+        export LS_COLORS="$(vivid generate gruvbox-dark)";
 
         ## Autocompletions
         # tailscale

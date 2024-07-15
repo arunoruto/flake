@@ -10,8 +10,8 @@
   wallpapers = pkgs.fetchFromGitHub {
     owner = "arunoruto";
     repo = "wallpapers";
-    rev = "fbc9afaaac0fb40ac81ff054ddae9660a7716574";
-    hash = "sha256-DQGrrFDSAHLJMj26inTxk7jiLFm3cLI4jgCZX1mNZhA=";
+    rev = "8815698729ceff1f97fae5ab2bf930a9dd682198";
+    hash = "sha256-uPaPAggLFmureDXqKcvwr2uMb24QuxQzbwCqTHNSIrg=";
   };
 in {
   imports = [
@@ -25,6 +25,7 @@ in {
     image = "${wallpapers}/${image}";
     targets = {
       nixvim.enable = false;
+      vscode.enable = false;
     };
   };
 }

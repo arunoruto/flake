@@ -22,12 +22,18 @@
       url = "github:nix-community/home-manager/release-24.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    plasma-manager = {
+      url = "github:nix-community/plasma-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+    };
     nixvim = {
       # url = "github:nix-community/nixvim";
       # inputs.nixpkgs.follows = "nixpkgs-unstable";
       url = "github:nix-community/nixvim/nixos-24.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    neorg-overlay.url = "github:nvim-neorg/nixpkgs-neorg-overlay";
     nil.url = "github:oxalica/nil";
     # Styling
     stylix = {
@@ -36,8 +42,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     ags.url = "github:Aylur/ags";
-    # Misc
-    neorg-overlay.url = "github:nvim-neorg/nixpkgs-neorg-overlay";
   };
 
   outputs = {
@@ -51,8 +55,11 @@
   } @ inputs: let
     system = "x86_64-linux";
     # theme = "catppuccin-macchiato";
-    theme = "tokyo-night-dark";
-    image = "anime/jjk/satoru-gojo-jujutsu-kaisen-5k-ac.jpg";
+    # theme = "tokyo-night-dark";
+    theme = "gruvbox-material-dark-hard";
+    # image = "anime/jjk/satoru-gojo-jujutsu-kaisen-5k-ac.jpg";
+    # image = "anime/gruvbox/skull2.png";
+    image = "anime/gruvbox/boonies.png";
     # secure-boot = [
     #   lanzaboote.nixosModules.lanzaboote
     #   ({

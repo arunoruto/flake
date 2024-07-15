@@ -6,6 +6,7 @@
   imports = [
     ./firefox
     # ./steam.nix
+    ./vscode.nix
     ./zathura.nix
     # ./zed.nix
   ];
