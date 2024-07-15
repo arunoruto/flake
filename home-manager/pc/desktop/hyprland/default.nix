@@ -86,7 +86,8 @@
       };
 
       exec-once = [
-        "ags"
+        # "ags"
+        "ags --config \${FLAKE}/home-manager/pc/desktop/bars/ags/config/config.js"
         # "waybar"
         # ''mpvpaper -o "no-audio --loop-playlist --video-aspect-override=3:2" '*' $HOME/Videos/TBATE_AnimDesktop_Vol08.mp4''
         # ''mpvpaper -o "no-audio --loop-playlist panscan=1.0 '*' $HOME/Videos/TBATE_AnimDesktop_Vol08.mp4''
