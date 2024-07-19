@@ -13,6 +13,7 @@
     ./scanning.nix
     ./sound.nix
     ./ssd.nix
+    ./ssh.nix
     ./tailscale.nix
     ./vial.nix
   ];

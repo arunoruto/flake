@@ -33,13 +33,13 @@ in {
 
   # Enable SSH Daemon
   services = {
-    openssh = {
-      enable = true;
-      # require public key authentication for better security
-      #settings.PasswordAuthentication = false;
-      #settings.KbdInteractiveAuthentication = false;
-      #settings.PermitRootLogin = "yes";
-    };
+    # openssh = {
+    #   enable = true;
+    #   # require public key authentication for better security
+    #   #settings.PasswordAuthentication = false;
+    #   #settings.KbdInteractiveAuthentication = false;
+    #   #settings.PermitRootLogin = "yes";
+    # };
     # xrdp = {
     #   enable = true;
     #   defaultWindowManager = "gnome-remote-desktop";
