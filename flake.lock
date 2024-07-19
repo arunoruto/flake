@@ -771,6 +771,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-stable_2": {
+      "locked": {
+        "lastModified": 1720915306,
+        "narHash": "sha256-6vuViC56+KSr+945bCV8akHK+7J5k6n/epYg/W3I5eQ=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "74348da2f3a312ee25cea09b98cdba4cb9fa5d5d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "release-24.05",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs-unstable": {
       "locked": {
         "lastModified": 1720542800,
@@ -1015,6 +1031,7 @@
         "nixvim": "nixvim",
         "nur": "nur",
         "plasma-manager": "plasma-manager",
+        "sops-nix": "sops-nix",
         "stylix": "stylix"
       }
     },
@@ -1065,6 +1082,27 @@
       "original": {
         "owner": "oxalica",
         "repo": "rust-overlay",
+        "type": "github"
+      }
+    },
+    "sops-nix": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "nixpkgs-stable": "nixpkgs-stable_2"
+      },
+      "locked": {
+        "lastModified": 1720926522,
+        "narHash": "sha256-eTpnrT6yu1vp8C0B5fxHXhgKxHoYMoYTEikQx///jxY=",
+        "owner": "Mic92",
+        "repo": "sops-nix",
+        "rev": "0703ba03fd9c1665f8ab68cc3487302475164617",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Mic92",
+        "repo": "sops-nix",
         "type": "github"
       }
     },

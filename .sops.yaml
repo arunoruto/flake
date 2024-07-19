@@ -1,0 +1,7 @@
+keys:
+  - &zangetsu age1sv7v502vtcfqy3qpgp8jvk92rcajwgsqzngldt4233h4966jmvnq2lre7f
+creation_rules:
+  - path_regex: secrets.yaml$
+    key_groups:
+      - age:
+          - *zangetsu
