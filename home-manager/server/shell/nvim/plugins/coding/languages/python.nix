@@ -26,6 +26,7 @@
                 }
               '';
             };
+            isort.enable = true;
           };
         };
       };
