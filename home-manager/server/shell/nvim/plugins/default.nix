@@ -15,7 +15,7 @@
     ./lz-n.nix
     # ./nvim-tree.nix
     # ./substitute.nix
-    # ./trouble.nix
+    ./trouble.nix
   ];
 
   programs.nixvim = {
