@@ -86,6 +86,15 @@ in {
 
   programs.ssh = {
     enable = true;
+    matchBlocks = {
+      hublab = {
+        host = "gitlab.com github.com";
+        identitiesOnly = false;
+        identityFile = [
+          "~/.ssh/sops"
+        ];
+      };
+    };
     extraConfig = ''
       Host kyuubi.tail
           HostName kyuubi
