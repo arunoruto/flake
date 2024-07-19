@@ -6,6 +6,7 @@
   imports = [
     ./shell
     ./programs
+    ./secrets.nix
   ];
 
   home.packages = with pkgs; [

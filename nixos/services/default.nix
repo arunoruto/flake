@@ -11,6 +11,7 @@
     ./oneapi.nix
     ./printing.nix
     ./scanning.nix
+    ./secrets.nix
     ./sound.nix
     ./ssd.nix
     ./ssh.nix
@@ -24,10 +25,12 @@
   fwupd.enable = lib.mkDefault true;
   printing.enable = lib.mkDefault false;
   scanning.enable = lib.mkDefault false;
+  secrets.enable = lib.mkDefault true;
   oneapi.enable = lib.mkDefault false;
   # oneapi.enable = lib.mkDefault true;
   pipewire.enable = lib.mkDefault true;
   drive-optimizations.enable = lib.mkDefault true;
+  ssh.enable = lib.mkDefault true;
   tailscale.enable = lib.mkDefault true;
   vial.enable = lib.mkDefault true;
 

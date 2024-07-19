@@ -46,6 +46,13 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     ags.url = "github:Aylur/ags";
+
+    # Private
+    secrets = {
+      url = "git+ssh://git@github.com/arunoruto/secrets.nix.git?ref=main&shallow=1";
+      # url = "https://github.com/arunoruto/secrets.nix.git?ref=main&shallow=1";
+      flake = false;
+    };
   };
 
   outputs = {
