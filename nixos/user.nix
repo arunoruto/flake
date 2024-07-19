@@ -1,5 +1,6 @@
 {
   inputs,
+  config,
   pkgs,
   lib,
   username,
@@ -7,21 +8,27 @@
   image,
   ...
 }: {
-  users.users.${username} = {
-    isNormalUser = true;
-    shell = pkgs.zsh;
-    description = "Mirza";
-    extraGroups = [
-      "dialout"
-      "networkmanager"
-      "wheel"
-      "scanner"
-      "lp"
-      "pipewire"
-      "audio"
-      "video"
-      "render"
-    ];
+  sops.secrets."passwords/${username}".neededForUsers = true;
+
+  users = {
+    # mutableUsers = false;
+    users.${username} = {
+      isNormalUser = true;
+      # hashedPasswordFile = config.sops.secrets."passwords/${username}".path;
+      shell = pkgs.zsh;
+      description = "Mirza";
+      extraGroups = [
+        "dialout"
+        "networkmanager"
+        "wheel"
+        "scanner"
+        "lp"
+        "pipewire"
+        "audio"
+        "video"
+        "render"
+      ];
+    };
   };
 
   programs.zsh.enable = true;
