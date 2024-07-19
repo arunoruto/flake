@@ -10,6 +10,8 @@
       language-server = {
         gpt = {
           command = "helix-gpt";
+          args = ["--handler" "copilot"];
+          # args = ["--handler" "openai" "--openaiKey"];
         };
       };
     };
