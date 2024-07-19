@@ -7,6 +7,7 @@
   programs.firefox = {
     enable = true;
     # languagePacks = ["de" "en-US"];
+    # TODO: warning: The cfg.enableGnomeExtensions argument for `firefox.override` is deprecated, please add `pkgs.gnome-browser-connector` to `nativeMessagingHosts` instead
     enableGnomeExtensions = true;
 
     profiles.mirza = {
