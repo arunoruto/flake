@@ -51,7 +51,9 @@ in {
           echo "    { config = config.nixpkgs.config; };"
         }
 
+        # Variables
         export LS_COLORS="$(vivid generate gruvbox-dark)";
+        export COPILOT_API_KEY="$(cat ${config.sops.secrets."tokens/copilot".path})"
 
         ## Autocompletions
         # tailscale
@@ -77,6 +79,7 @@ in {
         unset __conda_setup
         # <<< conda initialize <<<
       '';
+
       antidote = {
         enable = true;
         plugins = [
