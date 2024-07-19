@@ -49,8 +49,8 @@
 
     # Private
     secrets = {
-      url = "git+ssh://git@github.com/arunoruto/secrets.nix.git?ref=main&shallow=1";
-      # url = "https://github.com/arunoruto/secrets.nix.git?ref=main&shallow=1";
+      # url = "git+ssh://git@github.com/arunoruto/secrets.nix.git?ref=main&shallow=1";
+      url = "git+https://github.com/arunoruto/secrets.nix.git?ref=main&shallow=1";
       flake = false;
     };
   };
