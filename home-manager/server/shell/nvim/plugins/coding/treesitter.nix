@@ -1,7 +1,7 @@
 {lib, ...}: {
   programs.nixvim = {
     plugins = {
-      treesitter-context.enable = true;
+      treesitter-context.enable = false;
       treesitter = {
         enable = lib.mkForce true;
         ensureInstalled = "all";
