@@ -1,6 +1,8 @@
-{pkgs, ...}: {
-  home.packages = with pkgs; [
-    unstable.glab # Gitlab CLI tool
+{pkgs, ...}: let
+  glab-pkg = pkgs.unstable.glab;
+in {
+  home.packages = [
+    glab-pkg # Gitlab CLI tool
   ];
 
   programs = {
@@ -25,10 +27,10 @@
       ];
       extraConfig = {
         "credential \"https://gitlab.com\"" = {
-          helper = "${pkgs.glab}/bin/glab auth git-credential";
+          helper = "${glab-pkg}/bin/glab auth git-credential";
         };
         "credential \"https://gitlab.bv.e-technik.tu-dortmund.de\"" = {
-          helper = "${pkgs.glab}/bin/glab auth git-credential";
+          helper = "${glab-pkg}/bin/glab auth git-credential";
         };
         pull = {
           rebase = true;
