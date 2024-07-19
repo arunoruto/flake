@@ -91,7 +91,7 @@ in {
         host = "gitlab.com github.com";
         identitiesOnly = false;
         identityFile = [
-          "~/.ssh/sops"
+          "~/.ssh/id_sops"
         ];
       };
     };
