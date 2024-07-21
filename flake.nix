@@ -19,7 +19,6 @@
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # Enable nur in the future
     nur.url = "github:nix-community/NUR";
     # Home Manager
     home-manager = {

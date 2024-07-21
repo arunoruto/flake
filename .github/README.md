@@ -60,7 +60,7 @@ nh home switch "./#<username>"
 
 Nixvim is the nix way to configure neovim. More information can be found in the [nvim README](./../home-manager/shell/nvim/README.md).
 
-# Helpful Material
+## Helpful Material
 
 Some nice intro is provided by [thiscute.world](https://nixos-and-flakes.thiscute.world/).
 
@@ -73,10 +73,15 @@ Some nice intro is provided by [thiscute.world](https://nixos-and-flakes.thiscut
 
 [Ampersand](https://www.youtube.com/watch?v=nLwbNhSxLd4) has a nice video about configuring a NixOS system similar to vimjoyer's `Ultimate NixOS Guide | Flakes | Home-Manager`
 
-# Cleanup
+## Cleanup
 
 It can get a bit messy with the generations, especially if nix is installed as a package manager.
 To clean up such systems, you can use the following commands:
 
 - `nix-collect-garbage`: can be used on all systems and the parameter `--delete-older-than` can be specified with a period (for example `"30 days"`).
   This command is mostly an alias of `nix-store --gc` or `nix store gc`, but extends it with the `--delete-older-than` and `--delete-old` flag.
+
+## TODO
+
+- Integrate [disko](https://github.com/nix-community/disko) for each system,
+  so it can be built easier later on.
