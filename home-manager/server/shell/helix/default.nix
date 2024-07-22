@@ -1,5 +1,5 @@
 # https://github.com/helix-editor/helix/wiki/Migrating-from-Vim
-{
+{pkgs, ...}: {
   imports = [
     ./keys.nix
     ./languages
@@ -8,6 +8,7 @@
   programs = {
     helix = {
       enable = true;
+      package = pkgs.unstable.helix;
       settings = {
         # theme = "catppuccin_macchiato";
         # theme = "base16_transparent";
