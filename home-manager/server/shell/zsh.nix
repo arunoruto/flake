@@ -1,4 +1,8 @@
-{config, ...}: let
+{
+  config,
+  pkgs,
+  ...
+}: let
   zsh-sh-catppuccin = "";
   #zsh-sh-catppuccin = builtins.fetchGit {
   #  url = "https://github.com/catppuccin/zsh-syntax-highlighting";
@@ -45,7 +49,7 @@ in {
         function get-pr-override() {
           PR_NO=$1
           HASH=$(curl -sL https://github.com/NixOS/nixpkgs/pull/''${PR_NO}.patch \
-                | head -n 1 | grep -o -E -e "[0-9a-f]{40}")
+                | head -n 1 | ${pkgs.gnugrep}/bin/grep -o -E -e "[0-9a-f]{40}")
           echo pr''${PR_NO} = "import (fetchTarball"
           echo "  \"\''${nixpkgs-tars}''${HASH}.tar.gz\")"
           echo "    { config = config.nixpkgs.config; };"
