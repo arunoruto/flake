@@ -1,6 +1,10 @@
 {pkgs, ...}: let
   packages = ps:
     with ps; [
+      # Jupyter
+      jupyter
+      ipython
+      python-lsp-server
       # Must
       matplotlib
       numba
@@ -9,6 +13,8 @@
       pandas
       plotly
       streamlit
+      # Misc
+      psutil
       # Optional
       # opencv4
       # pillow
