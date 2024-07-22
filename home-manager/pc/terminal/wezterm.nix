@@ -5,9 +5,9 @@
       local wezterm = require 'wezterm'
       local config = {}
       config.enable_wayland = false
-      -- config.color_scheme = 'Catppuccin Macchiato'
-      config.color_scheme = 'stylix'
       config.hide_tab_bar_if_only_one_tab = true
+      -- config.color_scheme = 'Catppuccin Macchiato'
+      -- config.color_scheme = 'stylix'
       -- config.window_decorations = 'TITLE | RESIZE'
       config.window_decorations = 'RESIZE'
       -- config.window_frame = {
@@ -26,13 +26,13 @@
       -- config.window_background_opacity = 0.99
       -- config.win32_system_backdrop = 'Acrylic'
       -- config.macos_window_background_blur = 20
+      -- config.font = wezterm.font_with_fallback {
+      --   'FiraCode Nerd Font',
+      --   'JetBrains Mono',
+      --   'Noto Color Emoji',
+      -- }
       config.initial_rows = 36
       config.initial_cols = 108
-      config.font = wezterm.font_with_fallback {
-        'FiraCode Nerd Font',
-        'JetBrains Mono',
-        'Noto Color Emoji',
-      }
       config.warn_about_missing_glyphs = false
       return config
     '';
