@@ -25,6 +25,7 @@
 
       settings = {
         "browser.startup.page" = 3;
+        "media.ffmpeg.vaapi.enabled" = true;
       };
     };
   };
