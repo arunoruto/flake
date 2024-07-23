@@ -15,6 +15,7 @@
     ./sound.nix
     ./ssd.nix
     ./ssh.nix
+    ./suid.nix
     ./tailscale.nix
     ./vial.nix
   ];

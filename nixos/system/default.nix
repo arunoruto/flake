@@ -4,8 +4,11 @@
   ...
 }: {
   imports = [
+    ./boot.nix
+    ./locale.nix
     ./nix-utils.nix
     ./secure-boot.nix
+    ./security.nix
   ];
 
   nix-utils.enable = lib.mkDefault true;
