@@ -25,6 +25,7 @@
   fingerprint.enable = lib.mkDefault false;
   flatpak.enable = lib.mkDefault false;
   fwupd.enable = lib.mkDefault true;
+  kanata.enable = lib.mkDefault true;
   printing.enable = lib.mkDefault false;
   scanning.enable = lib.mkDefault false;
   secrets.enable = lib.mkDefault true;
