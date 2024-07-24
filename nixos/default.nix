@@ -7,7 +7,7 @@
     ./services
     ./system
 
-    ./pr.nix
+    # ./pr.nix
 
     ./user.nix
   ];
