@@ -8,6 +8,7 @@
           language-servers = [
             "pyright"
             "ruff"
+            "gpt"
           ];
           formatter = {
             command = "ruff";
