@@ -8,6 +8,7 @@
     ./fingerprint.nix
     ./flatpak.nix
     ./fwupd.nix
+    ./kanata.nix
     ./oneapi.nix
     ./printing.nix
     ./scanning.nix
