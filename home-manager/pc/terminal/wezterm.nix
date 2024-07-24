@@ -4,6 +4,7 @@
     extraConfig = ''
       local wezterm = require 'wezterm'
       local config = {}
+      config.audible_bell = "Disabled"
       config.enable_wayland = false
       config.hide_tab_bar_if_only_one_tab = true
       -- config.color_scheme = 'Catppuccin Macchiato'
