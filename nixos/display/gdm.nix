@@ -17,6 +17,15 @@
       # displayManager.preStart = "sleep 1";
     };
 
-    programs.ssh.askPassword = lib.mkForce "${pkgs.gnome.seahorse.out}/bin/seahorse";
+    programs = {
+      ssh.askPassword = lib.mkForce "${pkgs.gnome.seahorse.out}/bin/seahorse";
+      dconf.profiles.gdm.databases = [
+        {
+          settings."org/gnome/settings-daemon/plugins/power" = {
+            ambient-enabled = false;
+          };
+        }
+      ];
+    };
   };
 }
