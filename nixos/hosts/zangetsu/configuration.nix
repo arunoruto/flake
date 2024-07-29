@@ -13,6 +13,7 @@
   # Set hostname
   networking.hostName = lib.mkForce "zangetsu"; # Define your hostname.
 
+  # Eanble fingerprint for framework laptop
   fingerprint.enable = true;
 
   # Framework specific kernel Params
