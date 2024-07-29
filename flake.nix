@@ -45,7 +45,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     ags.url = "github:Aylur/ags";
-    poetry2nix.url = "github:nix-community/poetry2nix";
+    poetry2nix = {
+      url = "github:nix-community/poetry2nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     # Private
     secrets = {
@@ -233,11 +236,16 @@
 
     devShells.${system}.default = pkgs.mkShell {
       buildInputs = with pkgs; [
-        gdb
-        zlib
+        # gdb
+        # zlib
+        python3
+        poetry
         inputs.poetry2nix.mkPoetryEnv
         {
           projectDir = "./.";
+          overrides = [
+            inputs.poetry2nix.defaultPoetryOverrides
+          ];
         }
       ];
       shellHook = ''
