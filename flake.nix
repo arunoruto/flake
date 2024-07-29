@@ -45,6 +45,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     ags.url = "github:Aylur/ags";
+    poetry2nix.url = "github:nix-community/poetry2nix";
 
     # Private
     secrets = {
@@ -234,6 +235,10 @@
       buildInputs = with pkgs; [
         gdb
         zlib
+        inputs.poetry2nix.mkPoetryEnv
+        {
+          projectDir = "./.";
+        }
       ];
       shellHook = ''
         # export LD_LIBRARY_PATH=${pkgs.lib.makeLibraryPath [pkgs.stdenv.cc.cc.lib pkgs.zlib]}:''$LD_LIBRARY_PATH
