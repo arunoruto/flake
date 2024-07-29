@@ -174,6 +174,22 @@
             ./nixos/hosts/kyuubi/configuration.nix
           ];
       };
+
+      # Server
+      kuchiki = nixpkgs.lib.nixosSystem {
+        inherit system;
+        specialArgs = {
+          inherit inputs;
+          inherit theme;
+          inherit image;
+          username = "mirza";
+        };
+        modules = 
+          nixos-modules
+          ++ [
+            ./nixos/hosts/kuchiki/configuration.nix
+          ];
+      };
     };
 
     homeConfigurations = {
