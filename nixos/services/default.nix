@@ -37,14 +37,14 @@
   tailscale.enable = lib.mkDefault true;
   vial.enable = lib.mkDefault true;
 
-  services.xserver = {
-    enable = true;
-    xkb = {
-      layout = "de";
-      variant = "";
-    };
-    excludePackages = with pkgs; [
-      xterm
-    ];
-  };
+  # services.xserver = {
+  #   enable = true;
+  #   xkb = {
+  #     layout = "de";
+  #     variant = "";
+  #   };
+  #   excludePackages = with pkgs; [
+  #     xterm
+  #   ];
+  # };
 }
