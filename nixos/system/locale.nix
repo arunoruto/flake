@@ -2,6 +2,8 @@ let
   british = "en_GB.UTF-8";
   german = "de_DE.UTF-8";
 in {
+  # Set keyboard layout in TTY
+  console.keyMap = "de";
   # Set your time zone.
   # time.timeZone = "Europe/Berlin";
   # allow TZ to be set by desktop user
