@@ -11,8 +11,10 @@
             "gpt"
           ];
           formatter = {
-            command = "ruff";
-            args = ["format" "--line-length" "88" "--quiet" "-"];
+            command = "bash";
+            args = ["-c" "isort - | ruff format -"];
+            # command = "ruff";
+            # args = ["format" "--line-length" "88" "--quiet" "-"];
           };
           roots = [
             "setup.py"
@@ -62,6 +64,7 @@
       python311Packages.debugpy
       pyright
       unstable.ruff
+      unstable.isort
     ];
   };
 }
