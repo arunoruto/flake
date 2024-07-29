@@ -1,18 +1,29 @@
-{pkgs, ...}: {
-  services = {
-    desktopManager.plasma6.enable = true;
+{
+  config,
+  lib,
+  # pkgs,
+  ...
+}: {
+  options = {
+    kde.enable = lib.mkEnableOption "Use the KDE desktop environment";
   };
 
-  security.pam.services.kwallet = {
-    name = "kwallet";
-    enableKwallet = true;
+  config = lib.mkIf config.kde.enable {
+    services = {
+      desktopManager.plasma6.enable = true;
+    };
+
+    security.pam.services.kwallet = {
+      name = "kwallet";
+      enableKwallet = true;
+    };
+
+    # services.xserver.displayManager.sddm.enable = true;
+
+    # environment.gnome.excludePackages =
+    #   (with pkgs; [
+    #     ])
+    #   ++ (with pkgs.gnome; [
+    #     ]);
   };
-
-  # services.xserver.displayManager.sddm.enable = true;
-
-  # environment.gnome.excludePackages =
-  #   (with pkgs; [
-  #     ])
-  #   ++ (with pkgs.gnome; [
-  #     ]);
 }

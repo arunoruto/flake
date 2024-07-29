@@ -1,6 +1,6 @@
 {
-  pkgs,
   config,
+  pkgs,
   lib,
   ...
 }: {
@@ -8,7 +8,7 @@
     lightdm.enable = lib.mkEnableOption "Use light display manager";
   };
 
-  config = {
+  config = lib.mkIf config.lightdm.enable {
     services.xserver.displayManager.lightdm = {
       enable = true;
       # background = lib.mkForce /home/mirza/Pictures/wallpapers/art/kanagawa/kanagawa-van-gogh.jpg;

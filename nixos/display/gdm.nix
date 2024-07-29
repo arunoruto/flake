@@ -1,4 +1,5 @@
 {
+  config,
   pkgs,
   lib,
   ...
@@ -7,7 +8,7 @@
     gdm.enable = lib.mkEnableOption "Use gnome display manager";
   };
 
-  config = {
+  config = lib.mkIf config.gdm.enable {
     services = {
       xserver = {
         displayManager = {

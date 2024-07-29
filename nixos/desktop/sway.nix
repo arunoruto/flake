@@ -1,4 +1,9 @@
-{pkgs, ...}: let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
   # bash script to let dbus know about important env variables and
   # propagate them to relevent services run at the end of sway config
   # see
@@ -37,42 +42,48 @@
     '';
   };
 in {
-  environment.systemPackages = with pkgs; [
-    dbus # make dbus-update-activation-environment available in the path
-    dbus-sway-environment
-    configure-gtk
-    grim # screenshot functionality
-    slurp # screenshot functionality
-    wl-clipboard # wl-copy and wl-paste for copy/paste from stdin / stdout
-    mako # notification system developed by swaywm maintainer
-    wdisplays # tool to configure displays
-  ];
-
-  # xdg-desktop-portal works by exposing a series of D-Bus interfaces
-  # known as portals under a well-known name
-  # (org.freedesktop.portal.Desktop) and object path
-  # (/org/freedesktop/portal/desktop).
-  # The portal interfaces include APIs for file access, opening URIs,
-  # printing and others.
-  services.dbus.enable = true;
-  xdg.portal = {
-    enable = true;
-    wlr.enable = true;
-    # gtk portal needed to make gtk apps happy
-    #extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+  options = {
+    sway.enable = lib.mkEnableOption "Use the Sway window manager";
   };
 
-  # enable sway window manager
-  programs.sway = {
-    enable = true;
-    wrapperFeatures.gtk = true;
-    extraPackages = with pkgs; [swaylock swayidle foot rofi playerctl waybar];
+  config = lib.mkIf config.sway.enable {
+    environment.systemPackages = with pkgs; [
+      dbus # make dbus-update-activation-environment available in the path
+      dbus-sway-environment
+      configure-gtk
+      grim # screenshot functionality
+      slurp # screenshot functionality
+      wl-clipboard # wl-copy and wl-paste for copy/paste from stdin / stdout
+      mako # notification system developed by swaywm maintainer
+      wdisplays # tool to configure displays
+    ];
+
+    # xdg-desktop-portal works by exposing a series of D-Bus interfaces
+    # known as portals under a well-known name
+    # (org.freedesktop.portal.Desktop) and object path
+    # (/org/freedesktop/portal/desktop).
+    # The portal interfaces include APIs for file access, opening URIs,
+    # printing and others.
+    services.dbus.enable = true;
+    xdg.portal = {
+      enable = true;
+      wlr.enable = true;
+      # gtk portal needed to make gtk apps happy
+      #extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+    };
+
+    # enable sway window manager
+    programs.sway = {
+      enable = true;
+      wrapperFeatures.gtk = true;
+      extraPackages = with pkgs; [swaylock swayidle foot rofi playerctl waybar];
+    };
+
+    # If you are on a laptop, you can set up brightness and volume function keys as follows:
+    programs.light.enable = true;
+
+    # Disable fringerprint login
+    # https://discourse.nixos.org/t/swaylock-wont-unlock/27275/3
+    security.pam.services.swaylock.fprintAuth = false;
   };
-
-  # If you are on a laptop, you can set up brightness and volume function keys as follows:
-  programs.light.enable = true;
-
-  # Disable fringerprint login
-  # https://discourse.nixos.org/t/swaylock-wont-unlock/27275/3
-  security.pam.services.swaylock.fprintAuth = false;
 }
