@@ -236,17 +236,18 @@
 
     devShells.${system}.default = pkgs.mkShell {
       buildInputs = with pkgs; [
-        # gdb
-        # zlib
-        python3
-        poetry
-        inputs.poetry2nix.mkPoetryEnv
-        {
-          projectDir = "./.";
-          overrides = [
-            inputs.poetry2nix.defaultPoetryOverrides
-          ];
-        }
+        gdb
+        stdenv.cc.cc.lib
+        zlib
+        # python3
+        # poetry
+        # inputs.poetry2nix.mkPoetryEnv
+        # {
+        #   projectDir = "./.";
+        #   overrides = [
+        #     inputs.poetry2nix.defaultPoetryOverrides
+        #   ];
+        # }
       ];
       shellHook = ''
         # export LD_LIBRARY_PATH=${pkgs.lib.makeLibraryPath [pkgs.stdenv.cc.cc.lib pkgs.zlib]}:''$LD_LIBRARY_PATH
