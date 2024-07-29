@@ -1,5 +1,4 @@
 {
-  inputs,
   pkgs,
   lib,
   ...
@@ -10,21 +9,40 @@
     ../..
   ];
 
+  # display-manager.enable = lib.mkForce false;
+  # desktop-environment.enable = lib.mkForce false;
+  display-manager.enable = false;
+  desktop-environment.enable = false;
+  media.enable = true;
+
+  firefox.enable = false;
+  chrome.enable = false;
+  steam.enable = false;
+
   # Set hostname
   networking.hostName = lib.mkForce "kuchiki"; # Define your hostname.
 
-  # boot = {
-  #   kernelParams = [
-  #     #"quiet"
-  #     #"splash"
-  #     "ahci.mobile_lpm_policy=3"
-  #     # For Power consumption
-  #     # https://kvark.github.io/linux/framework/2021/10/17/framework-nixos.html
-  #     "mem_sleep_default=deep"
-  #   ];
-  #   initrd.kernelModules = ["i915"];
-  # };
+  boot = {
+    kernelModules = ["amdgpu"];
+    # kernelParams = [
+    #   #"quiet"
+    #   #"splash"
+    #   "ahci.mobile_lpm_policy=3"
+    #   # For Power consumption
+    #   # https://kvark.github.io/linux/framework/2021/10/17/framework-nixos.html
+    #   "mem_sleep_default=deep"
+    # ];
+    # initrd.kernelModules = ["i915"];
+  };
 
+  hardware = {
+    opengl.extraPackages = with pkgs; [
+      # OpenCL
+      rocmPackages.clr.icd
+      # AMDVLK
+      amdvlk
+    ];
+  };
   # hardware.opengl = {
   #   enable = true;
   #   # package = pkgs.unstable.mesa.drivers;
