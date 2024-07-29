@@ -10,8 +10,8 @@
 
   config = lib.mkIf config.plex.enable {
     services.plex = {
-      enable = true
+      enable = true;
+      package = pkgs.unstable.plex;
     };
   };
-
 }
