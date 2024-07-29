@@ -231,8 +231,9 @@
     };
 
     devShells.${system}.default = pkgs.mkShell {
-      buildInputs = [
-        pkgs.zlib
+      buildInputs = with pkgs; [
+        gdb
+        zlib
       ];
       shellHook = ''
         export LD_LIBRARY_PATH=${pkgs.lib.makeLibraryPath [pkgs.stdenv.cc.cc.lib pkgs.zlib]}:''$LD_LIBRARY_PATH
