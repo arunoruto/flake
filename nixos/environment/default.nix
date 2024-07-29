@@ -12,5 +12,6 @@
   ];
 
   chrome.enable = lib.mkDefault true;
+  firefox.enable = lib.mkDefault true;
   steam.enable = lib.mkDefault true;
 }

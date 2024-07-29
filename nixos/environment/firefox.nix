@@ -1,12 +1,23 @@
-{pkgs, ...}: {
-  environment.systemPackages = with pkgs; [
-    (wrapFirefox (firefox-unwrapped.override {
-      pipewireSupport = true;
-    }) {})
-  ];
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
+  options = {
+    firefox.enable = lib.mkEnableOption "Configure firefox systemwide";
+  };
 
-  programs.firefox = {
-    enable = true;
-    languagePacks = ["de" "en-US"];
+  config = lib.mkIf config.firefox.enable {
+    environment.systemPackages = with pkgs; [
+      (wrapFirefox (firefox-unwrapped.override {
+        pipewireSupport = true;
+      }) {})
+    ];
+
+    programs.firefox = {
+      enable = true;
+      languagePacks = ["de" "en-US"];
+    };
   };
 }
