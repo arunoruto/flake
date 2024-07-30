@@ -1,3 +1,5 @@
+# Got autocompletions? Put them under ~/.nix-profile/share/zsh/site-functions
+# tailscale completion zsh &> ~/.nix-profile/share/zsh/site-functions/_tailscale
 {
   config,
   pkgs,
@@ -41,6 +43,7 @@ in {
       syntaxHighlighting = {
         enable = true;
       };
+      # defaultKeymap = "vim";
 
       initExtra = ''
         # Disable all sounds
@@ -51,8 +54,8 @@ in {
         zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
         zstyle ':completion:*' list-colors "''${(s.:.)LS_COLORS}"
 
-        bindkey "^[[1;5C" forward-word
-        bindkey "^[[1;5D" backward-word
+        # bindkey "^[[1;5C" forward-word
+        # bindkey "^[[1;5D" backward-word
 
         # Up(A) and down(B) for history search
         # bindkey '^[[A' history-substring-search-up
@@ -73,8 +76,8 @@ in {
 
         ## Autocompletions
         # tailscale
-        eval "tailscale completion zsh &> ~/.config/zsh/_tailscale"
-        source ~/.config/zsh/_tailscale
+        # eval "tailscale completion zsh &> ~/.config/zsh/_tailscale"
+        # source ~/.config/zsh/_tailscale
         # bws
         # eval "bws completions zsh &> ~/.config/zsh/_bws"
         # source ~/.config/zsh/_bws
@@ -133,4 +136,7 @@ in {
     direnv.enableZshIntegration = true;
     # zellij.enableZshIntegration = true;
   };
+
+  # home.file.".nix-profile/share/zsh/site-functions/_tailscale".source = "{config.services.tailscale.package}";
+  # home.file.".nix-profile/share/zsh/site-functions/_tailscale".source = "${pkgs.unstable.tailscale}";
 }
