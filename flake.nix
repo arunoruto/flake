@@ -176,6 +176,7 @@
           nixos-modules
           ++ [
             ./nixos/hosts/kyuubi/configuration.nix
+            # home-manager.nixosModules.home-manager
           ];
       };
 

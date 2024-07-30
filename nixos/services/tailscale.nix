@@ -13,9 +13,9 @@ in {
   config = lib.mkIf config.tailscale.enable {
     services.tailscale = {
       enable = true;
+      package = pkgs.unstable.tailscale;
       port = tailscale-port;
       useRoutingFeatures = "client";
-      package = pkgs.unstable.tailscale;
       extraUpFlags = [
         "--accept-routes"
       ];
