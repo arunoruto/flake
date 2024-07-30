@@ -7,6 +7,7 @@
     ./steam.nix
     ./chrome.nix
     ./programming.nix
+    ./python.nix
 
     # ./wayland.nix
   ];
