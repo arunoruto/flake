@@ -3,11 +3,11 @@
   pkgs,
   ...
 }: {
-  imports = [
-    inputs.nix-ld.nixosModules.nix-ld
-  ];
+  # imports = [
+  #   inputs.nix-ld.nixosModules.nix-ld
+  # ];
 
-  programs.nix-ld.dev = {
+  programs.nix-ld = {
     enable = true;
     package = pkgs.nix-ld-rs;
     libraries = with pkgs; [
