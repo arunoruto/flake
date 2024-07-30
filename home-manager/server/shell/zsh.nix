@@ -32,7 +32,15 @@ in {
         path = "${config.xdg.dataHome}/zsh/history";
       };
       autosuggestion.enable = true;
-      enableCompletion = false;
+      enableCompletion = true;
+      historySubstringSearch = {
+        enable = true;
+        searchDownKey = ["^[[B"];
+        searchUpKey = ["^[[A"];
+      };
+      syntaxHighlighting = {
+        enable = true;
+      };
 
       initExtra = ''
         # Disable all sounds
@@ -45,6 +53,10 @@ in {
 
         bindkey "^[[1;5C" forward-word
         bindkey "^[[1;5D" backward-word
+
+        # Up(A) and down(B) for history search
+        # bindkey '^[[A' history-substring-search-up
+        # bindkey '^[[B' history-substring-search-down
 
         function get-pr-override() {
           PR_NO=$1
@@ -64,8 +76,8 @@ in {
         eval "tailscale completion zsh &> ~/.config/zsh/_tailscale"
         source ~/.config/zsh/_tailscale
         # bws
-        eval "bws completions zsh &> ~/.config/zsh/_bws"
-        source ~/.config/zsh/_bws
+        # eval "bws completions zsh &> ~/.config/zsh/_bws"
+        # source ~/.config/zsh/_bws
 
         #source ${zsh-sh-catppuccin}/themes/catppuccin_macchiato-zsh-syntax-highlighting.zsh
 
@@ -85,10 +97,11 @@ in {
       '';
 
       antidote = {
-        enable = true;
+        enable = false;
         plugins = [
           "zsh-users/zsh-autosuggestions"
           "zsh-users/zsh-completions"
+          "zsh-users/zsh-history-substring-search"
           "zsh-users/zsh-syntax-highlighting"
         ];
       };
