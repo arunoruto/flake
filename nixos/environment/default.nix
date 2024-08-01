@@ -9,7 +9,7 @@
     ./programming.nix
     ./python.nix
 
-    # ./wayland.nix
+    ./wayland.nix
   ];
 
   chrome.enable = lib.mkDefault true;

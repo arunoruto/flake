@@ -31,24 +31,7 @@
       vimPlugins.nvim-dap-python
     ];
     extraConfigLua = ''
-      require("lz.n").load {
-        {
-          "nvim-dap",
-          cmd = "DapToggleBreakpoint",
-        },
-        --{
-        --  "nvim-dap-ui",
-        --  after = function ()
-        --    require("dap").setup()
-        --  end,
-        --},
-        --{
-        --  "nvim-dap-python",
-        --  after = function ()
-        --    require("dap").setup()
-        --  end,
-        --}
-      }
+
     '';
   };
 }

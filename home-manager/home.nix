@@ -25,10 +25,6 @@ in {
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
   home = {
-    #username = builtins.getEnv "USER";
-    #homeDirectory = builtins.getEnv "HOME";
-    #username = ''${builtins.getEnv "USER"}'';
-    #homeDirectory = ''${builtins.getEnv "HOME"}'';
     username = user;
     homeDirectory = "/home/${user}";
   };

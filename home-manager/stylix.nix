@@ -14,9 +14,9 @@
     hash = "sha256-uPaPAggLFmureDXqKcvwr2uMb24QuxQzbwCqTHNSIrg=";
   };
 in {
-  imports = [
-    inputs.stylix.homeManagerModules.stylix
-  ];
+  # imports = [
+  #   inputs.stylix.homeManagerModules.stylix
+  # ];
 
   stylix = {
     enable = true;

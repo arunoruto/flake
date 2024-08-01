@@ -54,14 +54,5 @@
     #  { mode = "n"; key = "<leader>fs"; action = "<cmd>Telescope live_grep<CR>";    options = { silent = true; desc = "Find string in cwd"; }; }
     #  { mode = "n"; key = "<leader>fc"; action = "<cmd>Telescope grep_string<CR>";  options = { silent = true; desc = "Find string under cursor in cwd"; }; }
     #];
-    extraConfigLua = ''
-      -- lazy load
-      require("lz.n").load {
-        {
-          "telescope.nvim",
-          cmd = "Telescope",
-        }
-      }
-    '';
   };
 }

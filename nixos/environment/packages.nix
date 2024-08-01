@@ -59,8 +59,8 @@
       #mailspring
       masterpdfeditor
       # mprime
+      unstable.plex-desktop
       remmina
-      thunderbird
       zoom-us
       zotero
 
