@@ -1,0 +1,12 @@
+import { barWindow } from "./src/bar.ts";
+// import { mediaPlayerWindow } from "src/mediaPlayer.js";
+// import { appLauncherWindow } from "./src/launcher.js";
+// import { notificationBalloonsWindow } from "./src/notificationPopups.js";
+// import { guruWindow } from "./src/widget/guruWindow.js";
+
+App.config({
+  style: "./css/style.scss",
+  windows: [barWindow()],
+});
+
+export {};

@@ -1,0 +1,13 @@
+@use "ags-variables.scss" as *;
+@use "modules/launcher.scss";
+@use "modules/guru.scss";
+@use "modules/notification.scss";
+@use "modules/player.scss";
+@use "modules/bar.scss";
+
+.transparent-button {
+  background: none;
+  background-image: none;
+  border: none;
+  color: $foregroundColor;
+}
