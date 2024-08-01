@@ -30,14 +30,15 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.home-manager.follows = "home-manager";
     };
-    nixvim = {
-      # url = "github:nix-community/nixvim";
-      # inputs.nixpkgs.follows = "nixpkgs-unstable";
-      url = "github:nix-community/nixvim/nixos-24.05";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    neorg-overlay.url = "github:nvim-neorg/nixpkgs-neorg-overlay";
-    nil.url = "github:oxalica/nil";
+    # nixvim = {
+    #   # url = "github:nix-community/nixvim";
+    #   # inputs.nixpkgs.follows = "nixpkgs-unstable";
+    #   url = "github:nix-community/nixvim/nixos-24.05";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
+    # neorg-overlay.url = "github:nvim-neorg/nixpkgs-neorg-overlay";
+    # nil.url = "github:oxalica/nil";
+    nixvim-flake.url = "github:arunoruto/nvim.nix";
     # Styling
     stylix = {
       url = "github:danth/stylix";
@@ -111,6 +112,9 @@
       inherit system;
       overlays = [
         overlay-unstable
+        (final: prev: {
+          neovim = inputs.nixvim-flake.packages.${system}.default;
+        })
         # make unstable packages available via overlay
         # (final: prev: {
         #   unstable = nixpkgs-unstable.legacyPackages.${prev.system};
@@ -159,7 +163,26 @@
         modules =
           nixos-modules
           ++ [
-            ./nixos/hosts/zangetsu/configuration.nix
+            # ./hosts/zangetsu/configuration.nix
+            ./hosts/zangetsu
+            home-manager.nixosModules.home-manager
+            {
+              home-manager = {
+                useGlobalPkgs = true;
+                useUserPackages = true;
+                users.mirza = import ./home-manager/home.nix;
+
+                extraSpecialArgs = {
+                  inherit inputs;
+                  inherit theme;
+                  inherit image;
+                  user = "mirza";
+                };
+              };
+
+              # Optionally, use home-manager.extraSpecialArgs to pass
+              # arguments to home.nix
+            }
           ];
       };
 
@@ -198,26 +221,26 @@
     };
 
     homeConfigurations = {
-      mirza = home-manager.lib.homeManagerConfiguration {
-        inherit pkgs;
+      # mirza = home-manager.lib.homeManagerConfiguration {
+      #   inherit pkgs;
 
-        # Specify your home configuration modules here, for example,
-        # the path to your home.nix.
-        modules =
-          home-manager-modules
-          ++ [
-            ./nixos/hosts/zangetsu/home.nix
-          ];
+      #   # Specify your home configuration modules here, for example,
+      #   # the path to your home.nix.
+      #   modules =
+      #     home-manager-modules
+      #     ++ [
+      #       ./nixos/hosts/zangetsu/home.nix
+      #     ];
 
-        # Optionally use extraSpecialArgs
-        # to pass through arguments to home.nix
-        extraSpecialArgs = {
-          inherit inputs;
-          inherit theme;
-          inherit image;
-          user = "mirza";
-        };
-      };
+      #   # Optionally use extraSpecialArgs
+      #   # to pass through arguments to home.nix
+      #   extraSpecialArgs = {
+      #     inherit inputs;
+      #     inherit theme;
+      #     inherit image;
+      #     user = "mirza";
+      #   };
+      # };
 
       mar = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
@@ -241,23 +264,8 @@
         glib
         stdenv.cc.cc.lib
         zlib
-        # python3
-        # poetry
-        # inputs.poetry2nix.mkPoetryEnv
-        # {
-        #   projectDir = "./.";
-        #   overrides = [
-        #     inputs.poetry2nix.defaultPoetryOverrides
-        #   ];
-        # }
       ];
 
-      # libs = with pkgs;
-      #   lib.makeLibraryPath [
-      #     glib
-      #     stdenv.cc.cc.lib
-      #     zlib
-      #   ];
       shellHook = ''
         # export LD_LIBRARY_PATH=${pkgs.lib.makeLibraryPath [pkgs.glib pkgs.stdenv.cc.cc.lib pkgs.zlib]}:''$LD_LIBRARY_PATH
         export LD_LIBRARY_PATH=${pkgs.lib.makeLibraryPath [pkgs.glib pkgs.stdenv.cc.cc.lib pkgs.zlib]}
