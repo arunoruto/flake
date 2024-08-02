@@ -4,7 +4,7 @@
   ...
 }: {
   imports = [
-    ../modules/nixos
+    ../../modules/nixos
   ];
 
   # Set hostname
