@@ -49,11 +49,7 @@
 
       discord
       gthumb
-      hunspell
-      hunspellDicts.de_DE
-      hunspellDicts.en_US
       # jabref
-      libreoffice-qt
       libsForQt5.kdenlive
       libsForQt5.okular
       #mailspring
