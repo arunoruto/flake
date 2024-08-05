@@ -1,5 +1,6 @@
 {...}: {
   imports = [
+    ./media
     ./pc
     ./server
   ];
