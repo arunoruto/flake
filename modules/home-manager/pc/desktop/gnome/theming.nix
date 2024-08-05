@@ -17,8 +17,8 @@
   candy-icons = pkgs.fetchFromGitHub {
     owner = "EliverLara";
     repo = "candy-icons";
-    rev = "aa610abb1ae6d8113a9446012275143592b91ef3";
-    sha256 = "sha256-pmfr2z1WPqXjtaYg7NnfBuq16p7Rf1/bCSsA2BkSpA0=";
+    rev = "5918a12632bf9c768cd1ad7a161076e3d72da60d";
+    sha256 = "sha256-pmw3lflD1Kq/qO6iGDh3myWQF8mm1FABZPFB8/1Ql7Q=";
   };
 in {
   # gtk settings
@@ -43,8 +43,8 @@ in {
     #   ".config/gtk-4.0/gtk.css".source =      "${catppuccin_pkg}/share/themes/${catppuccin_path}/gtk-4.0/gtk.css";
     #   ".config/gtk-4.0/gtk-dark.css".source = "${catppuccin_pkg}/share/themes/${catppuccin_path}/gtk-4.0/gtk-dark.css";
     ".local/share/icons/candy-icons" = {
-     recursive = true;
-     source = "${candy-icons}";
+      recursive = true;
+      source = "${candy-icons}";
     };
   };
 }

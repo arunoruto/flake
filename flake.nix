@@ -128,9 +128,7 @@
     };
     nixos-modules = [
       nixpkgs-config
-      # nix-ld.nixosModules.nix-ld
       nur.nixosModules.nur
-      # stylix.nixosModules.stylix
       stylix-config
     ];
     home-manager-modules = [
@@ -147,7 +145,7 @@
       #   stylix.image = nixpkgs.lib.mkDefault ./home-manager/desktop/default-wallpaper.png;
       #   #stylix.targets.nixvim.enable = nixpkgs.lib.mkDefault false;
       # }
-      ./home-manager/home.nix
+      ./modules/home-manager/home.nix
     ];
   in {
     nixosConfigurations = {
@@ -170,7 +168,7 @@
               home-manager = {
                 useGlobalPkgs = true;
                 useUserPackages = true;
-                users.mirza = import ./home-manager/home.nix;
+                users.mirza = import ./modules/home-manager/home.nix;
 
                 extraSpecialArgs = {
                   inherit inputs;
