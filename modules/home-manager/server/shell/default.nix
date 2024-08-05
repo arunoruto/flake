@@ -1,4 +1,4 @@
-{...}: {
+{lib, ...}: {
   imports = [
     # ./dprint
     ./nvim
@@ -15,4 +15,9 @@
     ./zsh.nix
     ./zellij.nix
   ];
+
+  bat.enable = lib.mkDefault true;
+  helix.enable = lib.mkDefault true;
+  yazi.enable = lib.mkDefault true;
+  zellij.enable = lib.mkDefault true;
 }
