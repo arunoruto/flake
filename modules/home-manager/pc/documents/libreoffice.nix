@@ -7,7 +7,7 @@
   options.libreoffice.enable = lib.mkEnableOption "Enable the document suite LibreOffice";
 
   config = lib.mkIf config.libreoffice.enable {
-    home.packges = with pkgs; [
+    home.packages = with pkgs; [
       libreoffice-qt
       hunspell
       hunspellDicts.en-us
