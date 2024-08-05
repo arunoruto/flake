@@ -10,6 +10,7 @@
     programs.yazi = {
       enable = true;
       # package = pkgs.unstable.yazi;
+      enableZshIntegration = config.programs.zsh.enable;
       settings = {
         plugin = {
           prepend_previewers = [

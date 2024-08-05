@@ -1,4 +1,8 @@
-{pkgs, ...}: {
+{
+  config,
+  pkgs,
+  ...
+}: {
   programs = {
     # Bash
     bash.initExtra = ''eval "$(direnv hook bash)"'';
@@ -39,10 +43,12 @@
       flags = [
         "--disable-up-arrow"
       ];
+      enableZshIntegration = config.programs.zsh.enable;
     };
 
     thefuck = {
       enable = true;
+      enableZshIntegration = config.programs.zsh.enable;
     };
 
     zoxide = {
@@ -50,11 +56,13 @@
       options = [
         "--cmd cd"
       ];
+      enableZshIntegration = config.programs.zsh.enable;
     };
 
     direnv = {
       enable = true;
       nix-direnv.enable = true;
+      enableZshIntegration = config.programs.zsh.enable;
     };
 
     ripgrep = {

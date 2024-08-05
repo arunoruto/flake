@@ -1,9 +1,10 @@
 # Some nice tips:
 # https://pragmaticpineapple.com/four-useful-fzf-tricks-for-your-terminal/
-{
+{config, ...}: {
   programs = {
     fzf = {
       enable = true;
+      enableZshIntegration = config.programs.zsh.enable;
     };
 
     zsh = {

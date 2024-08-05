@@ -4,13 +4,7 @@
   config,
   pkgs,
   ...
-}: let
-  zsh-sh-catppuccin = "";
-  #zsh-sh-catppuccin = builtins.fetchGit {
-  #  url = "https://github.com/catppuccin/zsh-syntax-highlighting";
-  #  ref = "main";
-  #};
-in {
+}: {
   programs = {
     zsh = {
       enable = true;
@@ -82,8 +76,6 @@ in {
         # eval "bws completions zsh &> ~/.config/zsh/_bws"
         # source ~/.config/zsh/_bws
 
-        #source ${zsh-sh-catppuccin}/themes/catppuccin_macchiato-zsh-syntax-highlighting.zsh
-
         # >>> conda initialize >>>
         __conda_setup="$('/opt/conda/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
         if [ $? -eq 0 ]; then
@@ -108,32 +100,15 @@ in {
           "zsh-users/zsh-syntax-highlighting"
         ];
       };
-      # oh-my-zsh = {
-      #   enable = true;
-      #   #  theme = "robbyrussell";
-      #   #  plugins = [
-      #   #  	"git"
-      #   #    "thefuck"
-      #   #    "docker"
-      #   #  ];
-      # };
-      # plugins = [
-      #   {
-      #     name = "zsh-autosuggestions";
-      #     src = builtins.fetchGit {
-      #       url = "https://github.com/zsh-users/zsh-autosuggestions";
-      #       ref = "master";
-      #     };
-      #   }
-      # ];
     };
-    starship.enableZshIntegration = true;
-    zoxide.enableZshIntegration = true;
-    fzf.enableZshIntegration = true;
-    atuin.enableZshIntegration = true;
-    thefuck.enableZshIntegration = true;
-    yazi.enableZshIntegration = true;
-    direnv.enableZshIntegration = true;
+
+    # starship.enableZshIntegration = true;
+    # zoxide.enableZshIntegration = true;
+    # fzf.enableZshIntegration = true;
+    # atuin.enableZshIntegration = true;
+    # thefuck.enableZshIntegration = true;
+    # yazi.enableZshIntegration = true;
+    # direnv.enableZshIntegration = true;
     # zellij.enableZshIntegration = true;
   };
 
