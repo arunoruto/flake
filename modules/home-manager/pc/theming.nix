@@ -1,9 +1,14 @@
 # https://danth.github.io/stylix/
 {
+  inputs,
   config,
   pkgs,
   ...
 }: {
+  imports = [
+    inputs.stylix.homeManagerModules.stylix
+  ];
+
   stylix = {
     cursor = {
       name = "catppuccin-macchiato-dark-cursors";
