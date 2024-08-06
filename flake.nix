@@ -161,26 +161,23 @@
         modules =
           nixos-modules
           ++ [
-            # ./hosts/zangetsu/configuration.nix
             ./hosts/zangetsu
             home-manager.nixosModules.home-manager
-            {
-              home-manager = {
-                useGlobalPkgs = true;
-                useUserPackages = true;
-                users.mirza = import ./modules/home-manager/home.nix;
+            ./homes
+            # {
+            #   home-manager = {
+            #     useGlobalPkgs = true;
+            #     useUserPackages = true;
+            #     users.mirza = import ./modules/home-manager/home.nix;
 
-                extraSpecialArgs = {
-                  inherit inputs;
-                  inherit theme;
-                  inherit image;
-                  user = "mirza";
-                };
-              };
-
-              # Optionally, use home-manager.extraSpecialArgs to pass
-              # arguments to home.nix
-            }
+            #     extraSpecialArgs = {
+            #       inherit inputs;
+            #       inherit theme;
+            #       inherit image;
+            #       user = "mirza";
+            #     };
+            #   };
+            # }
           ];
       };
 

@@ -16,7 +16,7 @@ in {
   };
 
   # Let Home Manager install and manage itself.
-  # programs.home-manager.enable = true;
+  programs.home-manager.enable = true;
 
   imports = [
     ./imports.nix
@@ -43,20 +43,6 @@ in {
   # want to update the value, then make sure to first check the Home Manager
   # release notes.
   home.stateVersion = "23.05"; # Please read the comment before changing.
-
-  # The home.packages option allows you to install Nix packages into your
-  # environment.
-  # This is now done in the respective client and server files
-  #home.packages = with pkgs;
-  #[
-  #];
-
-  ## Fonts
-  #fonts.fonts = with pkgs; [
-  #  aileron # helvetica
-  #  liberation_ttf # Times New Roman, Arial, and Courier New
-  #  (nerdfonts.override { fonts = [ "FiraCode" ]; })
-  #];
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.

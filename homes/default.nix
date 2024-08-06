@@ -1,22 +1,30 @@
 {
-  inputs',
-  self',
-  self,
-  config,
-  lib,
+  # inputs',
+  # self',
+  # self,
+  # config,
+  # lib,
+  inputs,
+  username,
+  theme,
+  image,
+  ...
 }: let
-  inherit (self) inputs;
-  inherit (lib.modules) mkIf;
-  inherit (lib.attrsets) genAttrs;
-  inherit (config) modules;
-
-  env = modules.usrEnv;
-  sys = modules.system;
-  defaults = sys.programs.default;
-
-  specialArgs = {inherit inputs self inputs' self' defaults;};
+  # inherit (self) inputs;
+  # inherit (lib.modules) mkIf;
+  # inherit (lib.attrsets) genAttrs;
+  # inherit (config) modules;
+  # env = modules.usrEnv;
+  # sys = modules.system;
+  # defaults = sys.programs.default;
+  # specialArgs = {inherit theme image inputs self inputs' self' defaults;};
+  specialArgs = {
+    inherit theme image inputs;
+    user = username;
+  };
 in {
-  home-manager = mkIf env.useHomeManager {
+  # home-manager = mkIf env.useHomeManager {
+  home-manager = {
     # tell home-manager to be as verbose as possible
     verbose = true;
 
@@ -43,6 +51,8 @@ in {
     # users in modules.system.users
     # the system expects user directories to be found in the present
     # directory, or will exit with directory not found errors
-    users = genAttrs config.modules.system.users (name: ./${name});
+    users.${username} = import ../modules/home-manager/home.nix;
+
+    # users = genAttrs config.modules.system.users (name: ./${name});
   };
 }

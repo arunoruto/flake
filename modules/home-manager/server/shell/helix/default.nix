@@ -16,8 +16,8 @@
     programs = {
       helix = {
         enable = true;
-        # package = pkgs.unstable.helix;
-        package = pkgs.unstable.evil-helix;
+        package = pkgs.unstable.helix;
+        # package = pkgs.unstable.evil-helix;
         settings = {
           # theme = "catppuccin_macchiato";
           # theme = "base16_transparent";
