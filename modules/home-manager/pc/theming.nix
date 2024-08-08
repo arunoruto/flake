@@ -5,9 +5,9 @@
   pkgs,
   ...
 }: {
-  imports = [
-    inputs.stylix.homeManagerModules.stylix
-  ];
+  # imports = [
+  #   inputs.stylix.homeManagerModules.stylix
+  # ];
 
   stylix = {
     cursor = {
