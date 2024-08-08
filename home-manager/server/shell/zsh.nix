@@ -54,8 +54,9 @@ in {
         zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
         zstyle ':completion:*' list-colors "''${(s.:.)LS_COLORS}"
 
-        # bindkey "^[[1;5C" forward-word
-        # bindkey "^[[1;5D" backward-word
+        # Ctrl + Left/Right arrow
+        bindkey "^[[1;5C" forward-word
+        bindkey "^[[1;5D" backward-word
 
         # Up(A) and down(B) for history search
         # bindkey '^[[A' history-substring-search-up
