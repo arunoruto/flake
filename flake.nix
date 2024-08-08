@@ -105,6 +105,9 @@
         overlays = [
           overlay-unstable
           # nur.overlay
+          (final: prev: {
+            neovim = inputs.nixvim-flake.packages.${system}.default;
+          })
         ];
       };
     };
