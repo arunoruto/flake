@@ -21,15 +21,4 @@
   oneapi.enable = lib.mkDefault false;
   # oneapi.enable = lib.mkDefault true;
   ssh.enable = lib.mkDefault true;
-
-  # services.xserver = {
-  #   enable = true;
-  #   xkb = {
-  #     layout = "de";
-  #     variant = "";
-  #   };
-  #   excludePackages = with pkgs; [
-  #     xterm
-  #   ];
-  # };
 }

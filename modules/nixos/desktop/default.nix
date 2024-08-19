@@ -30,11 +30,14 @@
       enable = true;
       xkb = {
         layout = "de";
-        variant = "";
+        variant = "us";
+        # layout = "us";
+        # variant = "altgr-intl";
       };
       excludePackages = with pkgs; [
         xterm
       ];
+      exportConfiguration = true;
     };
   };
 }
