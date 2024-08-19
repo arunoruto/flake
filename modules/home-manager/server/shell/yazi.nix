@@ -33,7 +33,7 @@
     };
     home.file = {
       ".config/yazi/plugins/glow.yazi" = {
-        recursive = true;
+        # recursive = true;
         source = pkgs.fetchFromGitHub {
           owner = "Reledia";
           repo = "glow.yazi";
@@ -42,7 +42,7 @@
         };
       };
       ".config/yazi/plugins/miller.yazi" = {
-        recursive = true;
+        # recursive = true;
         source = pkgs.fetchFromGitHub {
           owner = "Reledia";
           repo = "miller.yazi";
@@ -51,7 +51,7 @@
         };
       };
       ".config/yazi/plugins/hexyl.yazi" = {
-        recursive = true;
+        # recursive = true;
         source = pkgs.fetchFromGitHub {
           owner = "Reledia";
           repo = "hexyl.yazi";
@@ -60,7 +60,7 @@
         };
       };
       ".config/yazi/plugins/ouch.yazi" = {
-        recursive = true;
+        # recursive = true;
         source = pkgs.fetchFromGitHub {
           owner = "ndtoan96";
           repo = "ouch.yazi";

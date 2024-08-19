@@ -43,7 +43,7 @@ in {
     #   ".config/gtk-4.0/gtk.css".source =      "${catppuccin_pkg}/share/themes/${catppuccin_path}/gtk-4.0/gtk.css";
     #   ".config/gtk-4.0/gtk-dark.css".source = "${catppuccin_pkg}/share/themes/${catppuccin_path}/gtk-4.0/gtk-dark.css";
     ".local/share/icons/candy-icons" = {
-      recursive = true;
+      # recursive = true;
       source = "${candy-icons}";
     };
   };

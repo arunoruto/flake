@@ -19,7 +19,7 @@ in {
   home.file = {
     ".mozilla/firefox/${profile}/chrome" = {
       source = arcwtf;
-      recursive = true;
+      # recursive = true;
     };
   };
 }

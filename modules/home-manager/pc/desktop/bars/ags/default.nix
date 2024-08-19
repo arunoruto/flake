@@ -46,9 +46,8 @@
           $foregroundColor2: ${config.lib.stylix.colors.withHashtag.base05};
         '';
         ".config/ags/types" = {
-          recursive = true;
+          # recursive = true;
           source = config.lib.file.mkOutOfStoreSymlink "${config.programs.ags.finalPackage}/share/com.github.Aylur.ags/types";
-          # source = "${config.programs.ags.finalPackage}/share/com.github.Aylur.ags/types";
         };
       };
     };
