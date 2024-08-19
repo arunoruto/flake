@@ -35,6 +35,7 @@
       excludePackages = with pkgs; [
         xterm
       ];
+      exportConfiguration = true;
     };
   };
 }
