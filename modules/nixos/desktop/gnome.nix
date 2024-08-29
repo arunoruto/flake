@@ -14,26 +14,36 @@
       gnome.gnome-keyring.enable = true;
     };
 
-    environment.# Excluding some GNOME applications from the default install
-    gnome.excludePackages =
-      (with pkgs; [
-        gnome-photos
-        gnome-tour
-      ])
-      ++ (with pkgs.gnome; [
-        #cheese # webcam tool
-        gnome-music
-        gnome-terminal
-        #gedit # text editor
-        epiphany # web browser
-        geary # email reader
-        #evince # document viewer
-        #gnome-characters
-        totem # video player
-        tali # poker game
-        iagno # go game
-        hitori # sudoku game
-        atomix # puzzle game
-      ]);
+    environment = {
+      systemPackages = with pkgs; [
+        gnome-network-displays
+      ];
+      # Excluding some GNOME applications from the default install
+      gnome.excludePackages =
+        (with pkgs; [
+          gnome-photos
+          gnome-tour
+        ])
+        ++ (with pkgs.gnome; [
+          #cheese # webcam tool
+          gnome-music
+          gnome-terminal
+          #gedit # text editor
+          epiphany # web browser
+          geary # email reader
+          #evince # document viewer
+          #gnome-characters
+          totem # video player
+          tali # poker game
+          iagno # go game
+          hitori # sudoku game
+          atomix # puzzle game
+        ]);
+    };
+
+    networking.firewall = {
+      allowedTCPPorts = [7236 7250];
+      allowedUDPPorts = [7236 5353];
+    };
   };
 }
