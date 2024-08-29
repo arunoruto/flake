@@ -1,6 +1,7 @@
 {
   pkgs,
   lib,
+  osConfig,
   ...
 }: {
   imports = [
@@ -70,8 +71,10 @@
       };
 
       input = {
-        kb_layout = "de";
-        kb_variant = "";
+        # kb_layout = "de";
+        # kb_variant = "";
+        kb_layout = osConfig.services.xserver.xkb.layout;
+        kb_variant = osConfig.services.xserver.xkb.variant;
         kb_model = "";
         kb_options = "";
         kb_rules = "";
@@ -86,11 +89,13 @@
       };
 
       exec-once = [
+        "eww open bar"
         # "ags"
-        "ags --config \${FLAKE}/home-manager/pc/desktop/bars/ags/config/config.js"
+        # "ags --config \${FLAKE}/home-manager/pc/desktop/bars/ags/config/config.js"
         # "waybar"
         # ''mpvpaper -o "no-audio --loop-playlist --video-aspect-override=3:2" '*' $HOME/Videos/TBATE_AnimDesktop_Vol08.mp4''
         # ''mpvpaper -o "no-audio --loop-playlist panscan=1.0 '*' $HOME/Videos/TBATE_AnimDesktop_Vol08.mp4''
+        "wl-paste -t text --watch clipman store --no-persist"
       ];
 
       workspace = [
