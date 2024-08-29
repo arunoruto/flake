@@ -1,0 +1,99 @@
+(defwidget bar []
+  (centerbox :orientation "h"
+    (workspaces)
+    (music)
+    (sidestuff)))
+
+(defwidget sidestuff []
+  (box :class "sidestuff" :orientation "h" :space-evenly false :halign "end" :spacing 20
+    (metric :label "󰓃"
+            :value {round(volume * 100, 0)}
+            :onchange "wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ {}%")
+    (box :orientation "h"
+         :class "metric"
+         :space-evenly false
+          (box :class "label" " ")
+          (box battery)
+          (box "%"))
+    ; (metric :label ""
+    ;         :value {EWW_RAM.used_mem_perc}
+    ;         :onchange "")
+    ; (metric :label ""
+    ;         :value {round((1 - EWW_DISK["/"].free / EWW_DISK["/"].total) * 100, 0)}
+    ;         :onchange "")
+    (box :orientation "h"
+         :class "metric"
+         :space-evenly false
+          (box :class "label" " ")
+          (box date))
+    (box :orientation "h"
+         :class "metric"
+         :space-evenly false
+          (box :class "label" " ")
+          (box time))
+    ))
+
+(defwidget workspaces []
+  (box :class "workspaces"
+       :orientation "h"
+       :space-evenly true
+       :halign "start"
+       :spacing 10
+    (button :onclick "hyprctl dispatch workspace 1" "一")
+    (button :onclick "hyprctl dispatch workspace 2" "二")
+    (button :onclick "hyprctl dispatch workspace 3" "三")
+    (button :onclick "hyprctl dispatch workspace 4" "四")
+    (button :onclick "hyprctl dispatch workspace 5" "五")
+    (button :onclick "hyprctl dispatch workspace 6" "六")
+    (button :onclick "hyprctl dispatch workspace 7" "七")
+    (button :onclick "hyprctl dispatch workspace 8" "八")
+    (button :onclick "hyprctl dispatch workspace 9" "九")
+    (button :onclick "hyprctl dispatch workspace 10" "十")))
+
+(defwidget music []
+  (box :class "music"
+       :orientation "h"
+       :space-evenly false
+       :halign "center"
+    {music != "" ? "🎵${music}" : ""}))
+
+
+(defwidget metric [label value onchange]
+  (box :orientation "h"
+       :class "metric"
+       :space-evenly false
+    (box :class "label" label)
+    (scale :min 0
+           :max 101
+           :active {onchange != ""}
+           :value value
+           :onchange onchange)))
+
+
+
+(deflisten music :initial ""
+  "playerctl --follow metadata --format '{{ artist }} - {{ title }}' || true")
+
+(defpoll volume :interval "1s" :initial 50
+  "wpctl get-volume @DEFAULT_SINK@ | cut -d' ' -f2")
+
+(defpoll date :interval "10s"
+  "date '+%d.%m.%Y'")
+
+(defpoll time :interval "10s"
+  "date '+%H:%M'")
+
+(defpoll battery :interval "10s"
+  "cat /sys/class/power_supply/BAT1/capacity")
+
+(defwindow bar
+  :monitor 0
+  ; :windowtype "dock"
+  :exclusive true
+  :geometry (geometry :x "0%"
+                      :y "0%"
+                      :width "95%"
+                      :height "10px"
+                      :anchor "top center")
+  :reserve (struts :side "top" :distance "4%")
+  (bar))

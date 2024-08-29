@@ -1,0 +1,73 @@
+@import "./palette.scss";
+/* @import "../stylix/palette.scss"; */
+/* @import "../../../home/mirza/.config/stylix/palatte.scss"; */
+
+$bg: rgba($base00, 0.75);
+$fg: $base05;
+$hl: $base08;
+$container-padding: 5px;
+
+* {
+  all: unset; //Unsets everything so you can style everything from scratch
+}
+
+//Global Styles
+.bar {
+  background-color: rgba($bg, 0.0);
+  color: $fg;
+  padding: 5px;
+}
+
+// Styles on classes (see eww.yuck for more information)
+
+.sidestuff, .workspaces, .music {
+  background-color: $bg;
+  padding: $container-padding;
+}
+.sidestuff slider {
+  all: unset;
+  background-color: $bg;
+  color: $hl;
+}
+
+.metric scale trough highlight {
+  all: unset;
+  background-color: $hl;
+  color: #000000;
+  border-radius: 10px;
+}
+.metric scale trough {
+  all: unset;
+  background-color: $base02;
+  border-radius: 50px;
+  min-height: 3px;
+  min-width: 50px;
+  margin-left: 10px;
+  /* margin-right: 20px; */
+}
+.metric scale trough highlight {
+  all: unset;
+  background-color: $hl;
+  color: $base07;
+  border-radius: 10px;
+}
+.metric scale trough {
+  all: unset;
+  background-color: $base02;
+  border-radius: 50px;
+  min-height: 3px;
+  min-width: 50px;
+  margin-left: 10px;
+  /* margin-right: 20px; */
+}
+.label-ram {
+  font-size: large;
+}
+/* .workspaces { */
+  /* background-color: $bg; */
+  /* padding: $container-padding; */
+/* } */
+.workspaces button:hover {
+  color: $hl;
+}
+
