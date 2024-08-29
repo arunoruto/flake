@@ -10,11 +10,6 @@
   # monitorsConfig = pkgs.writeText "gdm_monitors.xml" (builtins.readFile /home/${username}/.config/monitors.xml);
   monitorsConfig = pkgs.writeText "gdm_monitors.xml" (builtins.readFile ./monitors.xml);
 in {
-  imports = [
-    ./hardware-configuration.nix
-    ../..
-  ];
-
   printing.enable = true;
   scanning.enable = true;
 

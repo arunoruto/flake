@@ -167,20 +167,6 @@
             ./hosts/zangetsu
             home-manager.nixosModules.home-manager
             ./homes
-            # {
-            #   home-manager = {
-            #     useGlobalPkgs = true;
-            #     useUserPackages = true;
-            #     users.mirza = import ./modules/home-manager/home.nix;
-
-            #     extraSpecialArgs = {
-            #       inherit inputs;
-            #       inherit theme;
-            #       inherit image;
-            #       user = "mirza";
-            #     };
-            #   };
-            # }
           ];
       };
 
@@ -196,7 +182,8 @@
         modules =
           nixos-modules
           ++ [
-            ./nixos/hosts/kyuubi/configuration.nix
+            ./hosts/kyuubi
+            # ./nixos/hosts/kyuubi/configuration.nix
             # home-manager.nixosModules.home-manager
           ];
       };
