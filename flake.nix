@@ -183,6 +183,8 @@
           nixos-modules
           ++ [
             ./hosts/kyuubi
+            home-manager.nixosModules.home-manager
+            ./homes
             # ./nixos/hosts/kyuubi/configuration.nix
             # home-manager.nixosModules.home-manager
           ];
@@ -227,20 +229,20 @@
       #   };
       # };
 
-      mar = home-manager.lib.homeManagerConfiguration {
-        inherit pkgs;
-        modules =
-          home-manager-modules
-          ++ [
-            ./nixos/hosts/kyuubi/home.nix
-          ];
-        extraSpecialArgs = {
-          inherit inputs;
-          inherit theme;
-          inherit image;
-          user = "mar";
-        };
-      };
+      # mar = home-manager.lib.homeManagerConfiguration {
+      #   inherit pkgs;
+      #   modules =
+      #     home-manager-modules
+      #     ++ [
+      #       ./nixos/hosts/kyuubi/home.nix
+      #     ];
+      #   extraSpecialArgs = {
+      #     inherit inputs;
+      #     inherit theme;
+      #     inherit image;
+      #     user = "mar";
+      #   };
+      # };
     };
 
     devShells.${system}.default = pkgs.mkShell {
