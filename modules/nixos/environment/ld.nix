@@ -1,5 +1,5 @@
 {
-  inputs,
+  # inputs,
   pkgs,
   ...
 }: {
@@ -9,9 +9,10 @@
 
   programs.nix-ld = {
     enable = true;
-    package = pkgs.nix-ld-rs;
+    package = pkgs.unstable.nix-ld;
     libraries = with pkgs; [
       stdenv.cc.cc
+      glibc
       zlib
     ];
   };
