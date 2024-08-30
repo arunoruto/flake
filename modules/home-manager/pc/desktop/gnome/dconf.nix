@@ -1,11 +1,4 @@
-{
-  config,
-  lib,
-  ...
-}: let
-  # wallpaper = "file://${builtins.getEnv "HOME"}/.local/share/backgrounds/komet/komet.xml";
-  # wallpaper = "file://${builtins.getEnv "HOME"}/Pictures/wallpapers/art/kanagawa/kanagawa-van-gogh.jpg";
-in {
+{lib, ...}: {
   dconf.settings = {
     # Time zone settings
     # "org/gnome/desktop/datetime" = {automatic-timezone = true;};
@@ -20,6 +13,14 @@ in {
     # Additional window buttons
     "org/gnome/desktop/wm/preferences" = {
       button-layout = "appmenu:minimize,close";
+    };
+    # Input settings
+    "org/gnome/desktop/input-sources" = {
+      # if this doesn't work, try the following command
+      # gsettings reset org.gnome.desktop.input-sources sources
+      # gsettings reset org.gnome.desktop.input-sources xkb-options
+      # sources = [];
+      # xkb-options = [];
     };
     # Mouse and touchpad settings
     "org/gnome/desktop/peripherals/touchpad" = {
