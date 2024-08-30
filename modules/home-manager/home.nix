@@ -19,6 +19,7 @@ in {
   programs.home-manager.enable = true;
 
   imports = [
+    ./hosts
     ./imports.nix
     ./stylix.nix
   ];
