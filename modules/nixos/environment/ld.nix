@@ -11,6 +11,7 @@
     enable = true;
     package = pkgs.unstable.nix-ld;
     libraries = with pkgs; [
+      blas
       stdenv.cc.cc
       glibc
       zlib
