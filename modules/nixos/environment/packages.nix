@@ -18,7 +18,7 @@
       file
       git
       htop
-      imagemagick
+      imagemagickBig
       intel-gpu-tools
       iperf
       killall
