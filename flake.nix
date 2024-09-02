@@ -43,7 +43,7 @@
     # };
     # neorg-overlay.url = "github:nvim-neorg/nixpkgs-neorg-overlay";
     # nil.url = "github:oxalica/nil";
-    nixvim-flake.url = "github:arunoruto/nvim.nix";
+    # nixvim-flake.url = "github:arunoruto/nvim.nix";
     # Styling
     stylix = {
       # url = "github:danth/stylix";
@@ -111,7 +111,7 @@
           overlay-unstable
           # nur.overlay
           (final: prev: {
-            neovim = inputs.nixvim-flake.packages.${system}.default;
+            # neovim = inputs.nixvim-flake.packages.${system}.default;
           })
         ];
       };
@@ -121,7 +121,7 @@
       overlays = [
         overlay-unstable
         (final: prev: {
-          neovim = inputs.nixvim-flake.packages.${system}.default;
+          # neovim = inputs.nixvim-flake.packages.${system}.default;
         })
         # make unstable packages available via overlay
         # (final: prev: {
@@ -188,6 +188,24 @@
           nixos-modules
           ++ [
             ./hosts/zangetsu
+            home-manager.nixosModules.home-manager
+            ./homes
+          ];
+      };
+
+      # Tower PC
+      yhwach = nixpkgs.lib.nixosSystem {
+        inherit system;
+        specialArgs = {
+          inherit inputs;
+          inherit theme;
+          inherit image;
+          username = "mirza";
+        };
+        modules =
+          nixos-modules
+          ++ [
+            ./hosts/yhwach
             home-manager.nixosModules.home-manager
             ./homes
           ];
