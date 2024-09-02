@@ -17,6 +17,7 @@
   ];
 
   davmail.enable = lib.mkDefault false;
+  flatpak.enable = lib.mkDefault true;
   secrets.enable = lib.mkDefault true;
   oneapi.enable = lib.mkDefault false;
   # oneapi.enable = lib.mkDefault true;
