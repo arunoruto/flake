@@ -112,7 +112,4 @@
     # direnv.enableZshIntegration = true;
     # zellij.enableZshIntegration = true;
   };
-
-  # home.file.".nix-profile/share/zsh/site-functions/_tailscale".source = "{config.services.tailscale.package}";
-  # home.file.".nix-profile/share/zsh/site-functions/_tailscale".source = "${pkgs.unstable.tailscale}";
 }

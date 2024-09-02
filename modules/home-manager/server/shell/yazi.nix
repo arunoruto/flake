@@ -10,6 +10,7 @@
     programs.yazi = {
       enable = true;
       # package = pkgs.unstable.yazi;
+      enableNushellIntegration = config.programs.nushell.enable;
       enableZshIntegration = config.programs.zsh.enable;
       settings = {
         plugin = {

@@ -9,7 +9,7 @@
         update-channel = ''bash -c "sudo nix-channel --update"'';
         home = "home-manager switch";
         tss = "tailscale switch (tailscale switch --list | tail -n +2 | fzf | tr -s ' ' | cut -d ' ' -f1)";
-        tsr = ''bash -c "sudo systemctl restart tailscaled.service"'';
+        # tsr = ''bash -c "sudo systemctl restart tailscaled.service"'';
         #tsen = "tailscale status | grep 'offers exit node' | fzf | tr -s ' ' | cut -d' ' -f2";
       };
       environmentVariables = {
@@ -31,7 +31,7 @@
         #   echo "    { config = config.nixpkgs.config; };"
         # }
 
-        $env.LS_COLORS = "$(vivid generate catppuccin-macchiato)";
+        $env.LS_COLORS = (vivid generate catppuccin-macchiato);
 
         # eval "tailscale completion zsh > ~/.config/zsh/_tailscale"
         # source ~/.config/zsh/_tailscale
