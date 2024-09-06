@@ -17,6 +17,7 @@
     hexyl
     hugo
     julia
+    marksman
     miller
     ouch
     slides
