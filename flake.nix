@@ -205,6 +205,22 @@
             ./nixos/hosts/kuchiki/configuration.nix
           ];
       };
+
+      # Firewall
+      narouter = nixpkgs.lib.nixosSystem {
+        inherit system;
+        specialArgs = {
+          inherit inputs;
+          inherit theme;
+          inherit image;
+          username = "mirza";
+        };
+        modules =
+          nixos-modules
+          ++ [
+            ./nixos/hosts/narouter/configuration.nix
+          ];
+      };
     };
 
     homeConfigurations = {
