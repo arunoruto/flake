@@ -219,6 +219,8 @@
           nixos-modules
           ++ [
             ./hosts/narouter
+            home-manager.nixosModules.home-manager
+            ./homes
           ];
       };
     };
