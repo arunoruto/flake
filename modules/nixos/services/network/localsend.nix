@@ -10,7 +10,7 @@ in {
 
   config = lib.mkIf config.localsend.enable {
     environment.systemPackages = with pkgs; [
-      localsend
+      unstable.localsend
     ];
 
     networking = {
