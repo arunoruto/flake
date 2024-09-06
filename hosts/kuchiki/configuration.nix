@@ -3,12 +3,6 @@
   lib,
   ...
 }: {
-  imports = [
-    ./hardware-configuration.nix
-    # inputs.nixos-hardware.nixosModules.framework-11th-gen-intel
-    ../..
-  ];
-
   # display-manager.enable = lib.mkForce false;
   # desktop-environment.enable = lib.mkForce false;
   display-manager.enable = false;

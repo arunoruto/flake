@@ -3,10 +3,6 @@
   lib,
   ...
 }: {
-  # imports = [
-  #   ../../modules/nixos
-  # ];
-
   # Set hostname
   networking.hostName = lib.mkForce "zangetsu"; # Define your hostname.
 

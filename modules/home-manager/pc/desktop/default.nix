@@ -30,7 +30,6 @@
     gnomeExtensions.emoji-copy
     # gnomeExtensions.focus
     #gnomeExtensions.spotify-controller
-    gnomeExtensions.spotify-tray
     gnomeExtensions.tailscale-status
     gnomeExtensions.transparent-top-bar
   ];
