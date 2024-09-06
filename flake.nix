@@ -202,7 +202,7 @@
         modules =
           nixos-modules
           ++ [
-            ./nixos/hosts/kuchiki
+            ./hosts/kuchiki
           ];
       };
 
@@ -218,7 +218,7 @@
         modules =
           nixos-modules
           ++ [
-            ./nixos/hosts/narouter
+            ./hosts/narouter
           ];
       };
     };
