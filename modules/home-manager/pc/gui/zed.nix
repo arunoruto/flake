@@ -1,5 +1,14 @@
-{pkgs, ...}: {
-  home.packages = with pkgs; [
-    unstable.zed-editor
-  ];
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}: {
+  options.zed.enable = lib.mkEnableOption "Enable Zed, a rust based IDE";
+
+  config = lib.mkIf config.zed.enable {
+    home.packages = with pkgs; [
+      unstable.zed-editor
+    ];
+  };
 }

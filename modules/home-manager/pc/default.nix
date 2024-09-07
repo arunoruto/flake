@@ -19,5 +19,6 @@
   config = lib.mkIf config.pc.enable {
     desktop.enable = lib.mkDefault true;
     documents.enable = lib.mkDefault true;
+    gui.enable = lib.mkDefault true;
   };
 }

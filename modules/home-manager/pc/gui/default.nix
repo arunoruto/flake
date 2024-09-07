@@ -1,25 +1,35 @@
 {
   config,
   pkgs,
+  lib,
   ...
 }: {
   imports = [
     ./firefox
-    # ./steam.nix
+    ./steam.nix
     ./thunderbird.nix
     ./vscode.nix
     ./zathura.nix
-    # ./zed.nix
+    ./zed.nix
   ];
 
-  home.packages = with pkgs; [
-    ladybird
-    # unstable.plex-desktop
-    unstable.zed-editor
-  ];
+  options.gui.enable = lib.mkEnableOption "Enable GUI programs";
 
-  # home.sessionVariables = {
-  #   # Firefox
-  #   BROWSER = "${config.programs.firefox.finalPackage}/bin/firefox";
-  # };
+  config = lib.mkIf config.gui.enable {
+    firefox.enable = lib.mkDefault true;
+    steam.enable = lib.mkDefault false;
+    thunderbird.enable = lib.mkDefault true;
+    vscode.enable = lib.mkDefault true;
+    zathura.enable = lib.mkDefault true;
+    zed.enable = lib.mkDefault true;
+
+    home.packages = with pkgs; [
+      ladybird
+    ];
+
+    # home.sessionVariables = {
+    #   # Firefox
+    #   BROWSER = "${config.programs.firefox.finalPackage}/bin/firefox";
+    # };
+  };
 }
