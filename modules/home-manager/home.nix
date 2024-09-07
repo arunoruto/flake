@@ -11,12 +11,14 @@ in {
   imports = [
     ./hosts
     ./pc
+    ./environment.nix
     ./imports.nix
     ./stylix.nix
     ./module.nix
   ];
 
   pc.enable = lib.mkDefault true;
+  environment.enable = true;
 
   # Allow unfree software
   nixpkgs = {
@@ -35,12 +37,6 @@ in {
     homeDirectory = "/home/${user}";
   };
 
-  # Download a gravatar image as profile
-  home.file.".face".source = pkgs.fetchurl {
-    url = "https://www.gravatar.com/avatar/${gravatar}?s=500";
-    hash = "sha256-xSBcAE2TkZpsdo1EbZduZKHOrW+8bYqm+ZHFmtd6kak=";
-  };
-
   # This value determines the Home Manager release that your configuration is
   # compatible with. This helps avoid breakage when a new Home Manager release
   # introduces backwards incompatible changes.
@@ -49,71 +45,4 @@ in {
   # want to update the value, then make sure to first check the Home Manager
   # release notes.
   home.stateVersion = "23.05"; # Please read the comment before changing.
-
-  # Home Manager is pretty good at managing dotfiles. The primary way to manage
-  # plain files is through 'home.file'.
-  home.file = {
-    # # Building this configuration will create a copy of 'dotfiles/screenrc' in
-    # # the Nix store. Activating the configuration will then make '~/.screenrc' a
-    # # symlink to the Nix store copy.
-    # ".screenrc".source = dotfiles/screenrc;
-
-    # # You can also set the file content immediately.
-    # ".gradle/gradle.properties".text = ''
-    #   org.gradle.console=verbose
-    #   org.gradle.daemon.idletimeout=3600000
-    # '';
-
-    ".config/chrome-flags.conf".text = ''
-      --enable-features=TouchpadOverscrollHistoryNavigation
-      --enable-gpu-rasterization
-      --ignore-gpu-blacklist
-      --disable-gpu-driver-workarounds
-    '';
-  };
-
-  programs.ssh = {
-    enable = true;
-    matchBlocks = {
-      hublab = {
-        host = "gitlab.com github.com";
-        identitiesOnly = false;
-        identityFile = [
-          "~/.ssh/id_sops"
-        ];
-      };
-    };
-    extraConfig = ''
-      Host kyuubi.tail
-          HostName kyuubi
-          User mar
-          ForwardX11 yes
-      Host ultron.tail
-          Hostname ultron
-          User mar
-          ForwardX11 yes
-      Host jabba.tail
-          Hostname jabba
-          User mar
-          ForwardX11 yes
-    '';
-  };
-
-  # You can also manage environment variables but you will have to manually
-  # source
-  #
-  #  ~/.nix-profile/etc/profile.d/hm-session-vars.sh
-  #
-  # or
-  #
-  #  /etc/profiles/per-user/mar/etc/profile.d/hm-session-vars.sh
-  #
-  # if you don't want to manage your shell through Home Manager.
-  home.sessionVariables = {
-    # EDITOR = "nvim";
-    EDITOR = "hx";
-    BROWSER = "firefox";
-    WINIT_UNIX_BACKEND = "x11";
-    FLAKE = "/home/${user}/.config/flake";
-  };
 }

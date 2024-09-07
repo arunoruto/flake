@@ -4,10 +4,13 @@
   ...
 }: {
   imports = [
-    ./shell
     ./programs
     ./secrets.nix
+    ./shell
+    ./ssh.nix
   ];
+
+  ssh.enable = true;
 
   home.packages = with pkgs; [
     speedtest-cli

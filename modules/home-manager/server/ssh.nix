@@ -3,9 +3,7 @@
   lib,
   ...
 }: {
-  options = {
-    ssh.enable = lib.mkEnableOption "Enable personal SSH settings";
-  };
+  options.ssh.enable = lib.mkEnableOption "Enable personal SSH settings";
 
   config = lib.mkIf config.ssh.enable {
     programs.ssh = {

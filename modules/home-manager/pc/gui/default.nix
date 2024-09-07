@@ -5,6 +5,7 @@
   ...
 }: {
   imports = [
+    ./chrome.nix
     ./firefox
     ./steam.nix
     ./thunderbird.nix
@@ -16,6 +17,7 @@
   options.gui.enable = lib.mkEnableOption "Enable GUI programs";
 
   config = lib.mkIf config.gui.enable {
+    chrome.enable = lib.mkDefault true;
     firefox.enable = lib.mkDefault true;
     steam.enable = lib.mkDefault false;
     thunderbird.enable = lib.mkDefault true;

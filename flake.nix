@@ -142,7 +142,7 @@
       # }
       nur.hmModules.nur
       # nixvim.homeManagerModules.nixvim
-      # stylix.homeManagerModules.stylix
+      inputs.stylix.homeManagerModules.stylix
       stylix-config
       # {
       #   stylix.image = nixpkgs.lib.mkDefault ./home-manager/desktop/default-wallpaper.png;
@@ -247,20 +247,23 @@
       #   };
       # };
 
-      # mar = home-manager.lib.homeManagerConfiguration {
-      #   inherit pkgs;
-      #   modules =
-      #     home-manager-modules
-      #     ++ [
-      #       ./nixos/hosts/kyuubi/home.nix
-      #     ];
-      #   extraSpecialArgs = {
-      #     inherit inputs;
-      #     inherit theme;
-      #     inherit image;
-      #     user = "mar";
-      #   };
-      # };
+      mar = home-manager.lib.homeManagerConfiguration {
+        inherit pkgs;
+        modules =
+          home-manager-modules
+          ++ [
+            ./nixos/hosts/kyuubi/home.nix
+            {
+              pc.enable = false;
+            }
+          ];
+        extraSpecialArgs = {
+          inherit inputs;
+          inherit theme;
+          inherit image;
+          user = "mar";
+        };
+      };
     };
 
     devShells.${system}.default = pkgs.mkShell {

@@ -4,9 +4,7 @@
   user,
   ...
 }: {
-  options = {
-    environment.enable = lib.mkEnableOption "Set env vars for user";
-  };
+  options.environment.enable = lib.mkEnableOption "Set env vars for user";
 
   config = lib.mkIf config.environment.enable {
     # You can also manage environment variables but you will have to manually
@@ -24,7 +22,7 @@
       EDITOR = "hx";
       BROWSER = "firefox";
       WINIT_UNIX_BACKEND = "x11";
-      FLAKE = "/home/${config.users.users}/.config/flake";
+      FLAKE = "/home/${user}/.config/flake";
     };
   };
 }
