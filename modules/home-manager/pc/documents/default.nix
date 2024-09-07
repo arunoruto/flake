@@ -1,7 +1,15 @@
-{lib, ...}: {
+{
+  lib,
+  config,
+  ...
+}: {
   imports = [
     ./libreoffice.nix
   ];
 
-  libreoffice.enable = lib.mkDefault true;
+  options.documents.enable = lib.mkEnableOption "Enable document apps";
+
+  config = lib.mkIf config.documents.enable {
+    libreoffice.enable = lib.mkDefault true;
+  };
 }

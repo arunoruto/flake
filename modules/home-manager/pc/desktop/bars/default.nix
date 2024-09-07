@@ -5,6 +5,9 @@
     ./waybar
   ];
 
-  ags.enable = lib.mkDefault false;
-  eww.enable = lib.mkDefault true;
+  bars = {
+    ags.enable = lib.mkDefault false;
+    eww.enable = lib.mkDefault true;
+    waybar.enable = lib.mkDefault false;
+  };
 }

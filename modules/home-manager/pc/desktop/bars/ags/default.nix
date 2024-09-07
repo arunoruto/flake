@@ -9,11 +9,9 @@
     inputs.ags.homeManagerModules.default
   ];
 
-  options = {
-    ags.enable = lib.mkEnableOption "Enable ags bar";
-  };
+  options.bars.ags.enable = lib.mkEnableOption "Enable ags bar";
 
-  config = lib.mkIf config.ags.enable {
+  config = lib.mkIf config.bars.ags.enable {
     programs.ags = {
       enable = true;
       # configDir = ../ags/config;

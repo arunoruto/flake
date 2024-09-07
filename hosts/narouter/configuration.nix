@@ -3,10 +3,6 @@
   lib,
   ...
 }: {
-  imports = [
-    ../..
-  ];
-
   # display-manager.enable = lib.mkForce false;
   # desktop-environment.enable = lib.mkForce false;
   display-manager.enable = false;

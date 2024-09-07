@@ -1,9 +1,10 @@
 {
   lib,
-  osConfig,
+  config,
   ...
 }: {
-  config = lib.mkIf (osConfig.networking.hostName == "kyuubi") {
+  # config = lib.mkIf (osConfig.networking.hostName == "kyuubi") {
+  config = lib.mkIf (config.hostname == "kyuubi") {
     home.file = {
       ".config/monitors.xml".source = ./monitors.xml;
     };

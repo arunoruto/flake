@@ -4,11 +4,9 @@
   pkgs,
   ...
 }: {
-  options = {
-    eww.enable = lib.mkEnableOption "Enable eww bar";
-  };
+  options.bars.eww.enable = lib.mkEnableOption "Enable eww bar";
 
-  config = lib.mkIf config.eww.enable {
+  config = lib.mkIf config.bars.eww.enable {
     programs.eww = {
       enable = true;
       package = pkgs.unstable.eww;

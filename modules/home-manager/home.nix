@@ -8,6 +8,16 @@
   # echo -n "name@example.com" | sha256sum | awk '{print $1}'
   gravatar = "4859e08193d7c964399632a8d55915804af07bf714a68aabe8bf2c2656c96f4a";
 in {
+  imports = [
+    ./hosts
+    ./pc
+    ./imports.nix
+    ./stylix.nix
+    ./module.nix
+  ];
+
+  pc.enable = lib.mkDefault true;
+
   # Allow unfree software
   nixpkgs = {
     config = {
@@ -18,11 +28,6 @@ in {
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
-  imports = [
-    ./hosts
-    ./imports.nix
-    ./stylix.nix
-  ];
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
   home = {

@@ -1,7 +1,0 @@
-// $backgroundColor: rgba(29, 32, 33, 0.7);
-// $backgroundColor2: rgba(29, 32, 33, 0.7);
-$backgroundColor: rgba(#ff00ff, 0.7);
-$backgroundColor2: rgba(200, 200, 200, 0.7);
-$highlightColor: #d79921;
-$foregroundColor: #ebdbb2;
-$foregroundColor2: #ebdbb2;

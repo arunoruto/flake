@@ -1,48 +1,32 @@
 {
   pkgs,
   lib,
+  config,
   ...
 }: let
-  flavor = "Macchiato";
-  accent = "Green";
-  bright = "Dark";
-  catppuccin_name = "Catppuccin-${flavor}-Standard-${accent}-${lib.strings.toLower bright}";
-  catppuccin_path = "Catppuccin-${flavor}-Standard-${accent}-${bright}";
-  #catppuccin_pkg = pkgs.catppuccin-gtk.override {
-  #  accents = ["${lib.strings.toLower accent}"];
-  #  size = "standard";
-  #  tweaks = ["normal"];
-  #  variant = lib.strings.toLower flavor;
-  #};
   candy-icons = pkgs.fetchFromGitHub {
     owner = "EliverLara";
     repo = "candy-icons";
-    rev = "5918a12632bf9c768cd1ad7a161076e3d72da60d";
-    sha256 = "sha256-pmw3lflD1Kq/qO6iGDh3myWQF8mm1FABZPFB8/1Ql7Q=";
+    rev = "b92b133d0ad7ed5b5e376bd00216a05652277209";
+    sha256 = "sha256-0wsSjK8WrwM/yh40a76cYblbv52tdJGTKAdxNU43frc=";
   };
 in {
-  # gtk settings
-  gtk = {
-    enable = true;
-    # theme = {
-    #   name = catppuccin_name;
-    #   package = catppuccin_pkg;
-    # };
-    # cursorTheme = {
-    #   name = "Catppuccin-Macchiato-Dark-Cursors";
-    #   package = pkgs.catppuccin-cursors.macchiatoDark;
-    # };
-  };
+  options.gnome.theming.enable = lib.mkEnableOption "Set GNOME theming through nix (only icons)";
 
-  #home.sessionVariables.GTK_THEME = catppuccin_name;
-  home.file = {
-    #   ".config/gtk-4.0/assets" = {
-    #     recursive = true;
-    #     source = "${catppuccin_pkg}/share/themes/${catppuccin_path}/gtk-4.0/assets";
-    #   };
-    #   ".config/gtk-4.0/gtk.css".source =      "${catppuccin_pkg}/share/themes/${catppuccin_path}/gtk-4.0/gtk.css";
-    #   ".config/gtk-4.0/gtk-dark.css".source = "${catppuccin_pkg}/share/themes/${catppuccin_path}/gtk-4.0/gtk-dark.css";
-    ".local/share/icons/candy-icons" = {
+  config = lib.mkIf config.gnome.theming.enable {
+    gtk = {
+      enable = true;
+      # theme = {
+      #   name = catppuccin_name;
+      #   package = catppuccin_pkg;
+      # };
+      # cursorTheme = {
+      #   name = "Catppuccin-Macchiato-Dark-Cursors";
+      #   package = pkgs.catppuccin-cursors.macchiatoDark;
+      # };
+    };
+
+    home.file.".local/share/icons/candy-icons" = {
       # recursive = true;
       source = "${candy-icons}";
     };
