@@ -34,5 +34,10 @@ in {
         checkReversePath = "loose";
       };
     };
+
+    # https://github.com/tailscale/tailscale/issues/3310#issuecomment-1722601407
+    boot.kernel.sysctl = {
+      "net.ipv4.conf.default.rp_filter" = 2;
+    };
   };
 }
