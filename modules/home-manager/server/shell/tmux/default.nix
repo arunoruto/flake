@@ -1,11 +1,12 @@
 {pkgs, ...}: {
   imports = [
-    ./catppuccin.nix
+    # ./catppuccin.nix
     #./pomodoro.nix
   ];
 
   programs.tmux = {
     enable = true;
+    package = pkgs.unstable.tmux;
     clock24 = true;
     shortcut = "Space";
     terminal = "screen-256color";
