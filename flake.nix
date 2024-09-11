@@ -252,7 +252,6 @@
         modules =
           home-manager-modules
           ++ [
-            ./nixos/hosts/kyuubi/home.nix
             {
               pc.enable = false;
             }
