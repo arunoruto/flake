@@ -1,11 +1,19 @@
-{lib, ...}: {
+{
+  lib,
+  config,
+  ...
+}: {
   imports = [
     ./alacritty.nix
     ./warp.nix
     ./wezterm.nix
   ];
 
-  alacritty.enable = lib.mkDefault false;
-  warp.enable = lib.mkDefault true;
-  wezterm.enable = lib.mkDefault true;
+  options.terminals.enable = lib.mkEnableOption "Enable configured terminals";
+
+  config = lib.mkIf config.terminals.enable {
+    alacritty.enable = lib.mkDefault false;
+    warp.enable = lib.mkDefault true;
+    wezterm.enable = lib.mkDefault true;
+  };
 }
