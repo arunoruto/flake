@@ -19,7 +19,6 @@
       git
       htop
       imagemagickBig
-      intel-gpu-tools
       iperf
       killall
       nmap
@@ -53,7 +52,7 @@
       libsForQt5.kdenlive
       libsForQt5.okular
       #mailspring
-      masterpdfeditor
+      # masterpdfeditor
       # mprime
       unstable.plex-desktop
       remmina

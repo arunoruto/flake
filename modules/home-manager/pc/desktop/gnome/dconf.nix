@@ -45,6 +45,19 @@
         # gtk-theme = lib.mkForce "Catppuccin-Macchiato-Standard-Green-Dark";
         icon-theme = lib.mkForce "candy-icons";
       };
+      # Power settings
+      "org/gnome/settings-daemon/plugins/power" = {
+        ambient-enabled = false;
+        idle-dim = false;
+        sleep-inactive-ac-timeout = 1800;
+        sleep-inactive-ac-type = "suspend";
+        sleep-inactive-battery-timeout = 900;
+        sleep-inactive-battery-type = "suspend";
+      };
+      # Session
+      "org/gnome/desktop/session" = {
+        idle-delay = "uint32 900";
+      };
       # Set list of custom keybinding
       "org/gnome/settings-daemon/plugins/media-keys" = {
         custom-keybindings = [
@@ -72,7 +85,10 @@
         binding = "<Control>less";
       };
       # i3 keybindings
-      "org/gnome/mutter".dynamic-workspaces = false;
+      "org/gnome/mutter" = {
+        experimental-features = ["scale-monitor-framebuffer"];
+        dynamic-workspaces = false;
+      };
       "org/gnome/desktop/wm/preferences".num-workspaces = 9;
       "org/gnome/shell/keybindings" = {
         switch-to-application-1 = [];

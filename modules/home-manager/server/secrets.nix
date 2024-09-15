@@ -22,6 +22,7 @@ in {
         path = config.home.homeDirectory + "/.ssh/sops_key";
       };
       "tokens/copilot" = {};
+      "tokens/cachix" = {};
     };
   };
 

@@ -40,6 +40,11 @@
       # defaultKeymap = "vim";
 
       initExtra = ''
+        # Variables
+        export LS_COLORS="$(vivid generate gruvbox-dark)";
+        export COPILOT_API_KEY="$(cat ${config.sops.secrets."tokens/copilot".path})"
+        export CACHIX_AUTH_TOKEN="$(cat ${config.sops.secrets."tokens/cachix".path})"
+
         # Disable all sounds
         unsetopt BEEP
 
@@ -64,10 +69,6 @@
           echo "  \"\''${nixpkgs-tars}''${HASH}.tar.gz\")"
           echo "    { config = config.nixpkgs.config; };"
         }
-
-        # Variables
-        export LS_COLORS="$(vivid generate gruvbox-dark)";
-        export COPILOT_API_KEY="$(cat ${config.sops.secrets."tokens/copilot".path})"
 
         ## Autocompletions
         # tailscale

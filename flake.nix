@@ -152,7 +152,25 @@
     ];
   in {
     nixosConfigurations = {
-      # Framework Laptop
+      # Framework Laptop AMD 7040
+      isshin = nixpkgs.lib.nixosSystem {
+        inherit system;
+        specialArgs = {
+          inherit inputs;
+          inherit theme;
+          inherit image;
+          username = "mirza";
+        };
+        modules =
+          nixos-modules
+          ++ [
+            ./hosts/isshin
+            home-manager.nixosModules.home-manager
+            ./homes
+          ];
+      };
+    
+      # Framework Laptop Intel 11th
       zangetsu = nixpkgs.lib.nixosSystem {
         inherit system;
         specialArgs = {

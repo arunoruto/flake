@@ -36,13 +36,6 @@
       #qbittorrent
 
       exercism
-
-      gnomeExtensions.appindicator
-      gnomeExtensions.emoji-copy
-      # gnomeExtensions.focus
-      #gnomeExtensions.spotify-controller
-      gnomeExtensions.tailscale-status
-      gnomeExtensions.transparent-top-bar
     ];
   };
 }
