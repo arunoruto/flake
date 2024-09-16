@@ -19,6 +19,7 @@
   config = lib.mkIf config.desktop.enable {
     gnome.enable = lib.mkDefault true;
     hyprland.enable = lib.mkDefault true;
+    sway.enable = lib.mkDefault false;
 
     home.packages = with pkgs; [
       gimp
