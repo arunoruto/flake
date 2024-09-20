@@ -1,6 +1,11 @@
 {
   description = "Mirzas Nix Config";
 
+  nixConfig = {
+    extra-substituters = ["https://arunoruto.cachix.org"];
+    extra-trusted-public-keys = ["arunoruto.cachix.org-1:GQVw1YDtjt0+ElmQifxEI52a0pRVe9/gdcNEr8v8G14="];
+  };
+
   inputs = {
     # Nixpkgs
     nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
@@ -169,7 +174,7 @@
             ./homes
           ];
       };
-    
+
       # Framework Laptop Intel 11th
       zangetsu = nixpkgs.lib.nixosSystem {
         inherit system;

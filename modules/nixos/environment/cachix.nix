@@ -2,6 +2,7 @@
   pkgs,
   lib,
   config,
+  username,
   ...
 }: {
   options.cachix.enable = lib.mkEnableOption "Use cachix to manage nix caches for packages";
@@ -10,5 +11,7 @@
     environment.systemPackages = with pkgs; [
       cachix
     ];
+
+    nix.settings.trusted-users = ["root" username];
   };
 }

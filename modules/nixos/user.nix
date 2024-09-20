@@ -37,11 +37,6 @@
 
   environment.sessionVariables.FLAKE = "/home/${username}/.config/flake";
 
-  # catppuccin = {
-  #   enable = true;
-  #   flavor = "macchiato";
-  #   accent = "green";
-  # };
   imports = [
     inputs.stylix.nixosModules.stylix
   ];
