@@ -1,11 +1,12 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  lib,
+  ...
+}: {
   boot = {
     loader = {
-      timeout = 0; # Hit F10 for a list of generations
-      systemd-boot = {
-        enable = true;
-        memtest86.enable = true;
-      };
+      timeout = lib.mkDefault 0; # Hit F10 for a list of generations
+      systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
     };
     kernelPackages = pkgs.linuxPackages_latest;
