@@ -15,6 +15,7 @@
     ./secrets.nix
     ./ssh.nix
     ./tlp.nix
+    ./ppd.nix
   ];
 
   davmail.enable = lib.mkDefault false;

@@ -1,4 +1,5 @@
 {
+  # pkgs,
   lib,
   config,
   ...
@@ -10,8 +11,10 @@
   '';
 
   config = lib.mkIf config.ppd.enable {
-    services = {
-      power-profiles-daemon.enable = lib.mkDefault true;
-      powerManagement.powertop.enable = lib.mkDefault false;
+    services.power-profiles-daemon.enable = lib.mkDefault true;
+    powerManagement.powertop.enable = lib.mkDefault false;
+    # environment.systemPackages = with pkgs; [
+    #   powertop
+    # ];
   };
 }
