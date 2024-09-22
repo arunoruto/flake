@@ -43,7 +43,7 @@ in {
       gitCredentialHelper.enable = true;
       settings = {
         git_protocol = "https";
-        editor = "vim";
+        # editor = "hx";
         prompt = "enabled";
         aliases = {
           co = "pr checkout";
