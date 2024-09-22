@@ -1,10 +1,10 @@
 {
   description = "Mirzas Nix Config";
 
-  nixConfig = {
-    extra-substituters = ["https://arunoruto.cachix.org"];
-    extra-trusted-public-keys = ["arunoruto.cachix.org-1:GQVw1YDtjt0+ElmQifxEI52a0pRVe9/gdcNEr8v8G14="];
-  };
+  # nixConfig = {
+  #   extra-substituters = ["https://arunoruto.cachix.org"];
+  #   extra-trusted-public-keys = ["arunoruto.cachix.org-1:GQVw1YDtjt0+ElmQifxEI52a0pRVe9/gdcNEr8v8G14="];
+  # };
 
   inputs = {
     # Nixpkgs
