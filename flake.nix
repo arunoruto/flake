@@ -30,6 +30,12 @@
       url = "github:nix-community/home-manager/release-24.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # DEs
+    nixos-cosmic = {
+      url = "github:lilyinstarlight/nixos-cosmic";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      # inputs.nixpkgs.follows = "nixpkgs";
+    };
     plasma-manager = {
       url = "github:nix-community/plasma-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -80,23 +86,6 @@
     # image = "anime/jjk/satoru-gojo-jujutsu-kaisen-5k-ac.jpg";
     # image = "anime/gruvbox/skull2.png";
     image = "anime/gruvbox/boonies.png";
-    # secure-boot = [
-    #   lanzaboote.nixosModules.lanzaboote
-    #   ({
-    #     pkgs,
-    #     lib,
-    #     ...
-    #   }: {
-    #     environment.systemPackages = [pkgs.sbctl];
-    #     boot = {
-    #       loader.systemd-boot.enable = lib.mkForce false;
-    #       lanzaboote = {
-    #         enable = true;
-    #         pkiBundle = "/etc/secureboot";
-    #       };
-    #     };
-    #   })
-    # ];
     overlay-unstable = final: prev: {
       unstable = import nixpkgs-unstable {
         inherit system;

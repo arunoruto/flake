@@ -4,10 +4,6 @@
   config,
   ...
 }: {
-  # imports = [
-  #   ../../modules/nixos
-  # ];
-
   # Set hostname
   networking.hostName = lib.mkForce "yhwach"; # Define your hostname.
 
@@ -19,6 +15,8 @@
 
   # Set system time
   time.hardwareClockInLocalTime = true;
+
+  cosmic.enable = true;
 
   # Eanble fingerprint for framework laptop
   # fingerprint.enable = true;

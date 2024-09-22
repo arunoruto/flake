@@ -5,6 +5,7 @@
   ...
 }: {
   imports = [
+    ./cosmic.nix
     ./gnome.nix
     ./hyprland.nix
     ./kde.nix
@@ -21,6 +22,7 @@
     # sway.enable = lib.mkForce false;
     # hyprland.enable = lib.mkForce false;
 
+    cosmic.enable = lib.mkDefault false;
     gnome.enable = lib.mkDefault true;
     kde.enable = lib.mkDefault false;
     sway.enable = lib.mkDefault true;
