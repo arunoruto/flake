@@ -33,7 +33,7 @@
       bat
       dust
       eza
-      linuxPackages_latest.perf
+      # linuxPackages_latest.perf
       lsd
       riffdiff
       tmux
