@@ -49,8 +49,8 @@
       "org/gnome/settings-daemon/plugins/power" = {
         ambient-enabled = false;
         idle-dim = false;
-        sleep-inactive-ac-timeout = 1800;
-        sleep-inactive-ac-type = "suspend";
+        # sleep-inactive-ac-timeout = 1800;
+        # sleep-inactive-ac-type = "suspend";
         sleep-inactive-battery-timeout = 900;
         sleep-inactive-battery-type = "suspend";
       };
