@@ -20,8 +20,9 @@
       };
       sessionVariables = {
         XAUTHORITY = "$HOME/.Xauthority";
+        # NIX_SSHOPTS = "source /etc/profile.d/nix.sh;";
         PATH = "$HOME/.bin:$PATH";
-        TEST = "1234";
+        TEST = "12345";
       };
       history = {
         size = 10000;
