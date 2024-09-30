@@ -38,9 +38,11 @@
     systemd.tmpfiles.rules = let
       rocmEnv = pkgs.symlinkJoin {
         name = "rocm-combined";
-        paths = with pkgs.rocmPackages; [
+        paths = with pkgs.rocmPackages_5; [
           clr
+          llvm.lld
           hipcc
+          hipfft
           hipsolver
           hipblas
           rocblas
@@ -51,7 +53,7 @@
           rocsparse
           rocsolver
           rccl
-          # miopen
+          miopen
         ];
       };
     in [
