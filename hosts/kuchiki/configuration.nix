@@ -12,6 +12,7 @@
   firefox.enable = false;
   chrome.enable = false;
   steam.enable = false;
+  # home.pc.enable = false;
 
   # Set hostname
   networking.hostName = lib.mkForce "kuchiki"; # Define your hostname.

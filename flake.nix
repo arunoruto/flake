@@ -164,7 +164,7 @@
           ];
       };
 
-      # Framework Laptop Intel 11th
+      # Framework Case Intel 11th
       zangetsu = nixpkgs.lib.nixosSystem {
         inherit system;
         specialArgs = {
@@ -233,6 +233,8 @@
           nixos-modules
           ++ [
             ./hosts/kuchiki
+            home-manager.nixosModules.home-manager
+            ./homes
           ];
       };
 
