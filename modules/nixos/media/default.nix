@@ -4,6 +4,7 @@
   ...
 }: {
   imports = [
+    ./arr.nix
     ./plex.nix
   ];
   options = {
@@ -11,6 +12,7 @@
   };
 
   config = lib.mkIf config.media.enable {
+    arr.enable = lib.mkDefault true;
     plex.enable = lib.mkDefault true;
   };
 }

@@ -14,6 +14,7 @@
   display-manager.enable = false;
   desktop-environment.enable = false;
   media.enable = true;
+  nas.enable = true;
 
   firefox.enable = false;
   chrome.enable = false;
