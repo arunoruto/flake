@@ -9,10 +9,11 @@
   desktop-environment.enable = false;
   media.enable = true;
 
-  firefox.enable = false;
-  chrome.enable = false;
-  steam.enable = false;
+  # firefox.enable = false;
+  # chrome.enable = false;
+  # steam.enable = false;
   # home.pc.enable = false;
+  gui.enable = false;
 
   # Set hostname
   networking.hostName = lib.mkForce "kuchiki"; # Define your hostname.

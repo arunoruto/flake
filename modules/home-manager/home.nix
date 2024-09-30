@@ -1,4 +1,5 @@
 {
+  osConfig,
   pkgs,
   lib,
   user,
@@ -17,7 +18,7 @@ in {
     ./module.nix
   ];
 
-  pc.enable = lib.mkDefault true;
+  pc.enable = lib.mkDefault osConfig.gui.enable;
   environment.enable = true;
 
   # Allow unfree software
