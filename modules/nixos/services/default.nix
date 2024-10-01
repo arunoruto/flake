@@ -1,5 +1,5 @@
 {
-  pkgs,
+  config,
   lib,
   ...
 }: {
@@ -19,7 +19,7 @@
   ];
 
   davmail.enable = lib.mkDefault false;
-  flatpak.enable = lib.mkDefault true;
+  flatpak.enable = lib.mkDefault config.xdg.portal.enable;
   secrets.enable = lib.mkDefault true;
   oneapi.enable = lib.mkDefault false;
   # oneapi.enable = lib.mkDefault true;

@@ -23,6 +23,12 @@
         (with pkgs; [
           gnome-photos
           gnome-tour
+          nautilus-open-any-terminal
+          gnome.nautilus-python
+          gnome.gnome-software
+          gnome.pomodoro
+          gnome.gnome-remote-desktop
+          gnome3.gnome-tweaks
         ])
         ++ (with pkgs.gnome; [
           #cheese # webcam tool

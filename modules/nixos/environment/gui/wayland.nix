@@ -18,5 +18,9 @@
         xdgOpenUsePortal = true;
       };
     };
+
+    environment.systemPackages = with pkgs; [
+      wl-clipboard
+    ];
   };
 }

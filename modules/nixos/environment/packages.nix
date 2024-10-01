@@ -1,7 +1,7 @@
 {pkgs, ...}: {
-  imports = [
-    ./chrome.nix
-  ];
+  # imports = [
+  #   ./chrome.nix
+  # ];
 
   environment = {
     # Enable shells
@@ -39,25 +39,25 @@
       tmux
       unstable.ventoy
       vim
-      vlc
-      unstable.vscode
+      # vlc
+      # unstable.vscode
       #vscode
-      wezterm
+      # wezterm
       wget
-      wl-clipboard
+      # wl-clipboard
 
-      discord
-      gthumb
+      # discord
+      # gthumb
       # jabref
-      libsForQt5.kdenlive
-      libsForQt5.okular
+      # libsForQt5.kdenlive
+      # libsForQt5.okular
       #mailspring
       # masterpdfeditor
       # mprime
-      unstable.plex-desktop
-      remmina
-      zoom-us
-      zotero
+      # unstable.plex-desktop
+      # remmina
+      # zoom-us
+      # zotero
 
       texlive.combined.scheme-full
 
@@ -65,12 +65,12 @@
       #ultrastar-manager
 
       # Gnome specific applications
-      nautilus-open-any-terminal
-      gnome.nautilus-python
-      gnome.gnome-software
-      gnome.pomodoro
-      gnome.gnome-remote-desktop
-      gnome3.gnome-tweaks
+      # nautilus-open-any-terminal
+      # gnome.nautilus-python
+      # gnome.gnome-software
+      # gnome.pomodoro
+      # gnome.gnome-remote-desktop
+      # gnome3.gnome-tweaks
     ];
   };
 }
