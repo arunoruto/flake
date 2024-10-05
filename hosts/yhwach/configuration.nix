@@ -6,12 +6,16 @@
 }: {
   # Set hostname
   networking.hostName = lib.mkForce "yhwach"; # Define your hostname.
+  netbird.enable = true;
 
   # Enable lanzaboote for secure-boot
   secureboot.enable = true;
 
   # Enable systemd-boot selection
-  boot.loader.timeout = 10;
+  boot = {
+    loader.timeout = 10;
+    kernelParams = ["nvidia.NVreg_EnableGpuFirmware=0"];
+  };
 
   # Set system time
   time.hardwareClockInLocalTime = true;
@@ -88,7 +92,4 @@
       #   ];
     };
   };
-  # environment.sessionVariables = {
-  #   LIBVA_DRIVER_NAME = "iHD";
-  # }; # Force intel-media-driver
 }
