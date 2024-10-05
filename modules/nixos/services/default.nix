@@ -7,6 +7,7 @@
     ./hardware
     ./input
     ./media
+    ./nas
     ./network
 
     ./davmail.nix
@@ -17,6 +18,8 @@
     ./tlp.nix
     ./ppd.nix
   ];
+
+  nas.enable = lib.mkDefault false;
 
   davmail.enable = lib.mkDefault false;
   flatpak.enable = lib.mkDefault config.xdg.portal.enable;
