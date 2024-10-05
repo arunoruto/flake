@@ -20,6 +20,7 @@
       #mailspring
       # masterpdfeditor
       # mprime
+      # unstable.mqtt-explorer
       unstable.plex-desktop
       remmina
       zoom-us
