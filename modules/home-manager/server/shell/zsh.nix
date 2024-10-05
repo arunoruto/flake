@@ -25,6 +25,7 @@
         TEST = "12345";
       };
       history = {
+        # append = true;
         size = 10000;
         path = "${config.xdg.dataHome}/zsh/history";
       };
@@ -32,8 +33,8 @@
       enableCompletion = true;
       historySubstringSearch = {
         enable = true;
-        searchDownKey = ["^[[B"];
-        searchUpKey = ["^[[A"];
+        searchDownKey = ["^[OB"];
+        searchUpKey = ["^[OA"];
       };
       syntaxHighlighting = {
         enable = true;
@@ -57,10 +58,6 @@
         # Ctrl + left/right arrow key movement
         bindkey "^[[1;5C" forward-word
         bindkey "^[[1;5D" backward-word
-
-        # Up(A) and down(B) for history search
-        # bindkey '^[[A' history-substring-search-up
-        # bindkey '^[[B' history-substring-search-down
 
         function get-pr-override() {
           PR_NO=$1
