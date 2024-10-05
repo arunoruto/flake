@@ -17,18 +17,18 @@
     environment = {
       systemPackages = with pkgs; [
         gnome-network-displays
+        nautilus-open-any-terminal
+        gnome.nautilus-python
+        gnome.gnome-software
+        gnome.pomodoro
+        gnome.gnome-remote-desktop
+        gnome3.gnome-tweaks
       ];
       # Excluding some GNOME applications from the default install
       gnome.excludePackages =
         (with pkgs; [
           gnome-photos
           gnome-tour
-          nautilus-open-any-terminal
-          gnome.nautilus-python
-          gnome.gnome-software
-          gnome.pomodoro
-          gnome.gnome-remote-desktop
-          gnome3.gnome-tweaks
         ])
         ++ (with pkgs.gnome; [
           #cheese # webcam tool
