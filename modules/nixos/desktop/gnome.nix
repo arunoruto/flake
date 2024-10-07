@@ -10,7 +10,12 @@
 
   config = lib.mkIf config.gnome.enable {
     services = {
-      xserver.desktopManager.gnome.enable = true;
+      xserver.desktopManager.gnome = {
+        enable = true;
+        extraGSettingsOverridePackages = with pkgs; [
+          # gnome.mutter
+        ];
+      };
       gnome.gnome-keyring.enable = true;
     };
 
