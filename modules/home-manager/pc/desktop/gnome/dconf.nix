@@ -86,7 +86,10 @@
       };
       # i3 keybindings
       "org/gnome/mutter" = {
-        experimental-features = ["scale-monitor-framebuffer"];
+        experimental-features = [
+          "scale-monitor-framebuffer"
+          # "x11-randr-fractional-scaling"
+        ];
         dynamic-workspaces = false;
       };
       "org/gnome/desktop/wm/preferences".num-workspaces = 9;
