@@ -5,6 +5,9 @@
   # Eanble fingerprint for framework laptop
   fingerprint.enable = true;
 
+  # tailscale.enable = false;
+  # netbird.enable = true;
+
   amd.enable = true;
 
   # Fix 6GHz problem
