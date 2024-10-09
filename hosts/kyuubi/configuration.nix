@@ -1,8 +1,6 @@
 {
-  config,
   pkgs,
   lib,
-  username,
   ...
 }: let
   # monitorsXmlContent = builtins.readFile /home/mar/.config/monitors.xml;
