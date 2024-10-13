@@ -12,9 +12,9 @@ in {
   imports = [
     ./hosts
     ./pc
+    ./theming
     ./environment.nix
     ./imports.nix
-    ./stylix.nix
     ./module.nix
   ];
 
