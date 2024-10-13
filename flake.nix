@@ -220,7 +220,7 @@
           ];
       };
 
-      # Server
+      # New NAS Server
       kuchiki = nixpkgs.lib.nixosSystem {
         inherit system;
         specialArgs = {
@@ -238,6 +238,23 @@
           ];
       };
 
+      # Crappy AMD Mini PC
+      yoruichi = nixpkgs.lib.nixosSystem {
+        inherit system;
+        specialArgs = {
+          inherit inputs;
+          inherit theme;
+          inherit image;
+          username = "mirza";
+        };
+        modules =
+          nixos-modules
+          ++ [
+            ./hosts/yoruichi
+            home-manager.nixosModules.home-manager
+            ./homes
+          ];
+      };
       # Firewall
       narouter = nixpkgs.lib.nixosSystem {
         inherit system;
