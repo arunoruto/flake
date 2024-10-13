@@ -24,7 +24,7 @@
     home.packages = with pkgs; [
       gimp
       inkscape
-      #jabref
+      jabref
       obs-studio
       #obsidian
       #okular
