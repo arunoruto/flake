@@ -13,7 +13,7 @@
 
   config = lib.mkIf config.terminals.enable {
     alacritty.enable = lib.mkDefault false;
-    warp.enable = lib.mkDefault true;
+    warp.enable = lib.mkDefault false;
     wezterm.enable = lib.mkDefault true;
   };
 }
