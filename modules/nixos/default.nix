@@ -3,6 +3,7 @@
     ./desktop
     ./display
     ./environment
+    ./host-types
     ./media
     ./network
     ./services

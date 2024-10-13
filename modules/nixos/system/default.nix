@@ -4,7 +4,7 @@
   ...
 }: {
   imports = [
-    ./boot.nix
+    ./boot
     ./locale.nix
     ./nix-utils.nix
     ./secure-boot.nix
