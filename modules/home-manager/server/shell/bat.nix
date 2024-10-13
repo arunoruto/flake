@@ -21,7 +21,7 @@
 
       zsh = {
         shellAliases = {
-          cat = "bat --paging=never";
+          cat = "bat -pp";
           less = "bat --paging=always";
         };
       };

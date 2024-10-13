@@ -91,24 +91,15 @@
         # <<< conda initialize <<<
       '';
 
-      antidote = {
-        enable = false;
-        plugins = [
-          "zsh-users/zsh-autosuggestions"
-          "zsh-users/zsh-completions"
-          "zsh-users/zsh-history-substring-search"
-          "zsh-users/zsh-syntax-highlighting"
-        ];
-      };
+      # antidote = {
+      #   enable = false;
+      #   plugins = [
+      #     "zsh-users/zsh-autosuggestions"
+      #     "zsh-users/zsh-completions"
+      #     "zsh-users/zsh-history-substring-search"
+      #     "zsh-users/zsh-syntax-highlighting"
+      #   ];
+      # };
     };
-
-    # starship.enableZshIntegration = true;
-    # zoxide.enableZshIntegration = true;
-    # fzf.enableZshIntegration = true;
-    # atuin.enableZshIntegration = true;
-    # thefuck.enableZshIntegration = true;
-    # yazi.enableZshIntegration = true;
-    # direnv.enableZshIntegration = true;
-    # zellij.enableZshIntegration = true;
   };
 }
