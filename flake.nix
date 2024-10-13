@@ -68,6 +68,10 @@
       url = "git+https://github.com/arunoruto/secrets.nix.git?ref=main&shallow=1";
       flake = false;
     };
+    wallpapers = {
+      url = "git+https://github.com/arunoruto/wallpapers.git?ref=main&shallow=1";
+      flake = false;
+    };
   };
 
   outputs = {
@@ -80,9 +84,9 @@
     ...
   } @ inputs: let
     system = "x86_64-linux";
-    # theme = "catppuccin-macchiato";
-    # theme = "tokyo-night-dark";
-    theme = "gruvbox-material-dark-hard";
+    # scheme = "catppuccin-macchiato";
+    # scheme = "tokyo-night-dark";
+    scheme = "gruvbox-material-dark-hard";
     # image = "anime/jjk/satoru-gojo-jujutsu-kaisen-5k-ac.jpg";
     # image = "anime/gruvbox/skull2.png";
     image = "anime/gruvbox/boonies.png";
@@ -120,7 +124,7 @@
     };
     stylix-config = {
       stylix.image = nixpkgs.lib.mkDefault ./modules/home-manager/theming/wallpaper.png;
-      # theme = "tokyo-night-dark";
+      # scheme = "tokyo-night-dark";
       # image = "anime/jjk/satoru-gojo-jujutsu-kaisen-5k-ac.jpg";
     };
     nixos-modules = [
@@ -151,7 +155,7 @@
         inherit system;
         specialArgs = {
           inherit inputs;
-          inherit theme;
+          inherit scheme;
           inherit image;
           username = "mirza";
         };
@@ -169,7 +173,7 @@
         inherit system;
         specialArgs = {
           inherit inputs;
-          inherit theme;
+          inherit scheme;
           inherit image;
           username = "mirza";
         };
@@ -187,7 +191,7 @@
         inherit system;
         specialArgs = {
           inherit inputs;
-          inherit theme;
+          inherit scheme;
           inherit image;
           username = "mirza";
         };
@@ -205,7 +209,7 @@
         inherit system;
         specialArgs = {
           inherit inputs;
-          inherit theme;
+          inherit scheme;
           inherit image;
           username = "mar";
         };
@@ -225,7 +229,7 @@
         inherit system;
         specialArgs = {
           inherit inputs;
-          inherit theme;
+          inherit scheme;
           inherit image;
           username = "mirza";
         };
@@ -243,7 +247,7 @@
         inherit system;
         specialArgs = {
           inherit inputs;
-          inherit theme;
+          inherit scheme;
           inherit image;
           username = "mirza";
         };
@@ -260,7 +264,7 @@
         inherit system;
         specialArgs = {
           inherit inputs;
-          inherit theme;
+          inherit scheme;
           inherit image;
           username = "mirza";
         };
@@ -290,7 +294,7 @@
       #   # to pass through arguments to home.nix
       #   extraSpecialArgs = {
       #     inherit inputs;
-      #     inherit theme;
+      #     inherit scheme;
       #     inherit image;
       #     user = "mirza";
       #   };
@@ -307,7 +311,7 @@
           ];
         extraSpecialArgs = {
           inherit inputs;
-          inherit theme;
+          inherit scheme;
           inherit image;
           user = "mar";
         };

@@ -19,6 +19,7 @@ in {
   ];
 
   pc.enable = lib.mkDefault osConfig.gui.enable;
+  theming.enable = lib.mkDefault osConfig.gui.enable;
   environment.enable = true;
 
   # Allow unfree software

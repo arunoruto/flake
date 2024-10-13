@@ -662,7 +662,8 @@
         "poetry2nix": "poetry2nix",
         "secrets": "secrets",
         "sops-nix": "sops-nix",
-        "stylix": "stylix"
+        "stylix": "stylix",
+        "wallpapers": "wallpapers"
       }
     },
     "rust-overlay": {
@@ -859,6 +860,24 @@
         "owner": "numtide",
         "repo": "treefmt-nix",
         "type": "github"
+      }
+    },
+    "wallpapers": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1720967019,
+        "narHash": "sha256-uPaPAggLFmureDXqKcvwr2uMb24QuxQzbwCqTHNSIrg=",
+        "ref": "main",
+        "rev": "8815698729ceff1f97fae5ab2bf930a9dd682198",
+        "shallow": true,
+        "type": "git",
+        "url": "https://github.com/arunoruto/wallpapers.git"
+      },
+      "original": {
+        "ref": "main",
+        "shallow": true,
+        "type": "git",
+        "url": "https://github.com/arunoruto/wallpapers.git"
       }
     }
   },

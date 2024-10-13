@@ -1,8 +1,19 @@
-{lib, ...}: {
+{
+  lib,
+  config,
+  ...
+}: {
   imports = [
     ./icons.nix
     ./stylix.nix
   ];
 
-  theming.icons.enable = lib.mkDefault true;
+  options.theming.enable = lib.mkEnableOption "Setup local theming";
+
+  config = lib.mkIf config.theming.enable {
+    theming = {
+      icons.enable = lib.mkDefault true;
+      # stylix.enable = lib.mkDefault true;
+    };
+  };
 }
