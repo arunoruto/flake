@@ -3,26 +3,22 @@
   lib,
   ...
 }: {
-  # display-manager.enable = lib.mkForce false;
-  # desktop-environment.enable = lib.mkForce false;
-  display-manager.enable = false;
-  desktop-environment.enable = false;
+  tinypc.enable = true;
 
-  # firefox.enable = false;
-  # chrome.enable = false;
-  # steam.enable = false;
-  # home.pc.enable = false;
-  gui.enable = false;
-  boot.loader.efi.canTouchEfiVariables = false;
-  boot.loader = {
-    systemd-boot.enable = false;
-    grub = {
-      enable = true;
-      device = "/dev/sda";
-      #useOSProber = true;
-      efiSupport = false;
-    };
-  };
+  efi.enable = false;
+  grub.enable = true;
+  systemd-boot.enable = false;
+  boot.loader.grub.device = "/dev/sda";
+  # boot.loader.efi.canTouchEfiVariables = false;
+  # boot.loader = {
+  #   systemd-boot.enable = false;
+  #   grub = {
+  #     enable = true;
+  #     device = "/dev/sda";
+  #     #useOSProber = true;
+  #     efiSupport = false;
+  #   };
+  # };
 
   # Set hostname
   networking.hostName = lib.mkForce "yoruichi"; # Define your hostname.
