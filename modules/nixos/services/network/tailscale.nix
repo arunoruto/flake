@@ -35,9 +35,11 @@ in {
       };
     };
 
-    # https://github.com/tailscale/tailscale/issues/3310#issuecomment-1722601407
     boot.kernel.sysctl = {
+      # https://github.com/tailscale/tailscale/issues/3310#issuecomment-1722601407
       "net.ipv4.conf.default.rp_filter" = 2;
+      "net.ipv4.ip_forward" = 1;
+      "net.ipv6.conf.all.forwarding" = 1;
     };
   };
 }
