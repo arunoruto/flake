@@ -14,7 +14,7 @@
     ./programming.nix
     ./python.nix
 
-    ./amd.nix
+    ./amd
     ./intel.nix
   ];
 
