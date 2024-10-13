@@ -2,6 +2,8 @@
   # Set hostname
   networking.hostName = lib.mkForce "isshin"; # Define your hostname.
 
+  laptop.enable = true;
+
   # Eanble fingerprint for framework laptop
   fingerprint.enable = true;
 
