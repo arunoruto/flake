@@ -119,7 +119,7 @@
       ];
     };
     stylix-config = {
-      stylix.image = nixpkgs.lib.mkDefault ./home-manager/desktop/default-wallpaper.png;
+      stylix.image = nixpkgs.lib.mkDefault ./modules/home-manager/theming/wallpaper.png;
       # theme = "tokyo-night-dark";
       # image = "anime/jjk/satoru-gojo-jujutsu-kaisen-5k-ac.jpg";
     };
