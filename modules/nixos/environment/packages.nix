@@ -59,8 +59,6 @@
       # zoom-us
       # zotero
 
-      texlive.combined.scheme-full
-
       #ultrastardx
       #ultrastar-manager
 
