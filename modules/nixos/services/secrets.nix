@@ -24,6 +24,14 @@ in {
         keyFile = "/var/lib/sops-nix/keys.txt";
         generateKey = true;
       };
+
+      secrets = {
+        # "private_keys/mirza@zangetsu" = {
+        #   path = config.home.homeDirectory + "/.ssh/sops_key";
+        # };
+        "tokens/copilot" = {};
+        "tokens/cachix" = {};
+      };
     };
   };
 }

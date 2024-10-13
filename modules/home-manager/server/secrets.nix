@@ -15,7 +15,11 @@ in {
     # defaultSopsFile = "/home/mirza/Projects/secrets.nix/secrets.yaml";
     validateSopsFiles = false;
 
-    age.keyFile = config.home.homeDirectory + "/.config/sops/age/keys.txt";
+    age = {
+      # sshKeyPaths = ["/etc/ssh/ssh_host_ed25519_key"];
+      keyFile = config.home.homeDirectory + "/.config/sops/age/keys.txt";
+      # generateKey = true;
+    };
 
     secrets = {
       "private_keys/mirza@zangetsu" = {
