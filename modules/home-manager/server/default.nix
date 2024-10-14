@@ -19,7 +19,7 @@
     glow
     hexyl
     hugo
-    julia
+    # julia
     marksman
     miller
     ncdu
