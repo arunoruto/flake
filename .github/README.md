@@ -88,3 +88,7 @@ To clean up such systems, you can use the following commands:
 
 - Integrate [disko](https://github.com/nix-community/disko) for each system,
   so it can be built easier later on.
+
+## Credits
+
+- [use-the-fork](https://github.com/use-the-fork) helped me to [move](https://www.reddit.com/r/NixOS/comments/1eely7a/access_homemanager_config_from_my_nixos_config/) from a standalone config for home-manager to using it as a module
