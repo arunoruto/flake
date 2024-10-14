@@ -5,8 +5,10 @@
 }: {
   imports = [
     ./programs
-    ./secrets.nix
+    ./services
     ./shell
+
+    ./secrets.nix
     ./ssh.nix
   ];
 
