@@ -69,7 +69,7 @@ Some nice intro is provided by [thiscute.world](https://nixos-and-flakes.thiscut
 - [Ultimate NixOS Guide | Flakes | Home-manager](https://www.youtube.com/watch?v=a67Sv4Mbxmc) gives a good introduction for beginners, and introduces flakes and how to use them to configure the system
 - [Modularize NixOS and Home Manager | Great Practices](https://www.youtube.com/watch?v=vYc6IzKvAJQ) shows how to organize the files and make them easier to manage
 - [Nixvim: Neovim Distro Powered By Nix](https://www.youtube.com/watch?v=b641h63lqy0): configure neovim the nix way!
-- [Is NixOS The Best Gaming Distro | Linux Gaming Setup]: nix can be used for gaming too! This video gives nice tips to configure your system for a specific hardware too
+- [Is NixOS The Best Gaming Distro | Linux Gaming Setup](https://www.youtube.com/watch?v=qlfm3MEbqYA): nix can be used for gaming too! This video gives nice tips to configure your system for a specific hardware too
 
 [Ampersand](https://www.youtube.com/watch?v=nLwbNhSxLd4) has a nice video about configuring a NixOS system similar to vimjoyer's `Ultimate NixOS Guide | Flakes | Home-Manager`
 
@@ -80,6 +80,7 @@ To clean up such systems, you can use the following commands:
 
 - `nix-collect-garbage`: can be used on all systems and the parameter `--delete-older-than` can be specified with a period (for example `"30 days"`).
   This command is mostly an alias of `nix-store --gc` or `nix store gc`, but extends it with the `--delete-older-than` and `--delete-old` flag.
+- `nh clean all`: clean everything using the `nh` tool.
 
 ## TODO
 
