@@ -122,11 +122,11 @@
         # })
       ];
     };
-    stylix-config = {
-      stylix.image = nixpkgs.lib.mkDefault ./modules/home-manager/theming/wallpaper.png;
-      # scheme = "tokyo-night-dark";
-      # image = "anime/jjk/satoru-gojo-jujutsu-kaisen-5k-ac.jpg";
-    };
+    # stylix-config = {
+    #   stylix.image = nixpkgs.lib.mkDefault ./modules/home-manager/theming/wallpaper.png;
+    #   # scheme = "tokyo-night-dark";
+    #   # image = "anime/jjk/satoru-gojo-jujutsu-kaisen-5k-ac.jpg";
+    # };
     nixos-modules = [
       nixpkgs-config
       nur.nixosModules.nur
@@ -160,151 +160,211 @@
       #   #stylix.targets.nixvim.enable = nixpkgs.lib.mkDefault false;
       # }
     ];
-  in {
-    nixosConfigurations = {
-      # Framework Laptop AMD 7040
-      isshin = nixpkgs.lib.nixosSystem {
-        inherit system;
-        specialArgs = {
-          inherit inputs;
-          username = "mirza";
-        };
-        modules =
-          nixos-modules
-          ++ [
-            ./hosts/isshin
-            home-manager.nixosModules.home-manager
-            ./homes
-          ];
-      };
 
-      # Framework Case Intel 11th
-      zangetsu = nixpkgs.lib.nixosSystem {
-        inherit system;
-        specialArgs = {
-          inherit inputs;
-          username = "mirza";
-        };
-        modules =
-          nixos-modules
-          ++ [
-            ./hosts/zangetsu
-            home-manager.nixosModules.home-manager
-            ./homes
-          ];
-      };
-
-      # Tower PC
-      yhwach = nixpkgs.lib.nixosSystem {
-        inherit system;
-        specialArgs = {
-          inherit inputs;
-          username = "mirza";
-        };
-        modules =
-          nixos-modules
-          ++ [
-            ./hosts/yhwach
-            home-manager.nixosModules.home-manager
-            ./homes
-          ];
-      };
-
-      # Work PC
-      kyuubi = nixpkgs.lib.nixosSystem {
-        inherit system;
-        specialArgs = {
-          inherit inputs;
-          username = "mar";
-        };
-        modules =
-          nixos-modules
-          ++ [
-            ./hosts/kyuubi
-            home-manager.nixosModules.home-manager
-            ./homes
-          ];
-      };
-
-      # New NAS Server
-      kuchiki = nixpkgs.lib.nixosSystem {
-        inherit system;
-        specialArgs = {
-          inherit inputs;
-          username = "mirza";
-        };
-        modules =
-          nixos-modules
-          ++ [
-            ./hosts/kuchiki
-            home-manager.nixosModules.home-manager
-            ./homes
-          ];
-      };
-
-      # Crappy AMD Mini PC
-      yoruichi = nixpkgs.lib.nixosSystem {
-        inherit system;
-        specialArgs = {
-          inherit inputs;
-          username = "mirza";
-        };
-        modules =
-          nixos-modules
-          ++ [
-            ./hosts/yoruichi
-            home-manager.nixosModules.home-manager
-            ./homes
-          ];
-      };
-      # Firewall
-      narouter = nixpkgs.lib.nixosSystem {
-        inherit system;
-        specialArgs = {
-          inherit inputs;
-          username = "mirza";
-        };
-        modules =
-          nixos-modules
-          ++ [
-            ./hosts/narouter
-            home-manager.nixosModules.home-manager
-            ./homes
-          ];
-      };
+    hostname-users = {
+      # Personal
+      "isshin" = "mirza";
+      "zangetsu" = "mirza";
+      "yhwach" = "mirza";
+      "kuchiki" = "mirza";
+      "yoruichi" = "mirza";
+      "narouter" = "mirza";
+      # Work
+      "kyuubi" = "mar";
     };
+  in {
+    nixosConfigurations = nixpkgs.lib.genAttrs (builtins.attrNames hostname-users) (hostname:
+      nixpkgs.lib.nixosSystem {
+        inherit system;
+        specialArgs = {
+          inherit inputs;
+          username = hostname-users."${hostname}";
+        };
+        modules =
+          nixos-modules
+          ++ [
+            {networking.hostName = nixpkgs.lib.mkForce hostname;}
+            ./hosts/${hostname}
+            home-manager.nixosModules.home-manager
+            ./homes
+          ];
+      });
+    # nixosConfigurations = nixpkgs.lib.attrsets.mapAttrs (user: hosts:
+    #   nixpkgs.lib.attrsets.map (
+    #     host: {
+    #       ${host} = nixpkgs.lib.nixosSystem {
+    #         inherit system;
+    #         specialArgs = {
+    #           inherit inputs;
+    #           username = "${user}";
+    #         };
+    #         modules =
+    #           nixos-modules
+    #           ++ [
+    #             ./hosts/${host}
+    #             home-manager.nixosModules.home-manager
+    #             ./homes
+    #           ];
+    #       };
+    #     }
+    #   )
+    #   hosts)
+    # users-hostnames;
 
-    homeConfigurations = {
-      # mirza = home-manager.lib.homeManagerConfiguration {
-      #   inherit pkgs;
+    # nixosConfigurations = {
+    #   # Framework Laptop AMD 7040
+    #   isshin = nixpkgs.lib.nixosSystem {
+    #     inherit system;
+    #     specialArgs = {
+    #       inherit inputs;
+    #       username = "mirza";
+    #     };
+    #     modules =
+    #       nixos-modules
+    #       ++ [
+    #         ./hosts/isshin
+    #         home-manager.nixosModules.home-manager
+    #         ./homes
+    #       ];
+    #   };
 
-      #   # Specify your home configuration modules here, for example,
-      #   # the path to your home.nix.
-      #   modules =
-      #     home-manager-modules
-      #     ++ [
-      #       ./nixos/hosts/zangetsu/home.nix
-      #     ];
+    #   # Framework Case Intel 11th
+    #   zangetsu = nixpkgs.lib.nixosSystem {
+    #     inherit system;
+    #     specialArgs = {
+    #       inherit inputs;
+    #       username = "mirza";
+    #     };
+    #     modules =
+    #       nixos-modules
+    #       ++ [
+    #         ./hosts/zangetsu
+    #         home-manager.nixosModules.home-manager
+    #         ./homes
+    #       ];
+    #   };
 
-      #   # Optionally use extraSpecialArgs
-      #   # to pass through arguments to home.nix
-      #   extraSpecialArgs = {
-      #     inherit inputs;
-      #     inherit scheme;
-      #     inherit image;
-      #     user = "mirza";
-      #   };
-      # };
+    #   # Tower PC
+    #   yhwach = nixpkgs.lib.nixosSystem {
+    #     inherit system;
+    #     specialArgs = {
+    #       inherit inputs;
+    #       username = "mirza";
+    #     };
+    #     modules =
+    #       nixos-modules
+    #       ++ [
+    #         ./hosts/yhwach
+    #         home-manager.nixosModules.home-manager
+    #         ./homes
+    #       ];
+    #   };
 
-      mar = home-manager.lib.homeManagerConfiguration {
+    #   # Work PC
+    #   kyuubi = nixpkgs.lib.nixosSystem {
+    #     inherit system;
+    #     specialArgs = {
+    #       inherit inputs;
+    #       username = "mar";
+    #     };
+    #     modules =
+    #       nixos-modules
+    #       ++ [
+    #         ./hosts/kyuubi
+    #         home-manager.nixosModules.home-manager
+    #         ./homes
+    #       ];
+    #   };
+
+    #   # New NAS Server
+    #   kuchiki = nixpkgs.lib.nixosSystem {
+    #     inherit system;
+    #     specialArgs = {
+    #       inherit inputs;
+    #       username = "mirza";
+    #     };
+    #     modules =
+    #       nixos-modules
+    #       ++ [
+    #         ./hosts/kuchiki
+    #         home-manager.nixosModules.home-manager
+    #         ./homes
+    #       ];
+    #   };
+
+    #   # Crappy AMD Mini PC
+    #   yoruichi = nixpkgs.lib.nixosSystem {
+    #     inherit system;
+    #     specialArgs = {
+    #       inherit inputs;
+    #       username = "mirza";
+    #     };
+    #     modules =
+    #       nixos-modules
+    #       ++ [
+    #         ./hosts/yoruichi
+    #         home-manager.nixosModules.home-manager
+    #         ./homes
+    #       ];
+    #   };
+    #   # Firewall
+    #   narouter = nixpkgs.lib.nixosSystem {
+    #     inherit system;
+    #     specialArgs = {
+    #       inherit inputs;
+    #       username = "mirza";
+    #     };
+    #     modules =
+    #       nixos-modules
+    #       ++ [
+    #         ./hosts/narouter
+    #         home-manager.nixosModules.home-manager
+    #         ./homes
+    #       ];
+    #   };
+    # };
+
+    homeConfigurations = nixpkgs.lib.genAttrs (nixpkgs.lib.lists.unique (builtins.attrValues hostname-users)) (user:
+      home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
         modules = home-manager-modules;
         extraSpecialArgs = {
           inherit inputs;
-          user = "mar";
+          inherit user;
+          # user = user;
         };
-      };
-    };
+      });
+    # homeConfigurations = {
+    #   # mirza = home-manager.lib.homeManagerConfiguration {
+    #   #   inherit pkgs;
+
+    #   #   # Specify your home configuration modules here, for example,
+    #   #   # the path to your home.nix.
+    #   #   modules =
+    #   #     home-manager-modules
+    #   #     ++ [
+    #   #       ./nixos/hosts/zangetsu/home.nix
+    #   #     ];
+
+    #   #   # Optionally use extraSpecialArgs
+    #   #   # to pass through arguments to home.nix
+    #   #   extraSpecialArgs = {
+    #   #     inherit inputs;
+    #   #     inherit scheme;
+    #   #     inherit image;
+    #   #     user = "mirza";
+    #   #   };
+    #   # };
+
+    #   mar = home-manager.lib.homeManagerConfiguration {
+    #     inherit pkgs;
+    #     modules = home-manager-modules;
+    #     extraSpecialArgs = {
+    #       inherit inputs;
+    #       user = "mar";
+    #     };
+    #   };
+    # };
 
     devShells.${system}.default = pkgs.mkShell {
       buildInputs = with pkgs; [

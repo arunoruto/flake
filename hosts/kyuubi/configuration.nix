@@ -1,6 +1,6 @@
 {
   pkgs,
-  lib,
+  # lib,
   ...
 }: let
   # monitorsXmlContent = builtins.readFile /home/mar/.config/monitors.xml;
@@ -10,9 +10,10 @@
 in {
   printing.enable = true;
   scanning.enable = true;
+  workstation.enable = true;
 
   # Define your hostname.
-  networking.hostName = lib.mkForce "kyuubi";
+  # networking.hostName = lib.mkForce "kyuubi";
 
   nfs.enable = true;
 
