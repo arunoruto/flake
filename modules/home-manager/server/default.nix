@@ -22,6 +22,7 @@
     julia
     marksman
     miller
+    ncdu
     ouch
     slides
     unstable.vivid
