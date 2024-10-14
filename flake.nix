@@ -130,7 +130,7 @@
     nixos-modules = [
       nixpkgs-config
       nur.nixosModules.nur
-      stylix-config
+      # stylix-config
       {
         theming = {
           inherit scheme;
@@ -144,21 +144,21 @@
       #     neorg-overlay.overlays.default
       #   ];
       # }
-      nur.hmModules.nur
       # nixvim.homeManagerModules.nixvim
-      inputs.stylix.homeManagerModules.stylix
-      stylix-config
-      # {
-      #   stylix.image = nixpkgs.lib.mkDefault ./home-manager/desktop/default-wallpaper.png;
-      #   #stylix.targets.nixvim.enable = nixpkgs.lib.mkDefault false;
-      # }
+      nur.hmModules.nur
       ./modules/home-manager/home.nix
+      inputs.stylix.homeManagerModules.stylix
       {
         theming = {
           inherit scheme;
           inherit image;
         };
       }
+      # stylix-config
+      # {
+      #   stylix.image = nixpkgs.lib.mkDefault ./home-manager/desktop/default-wallpaper.png;
+      #   #stylix.targets.nixvim.enable = nixpkgs.lib.mkDefault false;
+      # }
     ];
   in {
     nixosConfigurations = {
@@ -223,8 +223,6 @@
             ./hosts/kyuubi
             home-manager.nixosModules.home-manager
             ./homes
-            # ./nixos/hosts/kyuubi/configuration.nix
-            # home-manager.nixosModules.home-manager
           ];
       };
 
@@ -300,13 +298,7 @@
 
       mar = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
-        modules =
-          home-manager-modules;
-        # ++ [
-        #   {
-        #     pc.enable = false;
-        #   }
-        # ];
+        modules = home-manager-modules;
         extraSpecialArgs = {
           inherit inputs;
           user = "mar";

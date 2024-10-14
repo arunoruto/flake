@@ -92,3 +92,4 @@ To clean up such systems, you can use the following commands:
 ## Credits
 
 - [use-the-fork](https://github.com/use-the-fork) helped me to [move](https://www.reddit.com/r/NixOS/comments/1eely7a/access_homemanager_config_from_my_nixos_config/) from a standalone config for home-manager to using it as a module
+- [u/paulgdp](https://www.reddit.com/user/paulgdp/) gave [advice](https://www.reddit.com/r/NixOS/comments/19c5een/comment/kiwxy8b/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button) on how `nixosConfig` is an attribute of `args` if the config is used in NixOS, used in `modules/home-manager/imports.nix`
