@@ -1,6 +1,8 @@
 # Mirza's Awesome Nix Config
 
-![https://www.reddit.com/r/NixOS/comments/16ky6ez/nixos_logo_variations/](https://preview.redd.it/nixos-logo-variations-v0-yr95r3otvsob1.png?width=1024&format=png&auto=webp&s=d0a14a613101103a31844ab60a711128286468a2)
+<!-- ![https://www.reddit.com/r/NixOS/comments/16ky6ez/nixos_logo_variations/](https://preview.redd.it/nixos-logo-variations-v0-yr95r3otvsob1.png?width=1024&format=png&auto=webp&s=d0a14a613101103a31844ab60a711128286468a2) -->
+
+![https://www.reddit.com/r/NixOS/comments/16ky6ez/nixos_logo_variations/](nixos-logo-cloudy.webp)
 
 ## Initial setup
 
@@ -17,7 +19,7 @@ If it deviates from this, set the env-variable `FLAKE` to the new path.
 When first time trying to install the flake, you need to run:
 
 ```sh
-sudo nixos-rebuild switch --flake "./#<device-name>"
+sudo nixos-rebuild switch --flake ./#<device-name>
 ```
 
 ### Home Manager
@@ -25,7 +27,7 @@ sudo nixos-rebuild switch --flake "./#<device-name>"
 Like NixOS, home-manager can be also updated from the flake file like follows:
 
 ```sh
-home-manager switch --flake "./#<username>"
+home-manager switch --flake ./#<username>
 ```
 
 The flake specifications are surrounded by quotes, since some shells (e.g. zsh) are complaining due to the # symbol.
@@ -46,14 +48,14 @@ After the initial setup, the system can be configured using the [`nh`](https://g
 
 ```sh
 nh os switch # if the FLAKE variable is set, or
-nh os switch "./#<device-name>"
+nh os switch ./#<device-name>
 ```
 
 ### Home Manager
 
 ```sh
 nh home switch # if the FLAKE variable is set, or
-nh home switch "./#<username>"
+nh home switch ./#<username>
 ```
 
 ## Nixvim
