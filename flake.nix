@@ -301,12 +301,12 @@
       mar = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
         modules =
-          home-manager-modules
-          ++ [
-            {
-              pc.enable = false;
-            }
-          ];
+          home-manager-modules;
+        # ++ [
+        #   {
+        #     pc.enable = false;
+        #   }
+        # ];
         extraSpecialArgs = {
           inherit inputs;
           user = "mar";
