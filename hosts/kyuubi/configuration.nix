@@ -14,6 +14,8 @@ in {
   # Define your hostname.
   networking.hostName = lib.mkForce "kyuubi";
 
+  nfs.enable = true;
+
   # environment.sessionVariables.FLAKE = "/home/${username}/Development/nix";
 
   # Disable Autosuspend for USB Bluetooth dongles
