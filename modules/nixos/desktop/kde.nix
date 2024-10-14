@@ -4,9 +4,7 @@
   # pkgs,
   ...
 }: {
-  options = {
-    kde.enable = lib.mkEnableOption "Use the KDE desktop environment";
-  };
+  options.kde.enable = lib.mkEnableOption "Use the KDE desktop environment";
 
   config = lib.mkIf config.kde.enable {
     services = {

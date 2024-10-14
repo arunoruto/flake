@@ -4,11 +4,7 @@
   lib,
   user,
   ...
-}: let
-  # Email hash to get the gravatar image:
-  # echo -n "name@example.com" | sha256sum | awk '{print $1}'
-  gravatar = "4859e08193d7c964399632a8d55915804af07bf714a68aabe8bf2c2656c96f4a";
-in {
+}: {
   imports = [
     ./hosts
     ./pc
@@ -23,11 +19,7 @@ in {
   environment.enable = true;
 
   # Allow unfree software
-  nixpkgs = {
-    config = {
-      allowUnfree = true;
-    };
-  };
+  nixpkgs.config.allowUnfree = true;
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;

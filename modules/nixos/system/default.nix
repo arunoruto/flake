@@ -1,8 +1,8 @@
 {
   # pkgs,
   lib,
-  image,
-  scheme,
+  # image,
+  # scheme,
   ...
 }: {
   imports = [
@@ -17,11 +17,11 @@
 
   nix-utils.enable = lib.mkDefault true;
   secureboot.enable = lib.mkDefault false;
-  theming = {
-    # enable = lib.mkDefault true;
-    inherit image;
-    inherit scheme;
-  };
+  # theming = {
+  #   # enable = lib.mkDefault true;
+  #   inherit image;
+  #   inherit scheme;
+  # };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

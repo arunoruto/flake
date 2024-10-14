@@ -131,6 +131,12 @@
       nixpkgs-config
       nur.nixosModules.nur
       stylix-config
+      {
+        theming = {
+          inherit scheme;
+          inherit image;
+        };
+      }
     ];
     home-manager-modules = [
       # {
@@ -147,6 +153,12 @@
       #   #stylix.targets.nixvim.enable = nixpkgs.lib.mkDefault false;
       # }
       ./modules/home-manager/home.nix
+      {
+        theming = {
+          inherit scheme;
+          inherit image;
+        };
+      }
     ];
   in {
     nixosConfigurations = {
@@ -155,8 +167,6 @@
         inherit system;
         specialArgs = {
           inherit inputs;
-          inherit scheme;
-          inherit image;
           username = "mirza";
         };
         modules =
@@ -173,8 +183,6 @@
         inherit system;
         specialArgs = {
           inherit inputs;
-          inherit scheme;
-          inherit image;
           username = "mirza";
         };
         modules =
@@ -191,8 +199,6 @@
         inherit system;
         specialArgs = {
           inherit inputs;
-          inherit scheme;
-          inherit image;
           username = "mirza";
         };
         modules =
@@ -209,8 +215,6 @@
         inherit system;
         specialArgs = {
           inherit inputs;
-          inherit scheme;
-          inherit image;
           username = "mar";
         };
         modules =
@@ -229,8 +233,6 @@
         inherit system;
         specialArgs = {
           inherit inputs;
-          inherit scheme;
-          inherit image;
           username = "mirza";
         };
         modules =
@@ -247,8 +249,6 @@
         inherit system;
         specialArgs = {
           inherit inputs;
-          inherit scheme;
-          inherit image;
           username = "mirza";
         };
         modules =
@@ -264,8 +264,6 @@
         inherit system;
         specialArgs = {
           inherit inputs;
-          inherit scheme;
-          inherit image;
           username = "mirza";
         };
         modules =
@@ -311,8 +309,6 @@
           ];
         extraSpecialArgs = {
           inherit inputs;
-          inherit scheme;
-          inherit image;
           user = "mar";
         };
       };
