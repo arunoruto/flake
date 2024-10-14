@@ -1,21 +1,28 @@
 {
-  osConfig,
-  pkgs,
-  lib,
+  # lib,
   user,
   ...
 }: {
   imports = [
     ./hosts
-    ./pc
-    ./theming
+    # ./pc
+    # ./theming
     ./environment.nix
     ./imports.nix
     ./module.nix
   ];
 
-  pc.enable = lib.mkDefault osConfig.gui.enable;
-  theming.enable = lib.mkDefault osConfig.gui.enable;
+  # pc.enable =
+  #   lib.mkDefault
+  #   (
+  #     if (args ? nixosConfig)
+  #     then osConfig.gui.enable
+  #     else false
+  #   );
+  # theming.enable =
+  #   if (args ? nixosConfig)
+  #   then lib.mkDefault osConfig.gui.enable
+  #   else false;
   environment.enable = true;
 
   # Allow unfree software
