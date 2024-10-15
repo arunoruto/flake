@@ -195,6 +195,8 @@
         };
       });
 
+    packages = import ./packages nixpkgs.legacyPackages.${system};
+
     devShells.${system}.default = pkgs.mkShell {
       buildInputs = with pkgs; [
         cmake
