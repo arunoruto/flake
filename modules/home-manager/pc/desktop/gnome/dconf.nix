@@ -131,6 +131,9 @@
       "com/github/stunkymonkey/nautilus-open-any-terminal" = {
         terminal = "wezterm";
       };
+      "org/blueman/plugins/powermanager" = {
+        "auto-power-on" = false;
+      };
     };
   };
 }
