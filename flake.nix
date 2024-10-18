@@ -116,24 +116,24 @@
           username = hostname-users."${hostname}";
         };
         modules = [
-            nur.nixosModules.nur
-            {
-                networking.hostName = nixpkgs.lib.mkForce hostname;
-                nixpkgs = {
-                config.allowUnfree = true;
-                overlays = [
-                    self.overlays.additions
-                    self.overlays.unstable-packages
-                ];
-                };
-                theming = {
-                inherit scheme;
-                inherit image;
-                };
-            }
-            ./hosts/${hostname}
-            home-manager.nixosModules.home-manager
-            ./homes
+          nur.nixosModules.nur
+          {
+            networking.hostName = nixpkgs.lib.mkForce hostname;
+            nixpkgs = {
+              config.allowUnfree = true;
+              overlays = [
+                self.overlays.additions
+                self.overlays.unstable-packages
+              ];
+            };
+            theming = {
+              inherit scheme;
+              inherit image;
+            };
+          }
+          ./hosts/${hostname}
+          home-manager.nixosModules.home-manager
+          ./homes
         ];
       });
 
@@ -165,21 +165,24 @@
     packages.${system} = import ./pkgs nixpkgs.legacyPackages.${system};
     overlays = import ./overlays {inherit inputs;};
 
-    # devShells.${system}.default = pkgs.mkShell {
-    #   buildInputs = with pkgs; [
-    #     cmake
-    #     glib
-    #     stdenv.cc.cc.lib
-    #     zlib
-    #   ];
+    devShells.${system}.default = let
+      pkgs = nixpkgs.legacyPackages.${system};
+    in
+      pkgs.mkShell {
+        buildInputs = with pkgs; [
+          cmake
+          glib
+          stdenv.cc.cc.lib
+          zlib
+        ];
 
-    #   shellHook = ''
-    #     # export LD_LIBRARY_PATH=${pkgs.lib.makeLibraryPath [pkgs.glib pkgs.stdenv.cc.cc.lib pkgs.zlib]}:''$LD_LIBRARY_PATH
-    #     export LD_LIBRARY_PATH=${pkgs.lib.makeLibraryPath [pkgs.glib pkgs.stdenv.cc.cc.lib pkgs.zlib]}
-    #     # https://github.com/python-poetry/poetry/issues/8623#issuecomment-1793624371
-    #     export PYTHON_KEYRING_BACKEND=keyring.backends.null.Keyring
-    #     echo "Flake Env"
-    #   '';
-    # };
+        shellHook = ''
+          # export LD_LIBRARY_PATH=${pkgs.lib.makeLibraryPath [pkgs.glib pkgs.stdenv.cc.cc.lib pkgs.zlib]}:''$LD_LIBRARY_PATH
+          export LD_LIBRARY_PATH=${pkgs.lib.makeLibraryPath [pkgs.glib pkgs.stdenv.cc.cc.lib pkgs.zlib]}
+          # https://github.com/python-poetry/poetry/issues/8623#issuecomment-1793624371
+          export PYTHON_KEYRING_BACKEND=keyring.backends.null.Keyring
+          echo "Flake Env"
+        '';
+      };
   };
 }
