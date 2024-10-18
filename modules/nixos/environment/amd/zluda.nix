@@ -8,7 +8,7 @@
 
   config = lib.mkIf config.amd.zluda.enable {
     environment.systemPackages = with pkgs; [
-      zluda
+      zluda-rocm5
     ];
 
     # systemd.tmpfiles.rules = let

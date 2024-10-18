@@ -195,7 +195,7 @@
         };
       });
 
-    packages = import ./packages nixpkgs.legacyPackages.${system};
+    packages.${system} = import ./pkgs nixpkgs.legacyPackages.${system};
 
     devShells.${system}.default = pkgs.mkShell {
       buildInputs = with pkgs; [

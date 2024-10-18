@@ -1,8 +1,7 @@
-{
-  pkgs,
-  config,
-  lib,
-  ...
+{ pkgs
+, config
+, lib
+, ...
 }: {
   imports = [
     ./rocm.nix
@@ -14,10 +13,10 @@
   config = lib.mkIf config.amd.enable {
     amd = {
       rocm.enable = lib.mkDefault false;
-      zluda.enable = lib.mkDefault false;
+      zluda.enable = lib.mkDefault true;
     };
 
-    services.xserver.videoDrivers = ["amdgpu"];
+    services.xserver.videoDrivers = [ "amdgpu" ];
 
     environment.systemPackages = with pkgs; [
       amdgpu_top
