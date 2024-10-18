@@ -13,9 +13,9 @@
   };
 
   # custom nvim for the future maybe?
-  # (final: prev: {
-  #   # neovim = inputs.nixvim-flake.packages.${system}.default;
-  # })
+  # my-nixvim = final: prev: {
+  #   neovim = inputs.nixvim-flake.packages.${final.system}.default;
+  # };
 
   # When applied, the unstable nixpkgs set (declared in the flake inputs) will
   # be accessible through 'pkgs.unstable'
