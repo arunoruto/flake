@@ -95,65 +95,6 @@
     # image = "anime/jjk/satoru-gojo-jujutsu-kaisen-5k-ac.jpg";
     # image = "anime/gruvbox/skull2.png";
     image = "anime/gruvbox/boonies.png";
-    overlay-unstable = final: prev: {
-      unstable = import nixpkgs-unstable {
-        inherit system;
-        config.allowUnfree = true;
-        config.nvidia.acceptLicense = true;
-      };
-    };
-    nixpkgs-config = {
-      nixpkgs = {
-        config.allowUnfree = true;
-        overlays = [
-          overlay-unstable
-          # nur.overlay
-          (final: prev: {
-            # neovim = inputs.nixvim-flake.packages.${system}.default;
-          })
-        ];
-      };
-    };
-    pkgs = import nixpkgs {
-      inherit system;
-      overlays = [
-        overlay-unstable
-        (final: prev: {
-          # neovim = inputs.nixvim-flake.packages.${system}.default;
-        })
-        # make unstable packages available via overlay
-        # (final: prev: {
-        #   unstable = nixpkgs-unstable.legacyPackages.${prev.system};
-        # })
-      ];
-    };
-    nixos-modules = [
-      nixpkgs-config
-      nur.nixosModules.nur
-      {
-        theming = {
-          inherit scheme;
-          inherit image;
-        };
-      }
-    ];
-    home-manager-modules = [
-      # {
-      #   nixpkgs.overlays = [
-      #     neorg-overlay.overlays.default
-      #   ];
-      # }
-      # nixvim.homeManagerModules.nixvim
-      nur.hmModules.nur
-      ./modules/home-manager/home.nix
-      inputs.stylix.homeManagerModules.stylix
-      {
-        theming = {
-          inherit scheme;
-          inherit image;
-        };
-      }
-    ];
 
     hostname-users = {
       # Personal
@@ -174,44 +115,71 @@
           inherit inputs;
           username = hostname-users."${hostname}";
         };
-        modules =
-          nixos-modules
-          ++ [
-            {networking.hostName = nixpkgs.lib.mkForce hostname;}
+        modules = [
+            nur.nixosModules.nur
+            {
+                networking.hostName = nixpkgs.lib.mkForce hostname;
+                nixpkgs = {
+                config.allowUnfree = true;
+                overlays = [
+                    self.overlays.additions
+                    self.overlays.unstable-packages
+                ];
+                };
+                theming = {
+                inherit scheme;
+                inherit image;
+                };
+            }
             ./hosts/${hostname}
             home-manager.nixosModules.home-manager
             ./homes
-          ];
+        ];
       });
 
     homeConfigurations = nixpkgs.lib.genAttrs (nixpkgs.lib.lists.unique (builtins.attrValues hostname-users)) (user:
       home-manager.lib.homeManagerConfiguration {
-        inherit pkgs;
-        modules = home-manager-modules;
+        pkgs = import nixpkgs {
+          inherit system;
+          overlays = [
+            self.overlays.unstable-packages
+          ];
+        };
+        modules = [
+          nur.hmModules.nur
+          ./modules/home-manager/home.nix
+          inputs.stylix.homeManagerModules.stylix
+          {
+            theming = {
+              inherit scheme;
+              inherit image;
+            };
+          }
+        ];
         extraSpecialArgs = {
           inherit inputs;
           inherit user;
-          # user = user;
         };
       });
 
     packages.${system} = import ./pkgs nixpkgs.legacyPackages.${system};
+    overlays = import ./overlays {inherit inputs;};
 
-    devShells.${system}.default = pkgs.mkShell {
-      buildInputs = with pkgs; [
-        cmake
-        glib
-        stdenv.cc.cc.lib
-        zlib
-      ];
+    # devShells.${system}.default = pkgs.mkShell {
+    #   buildInputs = with pkgs; [
+    #     cmake
+    #     glib
+    #     stdenv.cc.cc.lib
+    #     zlib
+    #   ];
 
-      shellHook = ''
-        # export LD_LIBRARY_PATH=${pkgs.lib.makeLibraryPath [pkgs.glib pkgs.stdenv.cc.cc.lib pkgs.zlib]}:''$LD_LIBRARY_PATH
-        export LD_LIBRARY_PATH=${pkgs.lib.makeLibraryPath [pkgs.glib pkgs.stdenv.cc.cc.lib pkgs.zlib]}
-        # https://github.com/python-poetry/poetry/issues/8623#issuecomment-1793624371
-        export PYTHON_KEYRING_BACKEND=keyring.backends.null.Keyring
-        echo "Flake Env"
-      '';
-    };
+    #   shellHook = ''
+    #     # export LD_LIBRARY_PATH=${pkgs.lib.makeLibraryPath [pkgs.glib pkgs.stdenv.cc.cc.lib pkgs.zlib]}:''$LD_LIBRARY_PATH
+    #     export LD_LIBRARY_PATH=${pkgs.lib.makeLibraryPath [pkgs.glib pkgs.stdenv.cc.cc.lib pkgs.zlib]}
+    #     # https://github.com/python-poetry/poetry/issues/8623#issuecomment-1793624371
+    #     export PYTHON_KEYRING_BACKEND=keyring.backends.null.Keyring
+    #     echo "Flake Env"
+    #   '';
+    # };
   };
 }
