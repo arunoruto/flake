@@ -13,15 +13,12 @@
     ./security.nix
     # ./systemd.nix
     ./theming.nix
+    ./upgrade.nix
   ];
 
   nix-utils.enable = lib.mkDefault true;
   secureboot.enable = lib.mkDefault false;
-  # theming = {
-  #   # enable = lib.mkDefault true;
-  #   inherit image;
-  #   inherit scheme;
-  # };
+  upgrades.enable = lib.mkDefault false;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
@@ -31,19 +28,6 @@
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "23.11"; # Did you read the comment?
 
-  # Auto updates
-  # system.autoUpgrade = {
-  #   enable = true;
-  #   channel = "https://nixos.org/channels/nixos-${config.system.stateVersion}";
-  # };
-
-  # environment.systemPackages = with pkgs; [
-  #   unstable.nh
-  #   nix-tree
-  #   nix-output-monitor
-  #   nvd
-  # ];
-  #
   # # Auto clean system
   # nix = {
   #   settings = {
