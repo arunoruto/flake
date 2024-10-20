@@ -12,5 +12,6 @@
 
     latex.enable = false;
     programming.enable = false;
+    upgrades.enable = true;
   };
 }

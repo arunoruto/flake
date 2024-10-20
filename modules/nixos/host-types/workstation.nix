@@ -8,5 +8,6 @@
   config = lib.mkIf config.workstation.enable {
     latex.enable = true;
     programming.enable = true;
+    upgrades.enable = true;
   };
 }
