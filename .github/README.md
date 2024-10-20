@@ -60,7 +60,21 @@ nh home switch ./#<username>
 
 ## Nixvim
 
-Nixvim is the nix way to configure neovim. More information can be found in the [nvim README](./../home-manager/shell/nvim/README.md).
+Nixvim is the nix way to configure neovim. More information can be found in the [nvim README](../modules/home-manager/server/shell/nvim/README.md).
+
+## Git Fetchers
+
+When using a git fetcher, you need the commit hash/revision/tag/version and the corresponding hash. You can either fetch everything with an empty hash, let the build error out and copy the hash from the logs, or use `nix-prefetch-git`:
+
+```sh
+nix run nixpkgs#nix-prefetch-git <URL>
+```
+
+To prefetch candy-icons, you would call:
+
+```sh
+nix run nixpkgs#nix-prefetch-git https://github.com/EliverLara/candy-icons
+```
 
 ## Helpful Material
 
