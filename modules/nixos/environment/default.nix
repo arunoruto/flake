@@ -15,6 +15,7 @@
 
     ./amd
     ./intel.nix
+    ./nvidia.nix
   ];
 
   cachix.enable = lib.mkDefault false;
@@ -24,4 +25,5 @@
 
   amd.enable = lib.mkDefault false;
   intel.enable = lib.mkDefault false;
+  nvidia.enable = lib.mkDefault false;
 }
