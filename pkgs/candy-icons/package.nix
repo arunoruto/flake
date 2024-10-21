@@ -36,6 +36,6 @@ stdenvNoCC.mkDerivation {
     description = "Icon theme colored with sweet gradients";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [clr-cera];
+    maintainers = with maintainers; [arunoruto];
   };
 }
