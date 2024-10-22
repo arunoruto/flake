@@ -51,12 +51,15 @@
         idle-dim = false;
         # sleep-inactive-ac-timeout = 1800;
         # sleep-inactive-ac-type = "suspend";
-        sleep-inactive-battery-timeout = 900;
-        sleep-inactive-battery-type = "suspend";
+        # sleep-inactive-battery-timeout = 900;
+        # sleep-inactive-battery-type = "suspend";
       };
       # Session
       "org/gnome/desktop/session" = {
-        idle-delay = "uint32 900";
+        idle-delay =
+          if config.laptop.enable
+          then "uint32 900"
+          else "uint32 0";
       };
       # Set list of custom keybinding
       "org/gnome/settings-daemon/plugins/media-keys" = {
