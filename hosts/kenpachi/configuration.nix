@@ -5,10 +5,10 @@
 }: {
   tinypc.enable = true;
 
-  efi.enable = false;
-  grub.enable = true;
-  systemd-boot.enable = false;
-  boot.loader.grub.device = "/dev/sda";
+  #efi.enable = false;
+  #grub.enable = true;
+  #systemd-boot.enable = false;
+  #boot.loader.grub.device = "/dev/sda";
   # boot.loader.efi.canTouchEfiVariables = false;
   # boot.loader = {
   #   systemd-boot.enable = false;
@@ -21,7 +21,7 @@
   # };
 
   # Set hostname
-  networking.hostName = lib.mkForce "yoruichi"; # Define your hostname.
+  #networking.hostName = lib.mkForce "yoruichi"; # Define your hostname.
 
   boot = {
     # kernelModules = ["amdgpu"];
