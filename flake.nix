@@ -103,6 +103,7 @@
       "yhwach" = "mirza"; # Tower PC
       "kuchiki" = "mirza"; # New NAS Server
       "yoruichi" = "mirza"; # Crappy AMD Mini PC
+      "kenpachi" = "mirza"; # S740 Mini PC
       "narouter" = "mirza"; # Firewall
       # Work
       "kyuubi" = "mar"; # Crappy Work PC
