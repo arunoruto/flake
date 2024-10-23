@@ -15,9 +15,6 @@
   # home.pc.enable = false;
   gui.enable = false;
 
-  # Set hostname
-  networking.hostName = lib.mkForce "kuchiki"; # Define your hostname.
-
   boot = {
     kernelModules = ["amdgpu"];
     # kernelParams = [

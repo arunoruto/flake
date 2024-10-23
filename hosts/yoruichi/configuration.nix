@@ -20,9 +20,6 @@
   #   };
   # };
 
-  # Set hostname
-  networking.hostName = lib.mkForce "yoruichi"; # Define your hostname.
-
   boot = {
     # kernelModules = ["amdgpu"];
     # kernelParams = [

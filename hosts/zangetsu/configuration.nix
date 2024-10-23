@@ -3,9 +3,6 @@
   lib,
   ...
 }: {
-  # Set hostname
-  networking.hostName = lib.mkForce "zangetsu"; # Define your hostname.
-
   # Eanble fingerprint for framework laptop
   fingerprint.enable = false;
 
