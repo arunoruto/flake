@@ -1,4 +1,8 @@
-{lib, ...}: {
+{
+  inputs,
+  lib,
+  ...
+}: {
   imports = [
     ./desktop
     ./display
@@ -18,4 +22,6 @@
   display-manager.enable = lib.mkDefault true;
   media.enable = lib.mkDefault false;
   gui.enable = lib.mkDefault true;
+
+  nix.nixPath = ["nixpkgs=${inputs.nixpkgs}"];
 }
