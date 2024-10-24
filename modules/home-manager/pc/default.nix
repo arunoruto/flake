@@ -12,7 +12,6 @@
 
     ./avatar.nix
     ./input.nix
-    ./theming.nix
   ];
 
   options.pc.enable = lib.mkEnableOption "PC config";

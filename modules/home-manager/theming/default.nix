@@ -4,7 +4,10 @@
   ...
 }: {
   imports = [
+    ./cursors.nix
+    ./fonts.nix
     ./icons.nix
+    ./pc.nix
     ./stylix.nix
   ];
 
@@ -12,7 +15,9 @@
 
   config = lib.mkIf config.theming.enable {
     theming = {
-      icons.enable = lib.mkDefault true;
+      cursors.enable = lib.mkDefault config.desktop.enable;
+      icons.enable = lib.mkDefault config.desktop.enable;
+      fonts.enable = lib.mkDefault config.desktop.enable;
       # stylix.enable = lib.mkDefault true;
     };
   };

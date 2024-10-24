@@ -5,22 +5,11 @@
   pkgs,
   lib,
   ...
-}:
-# let
-#   wallpapers = pkgs.fetchFromGitHub {
-#     owner = "arunoruto";
-#     repo = "wallpapers";
-#     rev = "8815698729ceff1f97fae5ab2bf930a9dd682198";
-#     hash = "sha256-uPaPAggLFmureDXqKcvwr2uMb24QuxQzbwCqTHNSIrg=";
-#   };
-# in
-{
+}: {
   # imports = [
   #   inputs.stylix.homeManagerModules.stylix
   # ];
   options.theming = {
-    # enable = lib.mkEnableOption "Setup icons for theming";
-
     scheme = lib.mkOption {
       type = lib.types.str;
       default = "catppuccin-macchiato";
@@ -45,9 +34,14 @@
   # config = lib.mkIf config.theming.enable {
   config = {
     stylix = {
-      enable = true;
+      enable = lib.mkDefault true;
       base16Scheme = lib.mkDefault "${pkgs.base16-schemes}/share/themes/${config.theming.scheme}.yaml";
       image = "${inputs.wallpapers}/${config.theming.image}";
+      # cursor = {
+      #   name = "catppuccin-macchiato-dark-cursors";
+      #   # package = pkgs.catppuccin-cursors.macchiatoDark;
+      #   package = pkgs.apple-cursor;
+      # };
       targets = {
         nixvim.enable = false;
         vscode.enable = true;
