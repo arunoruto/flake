@@ -44,10 +44,10 @@
         #   hash = "sha256-uPaPAggLFmureDXqKcvwr2uMb24QuxQzbwCqTHNSIrg=";
         # }
         inputs.wallpapers + "/${config.theming.image}";
-      cursor = {
-        name = "catppuccin-macchiato-dark-cursors";
-        package = pkgs.catppuccin-cursors.macchiatoDark;
-      };
+      # cursor = {
+      #   name = "catppuccin-macchiato-dark-cursors";
+      #   package = pkgs.catppuccin-cursors.macchiatoDark;
+      # };
       targets = {
         # lightdm.enable = true;
       };
