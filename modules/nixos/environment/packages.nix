@@ -30,45 +30,10 @@
       traceroute
       unzip
 
-      bat
       dust
-      eza
-      # linuxPackages_latest.perf
-      lsd
       riffdiff
-      tmux
-      unstable.ventoy
-      vim
-      # vlc
-      # unstable.vscode
-      #vscode
-      # wezterm
+      # unstable.ventoy
       wget
-      # wl-clipboard
-
-      # discord
-      # gthumb
-      # jabref
-      # libsForQt5.kdenlive
-      # libsForQt5.okular
-      #mailspring
-      # masterpdfeditor
-      # mprime
-      # unstable.plex-desktop
-      # remmina
-      # zoom-us
-      # zotero
-
-      #ultrastardx
-      #ultrastar-manager
-
-      # Gnome specific applications
-      # nautilus-open-any-terminal
-      # gnome.nautilus-python
-      # gnome.gnome-software
-      # gnome.pomodoro
-      # gnome.gnome-remote-desktop
-      # gnome3.gnome-tweaks
     ];
   };
 }

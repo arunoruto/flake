@@ -34,7 +34,7 @@
   # config = lib.mkIf config.theming.enable {
   config = {
     stylix = {
-      enable = true;
+      enable = lib.mkDefault true;
       base16Scheme = lib.mkDefault "${pkgs.base16-schemes}/share/themes/${config.theming.scheme}.yaml";
       image =
         # pkgs.fetchFromGitHub {
