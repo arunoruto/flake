@@ -12,6 +12,7 @@
       python-lsp-server
       # Must
       jax
+      jaxlib
       matplotlib
       numba
       numba-scipy
