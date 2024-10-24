@@ -34,7 +34,8 @@
   # config = lib.mkIf config.theming.enable {
   config = {
     stylix = {
-      enable = lib.mkDefault true;
+      # enable = lib.mkDefault true;
+      enable = true;
       base16Scheme = lib.mkDefault "${pkgs.base16-schemes}/share/themes/${config.theming.scheme}.yaml";
       image = "${inputs.wallpapers}/${config.theming.image}";
       # cursor = {
