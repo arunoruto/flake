@@ -105,6 +105,7 @@
       "yoruichi" = "mirza"; # Crappy AMD Mini PC
       "kenpachi" = "mirza"; # S740 Mini PC
       "narouter" = "mirza"; # Firewall
+      "aizen" = "mirza";
       # Work
       "kyuubi" = "mar"; # Crappy Work PC
     };
