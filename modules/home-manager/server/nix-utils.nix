@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  user,
   ...
 }: let
   default = {
@@ -25,6 +26,10 @@ in {
   };
 
   config = lib.mkIf config.nix-utils.enable {
+    nix.extraOptions = ''
+      trusted-users = root ${user}
+    '';
+
     home.packages = with pkgs; [
       alejandra
       nixd

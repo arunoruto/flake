@@ -1,6 +1,8 @@
 {
   inputs,
   lib,
+  config,
+  username,
   ...
 }: {
   imports = [
@@ -23,5 +25,8 @@
   media.enable = lib.mkDefault false;
   gui.enable = lib.mkDefault true;
 
-  nix.nixPath = ["nixpkgs=${inputs.nixpkgs}"];
+  nix = {
+    nixPath = ["nixpkgs=${inputs.nixpkgs}"];
+    extraOptions = config.home-manager.users.${username}.nix.extraOptions;
+  };
 }
