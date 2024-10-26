@@ -1,0 +1,3 @@
+{
+  tinypc.enable = true;
+}
