@@ -22,7 +22,7 @@ in {
 
   nixd-config = {
     nixpkgs.expr = ''import (builtins.getFlake "${flake-location}").inputs.nixpkgs { }'';
-    formatting.command = ["alejandra"];
+    formatting.command = ["nixfmt"];
     options = {
       nixos.expr =
         if (args ? nixosConfig)
