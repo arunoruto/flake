@@ -4,17 +4,19 @@
   pkgs,
   user,
   ...
-}: let
+}:
+let
   default = {
     nixpkgs.expr = "import <nixpkgs> { }";
-    formatting.command = ["nixfmt"];
+    formatting.command = [ "nixfmt" ];
     options = {
       nixos.expr = "";
       home-manager.expr = "";
     };
-    diagnostics.supress = [];
+    diagnostics.supress = [ ];
   };
-in {
+in
+{
   options = {
     nix-utils.enable = lib.mkEnableOption "Helpful nix utils";
     nixd-config = lib.mkOption {
@@ -33,6 +35,15 @@ in {
     home.packages = with pkgs; [
       alejandra
       nixd
+      # nixfmt
+      unstable.nixfmt-rfc-style
+
+      unstable.nh
+      nix-du
+      nix-tree
+      nix-output-monitor
+      nvd
+      unstable.nixpkgs-review
     ];
   };
 }
