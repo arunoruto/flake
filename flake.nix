@@ -11,6 +11,10 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     # NixOS
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nixos-hardware.url = "github:nixos/nixos-hardware";
     nixos-facter-modules.url = "github:numtide/nixos-facter-modules";
     nix-ld = {
@@ -123,6 +127,9 @@
             inputs.nur.nixosModules.nur
             inputs.nixos-facter-modules.nixosModules.facter
             {
+              users.users.root.openssh.authorizedKeys.keys = [
+                "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICVG8SSbWy37rel+Yhz9rjpNscmO1+Br57beNzWRdaQk"
+              ];
               networking.hostName = nixpkgs.lib.mkForce hostname;
               facter.reportPath = nixpkgs.lib.mkIf (nixpkgs.lib.pathExists ./hosts/${hostname}/facter.json) ./hosts/${hostname}/facter.json;
               nixpkgs = {
