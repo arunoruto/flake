@@ -82,6 +82,8 @@ Some nice intro is provided by [thiscute.world](https://nixos-and-flakes.thiscut
 
 [vimjoyer](https://www.youtube.com/@vimjoyer) has some amazing videos about nix and other nix related stuff:
 
+- [Nix explained from the ground up](https://www.youtube.com/watch?v=5D3nUU1OVx8) is a really nice introduction to Nix
+- [NixOS: Everything Everywhere All At Once](https://www.youtube.com/watch?v=CwfKlX3rA6E) NixOS from a beginners perspective, kinda
 - [Ultimate NixOS Guide | Flakes | Home-manager](https://www.youtube.com/watch?v=a67Sv4Mbxmc) gives a good introduction for beginners, and introduces flakes and how to use them to configure the system
 - [Modularize NixOS and Home Manager | Great Practices](https://www.youtube.com/watch?v=vYc6IzKvAJQ) shows how to organize the files and make them easier to manage
 - [Nixvim: Neovim Distro Powered By Nix](https://www.youtube.com/watch?v=b641h63lqy0): configure neovim the nix way!
