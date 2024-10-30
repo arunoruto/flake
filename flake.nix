@@ -112,6 +112,7 @@
         "aizen" = "mirza";
         # Work
         "kyuubi" = "mar"; # Crappy Work PC
+        "madara" = "mar"; # Nice Work PC
       };
     in
     {
