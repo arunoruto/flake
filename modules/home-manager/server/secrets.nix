@@ -3,9 +3,11 @@
   config,
   pkgs,
   ...
-}: let
+}:
+let
   secretspath = builtins.toString inputs.secrets;
-in {
+in
+{
   imports = [
     inputs.sops-nix.homeManagerModules.sops
   ];
@@ -25,8 +27,9 @@ in {
       "private_keys/mirza@zangetsu" = {
         path = config.home.homeDirectory + "/.ssh/sops_key";
       };
-      "tokens/copilot" = {};
-      "tokens/cachix" = {};
+      "ssh_keys/blue".path = "${config.home.homeDirectory}/.ssh/id_blue";
+      "tokens/copilot" = { };
+      "tokens/cachix" = { };
     };
   };
 
