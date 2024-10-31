@@ -3,13 +3,15 @@
   lib,
   config,
   ...
-}: let
-  packages = ps:
-    with ps; [
+}:
+let
+  packages =
+    ps: with ps; [
       # Jupyter
       jupyter
       ipython
       python-lsp-server
+      ipympl
       # Must
       jax
       jaxlib
@@ -29,7 +31,8 @@
       # requests
       # scikit-image
     ];
-in {
+in
+{
   options.python.enable = lib.mkEnableOption "Setup a python environment";
 
   config = lib.mkIf config.python.enable {
