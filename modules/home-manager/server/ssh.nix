@@ -5,7 +5,7 @@
 }:
 let
   # pathToKeys = ./keys;
-  pathToKeys = config.home.sessionVariables.FLAKE + "homes/mirza/keys";
+  pathToKeys = lib.path.append ../../../. "homes/${config.home.username}/keys";
   yubikeys = lib.lists.forEach (builtins.attrNames (builtins.readDir pathToKeys)) (
     key: lib.substring 0 (lib.stringLength key - lib.stringLength ".pub") key
   );
