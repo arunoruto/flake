@@ -3,7 +3,8 @@
   lib,
   inputs,
   ...
-}: {
+}:
+{
   options.upgrades.enable = lib.mkEnableOption "Automated upgrades of the flake-based system";
 
   config = lib.mkIf config.upgrades.enable {

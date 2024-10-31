@@ -3,7 +3,8 @@
   pkgs,
   lib,
   ...
-}: {
+}:
+{
   imports = [
     ./hardware-configuration.nix
     inputs.nixos-hardware.nixosModules.framework-11th-gen-intel
@@ -26,7 +27,7 @@
       # https://kvark.github.io/linux/framework/2021/10/17/framework-nixos.html
       "mem_sleep_default=deep"
     ];
-    initrd.kernelModules = ["i915"];
+    initrd.kernelModules = [ "i915" ];
   };
 
   # Enable TLP and powertop for better battery life

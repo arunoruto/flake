@@ -3,7 +3,8 @@
   config,
   lib,
   ...
-}: {
+}:
+{
   # If desktop is enabled, also enable theming using stylix
   config = lib.mkIf config.desktop.enable {
     stylix = {

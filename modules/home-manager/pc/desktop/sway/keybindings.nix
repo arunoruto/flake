@@ -3,7 +3,8 @@
   pkgs,
   lib,
   ...
-}: let
+}:
+let
   modifier = config.wayland.windowManager.sway.config.modifier;
   terminal = "wezterm";
   menu = "${pkgs.rofi}/bin/rofi -show drun";
@@ -34,7 +35,8 @@
   ws8 = "number 8";
   ws9 = "number 9";
   ws0 = "number 10";
-in {
+in
+{
   options.sway.keybindings.enable = lib.mkEnableOption "Custom sway keybindings";
 
   config = lib.mkIf config.sway.keybindings.enable {

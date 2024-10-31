@@ -4,7 +4,13 @@
       auto-session = {
         enable = true;
         autoRestore.enabled = false;
-        autoSession.suppressDirs = ["~/" "~/Dev/" "~/Downloads" "~/Documents" "~/Desktop/"];
+        autoSession.suppressDirs = [
+          "~/"
+          "~/Dev/"
+          "~/Downloads"
+          "~/Documents"
+          "~/Desktop/"
+        ];
       };
     };
     keymaps = [

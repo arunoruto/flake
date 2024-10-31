@@ -3,7 +3,8 @@
   config,
   lib,
   ...
-}: {
+}:
+{
   options = {
     intel.enable = lib.mkEnableOption "Setup intel tools";
   };

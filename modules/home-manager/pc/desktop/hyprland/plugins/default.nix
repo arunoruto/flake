@@ -2,7 +2,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   imports = [
     ./hy3.nix
   ];

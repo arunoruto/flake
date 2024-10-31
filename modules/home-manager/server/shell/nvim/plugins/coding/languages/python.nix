@@ -3,7 +3,8 @@
   lib,
   pkgs,
   ...
-}: {
+}:
+{
   programs.nixvim = {
     plugins = {
       lsp = {

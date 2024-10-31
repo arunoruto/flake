@@ -3,7 +3,8 @@
   pkgs,
   lib,
   ...
-}: let
+}:
+let
   terminal = "wezterm";
   menu = "${pkgs.wofi}/bin/wofi --show drun --normal-window";
 
@@ -15,7 +16,8 @@
   right = "L";
   up = "K";
   down = "J";
-in {
+in
+{
   options.hypr.binds.enable = lib.mkEnableOption "Custom hyprland keybindings";
 
   config = lib.mkIf config.hypr.binds.enable {

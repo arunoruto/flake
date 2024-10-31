@@ -3,7 +3,8 @@
   pkgs,
   lib,
   ...
-}: {
+}:
+{
   options = {
     gnome.enable = lib.mkEnableOption "Use the GNOME desktop environment";
   };
@@ -47,14 +48,20 @@
           totem # video player
           tali # poker game
           iagno # go game
-          hitori # sudoku game
+          # hitori # sudoku game
           atomix # puzzle game
         ]);
     };
 
     networking.firewall = {
-      allowedTCPPorts = [7236 7250];
-      allowedUDPPorts = [7236 5353];
+      allowedTCPPorts = [
+        7236
+        7250
+      ];
+      allowedUDPPorts = [
+        7236
+        5353
+      ];
     };
   };
 }

@@ -4,7 +4,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   options.hypr.plugins.hy3.enable = lib.mkEnableOption "Use i3 layour in hyprland";
 
   config = lib.mkIf config.hypr.plugins.hy3.enable {

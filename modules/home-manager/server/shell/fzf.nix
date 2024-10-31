@@ -1,6 +1,7 @@
 # Some nice tips:
 # https://pragmaticpineapple.com/four-useful-fzf-tricks-for-your-terminal/
-{config, ...}: {
+{ config, ... }:
+{
   programs = {
     fzf = {
       enable = true;

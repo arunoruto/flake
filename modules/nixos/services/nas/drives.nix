@@ -3,7 +3,8 @@
   lib,
   pkgs,
   ...
-}: {
+}:
+{
   options = {
     drives.enable = lib.mkEnableOption "Utilities for managing drives";
   };

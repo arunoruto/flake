@@ -3,7 +3,8 @@
   pkgs,
   lib,
   ...
-}: {
+}:
+{
   options = {
     nix-utils.enable = lib.mkEnableOption "Enable nix-utils";
   };
@@ -30,7 +31,7 @@
       };
       optimise = {
         automatic = true;
-        dates = ["04:00"];
+        dates = [ "04:00" ];
       };
       gc = {
         automatic = true;

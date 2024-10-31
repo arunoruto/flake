@@ -3,10 +3,12 @@
   lib,
   pkgs,
   ...
-}: let
+}:
+let
   # version = "firefox-unwrapped";
   version = "floorp";
-in {
+in
+{
   options.firefox.enable = lib.mkEnableOption "Configure firefox systemwide";
 
   config = lib.mkIf config.firefox.enable {
@@ -19,13 +21,16 @@ in {
     programs.firefox = {
       enable = true;
       package =
-        if (version == "firefox-unwrapped")
-        then
+        if (version == "firefox-unwrapped") then
           pkgs.wrapFirefox (pkgs.${version}.override {
             pipewireSupport = true;
-          }) {}
-        else pkgs.${version};
-      languagePacks = ["de" "en-US"];
+          }) { }
+        else
+          pkgs.${version};
+      languagePacks = [
+        "de"
+        "en-US"
+      ];
     };
   };
 }

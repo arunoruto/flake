@@ -41,7 +41,7 @@ in
         "yubico/u2f_keys" = {
           owner = user-conf.name;
           inherit (user-conf) group;
-          path = "${user-conf.home}/.config/yubico/u2f_keys";
+          path = "${user-conf.home}/.config/Yubico/u2f_keys";
         };
       };
     };

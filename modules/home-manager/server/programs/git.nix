@@ -1,6 +1,8 @@
-{pkgs, ...}: let
+{ pkgs, ... }:
+let
   glab-pkg = pkgs.unstable.glab;
-in {
+in
+{
   home.packages = [
     glab-pkg # Gitlab CLI tool
   ];
@@ -57,21 +59,24 @@ in {
       settings = {
         gui = {
           theme = {
-            activeBorderColor = ["#8aadf4" "bold"];
-            inactiveBorderColor = ["#a5adcb"];
-            optionsTextColor = ["#8aadf4"];
-            selectedLineBgColor = ["#363a4f"];
-            cherryPickedCommitBgColor = ["#494d64"];
-            cherryPickedCommitFgColor = ["#8aadf4"];
-            unstagedChangesColor = ["#ed8796"];
-            defaultFgColor = ["#cad3f5"];
-            searchingActiveBorderColor = ["#eed49f"];
+            activeBorderColor = [
+              "#8aadf4"
+              "bold"
+            ];
+            inactiveBorderColor = [ "#a5adcb" ];
+            optionsTextColor = [ "#8aadf4" ];
+            selectedLineBgColor = [ "#363a4f" ];
+            cherryPickedCommitBgColor = [ "#494d64" ];
+            cherryPickedCommitFgColor = [ "#8aadf4" ];
+            unstagedChangesColor = [ "#ed8796" ];
+            defaultFgColor = [ "#cad3f5" ];
+            searchingActiveBorderColor = [ "#eed49f" ];
           };
           authorColors = {
             "*" = "#b7bdf8";
           };
         };
       };
-    }; #// builtins.fromYAML (builtins.readFile (catppuccin-lazygit + themes-mergable/${flavour}/${colour}.yml));
+    }; # // builtins.fromYAML (builtins.readFile (catppuccin-lazygit + themes-mergable/${flavour}/${colour}.yml));
   };
 }

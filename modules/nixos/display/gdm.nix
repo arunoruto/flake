@@ -3,7 +3,8 @@
   pkgs,
   lib,
   ...
-}: {
+}:
+{
   options = {
     gdm.enable = lib.mkEnableOption "Use gnome display manager";
   };

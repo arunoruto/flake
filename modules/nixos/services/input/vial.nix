@@ -3,7 +3,8 @@
   lib,
   pkgs,
   ...
-}: {
+}:
+{
   options = {
     vial.enable = lib.mkEnableOption "Support vial for custom keyboards";
   };

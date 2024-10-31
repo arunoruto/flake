@@ -3,7 +3,8 @@
   lib,
   pkgs,
   ...
-}: {
+}:
+{
   options.bars.eww.enable = lib.mkEnableOption "Enable eww bar";
 
   config = lib.mkIf config.bars.eww.enable {

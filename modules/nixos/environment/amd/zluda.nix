@@ -3,7 +3,8 @@
   config,
   lib,
   ...
-}: {
+}:
+{
   options.amd.zluda.enable = lib.mkEnableOption "ZLUDA: alternative for CUDA but for AMD";
 
   config = lib.mkIf config.amd.zluda.enable {

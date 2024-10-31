@@ -1,4 +1,5 @@
-{lib, ...}: {
+{ lib, ... }:
+{
   imports = [
     ./mopidy.nix
     # ./mpd.nix

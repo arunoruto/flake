@@ -2,7 +2,8 @@
   config,
   lib,
   ...
-}: {
+}:
+{
   options = {
     flatpak.enable = lib.mkEnableOption "flatpak";
   };

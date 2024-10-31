@@ -2,7 +2,8 @@
   config,
   pkgs,
   ...
-}: {
+}:
+{
   programs = {
     # Bash
     bash.initExtra = ''eval "$(direnv hook bash)"'';

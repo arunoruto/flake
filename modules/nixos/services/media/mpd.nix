@@ -3,7 +3,8 @@
   lib,
   username,
   ...
-}: {
+}:
+{
   options = {
     mpd.enable = lib.mkEnableOption "Enable mpd";
   };

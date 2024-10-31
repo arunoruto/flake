@@ -3,7 +3,8 @@
   config,
   lib,
   ...
-}: {
+}:
+{
   imports = [
     ./rocm.nix
     ./zluda.nix
@@ -17,7 +18,7 @@
       zluda.enable = lib.mkDefault true;
     };
 
-    services.xserver.videoDrivers = ["amdgpu"];
+    services.xserver.videoDrivers = [ "amdgpu" ];
 
     environment.systemPackages = with pkgs; [
       amdgpu_top

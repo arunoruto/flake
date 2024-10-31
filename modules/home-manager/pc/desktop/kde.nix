@@ -1,4 +1,5 @@
-{inputs, ...}: {
+{ inputs, ... }:
+{
   imports = [
     inputs.plasma-manager.homeManagerModules.plasma-manager
   ];
@@ -51,7 +52,10 @@
     #
     shortcuts = {
       ksmserver = {
-        "Lock Session" = ["Screensaver" "Meta+Ctrl+Alt+L"];
+        "Lock Session" = [
+          "Screensaver"
+          "Meta+Ctrl+Alt+L"
+        ];
       };
 
       kwin = {

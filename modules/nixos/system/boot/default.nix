@@ -2,7 +2,8 @@
   pkgs,
   lib,
   ...
-}: {
+}:
+{
   imports = [
     ./efi.nix
     ./grub.nix

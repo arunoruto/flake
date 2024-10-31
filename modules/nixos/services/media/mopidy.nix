@@ -3,7 +3,8 @@
   lib,
   pkgs,
   ...
-}: {
+}:
+{
   options = {
     mopidy.enable = lib.mkEnableOption "Enable mopidy";
   };

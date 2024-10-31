@@ -13,7 +13,12 @@
       })
     ];
     keymaps = [
-      { mode ="n"; key = "<leader>sm"; action = "<cmd>MaximizerToggle<CR>"; options.desc = "Maximize/minimize a split"; }
+      {
+        mode = "n";
+        key = "<leader>sm";
+        action = "<cmd>MaximizerToggle<CR>";
+        options.desc = "Maximize/minimize a split";
+      }
     ];
   };
 }

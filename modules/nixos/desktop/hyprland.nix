@@ -3,7 +3,8 @@
   lib,
   pkgs,
   ...
-}: {
+}:
+{
   options = {
     hyprland.enable = lib.mkEnableOption "Use the Hyprland window manager";
   };

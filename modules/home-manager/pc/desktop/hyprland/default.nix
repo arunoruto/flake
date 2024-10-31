@@ -3,7 +3,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   imports = [
     ./binds.nix
     ./idle.nix

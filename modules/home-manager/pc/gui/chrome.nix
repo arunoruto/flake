@@ -2,7 +2,8 @@
   config,
   lib,
   ...
-}: {
+}:
+{
   options = {
     chrome.enable = lib.mkEnableOption "Enable extra flags for chrome";
   };

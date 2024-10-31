@@ -1,4 +1,5 @@
-{lib, ...}: {
+{ lib, ... }:
+{
   imports = [
     ./ags
     ./eww

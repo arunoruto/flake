@@ -2,7 +2,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   options.alacritty.enable = lib.mkEnableOption "Enable alacritty config";
 
   config = lib.mkIf config.alacritty.enable {

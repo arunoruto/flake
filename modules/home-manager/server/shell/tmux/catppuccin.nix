@@ -1,4 +1,5 @@
-{pkgs, ...}: let
+{ pkgs, ... }:
+let
   tmux-catpuccin = pkgs.tmuxPlugins.mkTmuxPlugin {
     pluginName = "catppuccin";
     version = "2024-05-12";
@@ -9,7 +10,8 @@
       sha256 = "sha256-EHinWa6Zbpumu+ciwcMo6JIIvYFfWWEKH1lwfyZUNTo=";
     };
   };
-in {
+in
+{
   programs.tmux = {
     plugins = with pkgs; [
       {

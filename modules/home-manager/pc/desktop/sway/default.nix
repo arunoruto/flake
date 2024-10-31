@@ -3,10 +3,12 @@
   lib,
   config,
   ...
-}: let
+}:
+let
   image = "~/Pictures/wallpapers/anime/cafe-at-night.png";
   lockscreen = "${pkgs.swaylock}/bin/swaylock --image ${image}";
-in {
+in
+{
   imports = [
     ./services.nix
     # ./theme.nix
@@ -33,7 +35,7 @@ in {
         modifier = "Mod4";
         terminal = "wezterm";
         fonts = {
-          names = ["FiraCode Nerd Font Mono"];
+          names = [ "FiraCode Nerd Font Mono" ];
           style = "Regular";
           size = 10.0;
         };
@@ -83,7 +85,7 @@ in {
             workspaceNumbers = false;
             trayOutput = "primary";
             fonts = {
-              names = ["FiraCode Nerd Font Mono"];
+              names = [ "FiraCode Nerd Font Mono" ];
               style = "Regular";
               size = 11.0;
             };

@@ -1,11 +1,13 @@
-{pkgs, ...}: let
+{ pkgs, ... }:
+let
   flavor = "Macchiato";
   catppuccin_sway = "";
-  # catppuccin_sway = builtins.fetchGit {
-  #   url = "https://github.com/catppuccin/i3";
-  #   ref = "main";
-  # };
-in {
+in
+# catppuccin_sway = builtins.fetchGit {
+#   url = "https://github.com/catppuccin/i3";
+#   ref = "main";
+# };
+{
   wayland.windowManager.sway = {
     extraConfigEarly = ''
       include catppuccin-macchiato

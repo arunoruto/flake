@@ -2,7 +2,8 @@
   config,
   lib,
   ...
-}: {
+}:
+{
   options = {
     drive-optimizations.enable = lib.mkEnableOption "Enable drive optimizations";
   };

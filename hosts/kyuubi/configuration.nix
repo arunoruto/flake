@@ -2,12 +2,14 @@
   pkgs,
   # lib,
   ...
-}: let
+}:
+let
   # monitorsXmlContent = builtins.readFile /home/mar/.config/monitors.xml;
   # monitorsConfig = pkgs.writeText "gdm_monitors.xml" monitorsXmlContent;
   # monitorsConfig = pkgs.writeText "gdm_monitors.xml" (builtins.readFile /home/${username}/.config/monitors.xml);
   monitorsConfig = pkgs.writeText "gdm_monitors.xml" (builtins.readFile ./monitors.xml);
-in {
+in
+{
   printing.enable = true;
   scanning.enable = true;
   workstation.enable = true;
@@ -21,7 +23,7 @@ in {
 
   # Disable Autosuspend for USB Bluetooth dongles
   boot = {
-    kernelModules = ["snd-hda-intel "];
+    kernelModules = [ "snd-hda-intel " ];
     extraModprobeConfig = ''
       options btusb enable_autosuspend=n
     '';
@@ -86,7 +88,10 @@ in {
 
     services.NetworkManager-wait-online = {
       serviceConfig = {
-        ExecStart = ["" "${pkgs.networkmanager}/bin/nm-online -q"];
+        ExecStart = [
+          ""
+          "${pkgs.networkmanager}/bin/nm-online -q"
+        ];
       };
     };
   };

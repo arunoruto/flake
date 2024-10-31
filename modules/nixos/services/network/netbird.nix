@@ -3,7 +3,8 @@
   lib,
   pkgs,
   ...
-}: {
+}:
+{
   options.netbird.enable = lib.mkEnableOption "Enable netbird";
 
   config = lib.mkIf config.netbird.enable {

@@ -2,7 +2,8 @@
   config,
   lib,
   ...
-}: {
+}:
+{
   options = {
     scanning.enable = lib.mkEnableOption "Enable scanning support";
   };

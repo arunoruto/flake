@@ -1,4 +1,5 @@
-{inputs, ...}: {
+{ inputs, ... }:
+{
   nixpkgs.overlays = [
     inputs.nil.overlays.nil
   ];

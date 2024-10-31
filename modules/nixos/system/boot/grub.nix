@@ -2,7 +2,8 @@
   config,
   lib,
   ...
-}: {
+}:
+{
   options.grub.enable = lib.mkEnableOption "Use grub as a boot manager";
 
   config = lib.mkIf config.grub.enable {

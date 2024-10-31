@@ -8,7 +8,7 @@
   # Enable systemd-boot selection
   boot = {
     loader.timeout = 10;
-    kernelParams = ["nvidia.NVreg_EnableGpuFirmware=0"];
+    kernelParams = [ "nvidia.NVreg_EnableGpuFirmware=0" ];
   };
 
   # Set system time

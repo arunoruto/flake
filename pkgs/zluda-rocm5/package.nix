@@ -1,4 +1,18 @@
-{ lib, fetchFromGitHub, rocmPackages_5, python3, cargo, rustc, cmake, clang, zlib, libxml2, libedit, rustPlatform, stdenv }:
+{
+  lib,
+  fetchFromGitHub,
+  rocmPackages_5,
+  python3,
+  cargo,
+  rustc,
+  cmake,
+  clang,
+  zlib,
+  libxml2,
+  libedit,
+  rustPlatform,
+  stdenv,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "zluda";

@@ -3,7 +3,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   imports = [
     ./python.nix
   ];

@@ -3,7 +3,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   options.vscode.enable = lib.mkEnableOption "Enable Visual Studio Code, an electron based IDE";
 
   config = lib.mkIf config.vscode.enable {

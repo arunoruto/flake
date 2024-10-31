@@ -2,7 +2,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   imports = [
     ./cursors.nix
     ./fonts.nix

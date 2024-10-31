@@ -2,7 +2,8 @@
   pkgs,
   lib,
   ...
-}: {
+}:
+{
   # display-manager.enable = lib.mkForce false;
   # desktop-environment.enable = lib.mkForce false;
   display-manager.enable = false;
@@ -16,7 +17,7 @@
   gui.enable = false;
 
   boot = {
-    kernelModules = ["amdgpu"];
+    kernelModules = [ "amdgpu" ];
     # kernelParams = [
     #   #"quiet"
     #   #"splash"

@@ -2,7 +2,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   # config = lib.mkIf (osConfig.networking.hostName == "kyuubi") {
   config = lib.mkIf (config.hostname == "kyuubi") {
     home.file = {

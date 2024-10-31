@@ -5,8 +5,8 @@
     # };
     autoCmd = [
       {
-        event = ["BufEnter"];
-        pattern = ["*.md"];
+        event = [ "BufEnter" ];
+        pattern = [ "*.md" ];
         command = "setlocal wrap";
       }
     ];

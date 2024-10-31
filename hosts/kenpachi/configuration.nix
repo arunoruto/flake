@@ -2,7 +2,8 @@
   pkgs,
   lib,
   ...
-}: {
+}:
+{
   tinypc.enable = true;
 
   #efi.enable = false;

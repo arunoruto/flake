@@ -1,4 +1,5 @@
-{pkgs, ...}: let
+{ pkgs, ... }:
+let
   arcwtf = pkgs.fetchFromGitHub {
     owner = "KiKaraage";
     repo = "ArcWTF";
@@ -7,7 +8,8 @@
     hash = "sha256-gyJiIVnyZOYVX6G3m4SSbsb7K9g4zKZWlrHphEIQwsY=";
   };
   profile = "mirza";
-in {
+in
+{
   programs.firefox = {
     profiles.${profile}.settings = {
       "toolkit.legacyUserProfileCustomizations.stylesheets" = true;

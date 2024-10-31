@@ -4,7 +4,8 @@
   config,
   lib,
   ...
-}: {
+}:
+{
   imports = [
     ./gpt.nix
     ./julia.nix
@@ -16,11 +17,11 @@
   ];
 
   helix = {
-    julia.enable = lib.mkDefault (! config.tinypc.enable);
-    matlab.enable = lib.mkDefault (! config.tinypc.enable);
-    markdown.enable = lib.mkDefault (! config.tinypc.enable);
-    markup.enable = lib.mkDefault (! config.tinypc.enable);
+    julia.enable = lib.mkDefault (!config.tinypc.enable);
+    matlab.enable = lib.mkDefault (!config.tinypc.enable);
+    markdown.enable = lib.mkDefault (!config.tinypc.enable);
+    markup.enable = lib.mkDefault (!config.tinypc.enable);
     nix.enable = lib.mkDefault true;
-    python.enable = lib.mkDefault (! config.tinypc.enable);
+    python.enable = lib.mkDefault (!config.tinypc.enable);
   };
 }

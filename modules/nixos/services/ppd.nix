@@ -3,7 +3,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   options.ppd.enable = lib.mkEnableOption ''
     Enable power saving using Power Profiles Deamon.
     Needed by AMD framework laptops, since TLP interfers with some process.

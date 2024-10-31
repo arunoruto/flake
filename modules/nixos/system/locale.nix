@@ -2,16 +2,22 @@
   config,
   lib,
   ...
-}: let
+}:
+let
   british = "en_GB.UTF-8";
   german = "de_DE.UTF-8";
-in {
+in
+{
   # Set keyboard layout in TTY
   # console.keyMap = config.services.xserver.xkb.variant ? config.services.xserver.xkb.layout;
   console.keyMap =
-    if (config.services.xserver.xkb.variant != "") && (lib.stringLength config.services.xserver.xkb.variant == 2)
-    then config.services.xserver.xkb.variant
-    else config.services.xserver.xkb.layout;
+    if
+      (config.services.xserver.xkb.variant != "")
+      && (lib.stringLength config.services.xserver.xkb.variant == 2)
+    then
+      config.services.xserver.xkb.variant
+    else
+      config.services.xserver.xkb.layout;
   # Set your time zone.
   # time.timeZone = "Europe/Berlin";
   # allow TZ to be set by desktop user

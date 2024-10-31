@@ -4,7 +4,8 @@
   lib,
   pkgs,
   ...
-}: {
+}:
+{
   imports = [
     ./keys.nix
     ./languages

@@ -2,7 +2,8 @@
   config,
   lib,
   ...
-}: {
+}:
+{
   options.wezterm.enable = lib.mkEnableOption "Enable wezterm terminal";
 
   config = lib.mkIf config.wezterm.enable {

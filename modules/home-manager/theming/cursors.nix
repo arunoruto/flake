@@ -3,7 +3,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   options.theming.cursors.enable = lib.mkEnableOption "Setup cursors for system";
 
   config = lib.mkIf config.theming.cursors.enable {

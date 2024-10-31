@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
 
   postInstallPhase = ''
     wrapProgram $out/bin/mstm \
-      --prefix PATH : ${lib.makeBinPath [mpi]}
+      --prefix PATH : ${lib.makeBinPath [ mpi ]}
   '';
 
   meta = with lib; {
@@ -68,6 +68,6 @@ stdenv.mkDerivation rec {
     description = "Multiple Sphere T Matrix code in Fortran - parallel edition";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [arunoruto];
+    maintainers = with maintainers; [ arunoruto ];
   };
 }

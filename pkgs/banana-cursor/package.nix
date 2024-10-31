@@ -6,7 +6,8 @@
   yarn,
   clickgen,
   zip,
-}: let
+}:
+let
   pname = "banana-cursor";
   version = "v2.0.0";
 
@@ -36,35 +37,35 @@
     '';
   };
 in
-  stdenv.mkDerivation {
-    inherit pname;
-    inherit version;
+stdenv.mkDerivation {
+  inherit pname;
+  inherit version;
 
-    src = yarn-env;
+  src = yarn-env;
 
-    nativeBuildInputs = [
-      yarn
-      #   clickgen
-      #   zip
-    ];
+  nativeBuildInputs = [
+    yarn
+    #   clickgen
+    #   zip
+  ];
 
-    buildPhase = ''
-      # yarn generate
-      mkdir -p $out
-      cp -r . $out
-    '';
+  buildPhase = ''
+    # yarn generate
+    mkdir -p $out
+    cp -r . $out
+  '';
 
-    # installPhase = ''
-    #   mkdir -p $out/share/icons/${pname}
-    #   cp ${pname} $out/share/icons/${pname}
-    #   gtk-update-icon-cache $out/share/icons/${pname}
-    # '';
+  # installPhase = ''
+  #   mkdir -p $out/share/icons/${pname}
+  #   cp ${pname} $out/share/icons/${pname}
+  #   gtk-update-icon-cache $out/share/icons/${pname}
+  # '';
 
-    meta = with lib; {
-      homepage = "https://github.com/ful1e5/banana-cursor";
-      description = "The banana cursor. ";
-      license = licenses.gpl3;
-      platforms = platforms.linux;
-      maintainers = with maintainers; [arunoruto];
-    };
-  }
+  meta = with lib; {
+    homepage = "https://github.com/ful1e5/banana-cursor";
+    description = "The banana cursor. ";
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ arunoruto ];
+  };
+}

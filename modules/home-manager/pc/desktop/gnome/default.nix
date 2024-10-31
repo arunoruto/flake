@@ -3,7 +3,8 @@
   pkgs,
   config,
   ...
-}: {
+}:
+{
   imports = [
     ./dconf.nix
     ./theming.nix

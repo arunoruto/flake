@@ -2,7 +2,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   imports = [
     ./chrome.nix
     ./firefox.nix

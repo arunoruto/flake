@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   programs.helix = {
     languages = {
       # language = [
@@ -10,7 +11,10 @@
       language-server = {
         gpt = {
           command = "helix-gpt";
-          args = ["--handler" "copilot"];
+          args = [
+            "--handler"
+            "copilot"
+          ];
           # args = ["--handler" "openai" "--openaiKey"];
         };
       };

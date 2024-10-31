@@ -5,8 +5,9 @@
   config,
   username,
   ...
-}: {
-  imports = [inputs.stylix.nixosModules.stylix];
+}:
+{
+  imports = [ inputs.stylix.nixosModules.stylix ];
 
   options.theming = {
     # enable = lib.mkEnableOption "Enable eye-candy";
@@ -38,10 +39,7 @@
       enable = lib.mkDefault true;
       base16Scheme = lib.mkDefault "${pkgs.base16-schemes}/share/themes/${config.theming.scheme}.yaml";
       image = inputs.wallpapers + "/${config.theming.image}";
-      cursor =
-        if (config.gui.enable)
-        then config.home-manager.users.${username}.stylix.cursor
-        else {};
+      cursor = if (config.gui.enable) then config.home-manager.users.${username}.stylix.cursor else { };
       # fonts =
       #   if (config.gui.enable)
       #   then config.home-manager.users.${username}.stylix.fonts

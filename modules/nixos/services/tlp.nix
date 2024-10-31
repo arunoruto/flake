@@ -2,7 +2,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   options.tlp.enable = lib.mkEnableOption "Enable power saving using TLP";
 
   config = lib.mkIf config.tlp.enable {

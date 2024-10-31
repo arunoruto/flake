@@ -2,17 +2,17 @@
   config,
   pkgs,
   ...
-}: let
+}:
+let
   nixpkgs-tars = "https://github.com/NixOS/nixpkgs/archive/";
-in {
+in
+{
   nixpkgs.config = {
     packageOverrides = pkgs: {
-      pr324549 =
-        import (fetchTarball {
-          url = "${nixpkgs-tars}fdef90a430d23487ea285197eb37338f6c97cbb1.tar.gz";
-          sha256 = "1id3k5shi2ffyqb4ph597bj5ybs1jfjk7sqrpn6ii4svlzlg33n5";
-        })
-        {config = config.nixpkgs.config;};
+      pr324549 = import (fetchTarball {
+        url = "${nixpkgs-tars}fdef90a430d23487ea285197eb37338f6c97cbb1.tar.gz";
+        sha256 = "1id3k5shi2ffyqb4ph597bj5ybs1jfjk7sqrpn6ii4svlzlg33n5";
+      }) { config = config.nixpkgs.config; };
     };
   };
 

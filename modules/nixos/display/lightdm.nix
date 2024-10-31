@@ -3,7 +3,8 @@
   pkgs,
   lib,
   ...
-}: {
+}:
+{
   options = {
     lightdm.enable = lib.mkEnableOption "Use light display manager";
   };

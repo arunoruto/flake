@@ -2,7 +2,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   imports = [
     # ./custom/spotify.nix
   ];
@@ -107,11 +108,15 @@
             format-muted = "󰖁   0%";
             format-icons = {
               headphone = "";
-              default = ["󰕿 " "󰖀 " "󰕾 "];
+              default = [
+                "󰕿 "
+                "󰖀 "
+                "󰕾 "
+              ];
             };
             scroll-step = 5;
             on-click = "pavucontrol";
-            ignored-sinks = ["Easy Effects Sink"];
+            ignored-sinks = [ "Easy Effects Sink" ];
           };
 
           network = {
@@ -149,7 +154,11 @@
 
           backlight = {
             format = "{icon} {percent}%";
-            format-icons = [" " "󰃟 " "󰃠 "];
+            format-icons = [
+              " "
+              "󰃟 "
+              "󰃠 "
+            ];
           };
 
           battery = {
@@ -159,7 +168,13 @@
             };
             format = "{icon} {capacity}%";
             #format-icons = [" " " " " " " " " "];
-            format-icons = ["󰂎" "󰁻" "󰁾" "󰂁" "󰁹"];
+            format-icons = [
+              "󰂎"
+              "󰁻"
+              "󰁾"
+              "󰂁"
+              "󰁹"
+            ];
           };
 
           "image#cover-art" = {

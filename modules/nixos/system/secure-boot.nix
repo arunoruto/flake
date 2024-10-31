@@ -4,7 +4,8 @@
   pkgs,
   lib,
   ...
-}: {
+}:
+{
   imports = [
     inputs.lanzaboote.nixosModules.lanzaboote
   ];
@@ -14,7 +15,7 @@
   };
 
   config = lib.mkIf config.secureboot.enable {
-    environment.systemPackages = [pkgs.sbctl];
+    environment.systemPackages = [ pkgs.sbctl ];
     boot = {
       loader.systemd-boot.enable = lib.mkForce false;
       lanzaboote = {

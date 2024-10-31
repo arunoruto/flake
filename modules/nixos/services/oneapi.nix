@@ -3,7 +3,8 @@
   lib,
   pkgs,
   ...
-}: {
+}:
+{
   options = {
     oneapi.enable = lib.mkEnableOption "Enable OneAPI for Intel hardware";
   };
@@ -12,6 +13,6 @@
     environment.systemPackages = [
       config.nur.repos.gricad.intel-oneapi
     ];
-    
+
   };
 }

@@ -3,7 +3,8 @@
   pkgs,
   lib,
   ...
-}: {
+}:
+{
   options = {
     suid.enable = lib.mkEnableOption ''
       Some programs need SUID wrappers,

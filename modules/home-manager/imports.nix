@@ -2,7 +2,8 @@
   osConfig,
   lib,
   ...
-} @ args: {
+}@args:
+{
   imports = [
     ./media
     ./pc

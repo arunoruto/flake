@@ -3,7 +3,8 @@
   lib,
   pkgs,
   ...
-}: let
+}:
+let
   # bash script to let dbus know about important env variables and
   # propagate them to relevent services run at the end of sway config
   # see
@@ -32,16 +33,19 @@
     name = "configure-gtk";
     destination = "/bin/configure-gtk";
     executable = true;
-    text = let
-      schema = pkgs.gsettings-desktop-schemas;
-      datadir = "${schema}/share/gsettings-schemas/${schema.name}";
-    in ''
-      export XDG_DATA_DIRS=${datadir}:$XDG_DATA_DIRS
-      gnome_schema=org.gnome.desktop.interface
-      gsettings set $gnome_schema gtk-theme 'Dracula'
-    '';
+    text =
+      let
+        schema = pkgs.gsettings-desktop-schemas;
+        datadir = "${schema}/share/gsettings-schemas/${schema.name}";
+      in
+      ''
+        export XDG_DATA_DIRS=${datadir}:$XDG_DATA_DIRS
+        gnome_schema=org.gnome.desktop.interface
+        gsettings set $gnome_schema gtk-theme 'Dracula'
+      '';
   };
-in {
+in
+{
   options = {
     sway.enable = lib.mkEnableOption "Use the Sway window manager";
   };
@@ -76,7 +80,14 @@ in {
     programs.sway = {
       enable = true;
       wrapperFeatures.gtk = true;
-      extraPackages = with pkgs; [swaylock swayidle foot rofi playerctl waybar];
+      extraPackages = with pkgs; [
+        swaylock
+        swayidle
+        foot
+        rofi
+        playerctl
+        waybar
+      ];
     };
 
     # If you are on a laptop, you can set up brightness and volume function keys as follows:

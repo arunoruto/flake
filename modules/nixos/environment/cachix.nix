@@ -4,7 +4,8 @@
   config,
   username,
   ...
-}: {
+}:
+{
   options.cachix.enable = lib.mkEnableOption "Use cachix to manage nix caches for packages";
 
   config = lib.mkIf config.cachix.enable {
@@ -12,6 +13,9 @@
       cachix
     ];
 
-    nix.settings.trusted-users = ["root" username];
+    nix.settings.trusted-users = [
+      "root"
+      username
+    ];
   };
 }

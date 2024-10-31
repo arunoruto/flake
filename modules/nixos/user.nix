@@ -7,7 +7,8 @@
   theme,
   image,
   ...
-}: {
+}:
+{
   sops.secrets."passwords/${username}".neededForUsers = true;
 
   users = {

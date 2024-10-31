@@ -4,7 +4,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   imports = [
     inputs.ags.homeManagerModules.default
   ];

@@ -9,7 +9,8 @@
   theme,
   image,
   ...
-}: let
+}:
+let
   # inherit (self) inputs;
   # inherit (lib.modules) mkIf;
   # inherit (lib.attrsets) genAttrs;
@@ -22,7 +23,8 @@
     inherit theme image inputs;
     user = username;
   };
-in {
+in
+{
   # home-manager = mkIf env.useHomeManager {
   home-manager = {
     # tell home-manager to be as verbose as possible

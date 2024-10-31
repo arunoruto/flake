@@ -3,7 +3,8 @@
   lib,
   pkgs,
   ...
-}: {
+}:
+{
   programs.nixvim = {
     plugins = {
       lsp-format.enable = true;
@@ -114,7 +115,13 @@
       end
 
       -- -- list all LSPs from above
-      -- local lsps = {${lib.concatMapStringsSep "," (x: ''"${x}"'') (lib.filter (server: config.programs.nixvim.plugins.lsp.servers."${server}".enable) (lib.attrNames config.programs.nixvim.plugins.lsp.servers))}}
+      -- local lsps = {${
+        lib.concatMapStringsSep "," (x: ''"${x}"'') (
+          lib.filter (server: config.programs.nixvim.plugins.lsp.servers."${server}".enable) (
+            lib.attrNames config.programs.nixvim.plugins.lsp.servers
+          )
+        )
+      }}
       -- for i, v in ipairs(lsps) do
       --   lsps[i] = lsps[i]:gsub("-", "_")
       --   -- if v == "ruff-lsp" then

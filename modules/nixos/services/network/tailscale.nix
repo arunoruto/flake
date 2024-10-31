@@ -3,9 +3,11 @@
   lib,
   pkgs,
   ...
-}: let
+}:
+let
   tailscale-port = 41641;
-in {
+in
+{
   options = {
     tailscale.enable = lib.mkEnableOption "tailscale";
   };
@@ -27,9 +29,9 @@ in {
       # search = ["sparrow-yo.ts.net" "king-little.ts.net"];
       firewall = {
         # always allow traffic from your Tailscale network
-        trustedInterfaces = ["tailscale0"];
+        trustedInterfaces = [ "tailscale0" ];
         # allow the Tailscale UDP port through the firewall
-        allowedTCPPorts = [tailscale-port];
+        allowedTCPPorts = [ tailscale-port ];
         # https://github.com/tailscale/tailscale/issues/4432#issuecomment-1112819111
         checkReversePath = "loose";
       };

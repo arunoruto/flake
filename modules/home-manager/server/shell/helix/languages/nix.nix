@@ -1,16 +1,27 @@
-{ pkgs, config, lib, ... }: {
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
+{
   options.helix.nix.enable = lib.mkEnableOption "Helix Nix config";
 
   config = lib.mkIf config.helix.nix.enable {
     programs.helix = {
       languages = {
-        language = [{
-          name = "nix";
-          auto-format = true;
-          formatter.command = "nixfmt";
-          # formatter.command = "${pkgs.alejandra}/bin/alejandra";
-          language-servers = [ "nixd" "nil" ];
-        }];
+        language = [
+          {
+            name = "nix";
+            auto-format = true;
+            formatter.command = "nixfmt";
+            # formatter.command = "${pkgs.alejandra}/bin/alejandra";
+            language-servers = [
+              "nixd"
+              "nil"
+            ];
+          }
+        ];
         language-server = {
           nixd = {
             command = "nixd";

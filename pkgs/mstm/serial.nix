@@ -38,6 +38,6 @@ stdenv.mkDerivation rec {
     description = "Multiple Sphere T Matrix code in Fortran";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [arunoruto];
+    maintainers = with maintainers; [ arunoruto ];
   };
 }

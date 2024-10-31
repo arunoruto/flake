@@ -2,7 +2,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   options.hypr.idle.enable = lib.mkEnableOption "Configure hypridle";
 
   config = lib.mkIf config.hypr.idle.enable {

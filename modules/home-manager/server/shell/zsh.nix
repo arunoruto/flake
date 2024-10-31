@@ -4,16 +4,14 @@
   config,
   pkgs,
   ...
-}: {
+}:
+{
   programs = {
     zsh = {
       enable = true;
       dotDir = ".config/zsh";
       shellAliases = {
         grep = "rg";
-        update = ''bash -c "sudo nixos-rebuild switch"'';
-        update-channel = ''bash -c "sudo nix-channel --update"'';
-        home = "home-manager switch";
         tss = "tailscale switch $(tailscale switch --list | tail -n +2 | fzf | tr -s ' ' | cut -d ' ' -f1)";
         tsr = ''bash -c "sudo systemctl restart tailscaled.service"'';
         #tsen = "tailscale status | grep 'offers exit node' | fzf | tr -s ' ' | cut -d' ' -f2";
@@ -33,8 +31,8 @@
       enableCompletion = true;
       historySubstringSearch = {
         enable = true;
-        searchDownKey = ["^[OB"];
-        searchUpKey = ["^[OA"];
+        searchDownKey = [ "^[OB" ];
+        searchUpKey = [ "^[OA" ];
       };
       syntaxHighlighting = {
         enable = true;

@@ -3,7 +3,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   options.nvidia.enable = lib.mkEnableOption "Setup Nvidia environment";
 
   config = lib.mkIf config.nvidia.enable {
@@ -12,7 +13,7 @@
     # };
 
     # Load nvidia driver for Xorg and Wayland
-    services.xserver.videoDrivers = lib.mkDefault ["nvidia"];
+    services.xserver.videoDrivers = lib.mkDefault [ "nvidia" ];
 
     hardware = {
       nvidia = {

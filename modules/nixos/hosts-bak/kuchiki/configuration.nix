@@ -2,7 +2,8 @@
   pkgs,
   lib,
   ...
-}: {
+}:
+{
   imports = [
     ./hardware-configuration.nix
     # inputs.nixos-hardware.nixosModules.framework-11th-gen-intel
@@ -24,7 +25,7 @@
   networking.hostName = lib.mkForce "kuchiki"; # Define your hostname.
 
   boot = {
-    kernelModules = ["amdgpu"];
+    kernelModules = [ "amdgpu" ];
     # kernelParams = [
     #   #"quiet"
     #   #"splash"

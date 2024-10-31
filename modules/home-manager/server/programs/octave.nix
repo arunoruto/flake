@@ -1,9 +1,10 @@
 { pkgs, ... }:
 let
-  packages = ps: with ps; [
-    image
-    symbolic
-  ];
+  packages =
+    ps: with ps; [
+      image
+      symbolic
+    ];
 in
 {
   home.packages = with pkgs; [

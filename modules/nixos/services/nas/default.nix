@@ -2,7 +2,8 @@
   config,
   lib,
   ...
-}: {
+}:
+{
   imports = [
     ./drives.nix
     ./nfs.nix

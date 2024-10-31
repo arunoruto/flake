@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   imports = [
     # ./catppuccin.nix
     #./pomodoro.nix

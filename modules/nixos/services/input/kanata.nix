@@ -3,7 +3,8 @@
   pkgs,
   lib,
   ...
-}: {
+}:
+{
   options = {
     kanata.enable = lib.mkEnableOption "Enable kanata for keyboard remapping";
   };

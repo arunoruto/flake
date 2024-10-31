@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   imports = [
     ./alpha.nix
     #./baleia.nix
@@ -8,8 +9,9 @@
   ];
 
   programs.nixvim = {
-    plugins = {
-    };
+    plugins =
+      {
+      };
     extraPlugins = with pkgs.vimPlugins; [
       nui-nvim
     ];

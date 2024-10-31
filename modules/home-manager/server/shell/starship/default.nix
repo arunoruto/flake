@@ -1,11 +1,13 @@
-{config, ...}: let
+{ config, ... }:
+let
   flavour = "macchiato";
   catppuccin-starship = "";
-  #catppuccin-starship = builtins.fetchGit {
-  #  url = "https://github.com/catppuccin/starship";
-  #  ref = "main";
-  #};
-in {
+in
+#catppuccin-starship = builtins.fetchGit {
+#  url = "https://github.com/catppuccin/starship";
+#  ref = "main";
+#};
+{
   imports = [
     ./definitions
   ];

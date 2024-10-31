@@ -1,4 +1,5 @@
-{...}: {
+{ ... }:
+{
   programs.nixvim = {
     plugins = {
       telescope = {
@@ -8,9 +9,15 @@
             path_display = "smart";
             mappings = {
               i = {
-                "<C-k>" = {__raw = "require('telescope.actions').move_selection_previous";};
-                "<C-j>" = {__raw = "require('telescope.actions').move_selection_next";};
-                "<C-q>" = {__raw = "require('telescope.actions').send_selected_to_qflist + require('telescope.actions').open_qflist";};
+                "<C-k>" = {
+                  __raw = "require('telescope.actions').move_selection_previous";
+                };
+                "<C-j>" = {
+                  __raw = "require('telescope.actions').move_selection_next";
+                };
+                "<C-q>" = {
+                  __raw = "require('telescope.actions').send_selected_to_qflist + require('telescope.actions').open_qflist";
+                };
               };
             };
           };

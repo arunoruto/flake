@@ -2,7 +2,8 @@
   lib,
   pkgs,
   ...
-}: {
+}:
+{
   imports = [
     ./git.nix
     ./newsboat.nix

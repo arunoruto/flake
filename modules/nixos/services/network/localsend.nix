@@ -3,9 +3,11 @@
   lib,
   pkgs,
   ...
-}: let
+}:
+let
   localsendPort = 53317;
-in {
+in
+{
   options.localsend.enable = lib.mkEnableOption "Enable localsend for local network file sharing";
 
   config = lib.mkIf config.localsend.enable {
@@ -15,8 +17,8 @@ in {
 
     networking = {
       firewall = {
-        allowedTCPPorts = [localsendPort];
-        allowedUDPPorts = [localsendPort];
+        allowedTCPPorts = [ localsendPort ];
+        allowedUDPPorts = [ localsendPort ];
       };
     };
   };

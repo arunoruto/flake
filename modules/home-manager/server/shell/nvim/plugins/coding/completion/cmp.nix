@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   programs.nixvim = {
     plugins = {
       cmp-emoji.enable = true;
@@ -18,10 +19,14 @@
             #maxViewEntries = 30;
           };
           snippet.expand = "luasnip";
-          formatting.fields = ["kind" "abbr" "menu"];
+          formatting.fields = [
+            "kind"
+            "abbr"
+            "menu"
+          ];
           sources = [
-            {name = "nvim_lsp";}
-            {name = "emoji";}
+            { name = "nvim_lsp"; }
+            { name = "emoji"; }
             {
               name = "buffer";
               keywordLength = 3;

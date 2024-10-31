@@ -3,7 +3,8 @@
   lib,
   pkgs,
   ...
-}: {
+}:
+{
   options.libreoffice.enable = lib.mkEnableOption "Enable the document suite LibreOffice";
 
   config = lib.mkIf config.libreoffice.enable {

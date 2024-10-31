@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   programs.nixvim = {
     plugins.dap = {
       enable = true;
@@ -8,7 +9,7 @@
     };
     keymaps = [
       {
-        mode = ["n"];
+        mode = [ "n" ];
         key = "<leader>db";
         action = "<cmd>DapToggleBreakpoint<cr>";
         options = {
@@ -17,7 +18,7 @@
         };
       }
       {
-        mode = ["n"];
+        mode = [ "n" ];
         key = "<leader>dpr";
         action.__raw = ''function() require("dap-python").test_method() end'';
         options = {

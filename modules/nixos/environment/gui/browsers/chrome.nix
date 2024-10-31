@@ -3,7 +3,8 @@
   config,
   lib,
   ...
-}: {
+}:
+{
   options = {
     chrome.enable = lib.mkEnableOption "chrome";
   };

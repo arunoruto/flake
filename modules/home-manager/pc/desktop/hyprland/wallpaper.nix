@@ -2,7 +2,8 @@
   config,
   lib,
   ...
-}: {
+}:
+{
   options.hypr.wallpaper.enable = lib.mkEnableOption "Configure hyprpaper for wallpaper settings";
 
   config = lib.mkIf config.hypr.wallpaper.enable {

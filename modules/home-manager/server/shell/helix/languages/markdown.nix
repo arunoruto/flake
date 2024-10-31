@@ -5,7 +5,8 @@
   lib,
   pkgs,
   ...
-}: {
+}:
+{
   options.helix.markdown.enable = lib.mkEnableOption "Helix Markdown config";
 
   config = lib.mkIf config.helix.markdown.enable {
@@ -15,12 +16,18 @@
           {
             name = "markdown";
             auto-format = true;
-            rulers = [120];
+            rulers = [ 120 ];
             # language-servers = ["marksman" "ltex"];
-            language-servers = ["marksman" "oxide"];
+            language-servers = [
+              "marksman"
+              "oxide"
+            ];
             formatter = {
               command = "prettier";
-              args = ["--parser" "markdown"];
+              args = [
+                "--parser"
+                "markdown"
+              ];
             };
             # formatter = {
             #   command = "dprint";
@@ -32,7 +39,7 @@
           ltex = {
             command = "ltex-ls";
             config.ltex.dictionary = {
-              "en-US" = [];
+              "en-US" = [ ];
             };
           };
           oxide = {

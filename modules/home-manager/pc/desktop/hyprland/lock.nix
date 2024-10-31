@@ -3,10 +3,12 @@
   pkgs,
   lib,
   ...
-}: let
+}:
+let
   pkg = pkgs.unstable.hyprlock;
   font = config.stylix.fonts.monospace.name;
-in {
+in
+{
   options.hypr.lock.enable = lib.mkEnableOption "Custom hyprlock";
 
   config = lib.mkIf config.hypr.lock.enable {

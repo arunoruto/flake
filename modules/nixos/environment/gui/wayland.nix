@@ -3,7 +3,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   options.wayland.enable = lib.mkEnableOption "Setup wayland";
 
   config = lib.mkIf config.wayland.enable {

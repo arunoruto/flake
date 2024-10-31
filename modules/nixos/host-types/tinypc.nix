@@ -2,7 +2,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   options.tinypc.enable = lib.mkEnableOption "Sensible defaults for tiny/mini PCs";
 
   config = lib.mkIf config.tinypc.enable {

@@ -3,7 +3,8 @@
   lib,
   pkgs,
   ...
-}: {
+}:
+{
   options.yazi.enable = lib.mkEnableOption "Enable terminal file exporer";
 
   config = lib.mkIf config.yazi.enable {

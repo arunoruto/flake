@@ -3,7 +3,8 @@
   pkgs,
   lib,
   ...
-}: {
+}:
+{
   options = {
     plex.enable = lib.mkEnableOption "Enable Plex on the host";
   };

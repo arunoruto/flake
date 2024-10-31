@@ -4,7 +4,8 @@
   pkgs,
   lib,
   ...
-}: {
+}:
+{
   imports = [
     # ./arcwtf.nix
     ./pwa.nix

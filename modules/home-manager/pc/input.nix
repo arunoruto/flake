@@ -1,4 +1,5 @@
-{lib, ...}: {
+{ lib, ... }:
+{
   options.keyboard = {
     layout = lib.mkOption {
       type = lib.types.str;

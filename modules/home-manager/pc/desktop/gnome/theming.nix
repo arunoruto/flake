@@ -2,7 +2,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   options.gnome.theming.enable = lib.mkEnableOption "Set GNOME theming through nix (only icons)";
 
   config = lib.mkIf config.gnome.theming.enable {

@@ -3,7 +3,8 @@
   lib,
   pkgs,
   ...
-}: {
+}:
+{
   options.helix.markup.enable = lib.mkEnableOption "Helix Markup config";
 
   config = lib.mkIf config.helix.markup.enable {
@@ -16,16 +17,22 @@
             # rulers = [120];
             formatter = {
               command = "prettier";
-              args = ["--parser" "json"];
+              args = [
+                "--parser"
+                "json"
+              ];
             };
-            language-servers = ["vscode-json-languageserver"];
+            language-servers = [ "vscode-json-languageserver" ];
           }
           {
             name = "yaml";
             # auto-format = true;
             formatter = {
               command = "prettier";
-              args = ["--parser" "yaml"];
+              args = [
+                "--parser"
+                "yaml"
+              ];
             };
           }
           {
@@ -40,7 +47,7 @@
         language-server = {
           vscode-json-languageserver = {
             command = "vscode-json-languageserver";
-            args = ["--stdio"];
+            args = [ "--stdio" ];
           };
         };
       };

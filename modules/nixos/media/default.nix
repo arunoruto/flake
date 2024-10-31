@@ -2,7 +2,8 @@
   config,
   lib,
   ...
-}: {
+}:
+{
   imports = [
     ./arr.nix
     ./plex.nix

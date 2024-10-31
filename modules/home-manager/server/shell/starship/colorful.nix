@@ -54,21 +54,21 @@ in
         format = "[$user ]($style)";
         disabled = false;
       };
-      
+
       # An alternative to the username module which displays a symbol that
       # represents the current operating system
       os = {
         style = "fg:text bg:surface0";
         disabled = false; # Disabled by default
       };
-      
+
       directory = {
         style = "fg:text bg:surface1";
         format = "[ $path ]($style)";
         truncation_length = 3;
         truncation_symbol = "…/";
       };
-      
+
       # Here is how you can shorten some long paths by text replacement
       # similar to mapped_locations in Oh My Posh:
       directory.substitutions = {
@@ -82,95 +82,95 @@ in
         # So either put "Important Documents" before "Documents" or use the substituted version:
         # "Important 󰈙 " = " 󰈙 "
       };
-      
+
       c = {
         symbol = " ";
         style = "fg:surface0 bg:peach";
         format = "[ $symbol ($version) ]($style)";
       };
-      
+
       docker_context = {
         symbol = " ";
         style = "fg:surface0 bg:blue";
         format = "[ $symbol $context ]($style)";
       };
-      
+
       elixir = {
         symbol = " ";
         style = "fg:surface0 bg:peach";
         format = "[ $symbol ($version) ]($style)";
       };
-      
+
       elm = {
         symbol = " ";
         style = "fg:surface0 bg:peach";
         format = "[ $symbol ($version) ]($style)";
       };
-      
+
       git_branch = {
         symbol = "";
         style = "fg:surface0 bg:red";
         format = "[ $symbol $branch ]($style)";
       };
-      
+
       git_status = {
         style = "fg:surface0 bg:red";
         format = "[$all_status$ahead_behind ]($style)";
       };
-      
+
       golang = {
         symbol = " ";
         style = "fg:surface0 bg:peach";
         format = "[ $symbol ($version) ]($style)";
       };
-      
+
       gradle = {
         style = "fg:surface0 bg:peach";
         format = "[ $symbol ($version) ]($style)";
       };
-      
+
       haskell = {
         symbol = " ";
         style = "fg:surface0 bg:peach";
         format = "[ $symbol ($version) ]($style)";
       };
-      
+
       java = {
         symbol = " ";
         style = "fg:surface0 bg:peach";
         format = "[ $symbol ($version) ]($style)";
       };
-      
+
       julia = {
         symbol = " ";
         style = "fg:surface0 bg:peach";
         format = "[ $symbol ($version) ]($style)";
       };
-      
+
       nodejs = {
         symbol = "";
         style = "fg:surface0 bg:peach";
         format = "[ $symbol ($version) ]($style)";
       };
-      
+
       nim = {
         symbol = "󰆥 ";
         style = "fg:surface0 bg:peach";
         format = "[ $symbol ($version) ]($style)";
       };
-      
+
       rust = {
         symbol = "";
         style = "fg:surface0 bg:peach";
         format = "[ $symbol ($version) ]($style)";
       };
-      
+
       scala = {
         symbol = " ";
         style = "fg:surface0 bg:peach";
         format = "[ $symbol ($version) ]($style)";
       };
-      
+
       time = {
         disabled = false;
         time_format = "%R"; # Hour:Minute Format
@@ -180,7 +180,6 @@ in
 
       # package.disabled = true;
       palette = "catppuccin_${flavour}";
-    } // builtins.fromTOML (builtins.readFile
-      (catppuccin-starship + /palettes/${flavour}.toml));
+    } // builtins.fromTOML (builtins.readFile (catppuccin-starship + /palettes/${flavour}.toml));
   };
 }

@@ -2,7 +2,8 @@
   config,
   lib,
   ...
-}: {
+}:
+{
   options.nfs.enable = lib.mkEnableOption "NFS Settings for Server and Client";
 
   config = lib.mkIf config.nfs.enable {
@@ -17,8 +18,22 @@
 
     networking.firewall = {
       # for NFSv3; view with `rpcinfo -p`
-      allowedTCPPorts = [111 2049 4000 4001 4002 20048];
-      allowedUDPPorts = [111 2049 4000 4001 4002 20048];
+      allowedTCPPorts = [
+        111
+        2049
+        4000
+        4001
+        4002
+        20048
+      ];
+      allowedUDPPorts = [
+        111
+        2049
+        4000
+        4001
+        4002
+        20048
+      ];
     };
   };
 }

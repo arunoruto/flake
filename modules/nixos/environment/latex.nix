@@ -3,7 +3,8 @@
   config,
   lib,
   ...
-}: {
+}:
+{
   options.latex.enable = lib.mkEnableOption "Setup LaTeX for system";
 
   config = lib.mkIf config.latex.enable {

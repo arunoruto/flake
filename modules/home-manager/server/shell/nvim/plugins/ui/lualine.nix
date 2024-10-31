@@ -29,7 +29,7 @@
           lualine_c = [
             #  #"%="
           ];
-          lualine_x = [];
+          lualine_x = [ ];
           #lualine_y = [
           #  "filetype"
           #  "progress"
@@ -46,22 +46,22 @@
           ];
         };
         inactiveSections = {
-          lualine_a = ["filename"];
-          lualine_b = [];
-          lualine_c = [];
-          lualine_x = [];
-          lualine_y = [];
-          lualine_z = ["location"];
+          lualine_a = [ "filename" ];
+          lualine_b = [ ];
+          lualine_c = [ ];
+          lualine_x = [ ];
+          lualine_y = [ ];
+          lualine_z = [ "location" ];
         };
         tabline = {
-          lualine_a = [];
-          lualine_b = [];
-          lualine_c = [];
-          lualine_x = [];
-          lualine_y = [];
-          lualine_z = [];
+          lualine_a = [ ];
+          lualine_b = [ ];
+          lualine_c = [ ];
+          lualine_x = [ ];
+          lualine_y = [ ];
+          lualine_z = [ ];
         };
-        extensions = [];
+        extensions = [ ];
       };
     };
   };

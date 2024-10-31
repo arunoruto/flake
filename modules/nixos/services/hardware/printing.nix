@@ -3,7 +3,8 @@
   config,
   lib,
   ...
-}: {
+}:
+{
   options = {
     printing.enable = lib.mkEnableOption "Enable printing support";
   };

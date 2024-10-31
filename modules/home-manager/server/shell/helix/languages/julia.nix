@@ -4,7 +4,8 @@
   config,
   lib,
   ...
-}: {
+}:
+{
   options.helix.julia.enable = lib.mkEnableOption "Helix Julia config";
 
   config = lib.mkIf config.helix.julia.enable {
@@ -16,10 +17,14 @@
             auto-format = true;
             scope = "source.julia";
             injection-regex = "julia";
-            file-types = ["jl"];
-            roots = ["Project.toml" "Manifest.toml" "JuliaProject.toml"];
+            file-types = [ "jl" ];
+            roots = [
+              "Project.toml"
+              "Manifest.toml"
+              "JuliaProject.toml"
+            ];
             comment-token = "#";
-            language-servers = ["julia-lsp"];
+            language-servers = [ "julia-lsp" ];
             formatter = {
               command = "julia";
               args = [

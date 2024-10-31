@@ -1,12 +1,16 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   programs.nixvim = {
     plugins = {
       lint = {
         enable = true;
         # https://github.com/mfussenegger/nvim-lint?tab=readme-ov-file#available-linters
         lintersByFt = {
-          python = ["ruff"];
-          nix = ["deadnix" "nix"];
+          python = [ "ruff" ];
+          nix = [
+            "deadnix"
+            "nix"
+          ];
         };
         autoCmd = {
           callback = {
@@ -16,7 +20,11 @@
               end
             '';
           };
-          event = ["BufEnter" "BufWritePost" "InsertLeave"];
+          event = [
+            "BufEnter"
+            "BufWritePost"
+            "InsertLeave"
+          ];
         };
       };
     };

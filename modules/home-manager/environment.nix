@@ -3,7 +3,8 @@
   lib,
   user,
   ...
-}: {
+}:
+{
   options.environment.enable = lib.mkEnableOption "Set env vars for user";
 
   config = lib.mkIf config.environment.enable {

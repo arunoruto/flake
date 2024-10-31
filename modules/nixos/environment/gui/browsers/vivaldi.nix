@@ -3,7 +3,8 @@
   config,
   lib,
   ...
-}: {
+}:
+{
   options.vivaldi.enable = lib.mkEnableOption "Vivaldi Browser";
 
   config = lib.mkIf config.vivaldi.enable {

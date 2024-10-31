@@ -1,4 +1,5 @@
-{pkgs, ...}: let
+{ pkgs, ... }:
+let
   version = "1.0.2";
   tmux-pomodoro-plus = pkgs.tmuxPlugins.mkTmuxPlugin {
     pluginName = "pomodoro";
@@ -15,13 +16,13 @@
       ref = "main";
     };
   };
-in {
+in
+{
   programs.tmux = {
     plugins = [
       {
         plugin = tmux-pomodoro-plus;
-        extraConfig = ''
-        '';
+        extraConfig = '''';
       }
     ];
   };

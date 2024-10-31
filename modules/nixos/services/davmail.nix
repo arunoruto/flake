@@ -2,7 +2,8 @@
   config,
   lib,
   ...
-}: {
+}:
+{
   options = {
     davmail.enable = lib.mkEnableOption "Enable DavMail for exchange support";
   };
