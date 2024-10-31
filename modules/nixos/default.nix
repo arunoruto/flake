@@ -4,7 +4,8 @@
   config,
   username,
   ...
-}: {
+}:
+{
   imports = [
     ./desktop
     ./display
@@ -12,6 +13,7 @@
     ./host-types
     ./media
     ./network
+    ./security
     ./services
     ./system
 
@@ -26,7 +28,7 @@
   gui.enable = lib.mkDefault true;
 
   nix = {
-    nixPath = ["nixpkgs=${inputs.nixpkgs}"];
+    nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
     extraOptions = config.home-manager.users.${username}.nix.extraOptions;
   };
 }

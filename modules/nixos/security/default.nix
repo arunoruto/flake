@@ -3,7 +3,12 @@
   pkgs,
   lib,
   ...
-}: {
+}:
+{
+  imports = [
+    ./yubikey.nix
+  ];
+
   security = {
     polkit.enable = true;
 

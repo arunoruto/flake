@@ -4,13 +4,13 @@
   # image,
   # scheme,
   ...
-}: {
+}:
+{
   imports = [
     ./boot
     ./locale.nix
     ./nix-utils.nix
     ./secure-boot.nix
-    ./security.nix
     # ./systemd.nix
     ./theming.nix
     ./upgrade.nix
