@@ -31,6 +31,11 @@ in
         # "private_keys/mirza@zangetsu" = {
         #   path = config.home.homeDirectory + "/.ssh/sops_key";
         # };
+        "ssh_keys/${user-conf.name}" = {
+          owner = user-conf.name;
+          inherit (user-conf) group;
+          path = "${user-conf.home}/.ssh/id_ed25519";
+        };
         "tokens/copilot" = { };
         "tokens/cachix" = { };
         "yubico/u2f_keys" = {
