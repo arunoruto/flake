@@ -9,27 +9,30 @@
 
   config = lib.mkIf config.fingerprint.enable {
     # Enable fingerprint support with goodix (framework)
-    services.fprintd = {
-      enable = true;
-      # The following should work, but it does not...
-      # package = pkgs.fprintd-tod;
-      # tod = {
-      #   enable = true;
-      #   driver = pkgs.libfprint-2-tod1-goodix;
-      # };
-    };
+    # services.fprintd = {
+    #   enable = true;
+    #   # The following should work, but it does not...
+    #   # package = pkgs.fprintd-tod;
+    #   # tod = {
+    #   #   enable = true;
+    #   #   driver = pkgs.libfprint-2-tod1-goodix;
+    #   # };
+    # };
 
-    systemd.services.fprintd = {
-      wantedBy = [ "multi-user.target" ];
-      serviceConfig.Type = "simple";
-    };
+    # systemd.services.fprintd = {
+    #   wantedBy = [ "multi-user.target" ];
+    #   serviceConfig.Type = "simple";
+    # };
 
-    security.pam.services = {
-      # Enable fprintd for login, and it seems like for gnome and other stuff...
-      login.fprintAuth = true;
-      # If a key is pluged in, prioritse the fprintd instead of a yubikey
-      sudo.rules.auth.fprintd.order = config.security.pam.services.sudo.rules.auth.u2f.order - 10;
-    };
+    # security.pam.services = {
+    #   login = {
+    #     # Enable fprintd for login, and it seems like for gnome and other stuff...
+    #     fprintAuth = true;
+    #   };
+    #   # If a key is pluged in, prioritse the fprintd instead of a yubikey
+    #   # sudo.rules.auth.fprintd.order = config.security.pam.services.sudo.rules.auth.u2f.order - 10;
+    #   # sudo.rules.auth.u2f.order = config.security.pam.services.sudo.rules.auth.fprintd.order + 10;
+    # };
 
     ## we need fwupd 1.9.7 to downgrade the fingerprint sensor firmware
     # services.fwupd.package =
