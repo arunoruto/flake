@@ -1,8 +1,14 @@
 {
   config,
   lib,
+  username,
   ...
-}: {
+}:
+let
+  pubKeys = lib.filesystem.listFilesRecursive (lib.path.append ../../../. "homes/${username}/keys");
+in
+
+{
   options = {
     ssh.enable = lib.mkEnableOption "Enable SSH and configure it";
   };
@@ -23,5 +29,9 @@
         }
       ];
     };
+
+    users.users.${username}.openssh.authorizedKeys.keys = lib.lists.forEach pubKeys (
+      key: builtins.readFile key
+    );
   };
 }
