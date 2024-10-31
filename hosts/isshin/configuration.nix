@@ -1,4 +1,5 @@
-{lib, ...}: {
+{ lib, ... }:
+{
   # Set hostname
   networking.hostName = lib.mkForce "isshin"; # Define your hostname.
 
