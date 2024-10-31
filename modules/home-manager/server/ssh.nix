@@ -3,6 +3,18 @@
   lib,
   ...
 }:
+let
+  # pathToKeys = ./keys;
+  pathToKeys = config.home.sessionVariables.FLAKE + "homes/mirza/keys";
+  yubikeys = lib.lists.forEach (builtins.attrNames (builtins.readDir pathToKeys)) (
+    key: lib.substring 0 (lib.stringLength key - lib.stringLength ".pub") key
+  );
+  yubikeyPublicKeyEntries = lib.attrsets.mergeAttrsList (
+    lib.lists.map (key: {
+      ".ssh/${key}.pub".source = "${pathToKeys}/${key}.pub";
+    }) yubikeys
+  );
+in
 {
   options.ssh.enable = lib.mkEnableOption "Enable personal SSH settings";
 
@@ -27,16 +39,9 @@
       extraConfig = ''
         # Required for yubikey-agent
         AddKeysToAgent yes
-
-        Host kyuubi.tail
-            HostName kyuubi
-            User mar
-            ForwardX11 yes
-        Host jabba.tail
-            Hostname jabba
-            User mar
-            ForwardX11 yes
       '';
     };
+
+    home.file = { } // yubikeyPublicKeyEntries;
   };
 }

@@ -29,7 +29,7 @@ in
       u2f = {
         enable = true;
         # settings = {
-        cue = false; # Tells the user they need to press the button
+        cue = true; # Tells the user they need to press the button
         authFile = "${homedir}/.config/yubico/u2f_keys";
         # };
       };

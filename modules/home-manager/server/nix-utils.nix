@@ -28,9 +28,9 @@ in
   };
 
   config = lib.mkIf config.nix-utils.enable {
-    nix.extraOptions = ''
-      trusted-users = root ${user}
-    '';
+    # nix.extraOptions = ''
+    #   trusted-users = root ${user}
+    # '';
 
     home.packages = with pkgs; [
       alejandra

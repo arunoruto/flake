@@ -4,9 +4,11 @@
   user,
   osConfig,
   ...
-} @ args: let
+}@args:
+let
   flake-location = config.home.sessionVariables.FLAKE;
-in {
+in
+{
   imports = [
     ./programs
     ./services
@@ -22,15 +24,16 @@ in {
 
   nixd-config = {
     nixpkgs.expr = ''import (builtins.getFlake "${flake-location}").inputs.nixpkgs { }'';
-    formatting.command = ["nixfmt"];
+    formatting.command = [ "nixfmt" ];
     options = {
       nixos.expr =
-        if (args ? nixosConfig)
-        then ''(builtins.getFlake "${flake-location}").nixosConfigurations.${osConfig.networking.hostName}.options''
-        else "";
+        if (args ? nixosConfig) then
+          ''(builtins.getFlake "${flake-location}").nixosConfigurations.${osConfig.networking.hostName}.options''
+        else
+          "";
       home-manager.expr = ''(builtins.getFlake "${flake-location}").homeConfigurations."${user}".options'';
     };
-    diagnostics = {};
+    diagnostics = { };
   };
 
   home.packages = with pkgs; [

@@ -29,6 +29,6 @@
 
   nix = {
     nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
-    extraOptions = config.home-manager.users.${username}.nix.extraOptions;
+    # extraOptions = config.home-manager.users.${username}.nix.extraOptions;
   };
 }
