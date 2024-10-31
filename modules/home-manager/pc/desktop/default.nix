@@ -3,7 +3,8 @@
   pkgs,
   config,
   ...
-}: {
+}:
+{
   imports = [
     #./programs/steam.nix
 
@@ -12,6 +13,8 @@
     ./sway
     ./hyprland
     # ./kde.nix
+
+    ./notifications
   ];
 
   options.desktop.enable = lib.mkEnableOption "Enable desktop config";
