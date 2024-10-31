@@ -2,7 +2,8 @@
   config,
   lib,
   ...
-}: {
+}:
+{
   imports = [
     ./hardware
     ./input
@@ -13,7 +14,6 @@
     ./davmail.nix
     ./flatpak.nix
     ./oneapi.nix
-    ./secrets.nix
     ./ssh.nix
     ./tlp.nix
     ./ppd.nix
@@ -23,7 +23,6 @@
 
   davmail.enable = lib.mkDefault false;
   flatpak.enable = lib.mkDefault config.xdg.portal.enable;
-  secrets.enable = lib.mkDefault true;
   oneapi.enable = lib.mkDefault false;
   # oneapi.enable = lib.mkDefault true;
   ssh.enable = lib.mkDefault true;
