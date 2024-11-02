@@ -30,11 +30,11 @@
 
   environment = {
     # Enable shells
-    shells = with pkgs; [
-      bash
-      nushell
-      zsh
-    ];
+    # shells = with pkgs; [
+    #   bash
+    #   nushell
+    #   zsh
+    # ];
     pathsToLink = [ "/share/zsh" ];
   };
 }
