@@ -1,4 +1,9 @@
-{ lib, config, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 {
   imports = [
     # ./dprint
@@ -19,10 +24,13 @@
     ./zellij.nix
   ];
 
-  options.shell = lib.mkOption {
-    type = lib.types.str;
-    default = "bash";
-    description = "Choose which shell should be configured for the user";
+  options = {
+    shell = lib.mkOption {
+      type = lib.types.str;
+      default = "bash";
+      description = "Choose which shell should be configured for the user";
+    };
+    programs.bash.package = lib.mkPackageOption pkgs "bash" { };
   };
 
   config = {
