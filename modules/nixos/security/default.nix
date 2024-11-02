@@ -9,7 +9,7 @@
     ./fingerprint.nix
     ./rssh.nix
     ./secrets.nix
-    ./tpm.nix
+    ./tpm
     ./yubikey
   ];
 
