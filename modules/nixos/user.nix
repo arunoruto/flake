@@ -16,7 +16,11 @@
     users.${username} = {
       isNormalUser = true;
       # hashedPasswordFile = config.sops.secrets."passwords/${username}".path;
-      shell = pkgs.zsh;
+      # shell = pkgs.${config.home-manager.users.${username}.shell};
+      shell =
+        config.home-manager.users.${username}.programs.${
+          config.home-manager.users.${username}.shell
+        }.package;
       description = "Mirza";
       extraGroups = [
         "dialout"
@@ -30,6 +34,7 @@
         "render"
         "input"
         "uinput"
+        "tss" # tss group has access to TPM devices
       ];
     };
   };
