@@ -1,12 +1,4 @@
-{ config, ... }:
-let
-  flavour = "macchiato";
-  catppuccin-starship = "";
-in
-#catppuccin-starship = builtins.fetchGit {
-#  url = "https://github.com/catppuccin/starship";
-#  ref = "main";
-#};
+{ config, lib, ... }:
 {
   imports = [
     ./definitions
@@ -14,7 +6,9 @@ in
 
   programs.starship = {
     enable = true;
-    enableZshIntegration = config.programs.zsh.enable;
+    enableBashIntegration = lib.mkDefault config.programs.bash.enable;
+    enableNushellIntegration = lib.mkDefault config.programs.nushell.enable;
+    enableZshIntegration = lib.mkDefault config.programs.zsh.enable;
     settings = {
       format = "$hostname$directory$character";
       # format = "$directory";
@@ -35,8 +29,6 @@ in
         truncation_symbol = "../";
         style = "bold lavender";
       };
-      #palette = "catppuccin_${flavour}";
     };
-    #// builtins.fromTOML (builtins.readFile(catppuccin-starship + /palettes/${flavour}.toml));
   };
 }

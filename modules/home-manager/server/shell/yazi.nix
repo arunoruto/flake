@@ -11,8 +11,8 @@
     programs.yazi = {
       enable = true;
       # package = pkgs.unstable.yazi;
-      enableNushellIntegration = config.programs.nushell.enable;
-      enableZshIntegration = config.programs.zsh.enable;
+      enableNushellIntegration = lib.mkDefault config.programs.nushell.enable;
+      enableZshIntegration = lib.mkDefault config.programs.zsh.enable;
       settings = {
         plugin = {
           prepend_previewers = [

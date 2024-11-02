@@ -4,6 +4,13 @@
   pkgs,
   ...
 }:
+let
+
+  shellAliases = {
+    cat = "bat -pp";
+    less = "bat --paging=always";
+  };
+in
 {
   options.bat.enable = lib.mkEnableOption "Enable cat rust alternative";
 
@@ -25,11 +32,12 @@
         ];
       };
 
-      zsh = {
-        shellAliases = {
-          cat = "bat -pp";
-          less = "bat --paging=always";
-        };
+      zsh = lib.mkIf config.programs.zsh.enable {
+        inherit shellAliases;
+      };
+
+      nushell = lib.mkIf config.programs.nushell.enable {
+        inherit shellAliases;
       };
     };
   };
