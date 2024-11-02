@@ -1,5 +1,6 @@
 {
   lib,
+  pkgs,
   config,
   ...
 }:
@@ -8,18 +9,21 @@
     ./fingerprint.nix
     ./rssh.nix
     ./secrets.nix
+    ./tpm.nix
     ./yubikey
   ];
 
   fingerprint.enable = lib.mkDefault false;
   rssh.enable = lib.mkDefault (!config.yubikey.enable && config.ssh.enable);
   secrets.enable = lib.mkDefault true;
+  tpm.enable = lib.mkOptionDefault false;
   yubikey = {
-    enable = lib.mkDefault false;
+    enable = lib.mkOptionDefault false;
     identifiers = { };
   };
 
   security = {
     polkit.enable = true;
+    sudo.package = pkgs.sudo.override { withInsults = true; };
   };
 }
