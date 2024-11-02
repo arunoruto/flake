@@ -29,6 +29,7 @@
         gnome.pomodoro
         gnome.gnome-remote-desktop
         gnome3.gnome-tweaks
+        gnome.zenity
       ];
       # Excluding some GNOME applications from the default install
       gnome.excludePackages =
