@@ -8,6 +8,9 @@
   image,
   ...
 }:
+let
+  shell = config.home-manager.users.${username}.shell;
+in
 {
   sops.secrets."passwords/${username}".neededForUsers = true;
 
@@ -17,10 +20,7 @@
       isNormalUser = true;
       # hashedPasswordFile = config.sops.secrets."passwords/${username}".path;
       # shell = pkgs.${config.home-manager.users.${username}.shell};
-      shell =
-        config.home-manager.users.${username}.programs.${
-          config.home-manager.users.${username}.shell
-        }.package;
+      shell = config.home-manager.users.${username}.programs.${shell}.package;
       description = "Mirza";
       extraGroups = [
         "dialout"
@@ -41,5 +41,10 @@
 
   programs.zsh.enable = true;
 
-  environment.sessionVariables.FLAKE = "/home/${username}/.config/flake";
+  environment = {
+    sessionVariables.FLAKE = "/home/${username}/.config/flake";
+    shells = [
+      config.users.users.${username}.shell
+    ];
+  };
 }
