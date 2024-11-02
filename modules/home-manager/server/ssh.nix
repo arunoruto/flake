@@ -25,9 +25,9 @@ in
         hublab = {
           host = "gitlab.com github.com";
           identitiesOnly = false;
-          identityFile = [
-            "~/.ssh/id_sops"
-          ];
+          # identityFile = [
+          #   "~/.ssh/id_sops"
+          # ];
         };
         ultron-tail = {
           host = "ultron.tail";
