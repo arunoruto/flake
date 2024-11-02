@@ -32,9 +32,9 @@ in
     yubikey.custom.enable = lib.mkDefault false;
 
     environment.systemPackages = with pkgs; [
+      pam_u2f
       yubioath-flutter
       yubikey-manager
-      pam_u2f
     ];
 
     services = {
