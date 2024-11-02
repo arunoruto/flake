@@ -5,6 +5,7 @@
 }:
 {
   tinypc.enable = true;
+  tpm.enable = true;
 
   #efi.enable = false;
   #grub.enable = true;
