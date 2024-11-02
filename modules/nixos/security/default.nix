@@ -24,6 +24,7 @@
 
   security = {
     polkit.enable = true;
-    sudo.package = pkgs.sudo.override { withInsults = true; };
+    sudo.package =
+      if config.tinypc.enable then pkgs.sudo else pkgs.sudo.override { withInsults = true; };
   };
 }
