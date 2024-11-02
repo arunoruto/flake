@@ -5,5 +5,5 @@ pkgs: {
   candy-icons = pkgs.callPackage ./candy-icons/package.nix { };
   mstm = pkgs.callPackage ./mstm/parallel.nix { };
   zen-browser = pkgs.callPackage ./zen-browser/package.nix { };
-  isis = pkgs.callPackage ./isis/package.nix { };
+  # isis = pkgs.callPackage ./isis/package.nix { };
 }

@@ -21,7 +21,7 @@ stdenvNoCC.mkDerivation {
   # };
   src = builtins.fetchTarball {
     url = "https://anaconda.org/usgs-astrogeology/${pname}/${version}/download/linux-64/${pname}-${version}-0.tar.bz2";
-    sha256 = "";
+    sha256 = "sha256:0l910hqwrnd6c9zyc031x2iw1ji07amhs82g0c67lyxcj59nk1k7";
   };
 
   nativeBuildInputs = [
