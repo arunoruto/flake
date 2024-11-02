@@ -165,7 +165,8 @@
               };
               modules = [
                 inputs.nur.hmModules.nur
-                ./modules/home-manager/home.nix
+                # ./modules/home-manager/home.nix
+                ./homes/${user}
                 inputs.stylix.homeManagerModules.stylix
                 {
                   theming = {

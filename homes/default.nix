@@ -53,7 +53,8 @@ in
     # users in modules.system.users
     # the system expects user directories to be found in the present
     # directory, or will exit with directory not found errors
-    users.${username} = import ../modules/home-manager/home.nix;
+    # users.${username} = import ../modules/home-manager/home.nix;
+    users.${username} = import ./${username};
 
     # users = genAttrs config.modules.system.users (name: ./${name});
   };

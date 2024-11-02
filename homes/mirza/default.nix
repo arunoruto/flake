@@ -1,5 +1,8 @@
 {
   imports = [
-    ../../home-manager/home.nix
+    ../../modules/home-manager/home.nix
   ];
+
+  shell = "nushell";
+  zsh.enable = true;
 }
