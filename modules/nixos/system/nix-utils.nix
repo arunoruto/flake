@@ -19,6 +19,7 @@
 
     # Auto clean system
     nix = {
+      package = pkgs.unstable.nix;
       settings = {
         # build in a sandbox
         sandbox = true;
