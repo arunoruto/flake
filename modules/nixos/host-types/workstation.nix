@@ -10,6 +10,7 @@
     latex.enable = true;
     programming.enable = true;
     upgrades.enable = true;
-    yubikey.enable = true;
+    tpm.enable = lib.mkDefault true;
+    yubikey.enable = lib.mkDefault true;
   };
 }

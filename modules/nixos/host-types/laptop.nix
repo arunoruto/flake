@@ -9,6 +9,7 @@
   config = lib.mkIf config.laptop.enable {
     latex.enable = true;
     programming.enable = true;
-    yubikey.enable = true;
+    tpm.enable = lib.mkDefault true;
+    yubikey.enable = lib.mkDefault true;
   };
 }
