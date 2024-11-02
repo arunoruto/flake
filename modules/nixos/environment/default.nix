@@ -1,6 +1,6 @@
 {
   lib,
-  config,
+  pkgs,
   ...
 }:
 {
@@ -27,4 +27,14 @@
   amd.enable = lib.mkDefault false;
   intel.enable = lib.mkDefault false;
   nvidia.enable = lib.mkDefault false;
+
+  environment = {
+    # Enable shells
+    shells = with pkgs; [
+      bash
+      nushell
+      zsh
+    ];
+    pathsToLink = [ "/share/zsh" ];
+  };
 }
