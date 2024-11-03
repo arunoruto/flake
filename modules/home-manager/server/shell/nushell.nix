@@ -2,8 +2,9 @@
   config,
   lib,
   pkgs,
+  osConfig,
   ...
-}:
+}@args:
 {
   options.nushell.enable = lib.mkEnableOption "Configure nushell for you";
 
@@ -116,7 +117,15 @@
           ''
           + lib.optionalString config.skim.enable ''
             plugin add ${lib.getExe pkgs.unstable.nushellPlugins.skim}
-          '';
+          ''
+          + (
+            let
+              path = osConfig.services.ssh-tpm-agent.userProxyPath;
+            in
+            lib.optionalString ((args ? nixosConfig) && (path != "")) ''
+              $env.SSH_AUTH_SOCK = ($env.XDG_RUNTIME_DIR + '/ssh-tpm-agent.sock')
+            ''
+          );
       };
     };
 

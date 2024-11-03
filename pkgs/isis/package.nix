@@ -1,31 +1,33 @@
 {
   lib,
-  stdenvNoCC,
-  # fetchFromGitHub,
-  conda,
+  stdenv,
+  makeWrapper,
+
+  # runtime
+  xercesc,
 }:
 let
   pname = "isis";
   version = "8.3.0";
 
 in
-stdenvNoCC.mkDerivation {
+stdenv.mkDerivation {
   inherit pname;
   inherit version;
 
-  # src = fetchFromGitHub {
-  #   owner = "DOI-USGS";
-  #   repo = pname;
-  #   rev = version;
-  #   hash = "sha256-84DuZhzwqdE1ZFv5ytg4XxveuHXacFelYC0ERlExLS4=";
-  # };
   src = builtins.fetchTarball {
     url = "https://anaconda.org/usgs-astrogeology/${pname}/${version}/download/linux-64/${pname}-${version}-0.tar.bz2";
-    sha256 = "sha256:0l910hqwrnd6c9zyc031x2iw1ji07amhs82g0c67lyxcj59nk1k7";
+    sha256 = "sha256:0b0wlb9z9p5liws38bhbjvjpb2603355bwbkgv5x81p7pyf4wkdi";
   };
 
+  buildInputs = [
+    xercesc
+  ];
+
   nativeBuildInputs = [
-    conda
+    # conda
+    # xercesc
+    makeWrapper
   ];
 
   buildPhase = ''
@@ -35,12 +37,20 @@ stdenvNoCC.mkDerivation {
   installPhase = ''
     # runHook preInstall
 
-    # mkdir -p $out/share/icons/candy-icons
-    # cp -r . $out/share/icons/candy-icons
+    mkdir -p $out
+    cp -r . $out
     # gtk-update-icon-cache $out/share/icons/candy-icons
 
-    # runHook postInstall
+    runHook postInstall
   '';
+
+  postInstallPhase = ''
+    patchelf --set-rpath "${lib.makeLibraryPath [ xercesc ]}" $out/bin/isis2ascii
+  '';
+
+  # extraWrapProgramArgs = ''
+  #   --prefix LD_LIBRARY_PATH : $out/lib : ${lib.makeLibraryPath [ xercesc ]}
+  # '';
 
   meta = with lib; {
     homepage = "https://isis.astrogeology.usgs.gov";
