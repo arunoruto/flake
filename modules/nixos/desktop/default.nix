@@ -13,9 +13,7 @@
     ./sway.nix
   ];
 
-  options = {
-    desktop-environment.enable = lib.mkEnableOption "Enable desktop environment and window manager support";
-  };
+  options.desktop-environment.enable = lib.mkEnableOption "Enable desktop environment and window manager support";
 
   config = lib.mkIf config.desktop-environment.enable {
     # gnome.enable = lib.mkForce false;

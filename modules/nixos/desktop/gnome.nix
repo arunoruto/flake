@@ -17,7 +17,10 @@
           # gnome.mutter
         ];
       };
-      gnome.gnome-keyring.enable = true;
+      gnome = {
+        gnome-keyring.enable = true;
+        sushi.enable = true;
+      };
     };
 
     environment = {

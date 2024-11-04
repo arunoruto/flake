@@ -3,6 +3,7 @@
     ../../modules/home-manager/home.nix
   ];
 
-  shell = "nushell";
-  zsh.enable = true;
+  shell = "zsh";
+  # shell = "nushell";
+  # zsh.enable = true;
 }
