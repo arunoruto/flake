@@ -27,4 +27,8 @@
     sudo.package =
       if config.tinypc.enable then pkgs.sudo else pkgs.sudo.override { withInsults = true; };
   };
+
+  environment.systemPackages = with pkgs; [
+    clevis
+  ];
 }

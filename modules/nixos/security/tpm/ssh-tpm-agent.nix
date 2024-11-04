@@ -6,8 +6,7 @@
 }:
 let
   cfg = config.services.ssh-tpm-agent;
-  # socket = "/run/ssh-tpm-agent/socket";
-  socket = "/var/tmp/ssh-tpm-agent.sock";
+  proxy-set = lib.stringLength cfg.userProxyPath > 0;
 in
 {
   options.services.ssh-tpm-agent = {
@@ -20,6 +19,22 @@ in
     };
 
     package = lib.mkPackageOption pkgs "ssh-tpm-agent" { };
+
+    hostSocket = lib.mkOption {
+      type = lib.types.str;
+      # Change it to /run/ssh-tpm-agent/socket in the future
+      default = "/var/tmp/ssh-tpm-agent.sock";
+      description = ''
+        Location of the ssh-tpm-agent socket.
+      '';
+    };
+
+    userProxyPath = lib.mkOption {
+      type = lib.types.str;
+      # more default values can be added depending on the keyring enabled
+      default = if config.services.gnome.gnome-keyring.enable then "keyring/ssh" else "";
+      description = "Path relative to runtime root to be proxied to";
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -28,7 +43,13 @@ in
       pkcs11.enable = lib.mkDefault true;
     };
 
-    environment.systemPackages = [ cfg.package ];
+    environment = {
+      systemPackages = [ cfg.package ];
+      # Set variable for POSIX complient shells
+      extraInit = lib.optionalString proxy-set ''
+        export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-tpm-agent.sock"
+      '';
+    };
 
     systemd = {
       packages = [ cfg.package ];
@@ -68,7 +89,7 @@ in
           };
 
           serviceConfig = {
-            ExecStart = "${cfg.package}/bin/ssh-tpm-agent -d -l ${socket} --key-dir /etc/ssh";
+            ExecStart = "${cfg.package}/bin/ssh-tpm-agent -d -l ${cfg.hostSocket} --key-dir /etc/ssh";
             PassEnvironment = "SSH_AGENT_PID";
             KillMode = "process";
             Restart = "always";
@@ -85,7 +106,7 @@ in
           };
 
           socketConfig = {
-            ListenStream = socket;
+            ListenStream = cfg.hostSocket;
             SocketMode = "0600";
             Service = "ssh-tpm-agent.service";
           };
@@ -106,7 +127,8 @@ in
 
           serviceConfig = {
             Environment = "SSH_AUTH_SOCK=%t/ssh-tpm-agent.sock";
-            ExecStart = "${cfg.package}/bin/ssh-tpm-agent -d";
+            ExecStart =
+              "${cfg.package}/bin/ssh-tpm-agent -d" + lib.optionalString proxy-set " -A %t/${cfg.userProxyPath}";
             PassEnvironment = "SSH_AGENT_PID";
             SuccessExitStatus = "2";
             Type = "simple";
@@ -133,7 +155,7 @@ in
     };
 
     services.openssh.extraConfig = ''
-      HostKeyAgent ${socket}
+      HostKeyAgent ${cfg.hostSocket}
       HostKey /etc/ssh/ssh_tpm_host_ecdsa_key.pub
       HostKey /etc/ssh/ssh_tpm_host_rsa_key.pub
     '';

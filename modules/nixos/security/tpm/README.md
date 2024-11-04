@@ -1,4 +1,6 @@
-# Configure TPM with SSH
+# Configure TPM
+
+## with SSH
 
 There are a few methods on how to configure SSH using TPM.
 Many sources recommend to use `tpm2-tools`:
@@ -29,3 +31,7 @@ If the public key `.ssh/id_ecdsa.pub` is provided to GitHub, one can test it wit
 ```sh
 SSH_AUTH_SOCK=/run/user/1000/ssh-tpm-agent.sock ssh git@github.com
 ```
+
+## with Gnome Keyring
+
+https://221b.uk/gnome-login-using-u2f-security-tokens

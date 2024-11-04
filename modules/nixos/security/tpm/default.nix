@@ -15,6 +15,7 @@
     services.ssh-tpm-agent = {
       enable = true;
       package = pkgs.unstable.ssh-tpm-agent;
+      # userProxyPath = "yubikey-agent/yubikey-agent.sock";
     };
 
     security.tpm2 = {
@@ -25,9 +26,9 @@
     };
 
     environment = {
-      systemPackages = with pkgs.unstable; [
-        tpm2-tools
-      ];
+      # systemPackages = with pkgs.unstable; [
+      #   tpm2-tools
+      # ];
       sessionVariables = {
         # TSS2_LOG = "fapi+NONE";
         TPM2_PKCS11_TCTI = "tabrmd:";

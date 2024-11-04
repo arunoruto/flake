@@ -29,7 +29,7 @@
 
       # If a key is pluged in, prioritse the fprintd instead of a yubikey
       # sudo.rules.auth.fprintd.order = config.security.pam.services.sudo.rules.auth.u2f.order - 10;
-      # sudo.rules.auth.u2f.order = config.security.pam.services.sudo.rules.auth.fprintd.order + 10;
+      sudo.rules.auth.u2f.order = config.security.pam.services.sudo.rules.auth.fprintd.order + 10;
 
       # Enable gnome keyring in lightdm
       #security.pam.services.lightdm.enableGnomeKeyring = true;
