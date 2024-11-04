@@ -183,6 +183,16 @@
           );
 
       packages.${system} = import ./pkgs nixpkgs.legacyPackages.${system};
+      # packages.${system} = (
+      #   let
+      #     # pkgs = nixpkgs.legacyPackages.${system};
+      #     pkgs = import nixpkgs {
+      #       system = system;
+      #       config.allowUnfree = true;
+      #     };
+      #   in
+      #   import ./pkgs { inherit pkgs; }
+      # );
       overlays = import ./overlays { inherit inputs; };
 
       devShells.${system}.default =
