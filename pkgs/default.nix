@@ -13,16 +13,11 @@ pkgs: rec {
   mstm = pkgs.callPackage ./mstm/parallel.nix { };
   zen-browser = pkgs.callPackage ./zen-browser/package.nix { };
   isis = pkgs.callPackage ./isis/package.nix {
-    # embree = embree3;
-    # tnt = tnt126;
-    # jama = jama125;
-    # nanoflann = nanoflann132;
     inherit inja;
     inherit ale;
     inherit cspice;
     inherit csm;
   };
-  # embree3 = pkgs.callPackage ./isis/embree3.nix { };
   inja = pkgs.callPackage ./isis/inja.nix { };
   ale = pkgs.callPackage ./ale/package.nix { };
   cspice = pkgs.callPackage ./cspice/package.nix { };
