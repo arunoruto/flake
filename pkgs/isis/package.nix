@@ -159,19 +159,11 @@ stdenv.mkDerivation {
     protobuf
     python3
     qt5.qtbase
-    # qt5.qtgui
     qt5.qtmultimedia
-    # qt5.qtnetwork
-    # qt5.qtopengl
-    # qt5.qtprintsupport
-    # qt5.qtqml
     qt5.qtquick3d
     qt5.qtscript
-    # qt5.qtsql
     qt5.qtsvg
-    # qt5.qttest
     qt5.qtwebchannel
-    # qt5.qtxml
     suitesparse
     superlu
     tnt126
@@ -181,17 +173,18 @@ stdenv.mkDerivation {
 
   buildInputs = [
     geos
-    # tnt126
     xercesc
   ];
 
-  phases = [
-    "unpackPhase"
-    "preBuild"
-    "buildPhase"
-    "installPhase"
-  ];
-  # configurePhase = ":";
+  # phases = [
+  #   "unpackPhase"
+  #   "preBuild"
+  #   "buildPhase"
+  #   "preInstall"
+  #   "installPhase"
+  # ];
+  dontWrapQtApps = true;
+  configurePhase = ":";
 
   preBuild = ''
     mkdir -p build/lib install
@@ -199,29 +192,24 @@ stdenv.mkDerivation {
   '';
 
   buildPhase = ''
-    # runHook preBuild
+    runHook preBuild
     cd ./build
     cmake -DJP2KFLAG=OFF -DBUILDTESTS=OFF -DPYBINDINGS=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$(pwd)/../install -GNinja ../isis
   '';
 
-  preInstallPhase = ''
+  preInstall = ''
     substituteInPlace \
       ../isis/src/base/objs/EmbreeTargetShape/EmbreeTargetShape.cpp \
       --replace-fail "isinf" "std::isinf"
-    # cp IsisPreferences ..
     export ISISROOT=$(pwd)
   '';
 
   installPhase = ''
-    runHook preInstallPhase
-    ninja install
+    runHook preInstall
 
     mkdir $out
-    cp -r . $out
-    cp -r ../install $out
-    ls -la ../install
-    ls -la ..
-    ls -la .
+    ninja install
+    cp -r ../install/* $out
   '';
 
   meta = with lib; {
