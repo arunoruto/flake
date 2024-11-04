@@ -111,6 +111,8 @@
         switch-to-application-9 = [ ];
       };
       "org/gnome/desktop/wm/keybindings" = {
+        switch-applications = [ "<Super>Tab" ];
+        switch-windows = [ "<Alt>Tab" ];
         close = [
           "<Alt>F4"
           "<Super><Shift>q"
