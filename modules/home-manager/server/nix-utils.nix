@@ -40,6 +40,7 @@ in
 
       unstable.nh
       nix-du
+      nix-index # for developing nixpkgs
       nix-tree
       nix-output-monitor
       nvd

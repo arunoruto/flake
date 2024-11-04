@@ -53,6 +53,7 @@
           unsetopt BEEP
 
           # Enable autocomplete for . and ..
+          autoload -Uz compinit && compinit
           zstyle ':completion:*' special-dirs true
           zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
           zstyle ':completion:*' list-colors "''${(s.:.)LS_COLORS}"

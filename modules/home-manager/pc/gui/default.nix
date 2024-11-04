@@ -28,6 +28,7 @@
 
     home.packages = with pkgs; [
       ladybird
+      # unstable.spacedrive
     ];
 
     # home.sessionVariables = {

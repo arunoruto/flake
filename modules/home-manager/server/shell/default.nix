@@ -7,7 +7,7 @@
 {
   imports = [
     # ./dprint
-    ./nvim
+    # ./nvim
     ./helix
     ./starship
     ./tmux

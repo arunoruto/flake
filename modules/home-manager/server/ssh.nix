@@ -21,6 +21,8 @@ in
   config = lib.mkIf config.ssh.enable {
     programs.ssh = {
       enable = true;
+      # Required for yubikey-agent
+      addKeysToAgent = "yes";
       matchBlocks = {
         hublab = {
           host = "gitlab.com github.com";
@@ -36,10 +38,6 @@ in
           # forwardX11 = "yes";
         };
       };
-      extraConfig = ''
-        # Required for yubikey-agent
-        AddKeysToAgent yes
-      '';
     };
 
     home.file = { } // yubikeyPublicKeyEntries;
