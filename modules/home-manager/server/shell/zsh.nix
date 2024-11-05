@@ -18,6 +18,7 @@
           grep = "rg";
           tss = "tailscale switch $(tailscale switch --list | tail -n +2 | fzf | tr -s ' ' | cut -d ' ' -f1)";
           tsr = ''bash -c "sudo systemctl restart tailscaled.service"'';
+          zsh-bench = ''${lib.getExe pkgs.hyperfine} --warmup 3 "zsh -i -c exit"'';
           #tsen = "tailscale status | grep 'offers exit node' | fzf | tr -s ' ' | cut -d' ' -f2";
         };
         sessionVariables = {
@@ -44,6 +45,9 @@
         # defaultKeymap = "vim";
 
         initExtra = ''
+          # Enable zprof, but don't execute it on each startup
+          zmodload zsh/zprof
+
           # Variables
           export LS_COLORS="$(vivid generate gruvbox-dark)";
           export COPILOT_API_KEY="$(cat ${config.sops.secrets."tokens/copilot".path})"

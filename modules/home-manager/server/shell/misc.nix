@@ -15,6 +15,7 @@ let
   #   };
 
   enableBashIntegration = lib.mkDefault config.programs.bash.enable;
+  enableFishIntegration = lib.mkDefault config.programs.fish.enable;
   enableNushellIntegration = lib.mkDefault config.programs.nushell.enable;
   enableZshIntegration = lib.mkDefault config.programs.zsh.enable;
 in
@@ -30,6 +31,7 @@ in
     carapace = {
       enable = true;
       inherit enableBashIntegration;
+      inherit enableFishIntegration;
       inherit enableNushellIntegration;
       inherit enableZshIntegration;
     };
@@ -69,12 +71,15 @@ in
         "--disable-up-arrow"
       ];
       inherit enableBashIntegration;
+      inherit enableFishIntegration;
       inherit enableNushellIntegration;
       inherit enableZshIntegration;
     };
 
     thefuck = {
       enable = true;
+      inherit enableBashIntegration;
+      inherit enableFishIntegration;
       inherit enableNushellIntegration;
       inherit enableZshIntegration;
     };
@@ -84,6 +89,8 @@ in
       options = [
         "--cmd cd"
       ];
+      inherit enableBashIntegration;
+      inherit enableFishIntegration;
       inherit enableNushellIntegration;
       inherit enableZshIntegration;
     };
@@ -91,6 +98,8 @@ in
     direnv = {
       enable = true;
       nix-direnv.enable = true;
+      inherit enableBashIntegration;
+      # inherit enableFishIntegration;
       inherit enableNushellIntegration;
       inherit enableZshIntegration;
     };

@@ -4,6 +4,14 @@
   config,
   ...
 }:
+let
+  shells = [
+    # "bash"
+    "fish"
+    "nushell"
+    "zsh"
+  ];
+in
 {
   imports = [
     # ./dprint
@@ -16,12 +24,14 @@
     ./editorconfig.nix
     ./fzf.nix
     ./misc.nix
-    ./nushell.nix
     ./serpl.nix
     ./skim.nix
     ./yazi.nix
-    ./zsh.nix
     ./zellij.nix
+
+    ./fish.nix
+    ./nushell.nix
+    ./zsh.nix
   ];
 
   options = {
@@ -33,15 +43,20 @@
     programs.bash.package = lib.mkPackageOption pkgs "bash" { };
   };
 
-  config = {
-    bat.enable = lib.mkDefault true;
-    helix.enable = lib.mkDefault true;
-    serpl.enable = lib.mkDefault true;
-    skim.enable = lib.mkDefault true;
-    yazi.enable = lib.mkDefault true;
-    zellij.enable = lib.mkDefault true;
+  config =
+    {
+      bat.enable = lib.mkDefault true;
+      helix.enable = lib.mkDefault true;
+      serpl.enable = lib.mkDefault true;
+      skim.enable = lib.mkDefault true;
+      yazi.enable = lib.mkDefault true;
+      zellij.enable = lib.mkDefault true;
 
-    nushell.enable = lib.mkDefault (if config.shell == "nushell" then true else false);
-    zsh.enable = lib.mkDefault (if config.shell == "zsh" then true else false);
-  };
+      # fish.enable = lib.mkDefault (if config.shell == "fish" then true else false);
+      # nushell.enable = lib.mkDefault (if config.shell == "nushell" then true else false);
+      # zsh.enable = lib.mkDefault (if config.shell == "zsh" then true else false);
+    }
+    // lib.genAttrs shells (
+      sh: lib.genAttrs [ "enable" ] (val: lib.mkDefault (if config.shell == sh then true else false))
+    );
 }
