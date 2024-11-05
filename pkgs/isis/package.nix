@@ -3,10 +3,14 @@
   stdenv,
   fetchFromGitHub,
   fetchurl,
+  autoPatchelfHook,
+  patchelf,
 
   # build
   cmake,
   ninja,
+
+  # runtime
   ale,
   armadillo,
   blas,
@@ -17,6 +21,7 @@
   doxygen,
   eigen,
   embree,
+  geos,
   gsl,
   gtest,
   hdf5,
@@ -25,8 +30,10 @@
   lapack,
   libgeotiff,
   libtiff,
+  libsForQt5,
   nanoflann,
   nn,
+  opencv,
   protobuf,
   python3,
   pcl,
@@ -36,12 +43,8 @@
   tnt,
   swig,
   xalanc,
-
-  # runtime
-  geos,
-  opencv,
   xercesc,
-  libsForQt5,
+
 }:
 let
   pname = "isis";
@@ -130,6 +133,11 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     cmake
     ninja
+    autoPatchelfHook
+    patchelf
+  ];
+
+  buildInputs = [
     ale
     armadillo
     blas
@@ -140,6 +148,7 @@ stdenv.mkDerivation {
     doxygen
     eigen
     embree3
+    geos
     gsl
     gtest
     hdf5
@@ -169,47 +178,38 @@ stdenv.mkDerivation {
     tnt126
     swig
     xalanc
-  ];
-
-  buildInputs = [
-    geos
     xercesc
   ];
 
-  # phases = [
-  #   "unpackPhase"
-  #   "preBuild"
-  #   "buildPhase"
-  #   "preInstall"
-  #   "installPhase"
-  # ];
   dontWrapQtApps = true;
-  configurePhase = ":";
+
+  cmakeFlags = [
+    "-GNinja"
+    "-DJP2KFLAG=OFF"
+    "-DBUILDTESTS=OFF"
+    "-DPYBINDINGS=OFF"
+    "-S../isis"
+    "-Bbuild"
+  ];
+
+  preConfigure = ''
+    mkdir build
+    export ISISROOT="$(pwd)"
+  '';
 
   preBuild = ''
-    mkdir -p build/lib install
-    export ISISROOT=$(pwd)
-  '';
-
-  buildPhase = ''
-    runHook preBuild
-    cd ./build
-    cmake -DJP2KFLAG=OFF -DBUILDTESTS=OFF -DPYBINDINGS=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$(pwd)/../install -GNinja ../isis
-  '';
-
-  preInstall = ''
     substituteInPlace \
       ../isis/src/base/objs/EmbreeTargetShape/EmbreeTargetShape.cpp \
       --replace-fail "isinf" "std::isinf"
+    cd build
     export ISISROOT=$(pwd)
   '';
 
-  installPhase = ''
-    runHook preInstall
-
-    mkdir $out
-    ninja install
-    cp -r ../install/* $out
+  preFixup = ''
+    # Sensorbuild needs to be linked again!
+    for entry in $out/lib/*.so; do
+      patchelf --set-rpath "$out/lib" $entry
+    done
   '';
 
   meta = with lib; {
