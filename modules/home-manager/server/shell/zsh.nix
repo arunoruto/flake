@@ -1,5 +1,8 @@
 # Got autocompletions? Put them under ~/.nix-profile/share/zsh/site-functions
 # tailscale completion zsh &> ~/.nix-profile/share/zsh/site-functions/_tailscale
+# https://medium.com/@dannysmith/little-thing-2-speeding-up-zsh-f1860390f92
+# https://blog.mattclemente.com/2020/06/26/oh-my-zsh-slow-to-load
+# https://github.com/qoomon/zsh-lazyload
 {
   config,
   pkgs,
