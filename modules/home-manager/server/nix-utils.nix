@@ -28,9 +28,16 @@ in
   };
 
   config = lib.mkIf config.nix-utils.enable {
-    # nix.extraOptions = ''
-    #   trusted-users = root ${user}
-    # '';
+    nix = {
+      package = lib.mkForce pkgs.unstable.nix;
+      settings.experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
+      # extraOptions = ''
+      #   trusted-users = root ${user}
+      # '';
+    };
 
     home.packages = with pkgs; [
       alejandra
