@@ -15,6 +15,7 @@
         shellAliases = {
           grep = "rg";
           tss = "tailscale switch $(tailscale switch --list | tail -n +2 | fzf | tr -s ' ' | cut -d ' ' -f1)";
+          fish-bench = ''${lib.getExe pkgs.hyperfine} --warmup 3 "fish -i -c exit"'';
         };
         interactiveShellInit = ''
           # Disable greeting
