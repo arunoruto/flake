@@ -3,8 +3,9 @@
   lib,
   pkgs,
   user,
+  osConfig,
   ...
-}:
+}@args:
 let
   default = {
     nixpkgs.expr = "import <nixpkgs> { }";
@@ -15,6 +16,30 @@ let
     };
     diagnostics.supress = [ ];
   };
+
+  nix-repl = pkgs.writeScriptBin "nix-repl" (
+    ''
+      #!${lib.getExe pkgs.expect}
+
+      spawn nix repl
+      expect {
+        "Welcome to Nix" {}
+        -r "Nix (\\d+\\.\\d+\\.\\d+)" {}
+      }
+      send -- ":lf ${config.home.sessionVariables.FLAKE}\r"
+      expect -r "Added (\\d+) variables."
+      send -- ":lf nixpkgs\r"
+      expect -r "Added (\\d+) variables."
+      send -- "pkgs = legacyPackages.${pkgs.system}\r"
+      send -- "hm = homeConfigurations.${config.home.username}\r"
+    ''
+    + lib.optionalString (args ? nixosConfig) ''
+      send -- "os = nixosConfigurations.${osConfig.networking.hostName}\r"
+    ''
+    + ''
+      interact
+    ''
+  );
 in
 {
   options = {
@@ -39,19 +64,23 @@ in
       # '';
     };
 
-    home.packages = with pkgs; [
-      alejandra
-      nixd
-      # nixfmt
-      unstable.nixfmt-rfc-style
+    home.packages =
+      (with pkgs; [
+        alejandra
+        nixd
+        # nixfmt
+        unstable.nixfmt-rfc-style
 
-      unstable.nh
-      nix-du
-      nix-index # for developing nixpkgs
-      nix-tree
-      nix-output-monitor
-      nvd
-      unstable.nixpkgs-review
-    ];
+        unstable.nh
+        nix-du
+        nix-index # for developing nixpkgs
+        nix-tree
+        nix-output-monitor
+        nvd
+        unstable.nixpkgs-review
+      ])
+      ++ [
+        nix-repl # my nix repl wrapper
+      ];
   };
 }
