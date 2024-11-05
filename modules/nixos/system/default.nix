@@ -1,5 +1,5 @@
 {
-  # pkgs,
+  pkgs,
   lib,
   # image,
   # scheme,
@@ -19,6 +19,11 @@
   nix-utils.enable = lib.mkDefault true;
   secureboot.enable = lib.mkDefault false;
   upgrades.enable = lib.mkDefault false;
+
+  environment.systemPackages = with pkgs; [
+    lsof
+    lshw
+  ];
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
