@@ -4,4 +4,6 @@
   ];
 
   shell = "zsh";
+  nushell.enable = true;
+  fish.enable = true;
 }
