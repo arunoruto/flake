@@ -32,11 +32,16 @@ in
         ];
       };
 
-      zsh = lib.mkIf config.programs.zsh.enable {
+      bash = lib.mkIf config.programs.bash.enable {
         inherit shellAliases;
       };
-
+      fish = lib.mkIf config.programs.fish.enable {
+        inherit shellAliases;
+      };
       nushell = lib.mkIf config.programs.nushell.enable {
+        inherit shellAliases;
+      };
+      zsh = lib.mkIf config.programs.zsh.enable {
         inherit shellAliases;
       };
     };
