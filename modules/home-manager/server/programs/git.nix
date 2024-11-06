@@ -1,3 +1,5 @@
+# https://www.gerritcodereview.com/
+# https://meldmerge.org/
 { pkgs, ... }:
 let
   glab-pkg = pkgs.unstable.glab;
