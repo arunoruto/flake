@@ -97,6 +97,14 @@ in
       enable = true;
     };
 
+    # vivid = {
+    #   enable = true;
+    #   theme = "gruvbox-dark";
+    #   inherit enableBashIntegration;
+    #   inherit enableFishIntegration;
+    #   inherit enableNushellIntegration;
+    #   inherit enableZshIntegration;
+    # };
 
     zoxide = {
       enable = true;
