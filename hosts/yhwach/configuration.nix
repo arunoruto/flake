@@ -1,6 +1,8 @@
 {
+  workstation.enable = true;
   nvidia.enable = true;
-  netbird.enable = true;
+  # netbird.enable = true;
+  fingerprint.enable = true;
 
   # Enable lanzaboote for secure-boot
   secureboot.enable = true;
