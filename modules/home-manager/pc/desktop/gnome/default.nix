@@ -23,10 +23,10 @@
         appindicator
         emoji-copy
         # focus
-        # spotify-controller
         tailscale-status
         # tiling-shell
         transparent-top-bar
+        transparent-top-bar-adjustable-transparency
       ])
       ++ (with pkgs.unstable.gnomeExtensions; [
         tiling-shell
