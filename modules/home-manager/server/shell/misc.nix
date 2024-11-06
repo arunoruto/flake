@@ -120,5 +120,6 @@ in
 
   home.packages = with pkgs; [
     devenv
+    up
   ];
 }
