@@ -1,4 +1,4 @@
-{ user, ... }:
+{ config, user, ... }:
 {
   imports = [
     ./hosts
@@ -13,6 +13,9 @@
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
+
+  # For development
+  # programs.home-manager.path = "/home/${config.home.username}/Development/home-manager";
 
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
