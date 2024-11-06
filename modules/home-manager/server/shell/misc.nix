@@ -21,6 +21,17 @@ let
 in
 {
   programs = {
+    atuin = {
+      enable = true;
+      flags = [
+        "--disable-up-arrow"
+      ];
+      inherit enableBashIntegration;
+      inherit enableFishIntegration;
+      inherit enableNushellIntegration;
+      inherit enableZshIntegration;
+    };
+
     # Bash
     bash.initExtra = ''eval "$(direnv hook bash)"'';
 
@@ -29,6 +40,27 @@ in
 
     # completion manager
     carapace = {
+      enable = true;
+      inherit enableBashIntegration;
+      inherit enableFishIntegration;
+      inherit enableNushellIntegration;
+      inherit enableZshIntegration;
+    };
+
+    direnv = {
+      enable = true;
+      nix-direnv.enable = true;
+      inherit enableBashIntegration;
+      # inherit enableFishIntegration;
+      inherit enableNushellIntegration;
+      inherit enableZshIntegration;
+    };
+
+    fd = {
+      enable = true;
+    };
+
+    thefuck = {
       enable = true;
       inherit enableBashIntegration;
       inherit enableFishIntegration;
@@ -61,28 +93,10 @@ in
     };
     # nushell.shellAliases = lib.mkIf config.programs.nushell.enable aliases;
 
-    fd = {
+    ripgrep = {
       enable = true;
     };
 
-    atuin = {
-      enable = true;
-      flags = [
-        "--disable-up-arrow"
-      ];
-      inherit enableBashIntegration;
-      inherit enableFishIntegration;
-      inherit enableNushellIntegration;
-      inherit enableZshIntegration;
-    };
-
-    thefuck = {
-      enable = true;
-      inherit enableBashIntegration;
-      inherit enableFishIntegration;
-      inherit enableNushellIntegration;
-      inherit enableZshIntegration;
-    };
 
     zoxide = {
       enable = true;
@@ -93,19 +107,6 @@ in
       inherit enableFishIntegration;
       inherit enableNushellIntegration;
       inherit enableZshIntegration;
-    };
-
-    direnv = {
-      enable = true;
-      nix-direnv.enable = true;
-      inherit enableBashIntegration;
-      # inherit enableFishIntegration;
-      inherit enableNushellIntegration;
-      inherit enableZshIntegration;
-    };
-
-    ripgrep = {
-      enable = true;
     };
   };
 
