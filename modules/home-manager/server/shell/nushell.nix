@@ -22,7 +22,7 @@
         environmentVariables = {
           # PATH = "$env.PATH | append ($env.HOME + '/.bin')";
           TEST = "1234";
-          LS_COLORS = "(vivid generate gruvbox-dark)";
+          LS_COLORS = lib.mkDefault "(vivid generate gruvbox-dark)";
         };
 
         configFile.text =
