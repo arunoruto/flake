@@ -15,7 +15,7 @@
         package = pkgs.unstable.nushell;
         shellAliases = {
           grep = "rg";
-          # tss = "tailscale switch (tailscale switch --list | tail -n +2 | fzf | tr -s ' ' | cut -d ' ' -f1)";
+          nu-bench = ''${lib.getExe pkgs.hyperfine} --warmup 3 "nu -i -c exit"'';
           # tsr = ''bash -c "sudo systemctl restart tailscaled.service"'';
           #tsen = "tailscale status | grep 'offers exit node' | fzf | tr -s ' ' | cut -d' ' -f2";
         };
