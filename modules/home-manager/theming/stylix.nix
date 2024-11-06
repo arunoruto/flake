@@ -39,11 +39,6 @@
       enable = true;
       base16Scheme = lib.mkDefault "${pkgs.base16-schemes}/share/themes/${config.theming.scheme}.yaml";
       image = "${inputs.wallpapers}/${config.theming.image}";
-      # cursor = {
-      #   name = "catppuccin-macchiato-dark-cursors";
-      #   # package = pkgs.catppuccin-cursors.macchiatoDark;
-      #   package = pkgs.apple-cursor;
-      # };
       targets = {
         nixvim.enable = false;
         vscode.enable = true;

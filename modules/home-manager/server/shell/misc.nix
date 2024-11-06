@@ -62,6 +62,7 @@ in
 
     thefuck = {
       enable = true;
+      enableInstantMode = true;
       inherit enableBashIntegration;
       inherit enableFishIntegration;
       inherit enableNushellIntegration;
@@ -119,6 +120,7 @@ in
   };
 
   home.packages = with pkgs; [
+    broot
     devenv
     up
   ];
