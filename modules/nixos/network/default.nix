@@ -1,3 +1,4 @@
+{ config, ... }:
 {
   imports = [
     # ./dns.nix
@@ -11,7 +12,10 @@
 
   networking = {
     # Enable networking
-    networkmanager.enable = true;
+    networkmanager = {
+      enable = true;
+      wifi.powersave = config.laptop.enable;
+    };
     firewall = {
       # Disable the firewall altogether.
       # networking.firewall.enable = false;
