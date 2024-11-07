@@ -30,7 +30,7 @@ in
         }
       ];
       extraConfig = {
-        user.signingkey = "6B890C16BB7F7971";
+        # user.signingkey = "6B890C16BB7F7971";
         "credential \"https://gitlab.com\"" = {
           helper = "${glab-pkg}/bin/glab auth git-credential";
         };
