@@ -15,6 +15,12 @@ in
 
   options.yubikey = {
     enable = lib.mkEnableOption "Enable yubikey support";
+    signing = lib.mkOption {
+      default = "tengen";
+      type = lib.types.str;
+      description = "Key to be used for signing by default";
+      example = lib.literalExample "awesome-key";
+    };
     identifiers = lib.mkOption {
       default = { };
       type = lib.types.attrsOf lib.types.int;

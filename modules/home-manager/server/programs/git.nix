@@ -4,8 +4,9 @@
   config,
   pkgs,
   lib,
+  osConfig,
   ...
-}:
+}@args:
 let
   glab-pkg = pkgs.unstable.glab;
   shellAliases = {
@@ -22,7 +23,6 @@ in
       enable = true;
       userName = "Mirza Arnaut";
       userEmail = "mirza.arnaut45@gmail.com";
-      # userEmail = "mirza.arnaut@tu-dortmund.de";
       lfs.enable = true;
       delta = {
         enable = true;
@@ -38,19 +38,21 @@ in
           };
         }
       ];
-      extraConfig = {
-        # user.signingkey = "6B890C16BB7F7971";
-        # user.signingkey = "${config.home.homeDirectory}/.ssh/id_tengen.pub";
-        gpg.format = "ssh";
-        commit.gpgsign = true;
-        pull.rebase = true;
-        "credential \"https://gitlab.com\"" = {
-          helper = "${lib.getExe glab-pkg} auth git-credential";
+      extraConfig =
+        {
+          "credential \"https://gitlab.com\"" = {
+            helper = "${lib.getExe glab-pkg} auth git-credential";
+          };
+          "credential \"https://gitlab.bv.e-technik.tu-dortmund.de\"" = {
+            helper = "${lib.getExe glab-pkg} auth git-credential";
+          };
+          pull.rebase = true;
+        }
+        // lib.mkIf (args ? nixosConfig) {
+          commit.gpgsign = osConfig.yubikey.enable;
+          user.signingkey = "${config.home.homeDirectory}/.ssh/id_${osConfig.yubikey.signing}.pub";
+          gpg.format = "ssh";
         };
-        "credential \"https://gitlab.bv.e-technik.tu-dortmund.de\"" = {
-          helper = "${lib.getExe glab-pkg} auth git-credential";
-        };
-      };
     };
 
     gh = {
