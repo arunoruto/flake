@@ -28,10 +28,10 @@
         configFile.text =
           ''
             # Common ls aliases and sort them by type and then name
-            def lla [...args] { ls -la ...(if $args == [] {["."]} else {$args}) | sort-by type name -i }
-            def la  [...args] { ls -a  ...(if $args == [] {["."]} else {$args}) | sort-by type name -i }
-            def ll  [...args] { ls -l  ...(if $args == [] {["."]} else {$args}) | sort-by type name -i }
-            def l   [...args] { ls     ...(if $args == [] {["."]} else {$args}) | sort-by type name -i }
+            # def lla [...args] { ls -sla ...(if $args == [] {["."]} else {$args}) | sort-by type name -i | select mode user group size modified name }
+            def la  [...args] { ls -sa  ...(if $args == [] {["."]} else {$args}) | sort-by type name -i | select mode user group size modified name }
+            def ll  [...args] { ls -sal ...(if $args == [] {["."]} else {$args}) | sort-by type name -i | select mode user group size modified name }
+            #def l   [...args] { ls -s   ...(if $args == [] {["."]} else {$args}) | sort-by type name -i | select mode user group size modified name }
             # Tailscale Switch
             def tss [] { tailscale switch --list | detect columns | sk --format {get Tailnet Account | str join " "} --preview {} | get ID | tailscale switch $in }
 
@@ -114,6 +114,7 @@
                 }
               }
             }
+            plugin add ${lib.getExe pkgs.unstable.nushellPlugins.gstat}
           ''
           + lib.optionalString config.skim.enable ''
             plugin add ${lib.getExe pkgs.unstable.nushellPlugins.skim}
@@ -129,6 +130,10 @@
       };
     };
 
-    home.packages = lib.mkIf config.skim.enable [ pkgs.unstable.nushellPlugins.skim ];
+    home.packages =
+      (with pkgs.unstable.nushellPlugins; [
+        gstat
+      ])
+      ++ lib.optionals config.skim.enable [ pkgs.unstable.nushellPlugins.skim ];
   };
 }
