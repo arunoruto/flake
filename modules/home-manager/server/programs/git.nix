@@ -1,6 +1,6 @@
 # https://www.gerritcodereview.com/
 # https://meldmerge.org/
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 let
   glab-pkg = pkgs.unstable.glab;
 in
@@ -31,7 +31,9 @@ in
         }
       ];
       extraConfig = {
-        user.signingkey = "6B890C16BB7F7971";
+        # user.signingkey = "6B890C16BB7F7971";
+        user.signingkey = "${config.home.homeDirectory}/.ssh/id_tengen.pub";
+        gpg.format = "ssh";
         "credential \"https://gitlab.com\"" = {
           helper = "${glab-pkg}/bin/glab auth git-credential";
         };
