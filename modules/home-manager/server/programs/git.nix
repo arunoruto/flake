@@ -38,9 +38,7 @@ in
         "credential \"https://gitlab.bv.e-technik.tu-dortmund.de\"" = {
           helper = "${glab-pkg}/bin/glab auth git-credential";
         };
-        pull = {
-          rebase = true;
-        };
+        pull.rebase = true;
       };
     };
 
