@@ -40,7 +40,7 @@ in
       ];
       extraConfig = {
         # user.signingkey = "6B890C16BB7F7971";
-        user.signingkey = "${config.home.homeDirectory}/.ssh/id_tengen.pub";
+        # user.signingkey = "${config.home.homeDirectory}/.ssh/id_tengen.pub";
         gpg.format = "ssh";
         commit.gpgsign = true;
         pull.rebase = true;
@@ -68,28 +68,28 @@ in
 
     lazygit = {
       enable = true;
-      # settings = {
-      #   gui = {
-      #     theme = {
-      #       activeBorderColor = [
-      #         "#8aadf4"
-      #         "bold"
-      #       ];
-      #       inactiveBorderColor = [ "#a5adcb" ];
-      #       optionsTextColor = [ "#8aadf4" ];
-      #       selectedLineBgColor = [ "#363a4f" ];
-      #       cherryPickedCommitBgColor = [ "#494d64" ];
-      #       cherryPickedCommitFgColor = [ "#8aadf4" ];
-      #       unstagedChangesColor = [ "#ed8796" ];
-      #       defaultFgColor = [ "#cad3f5" ];
-      #       searchingActiveBorderColor = [ "#eed49f" ];
-      #     };
-      #     authorColors = {
-      #       "*" = "#b7bdf8";
-      #     };
-      #   };
-      # };
-    }; # // builtins.fromYAML (builtins.readFile (catppuccin-lazygit + themes-mergable/${flavour}/${colour}.yml));
+      settings = {
+        gui = {
+          theme = {
+            activeBorderColor = [
+              "#8aadf4"
+              "bold"
+            ];
+            inactiveBorderColor = [ "#a5adcb" ];
+            optionsTextColor = [ "#8aadf4" ];
+            selectedLineBgColor = [ "#363a4f" ];
+            cherryPickedCommitBgColor = [ "#494d64" ];
+            cherryPickedCommitFgColor = [ "#8aadf4" ];
+            unstagedChangesColor = [ "#ed8796" ];
+            defaultFgColor = [ "#cad3f5" ];
+            searchingActiveBorderColor = [ "#eed49f" ];
+          };
+          authorColors = {
+            "*" = "#b7bdf8";
+          };
+        };
+      };
+    };
 
     bash = lib.mkIf config.programs.bash.enable {
       inherit shellAliases;
