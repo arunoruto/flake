@@ -9,7 +9,7 @@
   ...
 }:
 let
-  shell = config.home-manager.users.${username}.shell;
+  shell = config.home-manager.users.${username}.shell.main;
 in
 {
   sops.secrets."passwords/${username}".neededForUsers = true;

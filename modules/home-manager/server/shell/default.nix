@@ -35,6 +35,6 @@ in
       shell.starship.enable = lib.mkDefault true;
     }
     // lib.genAttrs shells (
-      sh: lib.genAttrs [ "enable" ] (val: lib.mkDefault (if config.shell == sh then true else false))
+      sh: lib.genAttrs [ "enable" ] (val: lib.mkDefault (if config.shell.main == sh then true else false))
     );
 }
