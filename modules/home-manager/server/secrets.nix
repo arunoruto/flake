@@ -27,7 +27,8 @@ in
       "private_keys/mirza@zangetsu" = {
         path = config.home.homeDirectory + "/.ssh/sops_key";
       };
-      "ssh_keys/tomioka".path = "${config.home.homeDirectory}/.ssh/id_tomioka";
+      "ssh_keys/giyu".path = "${config.home.homeDirectory}/.ssh/id_giyu";
+      "ssh_keys/tengen".path = "${config.home.homeDirectory}/.ssh/id_tengen";
       "tokens/copilot" = { };
       "tokens/cachix" = { };
     };
