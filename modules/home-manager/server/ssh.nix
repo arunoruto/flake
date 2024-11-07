@@ -4,16 +4,20 @@
   ...
 }:
 let
-  # pathToKeys = ./keys;
-  pathToKeys = lib.path.append ../../../. "homes/${config.home.username}/keys";
-  yubikeys = lib.lists.forEach (builtins.attrNames (builtins.readDir pathToKeys)) (
-    key: lib.substring 0 (lib.stringLength key - lib.stringLength ".pub") key
-  );
-  yubikeyPublicKeyEntries = lib.attrsets.mergeAttrsList (
-    lib.lists.map (key: {
-      ".ssh/${key}.pub".source = "${pathToKeys}/${key}.pub";
-    }) yubikeys
-  );
+  pathToUserKeys = lib.path.append ../../../. "homes/${config.home.username}/keys";
+  pathToYubikeys = lib.path.append ../../../. "homes/keys";
+  keys =
+    pathToKeys:
+    lib.lists.forEach (builtins.attrNames (builtins.readDir pathToKeys)) (
+      key: lib.substring 0 (lib.stringLength key - lib.stringLength ".pub") key
+    );
+  publicKeyEntries =
+    pathToKeys:
+    lib.attrsets.mergeAttrsList (
+      lib.lists.map (key: {
+        ".ssh/${key}.pub".source = "${pathToKeys}/${key}.pub";
+      }) (keys pathToKeys)
+    );
 in
 {
   options.ssh.enable = lib.mkEnableOption "Enable personal SSH settings";
@@ -40,6 +44,6 @@ in
       };
     };
 
-    home.file = { } // yubikeyPublicKeyEntries;
+    home.file = { } // (publicKeyEntries pathToYubikeys) // (publicKeyEntries pathToUserKeys);
   };
 }
