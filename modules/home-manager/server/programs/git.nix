@@ -20,7 +20,7 @@ in
   programs = {
     git = {
       enable = true;
-      userName = "arunoruto";
+      userName = "Mirza Arnaut";
       userEmail = "mirza.arnaut45@gmail.com";
       # userEmail = "mirza.arnaut@tu-dortmund.de";
       lfs.enable = true;
