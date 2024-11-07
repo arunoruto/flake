@@ -54,6 +54,7 @@ in
       u2f = {
         enable = true;
         # settings = {
+        origin = "NIX";
         cue = true; # Tells the user they need to press the button
         authFile = "${homedir}/.config/Yubico/u2f_keys";
         # };
