@@ -13,7 +13,8 @@ in
     git = {
       enable = true;
       userName = "arunoruto";
-      userEmail = "mirza.arnaut@tu-dortmund.de";
+      userEmail = "mirza.arnaut45@gmail.com";
+      # userEmail = "mirza.arnaut@tu-dortmund.de";
       lfs.enable = true;
       delta = {
         enable = true;
