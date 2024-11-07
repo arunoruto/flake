@@ -10,6 +10,7 @@ let
 in
 {
   imports = [
+    ./cli
     ./programs
     ./services
     ./shell
