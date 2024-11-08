@@ -35,6 +35,9 @@
     #   nushell
     #   zsh
     # ];
-    pathsToLink = [ "/share/zsh" ];
+    # pathsToLink = [
+    #   "/share/zsh"
+    #   "/share/fish"
+    # ];
   };
 }

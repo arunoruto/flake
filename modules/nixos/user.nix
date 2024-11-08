@@ -46,5 +46,12 @@ in
     shells = [
       config.users.users.${username}.shell
     ];
+    pathsToLink =
+      lib.optionals config.home-manager.users.${username}.zsh.enable [
+        "/share/zsh"
+      ]
+      ++ lib.optionals config.home-manager.users.${username}.fish.enable [
+        "/share/fish"
+      ];
   };
 }
