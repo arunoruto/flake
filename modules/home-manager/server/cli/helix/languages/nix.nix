@@ -14,7 +14,7 @@
           {
             name = "nix";
             auto-format = true;
-            formatter.command = "nixfmt";
+            formatter.command = "${lib.getExe pkgs.unstable.nixfmt-rfc-style}";
             # formatter.command = "${pkgs.alejandra}/bin/alejandra";
             language-servers = [
               "nixd"
@@ -24,16 +24,14 @@
         ];
         language-server = {
           nixd = {
-            command = "nixd";
+            command = "${lib.getExe pkgs.unstable.nixd}";
             config = config.nixd-config;
           };
         };
       };
       extraPackages = with pkgs; [
-        nixd
-        # nixfmt
         nil
-        alejandra
+        # alejandra
       ];
     };
   };
