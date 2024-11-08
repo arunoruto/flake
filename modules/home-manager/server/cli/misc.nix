@@ -4,21 +4,16 @@
   lib,
   ...
 }:
-let
-  #   aliases = {
-  #     ls = "${pkgs.lsd}/bin/lsd";
-  #     ll = "${pkgs.lsd}/bin/lsd -l";
-  #     la = "${pkgs.lsd}/bin/lsd -A";
-  #     lt = "${pkgs.lsd}/bin/lsd --tree";
-  #     lla = "${pkgs.lsd}/bin/lsd -lA";
-  #     llt = "${pkgs.lsd}/bin/lsd -l --tree";
-  #   };
-
-  enableBashIntegration = lib.mkDefault config.programs.bash.enable;
-  enableFishIntegration = lib.mkDefault config.programs.fish.enable;
-  enableNushellIntegration = lib.mkDefault config.programs.nushell.enable;
-  enableZshIntegration = lib.mkDefault config.programs.zsh.enable;
-in
+# let
+#   aliases = {
+#     ls = "${pkgs.lsd}/bin/lsd";
+#     ll = "${pkgs.lsd}/bin/lsd -l";
+#     la = "${pkgs.lsd}/bin/lsd -A";
+#     lt = "${pkgs.lsd}/bin/lsd --tree";
+#     lla = "${pkgs.lsd}/bin/lsd -lA";
+#     llt = "${pkgs.lsd}/bin/lsd -l --tree";
+#   };
+# in
 {
   programs = {
     atuin = {
@@ -26,10 +21,6 @@ in
       flags = [
         "--disable-up-arrow"
       ];
-      inherit enableBashIntegration;
-      inherit enableFishIntegration;
-      inherit enableNushellIntegration;
-      inherit enableZshIntegration;
     };
 
     # Bash
@@ -38,22 +29,9 @@ in
     # Htop alternative
     btop.enable = true;
 
-    # completion manager
-    carapace = {
-      enable = true;
-      inherit enableBashIntegration;
-      inherit enableFishIntegration;
-      inherit enableNushellIntegration;
-      inherit enableZshIntegration;
-    };
-
     direnv = {
       enable = true;
       nix-direnv.enable = true;
-      inherit enableBashIntegration;
-      # inherit enableFishIntegration;
-      inherit enableNushellIntegration;
-      inherit enableZshIntegration;
     };
 
     fd = {
@@ -63,10 +41,6 @@ in
     thefuck = {
       enable = true;
       enableInstantMode = true;
-      inherit enableBashIntegration;
-      inherit enableFishIntegration;
-      inherit enableNushellIntegration;
-      inherit enableZshIntegration;
     };
 
     # lsd is an ls replacement
@@ -112,10 +86,6 @@ in
       options = [
         "--cmd cd"
       ];
-      inherit enableBashIntegration;
-      inherit enableFishIntegration;
-      inherit enableNushellIntegration;
-      inherit enableZshIntegration;
     };
   };
 

@@ -33,6 +33,9 @@ in
   config =
     {
       shell.starship.enable = lib.mkDefault true;
+
+      # completion manager
+      programs.carapace.enable = true;
     }
     // lib.genAttrs shells (
       sh: lib.genAttrs [ "enable" ] (val: lib.mkDefault (if config.shell.main == sh then true else false))
