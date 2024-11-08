@@ -23,8 +23,14 @@
       ssh.askPassword = lib.mkForce "${pkgs.gnome.seahorse.out}/bin/seahorse";
       dconf.profiles.gdm.databases = [
         {
-          settings."org/gnome/settings-daemon/plugins/power" = {
-            ambient-enabled = false;
+          settings = {
+            "org/gnome/settings-daemon/plugins/power" = {
+              ambient-enabled = false;
+            };
+            "org/gnome/login-screen" = {
+              enable-fingerprint-authentication = false;
+              enable-smartcard-authentication = false;
+            };
           };
         }
       ];
