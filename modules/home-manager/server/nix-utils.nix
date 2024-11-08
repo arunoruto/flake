@@ -66,9 +66,6 @@ in
 
     home.packages =
       (with pkgs; [
-        alejandra
-        nixd
-        # nixfmt
         unstable.nixfmt-rfc-style
 
         unstable.nh

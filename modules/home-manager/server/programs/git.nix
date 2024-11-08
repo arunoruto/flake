@@ -30,25 +30,16 @@ in
           side-by-side = true;
         };
       };
-      includes = [
-        {
-          #condition = "gitdir:~/cloudseeds/**";
-          contents = {
-            init.defaultBranch = "main";
-          };
-        }
-      ];
       extraConfig =
         {
-          "credential \"https://gitlab.com\"" = {
-            helper = "${lib.getExe glab-pkg} auth git-credential";
-          };
-          "credential \"https://gitlab.bv.e-technik.tu-dortmund.de\"" = {
-            helper = "${lib.getExe glab-pkg} auth git-credential";
-          };
           pull.rebase = true;
+          init.defaultBranch = "main";
+          credential = {
+            "https://gitlab.com".helper = "${lib.getExe glab-pkg} auth git-credential";
+            "https://gitlab.bv.e-technik.tu-dortmund.de".helper = "${lib.getExe glab-pkg} auth git-credential";
+          };
         }
-        // lib.mkIf (args ? nixosConfig) {
+        // lib.optionalAttrs (args ? nixosConfig) {
           commit.gpgsign = osConfig.yubikey.enable;
           user.signingkey = "${config.home.homeDirectory}/.ssh/id_${osConfig.yubikey.signing}.pub";
           gpg.format = "ssh";
@@ -59,7 +50,7 @@ in
       enable = true;
       gitCredentialHelper.enable = true;
       settings = {
-        git_protocol = "https";
+        git_protocol = "ssh";
         prompt = "enabled";
         aliases = {
           co = "pr checkout";
