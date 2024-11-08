@@ -5,6 +5,9 @@
   pkgs,
   ...
 }:
+let
+  toml = pkgs.formats.toml { };
+in
 {
   imports = [
     ./keys.nix
@@ -22,6 +25,7 @@
         settings = {
           # theme = "catppuccin_macchiato";
           # theme = "base16_transparent";
+          theme = lib.mkForce "my-stylix";
           editor = {
             true-color = true;
             bufferline = "always";
@@ -49,6 +53,14 @@
         ];
       };
       # zsh.shellAliases.vim = "hx";
+    };
+
+    home.file.".config/helix/themes/my-stylix.toml".source = toml.generate "my-stylix.toml" {
+      inherits = "stylix";
+      "ui.cursor.match" = {
+        fg = "base08";
+        modifiers = [ "reversed" ];
+      };
     };
   };
 }
