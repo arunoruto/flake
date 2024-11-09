@@ -1,4 +1,4 @@
 pkgs: {
-  python = import ./python.nix;
-  website = import ./website.nix;
+  python = import ./python.nix { inherit pkgs; };
+  website = import ./website.nix { inherit pkgs; };
 }
