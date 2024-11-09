@@ -29,6 +29,7 @@
       systemPackages = with pkgs.unstable; [
         age-plugin-tpm
         # tpm2-tools
+        tpm2-totp
       ];
       sessionVariables = {
         # TSS2_LOG = "fapi+NONE";
