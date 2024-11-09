@@ -85,6 +85,13 @@
       # will maybe change in the future!
       # -> look into flake parts/utils
       system = "x86_64-linux";
+      lib = nixpkgs.lib;
+      pkgs = import nixpkgs {
+        inherit system;
+        overlays = [
+          self.overlays.unstable-packages
+        ];
+      };
 
       # Some customization
       # scheme = "catppuccin-macchiato";
@@ -110,9 +117,9 @@
       };
     in
     {
-      nixosConfigurations = nixpkgs.lib.genAttrs (builtins.attrNames hostname-users) (
+      nixosConfigurations = lib.genAttrs (builtins.attrNames hostname-users) (
         hostname:
-        nixpkgs.lib.nixosSystem {
+        lib.nixosSystem {
           inherit system;
           specialArgs = {
             inherit inputs;
@@ -125,8 +132,8 @@
               users.users.root.openssh.authorizedKeys.keys = [
                 "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICVG8SSbWy37rel+Yhz9rjpNscmO1+Br57beNzWRdaQk"
               ];
-              networking.hostName = nixpkgs.lib.mkForce hostname;
-              facter.reportPath = nixpkgs.lib.mkIf (nixpkgs.lib.pathExists ./hosts/${hostname}/facter.json) ./hosts/${hostname}/facter.json;
+              networking.hostName = lib.mkForce hostname;
+              facter.reportPath = lib.mkIf (lib.pathExists ./hosts/${hostname}/facter.json) ./hosts/${hostname}/facter.json;
               nixpkgs = {
                 config.allowUnfree = true;
                 overlays = [
@@ -146,48 +153,33 @@
         }
       );
 
-      homeConfigurations =
-        nixpkgs.lib.genAttrs (nixpkgs.lib.lists.unique (builtins.attrValues hostname-users))
-          (
-            user:
-            home-manager.lib.homeManagerConfiguration {
-              pkgs = import nixpkgs {
-                inherit system;
-                overlays = [
-                  self.overlays.unstable-packages
-                ];
-              };
-              modules = [
-                # inputs.nur.hmModules.nur
-                # ./modules/home-manager/home.nix
-                ./homes/${user}
-                inputs.stylix.homeManagerModules.stylix
-                {
-                  theming = {
-                    inherit scheme;
-                    inherit image;
-                  };
-                }
-              ];
-              extraSpecialArgs = {
-                inherit inputs;
-                inherit user;
+      homeConfigurations = lib.genAttrs (lib.lists.unique (builtins.attrValues hostname-users)) (
+        user:
+        home-manager.lib.homeManagerConfiguration {
+          inherit pkgs;
+          modules = [
+            # inputs.nur.hmModules.nur
+            # ./modules/home-manager/home.nix
+            ./homes/${user}
+            inputs.stylix.homeManagerModules.stylix
+            {
+              theming = {
+                inherit scheme;
+                inherit image;
               };
             }
-          );
+          ];
+          extraSpecialArgs = {
+            inherit inputs;
+            inherit user;
+          };
+        }
+      );
 
       overlays = import ./overlays { inherit inputs; };
-      devShells.${system} = import ./shells nixpkgs.legacyPackages.${system};
-      packages.${system} = import ./pkgs nixpkgs.legacyPackages.${system};
-      # packages.${system} = (
-      #   let
-      #     # pkgs = nixpkgs.legacyPackages.${system};
-      #     pkgs = import nixpkgs {
-      #       system = system;
-      #       config.allowUnfree = true;
-      #     };
-      #   in
-      #   import ./pkgs { inherit pkgs; }
-      # );
+      devShells.${system} = import ./shells pkgs lib;
+      packages.${system} = import ./pkgs pkgs;
+      # devShells.${system} = import ./shells nixpkgs.legacyPackages.${system};
+      # packages.${system} = import ./pkgs nixpkgs.legacyPackages.${system};
     };
 }

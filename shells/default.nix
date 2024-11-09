@@ -1,4 +1,14 @@
-pkgs: {
-  python = import ./python.nix { inherit pkgs; };
-  website = import ./website.nix { inherit pkgs; };
-}
+pkgs: lib:
+pkgs.lib.genAttrs
+  [
+    "python"
+    "website"
+  ]
+  (
+    shell:
+    import ./${shell}.nix {
+      inherit pkgs;
+      inherit lib;
+    }
+  )
+# ] (shell: import ./${shell}.nix { inherit pkgs; })
