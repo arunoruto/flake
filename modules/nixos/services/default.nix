@@ -13,7 +13,6 @@
 
     ./davmail.nix
     ./flatpak.nix
-    ./oneapi.nix
     ./ssh.nix
     ./tlp.nix
     ./ppd.nix
@@ -23,8 +22,6 @@
 
   davmail.enable = lib.mkDefault false;
   flatpak.enable = lib.mkDefault config.xdg.portal.enable;
-  oneapi.enable = lib.mkDefault false;
-  # oneapi.enable = lib.mkDefault true;
   ssh.enable = lib.mkDefault true;
   tlp.enable = lib.mkDefault false;
   ppd.enable = lib.mkDefault false;

@@ -29,31 +29,25 @@
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nur.url = "github:nix-community/NUR";
+    # nur.url = "github:nix-community/NUR";
     # Home Manager
     home-manager = {
       url = "github:nix-community/home-manager/release-24.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     # DEs
-    nixos-cosmic = {
-      url = "github:lilyinstarlight/nixos-cosmic";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
-      # inputs.nixpkgs.follows = "nixpkgs";
-    };
-    plasma-manager = {
-      url = "github:nix-community/plasma-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.home-manager.follows = "home-manager";
-    };
-    # nixvim = {
-    #   # url = "github:nix-community/nixvim";
-    #   # inputs.nixpkgs.follows = "nixpkgs-unstable";
-    #   url = "github:nix-community/nixvim/nixos-24.05";
-    #   inputs.nixpkgs.follows = "nixpkgs";
+    # nixos-cosmic = {
+    #   url = "github:lilyinstarlight/nixos-cosmic";
+    #   inputs.nixpkgs.follows = "nixpkgs-unstable";
+    #   # inputs.nixpkgs.follows = "nixpkgs";
     # };
-    # neorg-overlay.url = "github:nvim-neorg/nixpkgs-neorg-overlay";
-    # nil.url = "github:oxalica/nil";
+    # plasma-manager = {
+    #   url = "github:nix-community/plasma-manager";
+    #   inputs = {
+    #     nixpkgs.follows = "nixpkgs";
+    #     home-manager.follows = "home-manager";
+    #   };
+    # };
     # nixvim-flake.url = "github:arunoruto/nvim.nix";
     # Styling
     stylix = {
@@ -61,11 +55,11 @@
       url = "github:danth/stylix/release-24.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    ags.url = "github:Aylur/ags";
-    poetry2nix = {
-      url = "github:nix-community/poetry2nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # ags.url = "github:Aylur/ags";
+    # poetry2nix = {
+    #   url = "github:nix-community/poetry2nix";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
 
     # Private
     secrets = {
@@ -125,7 +119,7 @@
             username = hostname-users."${hostname}";
           };
           modules = [
-            inputs.nur.nixosModules.nur
+            # inputs.nur.nixosModules.nur
             inputs.nixos-facter-modules.nixosModules.facter
             {
               users.users.root.openssh.authorizedKeys.keys = [
@@ -164,7 +158,7 @@
                 ];
               };
               modules = [
-                inputs.nur.hmModules.nur
+                # inputs.nur.hmModules.nur
                 # ./modules/home-manager/home.nix
                 ./homes/${user}
                 inputs.stylix.homeManagerModules.stylix

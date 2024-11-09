@@ -5,9 +5,7 @@
   ...
 }:
 {
-  options = {
-    oneapi.enable = lib.mkEnableOption "Enable OneAPI for Intel hardware";
-  };
+  options.oneapi.enable = lib.mkEnableOption "Enable OneAPI for Intel hardware";
 
   config = lib.mkIf config.oneapi.enable {
     environment.systemPackages = [

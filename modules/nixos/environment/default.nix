@@ -15,7 +15,7 @@
     ./ld.nix
 
     ./amd
-    ./intel.nix
+    ./intel
     ./nvidia
   ];
 

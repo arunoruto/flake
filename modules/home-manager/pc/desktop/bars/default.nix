@@ -1,13 +1,13 @@
 { lib, ... }:
 {
   imports = [
-    ./ags
+    # ./ags
     ./eww
     ./waybar
   ];
 
   bars = {
-    ags.enable = lib.mkDefault false;
+    # ags.enable = lib.mkDefault false;
     eww.enable = lib.mkDefault true;
     waybar.enable = lib.mkDefault false;
   };

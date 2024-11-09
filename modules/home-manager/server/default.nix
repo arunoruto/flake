@@ -42,7 +42,7 @@ in
     dust
     glow
     hexyl
-    hugo
+    # hugo
     marksman
     miller
     ncdu
