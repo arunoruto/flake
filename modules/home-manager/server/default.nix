@@ -1,6 +1,7 @@
 {
   config,
   pkgs,
+  lib,
   user,
   osConfig,
   ...
@@ -24,15 +25,13 @@ in
   ssh.enable = true;
 
   nixd-config = {
-    nixpkgs.expr = ''import (builtins.getFlake "${flake-location}").inputs.nixpkgs { }'';
+    nixpkgs.expr = "import (builtins.getFlake ''${flake-location}'').inputs.nixpkgs { }";
     formatting.command = [ "nixfmt" ];
     options = {
       nixos.expr =
-        if (args ? nixosConfig) then
-          ''(builtins.getFlake "${flake-location}").nixosConfigurations.${osConfig.networking.hostName}.options''
-        else
-          "";
-      home-manager.expr = ''(builtins.getFlake "${flake-location}").homeConfigurations."${user}".options'';
+        lib.optionalString (args ? nixosConfig)
+          "(builtins.getFlake ''${flake-location}'').nixosConfigurations.${osConfig.networking.hostName}.options";
+      home-manager.expr = "(builtins.getFlake ''${flake-location}'').homeConfigurations.${user}.options";
     };
     diagnostics = { };
   };

@@ -7,16 +7,6 @@
   ...
 }@args:
 let
-  default = {
-    nixpkgs.expr = "import <nixpkgs> { }";
-    formatting.command = [ "nixfmt" ];
-    options = {
-      nixos.expr = "";
-      home-manager.expr = "";
-    };
-    diagnostics.supress = [ ];
-  };
-
   nix-repl = pkgs.writeScriptBin "nix-repl" (
     ''
       #!${lib.getExe pkgs.expect}
@@ -44,9 +34,17 @@ in
 {
   options = {
     nix-utils.enable = lib.mkEnableOption "Helpful nix utils";
-    nixd-config = lib.mkOption {
+    nixd-config = lib.mkOption rec {
       type = lib.types.attrs;
-      inherit default;
+      default = {
+        nixpkgs.expr = "import <nixpkgs> { }";
+        formatting.command = [ "nixfmt" ];
+        options = {
+          nixos.expr = "";
+          home-manager.expr = "";
+        };
+        diagnostics.supress = [ ];
+      };
       example = default;
       description = "Configuration of nixd which will be used across multiple IDEs";
     };
