@@ -1,11 +1,6 @@
 {
   description = "Mirzas Nix Config";
 
-  # nixConfig = {
-  #   extra-substituters = ["https://arunoruto.cachix.org"];
-  #   extra-trusted-public-keys = ["arunoruto.cachix.org-1:GQVw1YDtjt0+ElmQifxEI52a0pRVe9/gdcNEr8v8G14="];
-  # };
-
   inputs = {
     # Nixpkgs
     nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
@@ -48,6 +43,10 @@
     #     home-manager.follows = "home-manager";
     #   };
     # };
+    helix = {
+      url = "github:helix-editor/helix";
+      # inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
     # nixvim-flake.url = "github:arunoruto/nvim.nix";
     # Styling
     stylix = {
