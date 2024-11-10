@@ -53,10 +53,14 @@ in
   config = lib.mkIf config.nix-utils.enable {
     nix = {
       package = lib.mkForce pkgs.unstable.nix;
-      settings.experimental-features = [
-        "nix-command"
-        "flakes"
-      ];
+      settings = {
+        experimental-features = [
+          "nix-command"
+          "flakes"
+        ];
+        extra-substituters = [ "https://helix.cachix.org" ];
+        extra-trusted-public-keys = [ "helix.cachix.org-1:ejp9KQpR1FBI2onstMQ34yogDm4OgU2ru6lIwPvuCVs=" ];
+      };
       # extraOptions = ''
       #   trusted-users = root ${user}
       # '';

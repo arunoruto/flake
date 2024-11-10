@@ -3,6 +3,7 @@
   config,
   lib,
   pkgs,
+  inputs,
   ...
 }:
 let
@@ -20,7 +21,9 @@ in
     programs = {
       helix = {
         enable = true;
-        package = pkgs.unstable.helix;
+        package = inputs.helix.packages.${pkgs.system}.default;
+        # package = pkgs.helix;
+        # package = pkgs.unstable.helix;
         # package = pkgs.unstable.evil-helix;
         settings = {
           theme = lib.mkForce "my-stylix";
@@ -40,10 +43,10 @@ in
               insert = "bar";
               select = "underline";
             };
-            # inline-diagnostics = {
-            #   cursor-line = "hint";
-            #   other-lines = "error";
-            # };
+            inline-diagnostics = {
+              cursor-line = "hint";
+              other-lines = "error";
+            };
             lsp.display-messages = true;
           };
         };
