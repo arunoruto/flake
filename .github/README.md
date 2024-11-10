@@ -76,6 +76,15 @@ To prefetch candy-icons, you would call:
 nix run nixpkgs#nix-prefetch-git https://github.com/EliverLara/candy-icons
 ```
 
+## Workflows
+
+If edits are made to the workflow(s), a token with the `workflow` scope is needed:
+
+```sh
+gh auth status # Check current scopes in token
+gh auth login --scopes workflow # Request a new one with the workflow scope
+```
+
 ## Helpful Material
 
 Some nice intro is provided by [thiscute.world](https://nixos-and-flakes.thiscute.world/).
