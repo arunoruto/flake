@@ -23,13 +23,12 @@ in
         package = pkgs.unstable.helix;
         # package = pkgs.unstable.evil-helix;
         settings = {
-          # theme = "catppuccin_macchiato";
-          # theme = "base16_transparent";
           theme = lib.mkForce "my-stylix";
           editor = {
             true-color = true;
             bufferline = "always";
             line-number = "relative";
+            rulers = [ 80 ];
             cursorline = true;
             color-modes = true;
             popup-border = "all";
