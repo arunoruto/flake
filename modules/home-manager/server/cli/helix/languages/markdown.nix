@@ -17,11 +17,14 @@
             name = "markdown";
             auto-format = true;
             rulers = [ 120 ];
-            # language-servers = ["marksman" "ltex"];
-            language-servers = [
-              "marksman"
-              "oxide"
-            ];
+            language-servers =
+              lib.optionals config.helix.ltex.enable [
+                "ltex"
+              ]
+              ++ [
+                "marksman"
+                "oxide"
+              ];
             formatter = {
               command = "prettier";
               args = [
@@ -36,20 +39,12 @@
           }
         ];
         language-server = {
-          ltex = {
-            command = "ltex-ls";
-            config.ltex.dictionary = {
-              "en-US" = [ ];
-            };
-          };
           oxide = {
-            command = "markdown-oxide";
+            command = lib.getExe pkgs.markdown-oxide;
           };
         };
       };
       extraPackages = with pkgs; [
-        # ltex-ls
-        markdown-oxide
         marksman
         nodePackages.prettier
       ];
