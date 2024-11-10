@@ -21,7 +21,7 @@
         # dictionary = {
         #   "en-US" = [ ];
         # };
-        additionalRules.languageModel = lib.optinalString config.helix.ltex.ngram "${config.home.homeDirectory}/.cache/ngrams";
+        additionalRules.languageModel = lib.optionalString config.helix.ltex.ngram "${config.home.homeDirectory}/.cache/ngrams";
       };
     };
 
