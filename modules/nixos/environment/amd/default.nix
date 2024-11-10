@@ -15,7 +15,7 @@
   config = lib.mkIf config.amd.enable {
     amd = {
       rocm.enable = lib.mkDefault false;
-      zluda.enable = lib.mkDefault true;
+      zluda.enable = lib.mkDefault false;
     };
 
     services.xserver.videoDrivers = [ "amdgpu" ];
