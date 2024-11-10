@@ -92,6 +92,7 @@
   home.packages = with pkgs; [
     broot
     devenv
+    fx
     up
   ];
 }
