@@ -93,6 +93,8 @@ gh auth login --scopes workflow # Request a new one with the workflow scope
 
 ## Helpful Material
 
+### Setup
+
 Some nice intro is provided by [thiscute.world](https://nixos-and-flakes.thiscute.world/).
 
 [vimjoyer](https://www.youtube.com/@vimjoyer) has some amazing videos about nix and other nix related stuff:
@@ -112,6 +114,10 @@ Some nice intro is provided by [thiscute.world](https://nixos-and-flakes.thiscut
 
 [Ampersand](https://www.youtube.com/watch?v=nLwbNhSxLd4) has a nice video about configuring a NixOS system
 similar to vimjoyer's `Ultimate NixOS Guide | Flakes | Home-Manager`
+
+### Nix Language
+
+- [inherit keyword](https://www.ersocon.net/articles/master-nix-inherit-keyword-in-5-minutes~c464b126-0d57-4971-9a87-2515f9aa8d19)
 
 ## Clean-up
 
