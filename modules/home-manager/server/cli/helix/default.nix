@@ -21,7 +21,11 @@ in
     programs = {
       helix = {
         enable = true;
-        package = inputs.helix.packages.${pkgs.system}.default;
+        package =
+          if config.hosts.tinypc.enable then
+            pkgs.unstable.helix
+          else
+            inputs.helix.packages.${pkgs.system}.default;
         # package = pkgs.helix;
         # package = pkgs.unstable.helix;
         # package = pkgs.unstable.evil-helix;
