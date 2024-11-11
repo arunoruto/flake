@@ -1,3 +1,3 @@
 {
-  tinypc.enable = true;
+  hosts.tinypc.enable = true;
 }

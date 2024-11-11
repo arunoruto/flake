@@ -14,7 +14,7 @@
     # Enable networking
     networkmanager = {
       enable = true;
-      wifi.powersave = config.laptop.enable;
+      wifi.powersave = config.hosts.laptop.enable;
     };
     firewall = {
       # Disable the firewall altogether.

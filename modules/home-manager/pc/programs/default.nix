@@ -15,9 +15,9 @@
     ./zed.nix
   ];
 
-  options.gui.enable = lib.mkEnableOption "Enable GUI programs";
+  options.pc.programs.enable = lib.mkEnableOption "Enable GUI programs";
 
-  config = lib.mkIf config.gui.enable {
+  config = lib.mkIf config.pc.programs.enable {
     chrome.enable = lib.mkDefault true;
     firefox.enable = lib.mkDefault true;
     steam.enable = lib.mkDefault false;
@@ -27,7 +27,23 @@
     zed.enable = lib.mkDefault true;
 
     home.packages = with pkgs; [
-      ladybird
+      vlc
+      # unstable.vscode
+
+      discord
+      # jabref
+      # libsForQt5.kdenlive
+      libsForQt5.okular
+      # mailspring
+      # masterpdfeditor
+      # mprime
+      # unstable.mqtt-explorer
+      unstable.plex-desktop
+      remmina
+      zoom-us
+      zotero
+
+      # ladybird
       # unstable.spacedrive
     ];
 

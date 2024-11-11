@@ -4,9 +4,9 @@
   ...
 }:
 {
-  options.workstation.enable = lib.mkEnableOption "Sensible defaults for workstations";
+  options.hosts.workstation.enable = lib.mkEnableOption "Sensible defaults for workstations";
 
-  config = lib.mkIf config.workstation.enable {
+  config = lib.mkIf config.hosts.workstation.enable {
     latex.enable = true;
     programming.enable = true;
     upgrades.enable = true;

@@ -12,14 +12,18 @@
   ];
 
   options = {
-    laptop.enable = lib.mkEnableOption "Sensible defaults for laptops";
-    tinypc.enable = lib.mkEnableOption "Sensible defaults for tinypcs";
+    hosts = {
+      laptop.enable = lib.mkEnableOption "Sensible defaults for laptops";
+      tinypc.enable = lib.mkEnableOption "Sensible defaults for tinypcs";
+    };
   };
 
   config = lib.mkIf (args ? nixosConfig) {
-    laptop.enable = lib.mkDefault osConfig.laptop.enable;
-    tinypc.enable = lib.mkDefault osConfig.tinypc.enable;
-    pc.enable = lib.mkDefault osConfig.gui.enable;
+    hosts = {
+      laptop.enable = lib.mkDefault osConfig.hosts.laptop.enable;
+      tinypc.enable = lib.mkDefault osConfig.hosts.tinypc.enable;
+    };
+    pc.enable = lib.mkDefault osConfig.programs.enable;
 
     hostname = lib.mkDefault osConfig.networking.hostName;
     keyboard = {
@@ -27,7 +31,7 @@
       variant = lib.mkDefault osConfig.services.xserver.xkb.variant;
     };
     theming = {
-      enable = lib.mkDefault osConfig.gui.enable;
+      enable = lib.mkDefault osConfig.programs.enable;
       image = lib.mkDefault osConfig.theming.image;
       scheme = lib.mkDefault osConfig.theming.scheme;
     };

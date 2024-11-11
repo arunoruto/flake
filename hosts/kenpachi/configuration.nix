@@ -4,7 +4,7 @@
   ...
 }:
 {
-  tinypc.enable = true;
+  hosts.tinypc.enable = true;
   tpm.enable = true;
 
   #efi.enable = false;

@@ -4,8 +4,6 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     clinfo
-    dig
-    direnv
     ffmpeg
     file
     git

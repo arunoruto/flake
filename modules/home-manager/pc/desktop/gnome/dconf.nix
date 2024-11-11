@@ -52,17 +52,20 @@
         icon-theme = lib.mkForce "candy-icons";
       };
       # Power settings
-      "org/gnome/settings-daemon/plugins/power" = {
-        ambient-enabled = false;
-        idle-dim = false;
-        # sleep-inactive-ac-timeout = 1800;
-        # sleep-inactive-ac-type = "suspend";
-        # sleep-inactive-battery-timeout = 900;
-        # sleep-inactive-battery-type = "suspend";
-      };
+      "org/gnome/settings-daemon/plugins/power" =
+        {
+          ambient-enabled = false;
+          idle-dim = false;
+        }
+        // lib.mkIf config.hosts.laptop.enable {
+          sleep-inactive-ac-timeout = 1800;
+          sleep-inactive-ac-type = "suspend";
+          sleep-inactive-battery-timeout = 900;
+          sleep-inactive-battery-type = "suspend";
+        };
       # Session
       "org/gnome/desktop/session" = {
-        idle-delay = if config.laptop.enable then "uint32 900" else "uint32 0";
+        idle-delay = if config.hosts.laptop.enable then "uint32 900" else "uint32 0";
       };
       # Set list of custom keybinding
       "org/gnome/settings-daemon/plugins/media-keys" = {

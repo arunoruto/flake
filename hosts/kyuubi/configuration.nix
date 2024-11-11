@@ -12,7 +12,7 @@ in
 {
   printing.enable = true;
   scanning.enable = true;
-  workstation.enable = true;
+  hosts.workstation.enable = true;
 
   # Define your hostname.
   # networking.hostName = lib.mkForce "kyuubi";

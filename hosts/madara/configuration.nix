@@ -12,8 +12,8 @@ in
 {
   printing.enable = true;
   scanning.enable = true;
-  workstation.enable = true;
-  nvidia.enable = true;
+  hosts.workstation.enable = true;
+  hosts.nvidia.enable = true;
 
   # Define your hostname.
   # networking.hostName = lib.mkForce "kyuubi";

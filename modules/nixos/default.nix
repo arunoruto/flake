@@ -10,9 +10,9 @@
     ./desktop
     ./display
     ./environment
-    ./host-types
     ./media
     ./network
+    ./programs
     ./security
     ./services
     ./system
@@ -25,7 +25,7 @@
   desktop-environment.enable = lib.mkDefault true;
   display-manager.enable = lib.mkDefault true;
   media.enable = lib.mkDefault false;
-  gui.enable = lib.mkDefault true;
+  programs.enable = lib.mkDefault true;
 
   nix = {
     nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];

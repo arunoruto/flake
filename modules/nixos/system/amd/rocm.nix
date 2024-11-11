@@ -5,9 +5,9 @@
   ...
 }:
 {
-  options.amd.rocm.enable = lib.mkEnableOption "Setup ROCm packages";
+  options.hosts.amd.rocm.enable = lib.mkEnableOption "Setup ROCm packages";
 
-  config = lib.mkIf config.amd.rocm.enable {
+  config = lib.mkIf config.hosts.amd.rocm.enable {
     environment.systemPackages = with pkgs.rocmPackages; [
       rocminfo
     ];

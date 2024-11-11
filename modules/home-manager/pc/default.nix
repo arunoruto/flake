@@ -7,8 +7,8 @@
   imports = [
     ./desktop
     ./documents
-    ./gui
     ./network
+    ./programs
     ./terminal
 
     ./avatar.nix
@@ -21,7 +21,7 @@
     avatar.enable = lib.mkDefault true;
     desktop.enable = lib.mkDefault true;
     documents.enable = lib.mkDefault true;
-    gui.enable = lib.mkDefault true;
+    pc.programs.enable = lib.mkDefault true;
     terminals.enable = lib.mkDefault true;
   };
 }

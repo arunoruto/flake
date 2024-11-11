@@ -5,9 +5,9 @@
   ...
 }:
 {
-  options.amd.zluda.enable = lib.mkEnableOption "ZLUDA: alternative for CUDA but for AMD";
+  options.hosts.amd.zluda.enable = lib.mkEnableOption "ZLUDA: alternative for CUDA but for AMD";
 
-  config = lib.mkIf config.amd.zluda.enable {
+  config = lib.mkIf config.hosts.amd.zluda.enable {
     environment.systemPackages = with pkgs; [
       zluda-rocm5
     ];

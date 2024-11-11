@@ -26,6 +26,7 @@
     environment = {
       systemPackages = with pkgs; [
         gnome-network-displays
+        gthumb
         nautilus-open-any-terminal
         gnome.nautilus-python
         gnome.gnome-software

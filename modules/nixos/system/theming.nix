@@ -39,7 +39,8 @@
       enable = lib.mkDefault true;
       base16Scheme = lib.mkDefault "${pkgs.base16-schemes}/share/themes/${config.theming.scheme}.yaml";
       image = inputs.wallpapers + "/${config.theming.image}";
-      cursor = if (config.gui.enable) then config.home-manager.users.${username}.stylix.cursor else { };
+      cursor =
+        if (config.programs.enable) then config.home-manager.users.${username}.stylix.cursor else { };
       # fonts =
       #   if (config.gui.enable)
       #   then config.home-manager.users.${username}.stylix.fonts

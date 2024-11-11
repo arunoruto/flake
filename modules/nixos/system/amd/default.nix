@@ -10,10 +10,10 @@
     ./zluda.nix
   ];
 
-  options.amd.enable = lib.mkEnableOption "Setup amd tools";
+  options.hosts.amd.enable = lib.mkEnableOption "Setup amd tools";
 
-  config = lib.mkIf config.amd.enable {
-    amd = {
+  config = lib.mkIf config.hosts.amd.enable {
+    hosts.amd = {
       rocm.enable = lib.mkDefault false;
       zluda.enable = lib.mkDefault false;
     };

@@ -8,17 +8,28 @@
 {
   imports = [
     ./boot
+    ./types
     ./locale.nix
     ./nix-utils.nix
     ./secure-boot.nix
     # ./systemd.nix
     ./theming.nix
     ./upgrade.nix
+
+    ./amd
+    ./intel
+    ./nvidia
   ];
 
   nix-utils.enable = lib.mkDefault true;
   secureboot.enable = lib.mkDefault false;
   upgrades.enable = lib.mkDefault false;
+
+  hosts = {
+    amd.enable = lib.mkDefault false;
+    intel.enable = lib.mkDefault false;
+    nvidia.enable = lib.mkDefault false;
+  };
 
   environment.systemPackages = with pkgs; [
     lsof

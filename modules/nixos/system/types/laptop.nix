@@ -4,9 +4,9 @@
   ...
 }:
 {
-  options.laptop.enable = lib.mkEnableOption "Sensible defaults for laptops";
+  options.hosts.laptop.enable = lib.mkEnableOption "Sensible defaults for laptops";
 
-  config = lib.mkIf config.laptop.enable {
+  config = lib.mkIf config.hosts.laptop.enable {
     latex.enable = true;
     programming.enable = true;
     tpm.enable = lib.mkDefault true;

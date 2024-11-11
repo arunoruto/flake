@@ -18,16 +18,16 @@
   ];
 
   helix = {
-    julia.enable = lib.mkDefault (!config.tinypc.enable);
+    julia.enable = lib.mkDefault (!config.hosts.tinypc.enable);
     ltex = {
-      enable = lib.mkDefault (!config.tinypc.enable);
-      ngram = lib.mkDefault (!config.tinypc.enable);
+      enable = lib.mkDefault (!config.hosts.tinypc.enable);
+      ngram = lib.mkDefault (!config.hosts.tinypc.enable);
     };
-    matlab.enable = lib.mkDefault (!config.tinypc.enable);
-    # markdown.enable = lib.mkDefault (!config.tinypc.enable);
+    matlab.enable = lib.mkDefault (!config.hosts.tinypc.enable);
+    # markdown.enable = lib.mkDefault (!config.hosts.tinypc.enable);
     markdown.enable = true;
-    markup.enable = lib.mkDefault (!config.tinypc.enable);
+    markup.enable = lib.mkDefault (!config.hosts.tinypc.enable);
     nix.enable = lib.mkDefault true;
-    python.enable = lib.mkDefault (!config.tinypc.enable);
+    python.enable = lib.mkDefault (!config.hosts.tinypc.enable);
   };
 }

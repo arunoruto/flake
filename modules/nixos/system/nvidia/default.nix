@@ -5,9 +5,9 @@
   ...
 }:
 {
-  options.nvidia.enable = lib.mkEnableOption "Setup Nvidia environment";
+  options.hosts.nvidia.enable = lib.mkEnableOption "Setup Nvidia environment";
 
-  config = lib.mkIf config.nvidia.enable {
+  config = lib.mkIf config.hosts.nvidia.enable {
     # boot = {
     #   kernelParams = ["nvidia.NVreg_EnableGpuFirmware=0"];
     # };

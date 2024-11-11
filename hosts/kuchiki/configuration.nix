@@ -14,7 +14,7 @@
   # chrome.enable = false;
   # steam.enable = false;
   # home.pc.enable = false;
-  gui.enable = false;
+  programs.enable = false;
 
   boot = {
     kernelModules = [ "amdgpu" ];

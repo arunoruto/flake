@@ -25,18 +25,15 @@
     sway.enable = lib.mkDefault false;
 
     home.packages = with pkgs; [
-      gimp
-      inkscape
+      # gimp
+      # inkscape
       jabref
-      obs-studio
-      #obsidian
+      # obs-studio
       #okular
       rnote
-      spotify
       telegram-desktop
-      #ultrastardx
-      via
-      vial
+      # via
+      # vial
       #qbittorrent
 
       exercism

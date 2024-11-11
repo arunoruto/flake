@@ -15,6 +15,6 @@
   config = lib.mkIf config.browsers.enable {
     chrome.enable = lib.mkDefault true;
     firefox.enable = lib.mkDefault true;
-    vivaldi.enable = lib.mkDefault true;
+    vivaldi.enable = lib.mkDefault false;
   };
 }

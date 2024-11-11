@@ -7,7 +7,7 @@
   # Eanble fingerprint for framework laptop
   fingerprint.enable = false;
 
-  intel.enable = true;
+  hosts.intel.enable = true;
 
   # Framework specific kernel Params
   boot = {

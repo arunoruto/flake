@@ -1,7 +1,9 @@
 {
-  workstation.enable = true;
+  hosts = {
+    workstation.enable = true;
+    nvidia.enable = true;
+  };
   yubikey.signing = "giyu";
-  nvidia.enable = true;
   # netbird.enable = true;
   # fingerprint.enable = true;
 
