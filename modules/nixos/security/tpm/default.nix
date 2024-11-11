@@ -13,7 +13,7 @@
 
   config = lib.mkIf config.tpm.enable {
     services.ssh-tpm-agent = {
-      enable = true;
+      enable = false;
       package = pkgs.unstable.ssh-tpm-agent;
       # userProxyPath = "yubikey-agent/yubikey-agent.sock";
     };
