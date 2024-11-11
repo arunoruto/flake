@@ -61,6 +61,18 @@ nh home switch # if the FLAKE variable is set, or
 nh home switch ./#<username>
 ```
 
+## Facter
+
+Generate a `facter.json` file for a system and place it in the correct host path:
+
+```sh
+sudo nix run \
+  --option experimental-features "nix-command flakes" \
+  --option extra-substituters https://numtide.cachix.org \
+  --option extra-trusted-public-keys numtide.cachix.org-1:2ps1kLBUWjxIneOy1Ik6cQjb41X0iXVXeHigGmycPPE= \
+  github:numtide/nixos-facter -- -o facter.json
+```
+
 ## Nixvim
 
 Nixvim is the nix way to configure neovim.
