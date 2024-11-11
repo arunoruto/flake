@@ -12,8 +12,11 @@ in
 {
   printing.enable = true;
   scanning.enable = true;
-  hosts.workstation.enable = true;
-  hosts.nvidia.enable = true;
+  hosts = {
+    workstation.enable = true;
+    nvidia.enable = true;
+  };
+  yubikey.signing = "kanae";
 
   # Define your hostname.
   # networking.hostName = lib.mkForce "kyuubi";
