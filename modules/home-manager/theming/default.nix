@@ -8,6 +8,7 @@
     ./cursors.nix
     ./fonts.nix
     ./icons.nix
+    ./monitors.nix
     ./pc.nix
     ./stylix.nix
   ];

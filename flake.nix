@@ -11,6 +11,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixos-hardware.url = "github:nixos/nixos-hardware";
+    ucodenix.url = "github:e-tho/ucodenix";
     nixos-facter-modules.url = "github:numtide/nixos-facter-modules";
     nix-ld = {
       url = "github:Mic92/nix-ld";
@@ -30,6 +31,7 @@
       url = "github:nix-community/home-manager/release-24.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    hyprpanel.url = "github:Jas-SinghFSU/HyprPanel";
     # DEs
     # nixos-cosmic = {
     #   url = "github:lilyinstarlight/nixos-cosmic";
