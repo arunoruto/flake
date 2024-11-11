@@ -6,7 +6,6 @@
   hosts.laptop.enable = true;
 
   # Eanble fingerprint for framework laptop
-  fingerprint.enable = true;
   hosts.amd.enable = true;
 
   # Fix 6GHz problem

@@ -5,7 +5,9 @@
   ...
 }:
 {
-  options.fingerprint.enable = lib.mkEnableOption "Enable fingerprint scanner support";
+  options.fingerprint.enable = lib.mkEnableOption "Enable fingerprint scanner support" // {
+    default = config.facter.detected.fingerprint.enable;
+  };
 
   config = lib.mkIf config.fingerprint.enable {
     # Enable fingerprint support with goodix (framework)

@@ -18,9 +18,4 @@
 
   # Set system time
   time.hardwareClockInLocalTime = true;
-
-  # cosmic.enable = true;
-
-  # Eanble fingerprint for framework laptop
-  # fingerprint.enable = true;
 }
