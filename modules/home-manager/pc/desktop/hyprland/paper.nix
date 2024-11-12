@@ -4,9 +4,13 @@
   ...
 }:
 {
-  options.hypr.wallpaper.enable = lib.mkEnableOption "Configure hyprpaper for wallpaper settings";
+  imports = [
+    ./paper-stylix.nix
+  ];
 
-  config = lib.mkIf config.hypr.wallpaper.enable {
+  options.hypr.paper.enable = lib.mkEnableOption "Configure hyprpaper for wallpaper settings";
+
+  config = lib.mkIf config.hypr.paper.enable {
     services.hyprpaper = {
       enable = true;
       settings = {

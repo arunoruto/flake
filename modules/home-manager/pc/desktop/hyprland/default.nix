@@ -9,11 +9,12 @@
     ./binds.nix
     ./idle.nix
     ./lock.nix
+    ./panel.nix
+    ./paper.nix
     ./plugins
     #  ./services.nix
     #  ./theme.nix
     #  ./waybar
-    ./wallpaper.nix
   ];
 
   options.hyprland.enable = lib.mkEnableOption "Custom hyprland config";
@@ -23,7 +24,8 @@
       binds.enable = true;
       idle.enable = true;
       lock.enable = true;
-      wallpaper.enable = true;
+      panel.enable = true;
+      paper.enable = true;
       plugins.enable = true;
     };
     wayland.windowManager.hyprland = {
@@ -99,7 +101,7 @@
         };
 
         exec-once = [
-          "eww open bar"
+          # "eww open bar"
           # "ags"
           # "ags --config \${FLAKE}/home-manager/pc/desktop/bars/ags/config/config.js"
           # "waybar"
@@ -132,7 +134,6 @@
     };
 
     home.packages = with pkgs; [
-      hyprshot
       #   wofi
       #   mpvpaper
     ];

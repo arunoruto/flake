@@ -95,7 +95,7 @@ in
 
         # Screenshot
         # '', Print, exec, grim -g "$(slurp -d)" - | wl-copy''
-        ", Print, exec, hyprshot --clipboard-only -m region"
+        ", Print, exec, ${lib.getExe pkgs.hyprshot} --clipboard-only -m region"
 
         # Shortcuts
         # "$mod, F1, exec, \${BROWSER}"
