@@ -91,6 +91,7 @@
         inherit system;
         overlays = [
           self.overlays.unstable-packages
+          inputs.hyprpanel.overlay
         ];
       };
 
@@ -140,6 +141,7 @@
                 overlays = [
                   self.overlays.additions
                   self.overlays.unstable-packages
+                  inputs.hyprpanel.overlay
                 ];
               };
               theming = {
