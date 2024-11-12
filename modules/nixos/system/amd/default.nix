@@ -2,10 +2,13 @@
   pkgs,
   config,
   lib,
+  inputs,
   ...
 }:
 {
   imports = [
+    inputs.ucodenix.nixosModules.default
+
     ./rocm.nix
     ./zluda.nix
   ];
@@ -18,7 +21,10 @@
       zluda.enable = lib.mkDefault false;
     };
 
-    services.xserver.videoDrivers = [ "amdgpu" ];
+    services = {
+      xserver.videoDrivers = [ "amdgpu" ];
+      ucodenix.enable = true;
+    };
 
     environment.systemPackages = with pkgs; [
       amdgpu_top
