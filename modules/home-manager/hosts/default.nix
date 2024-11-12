@@ -1,8 +1,8 @@
 { lib, ... }:
 {
   imports = [
-    ./kyuubi
-    ./zangetsu
+    # ./kyuubi
+    # ./zangetsu
   ];
 
   options = {
