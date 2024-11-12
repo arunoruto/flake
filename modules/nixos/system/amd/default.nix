@@ -23,7 +23,7 @@
 
     services = {
       xserver.videoDrivers = [ "amdgpu" ];
-      ucodenix.enable = true;
+      ucodenix.enable = false;
     };
 
     environment.systemPackages = with pkgs; [
