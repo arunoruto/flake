@@ -5,9 +5,7 @@
   ...
 }:
 {
-  options = {
-    vial.enable = lib.mkEnableOption "Support vial for custom keyboards";
-  };
+  options.vial.enable = lib.mkEnableOption "Support vial for custom keyboards";
 
   config = lib.mkIf config.vial.enable {
     # Packages with udev rules
