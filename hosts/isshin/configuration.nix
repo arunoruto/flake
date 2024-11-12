@@ -1,7 +1,10 @@
-{ lib, ... }:
+{ lib, config, ... }:
 {
   # Set hostname
   # networking.hostName = lib.mkForce "isshin"; # Define your hostname.
+  services = lib.mkIf (config.services ? ucodenix) {
+    ucodenix.cpuModelId = "00A70F41";
+  };
 
   hosts.laptop.enable = true;
 
