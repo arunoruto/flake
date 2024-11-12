@@ -134,6 +134,7 @@
     };
 
     home.packages = with pkgs; [
+      unstable.hyprpicker
       #   wofi
       #   mpvpaper
     ];
