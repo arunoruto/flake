@@ -8,6 +8,8 @@
   username,
   theme,
   image,
+  config,
+  lib,
   ...
 }:
 let
@@ -23,6 +25,7 @@ let
     inherit theme image inputs;
     user = username;
   };
+  host-home-config = ../hosts/${config.networking.hostName}/home.nix;
 in
 {
   # home-manager = mkIf env.useHomeManager {
@@ -54,7 +57,10 @@ in
     # the system expects user directories to be found in the present
     # directory, or will exit with directory not found errors
     # users.${username} = import ../modules/home-manager/home.nix;
-    users.${username} = import ./${username};
+    # users.${username} = (import ./${username}) // (import ../modules/home-manager/home.nix);
+    users.${username} =
+      (import ./${username})
+      // lib.optionalAttrs (builtins.pathExists host-home-config) (import host-home-config);
 
     # users = genAttrs config.modules.system.users (name: ./${name});
   };
