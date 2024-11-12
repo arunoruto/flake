@@ -43,12 +43,25 @@
             #   args = ["--plugin=${pkgs.nodePackages.prettier-plugin-toml}/lib/node_modules/prettier-plugin-toml" "--parser" "toml"];
             # };
           }
+          {
+            name = "xml";
+            # auto-format = true;
+            # formatter = {
+            #   command = "prettier";
+            #   args = [
+            #     "--parser"
+            #     "yaml"
+            #   ];
+            # };
+            language-servers = [ "lemminx" ];
+          }
         ];
         language-server = {
           vscode-json-languageserver = {
-            command = "vscode-json-languageserver";
+            command = lib.getExe pkgs.nodePackages.vscode-json-languageserver;
             args = [ "--stdio" ];
           };
+          lemminx.command = lib.getExe pkgs.lemminx;
         };
       };
       extraPackages = with pkgs; [
@@ -57,7 +70,6 @@
         yaml-language-server
         nodePackages.prettier
         nodePackages.prettier-plugin-toml
-        nodePackages.vscode-json-languageserver
       ];
     };
   };
