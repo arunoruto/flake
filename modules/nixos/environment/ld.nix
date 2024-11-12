@@ -15,6 +15,7 @@
       # blas
       stdenv.cc.cc
       glibc
+      opensc
       zlib
     ];
   };
