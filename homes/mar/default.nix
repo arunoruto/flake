@@ -3,7 +3,8 @@
     ../../modules/home-manager/home.nix
   ];
 
-  shell.main = "zsh";
-  nushell.enable = true;
+  shell.main = "fish";
   fish.enable = true;
+  nushell.enable = true;
+  zsh.enable = true;
 }
