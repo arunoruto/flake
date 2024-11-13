@@ -9,6 +9,6 @@
   bars = {
     # ags.enable = lib.mkDefault false;
     eww.enable = lib.mkDefault true;
-    waybar.enable = lib.mkDefault false;
+    waybar.enable = lib.mkDefault true;
   };
 }

@@ -30,6 +30,7 @@
     };
     wayland.windowManager.hyprland = {
       enable = true;
+      # package = pkgs.unstable.hyprland;
       settings = {
         # monitor = ",preferred,auto,1.175";
         monitor = lib.mkDefault ",preferred,auto,1";
@@ -125,6 +126,10 @@
           "9, defautName:8"
           "10,defautName:9"
         ];
+
+        # debug = {
+        #   disable_logs = false;
+        # };
       };
       xwayland = {
         enable = true;
