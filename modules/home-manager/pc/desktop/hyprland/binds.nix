@@ -6,7 +6,7 @@
 }:
 let
   terminal = "wezterm";
-  menu = "${pkgs.wofi}/bin/wofi --show drun --normal-window";
+  menu = "${lib.getExe config.programs.wofi.package} --show drun --normal-window";
 
   # left = "left";
   # right = "right";
@@ -31,7 +31,7 @@ in
 
         "$mod SHIFT, Q, killactive"
         "$mod SHIFT, E, exit"
-        "$mod SHIFT, R, exec, hyprctl reload"
+        "$mod SHIFT, R, exec, ${config.wayland.windowManager.hyprland.package}/bin/hyprctl reload"
         # "$mod SHIFT, R, exec, ${pkgs.hyprland}/bin/hyprctl reload"
 
         # Move focus with mod + arrow keys
@@ -101,7 +101,8 @@ in
         # "$mod, F1, exec, \${BROWSER}"
         # "$mod, F1, exec, google-chrome-stable"
         # "$mod, F1, exec, firefox"
-        "$mod, F1, exec, ${config.home.sessionVariables.BROWSER}"
+        "$mod, F1, exec, flatpak run io.github.zen_browser.zen"
+        # "$mod, F1, exec, ${config.home.sessionVariables.BROWSER}"
       ];
 
       bindm = [

@@ -31,7 +31,7 @@
       url = "github:nix-community/home-manager/release-24.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    hyprpanel.url = "github:Jas-SinghFSU/HyprPanel";
+    # hyprpanel.url = "github:Jas-SinghFSU/HyprPanel";
     # DEs
     # nixos-cosmic = {
     #   url = "github:lilyinstarlight/nixos-cosmic";
@@ -91,7 +91,7 @@
         inherit system;
         overlays = [
           self.overlays.unstable-packages
-          inputs.hyprpanel.overlay
+          # inputs.hyprpanel.overlay
         ];
       };
 
@@ -141,7 +141,7 @@
                 overlays = [
                   self.overlays.additions
                   self.overlays.unstable-packages
-                  inputs.hyprpanel.overlay
+                  # inputs.hyprpanel.overlay
                 ];
               };
               theming = {

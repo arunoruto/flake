@@ -15,8 +15,8 @@
     services.hyprpanel = {
       enable = true;
     };
-    wayland.windowManager.hyprland.settings.exec-once = [
-      "${config.services.hyprpanel.package}/bin/hyprpanel"
-    ];
+    # wayland.windowManager.hyprland.settings.exec-once = [
+    #   "${config.services.hyprpanel.package}/bin/hyprpanel"
+    # ];
   };
 }

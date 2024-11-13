@@ -9,7 +9,7 @@
     ./binds.nix
     ./idle.nix
     ./lock.nix
-    ./panel.nix
+    # ./panel.nix
     ./paper.nix
     ./plugins
     #  ./services.nix
@@ -24,7 +24,7 @@
       binds.enable = true;
       idle.enable = true;
       lock.enable = true;
-      panel.enable = true;
+      # panel.enable = true;
       paper.enable = true;
       plugins.enable = true;
     };
@@ -100,8 +100,11 @@
           sensitivity = 0; # -1.0 - 1.0, 0 means no modification.
         };
 
+        exec = [
+          "${lib.getExe config.programs.eww.package} open bar"
+        ];
+
         exec-once = [
-          # "eww open bar"
           # "ags"
           # "ags --config \${FLAKE}/home-manager/pc/desktop/bars/ags/config/config.js"
           # "waybar"
@@ -133,9 +136,10 @@
       '';
     };
 
+    programs.wofi.enable = true;
+
     home.packages = with pkgs; [
       unstable.hyprpicker
-      #   wofi
       #   mpvpaper
     ];
   };
