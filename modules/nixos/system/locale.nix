@@ -21,7 +21,7 @@ in
   # Set your time zone.
   # time.timeZone = "Europe/Berlin";
   # allow TZ to be set by desktop user
-  # time.timeZone = lib.mkForce null;
+  time.timeZone = null;
   services.automatic-timezoned.enable = true;
 
   # Select internationalisation properties.

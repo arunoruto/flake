@@ -24,7 +24,7 @@
     services = {
       xserver.videoDrivers = [ "amdgpu" ];
       ucodenix = {
-        enable = true;
+        enable = lib.mkDefault true;
         cpuModelId = lib.mkDefault "auto";
       };
     };
