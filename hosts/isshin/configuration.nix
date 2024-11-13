@@ -3,6 +3,7 @@
   # Set hostname
   # networking.hostName = lib.mkForce "isshin"; # Define your hostname.
   services = lib.mkIf (config.services ? ucodenix) {
+    ucodenix.enable = true;
     ucodenix.cpuModelId = "00A70F41";
   };
 
