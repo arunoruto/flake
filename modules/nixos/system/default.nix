@@ -12,7 +12,7 @@
     ./locale.nix
     ./nix-utils.nix
     ./secure-boot.nix
-    # ./systemd.nix
+    ./systemd.nix
     ./theming.nix
     ./upgrade.nix
 
