@@ -322,11 +322,11 @@
         "rust-overlay": "rust-overlay"
       },
       "locked": {
-        "lastModified": 1731295855,
-        "narHash": "sha256-PpkEexKnFxd72Z+bRnZqYmaSlNF0ztOIjY+aa/5PKak=",
+        "lastModified": 1731479417,
+        "narHash": "sha256-NZ+Jc9XecxUIC6RBE5TdDo8hKzI704fMBKTz6lEH32w=",
         "owner": "helix-editor",
         "repo": "helix",
-        "rev": "10c3502a89d51e2d074d0d2ca62f85241d6e8c0f",
+        "rev": "6cca98264fe308bd6a4f7f85be2d821b58f60b4a",
         "type": "github"
       },
       "original": {
@@ -534,22 +534,6 @@
         "type": "github"
       }
     },
-    "nixpkgs_3": {
-      "locked": {
-        "lastModified": 1730531603,
-        "narHash": "sha256-Dqg6si5CqIzm87sp57j5nTaeBbWhHFaVyG7V6L8k3lY=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "7ffd9ae656aec493492b44d0ddfb28e79a1ea25d",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "nixos-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "pre-commit-hooks-nix": {
       "inputs": {
         "flake-compat": [
@@ -742,15 +726,12 @@
       }
     },
     "ucodenix": {
-      "inputs": {
-        "nixpkgs": "nixpkgs_3"
-      },
       "locked": {
-        "lastModified": 1731428847,
-        "narHash": "sha256-x+Q0I+R+aBZoJIEuBFDDJFjFu+todWsZJXrQkAuVh/o=",
+        "lastModified": 1731510725,
+        "narHash": "sha256-kTX8QHL5PStzyITF47l6G/KvDjORuojX9NPNTccUtdA=",
         "owner": "e-tho",
         "repo": "ucodenix",
-        "rev": "404f4adc330b4a4047cecbc4457d4ae2abe69bed",
+        "rev": "7d7586d3fcd07e147c0dba9291b2473e060c4c98",
         "type": "github"
       },
       "original": {
