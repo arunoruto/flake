@@ -8,11 +8,11 @@
 
   config = lib.mkIf config.gnome.dconf.enable {
     dconf.settings = {
-      "org/gnome/shell" =
-        {
-        };
+      # "org/gnome/shell" = { };
       # Time zone settings
-      # "org/gnome/desktop/datetime" = {automatic-timezone = true;};
+      "org/gnome/desktop/datetime" = {
+        automatic-timezone = true;
+      };
       "org/gnome/system/location" = {
         enabled = true;
       };
