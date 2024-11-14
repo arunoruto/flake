@@ -100,6 +100,7 @@
           # "x11-randr-fractional-scaling"
         ];
         dynamic-workspaces = false;
+        workspaces-only-on-primary = true;
       };
       "org/gnome/desktop/wm/preferences".num-workspaces = 9;
       "org/gnome/shell/keybindings" = {
