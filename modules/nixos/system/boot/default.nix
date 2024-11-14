@@ -16,7 +16,7 @@
 
   boot = {
     loader.timeout = lib.mkDefault 0; # Hit F10 for a list of generations
-    kernelPackages = pkgs.linuxPackages_latest;
+    kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
     # plymouth.enable = true;
   };
 }
