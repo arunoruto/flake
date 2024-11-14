@@ -12,6 +12,7 @@
     ./network
 
     ./davmail.nix
+    ./github-runner.nix
     ./flatpak.nix
     ./ssh.nix
     ./tlp.nix

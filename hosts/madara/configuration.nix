@@ -17,6 +17,7 @@ in
     nvidia.enable = true;
   };
   yubikey.signing = "kanae";
+  services.github-runners.YASF.enable = true;
 
   # Define your hostname.
   # networking.hostName = lib.mkForce "kyuubi";
