@@ -95,13 +95,31 @@
         ];
       };
 
-      # Some customization
+      ## Some customization
+      ## Schemes: https://tinted-theming.github.io/base16-gallery/ 
       # scheme = "catppuccin-macchiato";
+      # scheme = "tokyo-night-moon";
       # scheme = "tokyo-night-dark";
-      scheme = "gruvbox-material-dark-hard";
+      # scheme = "tokyodark-terminal";
+      # scheme = "tokyo-night-terminal-dark";
+      scheme = "tokyo-city-terminal-dark";
+      # scheme = "outrun-dark";
+      # scheme = "pandora";
+      # scheme = "heetch";
+      # scheme = "gruvbox-material-dark-hard";
+      # scheme = "gruvbox-material-light-hard";
+      # scheme = "rose-pine-dawn";
+      # scheme = "rose-pine";
       # image = "anime/jjk/satoru-gojo-jujutsu-kaisen-5k-ac.jpg";
       # image = "anime/gruvbox/skull2.png";
-      image = "anime/gruvbox/boonies.png";
+      # image = "anime/gruvbox/boonies.png";
+      # image = "anime/dan-da-dan/op/okarun1.png";
+      # image = "anime/dan-da-dan/op/okarun2.png";
+      # image = "anime/dan-da-dan/op/okarun3.png";
+      # image = "anime/dan-da-dan/op/okarun4.png";
+      # image = "anime/dan-da-dan/op/okarun5.png";
+      # image = "anime/dan-da-dan/op/jiji1.png";
+      image = "anime/dan-da-dan/op/turbogranny1.png";
 
       hostname-users = {
         # Personal

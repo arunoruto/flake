@@ -22,6 +22,7 @@
           set fish_greeting
 
           set -gx LS_COLORS $(vivid generate gruvbox-dark)
+          set -gx NIX_LD_LIBRARY_PATH /run/current-system/sw/share/nix-ld/lib
         '';
 
         functions = {

@@ -743,10 +743,10 @@
     "wallpapers": {
       "flake": false,
       "locked": {
-        "lastModified": 1728863712,
-        "narHash": "sha256-yOGYiI8j+bDlYNecuWOk6yqk0hV0odTry3agL5O85ro=",
+        "lastModified": 1731869506,
+        "narHash": "sha256-c1XNNBwtItJnIrqxAzZ1HdttWnx9EsjrB9skv7KnVZI=",
         "ref": "main",
-        "rev": "e28eae4a9334fdf413af6c58f32a159dbae41695",
+        "rev": "7c7a8fcffd477e81cae6fbb41d96772c5b78a480",
         "shallow": true,
         "type": "git",
         "url": "https://github.com/arunoruto/wallpapers.git"

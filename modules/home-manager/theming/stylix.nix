@@ -37,8 +37,9 @@
     stylix = {
       # enable = lib.mkDefault true;
       enable = true;
-      base16Scheme = lib.mkDefault "${pkgs.base16-schemes}/share/themes/${config.theming.scheme}.yaml";
+      base16Scheme = lib.mkDefault "${pkgs.unstable.base16-schemes}/share/themes/${config.theming.scheme}.yaml";
       image = "${inputs.wallpapers}/${config.theming.image}";
+      polarity = "dark";
       targets = {
         nixvim.enable = false;
         vscode.enable = true;
