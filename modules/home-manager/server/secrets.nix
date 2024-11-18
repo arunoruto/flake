@@ -29,6 +29,7 @@ in
       };
       "ssh_keys/giyu".path = "${config.home.homeDirectory}/.ssh/id_giyu";
       "ssh_keys/tengen".path = "${config.home.homeDirectory}/.ssh/id_tengen";
+      "ssh_keys/kanae".path = "${config.home.homeDirectory}/.ssh/id_kanae";
       "tokens/copilot" = { };
       "tokens/cachix" = { };
     };
