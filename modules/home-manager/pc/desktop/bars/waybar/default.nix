@@ -11,6 +11,11 @@
   options.bars.waybar.enable = lib.mkEnableOption "Enable waybar config";
 
   config = lib.mkIf config.bars.waybar.enable {
+    # stylix.targets.waybar = {
+    #   enableLeftBackColors = true;
+    #   enableCenterBackColors = true;
+    #   enableRightBackColors = true;
+    # };
     programs.waybar = {
       enable = true;
       settings = {
@@ -185,7 +190,7 @@
           };
         };
       };
-      style = builtins.readFile ./style.css;
+      # style = builtins.readFile ./style.css;
     };
   };
 }
