@@ -23,7 +23,8 @@ in
   services.github-runners.YASF = {
     enable = lib.mkDefault false;
     url = "https://github.com/AGBV/YASF";
-    tokenFile = config.sops.secrets."tokens/yasf-runner".path;
+    tokenFile =
+      if cfg.enable then config.sops.secrets."tokens/yasf-runner".path else ./github-runner.nix;
     name = config.networking.hostName;
     replace = true;
     extraLabels = [
@@ -38,7 +39,7 @@ in
     ];
   };
 
-  systemd.tmpfiles.settings.yasf-files = cfg.enable {
+  systemd.tmpfiles.settings.yasf-files = lib.mkIf cfg.enable {
     ${workDir}.d = {
       user = gh-user;
       group = gh-user;
@@ -46,7 +47,7 @@ in
     };
   };
 
-  sops.secrets = cfg.enable {
+  sops.secrets = lib.mkIf cfg.enable {
     "tokens/yasf-runner" = {
       owner = config.users.users.${gh-user}.name;
       inherit (config.users.users.${gh-user}) group;
