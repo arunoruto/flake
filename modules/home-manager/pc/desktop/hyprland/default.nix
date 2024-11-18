@@ -102,7 +102,8 @@
         };
 
         exec = [
-          "${lib.getExe config.programs.eww.package} open bar"
+          # "${lib.getExe config.programs.eww.package} open bar"
+          "killall .waybar-wrapped && ${lib.getExe config.programs.waybar.package}"
         ];
 
         exec-once = [
