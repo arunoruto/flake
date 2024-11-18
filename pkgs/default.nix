@@ -12,6 +12,10 @@ pkgs: rec {
   candy-icons = pkgs.callPackage ./candy-icons/package.nix { };
   mstm = pkgs.callPackage ./mstm/parallel.nix { };
   zen-browser = pkgs.callPackage ./zen-browser/package.nix { };
+  wigxjpf = pkgs.callPackage ./wigxjpf/package.nix { };
+  pywigxjpf = pkgs.python3Packages.callPackage ./wigxjpf/pypackage.nix { };
+
+  # Work testing
   isis = pkgs.callPackage ./isis/package.nix {
     inherit inja;
     inherit ale;
