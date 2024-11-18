@@ -44,6 +44,8 @@ in
       yubikey-manager
     ];
 
+    programs.yubikey-touch-detector.enable = lib.mkDefault true;
+
     services = {
       pcscd.enable = true; # smartcard device
       udev.packages = [ pkgs.yubikey-personalization ];
