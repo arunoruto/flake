@@ -7,9 +7,10 @@
 let
   gh-user = "github";
   workDir = "/srv/yasf";
+  cfg = config.services.github-runners.YASF;
 in
 {
-  users = {
+  users = lib.mkIf cfg.enable {
     users.${gh-user} = {
       name = gh-user;
       group = gh-user;
@@ -37,7 +38,7 @@ in
     ];
   };
 
-  systemd.tmpfiles.settings.yasf-files = {
+  systemd.tmpfiles.settings.yasf-files = cfg.enable {
     ${workDir}.d = {
       user = gh-user;
       group = gh-user;
@@ -45,7 +46,7 @@ in
     };
   };
 
-  sops.secrets = {
+  sops.secrets = cfg.enable {
     "tokens/yasf-runner" = {
       owner = config.users.users.${gh-user}.name;
       inherit (config.users.users.${gh-user}) group;
