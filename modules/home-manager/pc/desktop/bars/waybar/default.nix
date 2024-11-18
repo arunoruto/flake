@@ -17,7 +17,7 @@
     #   enableRightBackColors = true;
     # };
     programs.waybar = {
-      enable = true;
+      # enable = true;
       settings = {
         mainBar = {
           layer = "top";

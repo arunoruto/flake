@@ -24,6 +24,10 @@
     pc.programs.enable = lib.mkDefault true;
     terminals.enable = lib.mkDefault true;
 
-    programs.autorandr.enable = lib.mkDefault true;
+    programs = {
+      autorandr.enable = lib.mkDefault true;
+      eww.enable = lib.mkDefault true;
+      waybar.enable = lib.mkDefault true;
+    };
   };
 }
