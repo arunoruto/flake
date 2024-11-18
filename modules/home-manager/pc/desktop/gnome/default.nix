@@ -23,13 +23,13 @@
         appindicator
         emoji-copy
         # focus
-        pip-on-top
         tailscale-status
         # tiling-shell
         # transparent-top-bar
         transparent-top-bar-adjustable-transparency
       ])
       ++ (with pkgs.unstable.gnomeExtensions; [
+        pip-on-top
         tiling-shell
       ]);
   };
