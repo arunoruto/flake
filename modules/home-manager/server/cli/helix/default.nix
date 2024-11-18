@@ -31,28 +31,31 @@ in
         # package = pkgs.unstable.evil-helix;
         settings = {
           theme = lib.mkForce "my-stylix";
-          editor = {
-            true-color = true;
-            bufferline = "always";
-            line-number = "relative";
-            rulers = [ 80 ];
-            cursorline = true;
-            color-modes = true;
-            popup-border = "all";
-            indent-guides = {
-              render = true;
+          editor =
+            {
+              true-color = true;
+              bufferline = "always";
+              line-number = "relative";
+              rulers = [ 80 ];
+              cursorline = true;
+              color-modes = true;
+              popup-border = "all";
+              indent-guides = {
+                render = true;
+              };
+              cursor-shape = {
+                normal = "block";
+                insert = "bar";
+                select = "underline";
+              };
+              lsp.display-messages = true;
+            }
+            // lib.optionalAttrs (!config.hosts.tinypc.enable) {
+              inline-diagnostics = {
+                cursor-line = "hint";
+                other-lines = "error";
+              };
             };
-            cursor-shape = {
-              normal = "block";
-              insert = "bar";
-              select = "underline";
-            };
-            inline-diagnostics = {
-              cursor-line = "hint";
-              other-lines = "error";
-            };
-            lsp.display-messages = true;
-          };
         };
         ignores = [
           ".build/"
