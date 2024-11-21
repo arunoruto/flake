@@ -9,6 +9,7 @@
   imports = [
     ./boot
     ./types
+    ./bluetooth.nix
     ./locale.nix
     ./nix-utils.nix
     ./secure-boot.nix
