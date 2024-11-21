@@ -88,7 +88,7 @@ in
       inherit shellAliases;
     };
     fish = lib.mkIf config.programs.fish.enable {
-      inherit shellAliases;
+      shellAbbrs = shellAliases;
     };
     nushell = lib.mkIf config.programs.nushell.enable {
       inherit shellAliases;
