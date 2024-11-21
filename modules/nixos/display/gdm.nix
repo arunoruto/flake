@@ -28,8 +28,8 @@
               ambient-enabled = false;
             };
             "org/gnome/login-screen" = {
-              enable-fingerprint-authentication = false;
-              enable-smartcard-authentication = false;
+              # enable-fingerprint-authentication = false;
+              # enable-smartcard-authentication = false;
             };
           };
         }
