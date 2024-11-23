@@ -2,6 +2,7 @@
   config,
   pkgs,
   lib,
+  username,
   ...
 }:
 {
@@ -28,13 +29,16 @@
           "nix-command"
           "flakes"
         ];
-        # extra-experimental-features = [
-        #   "pipe-operators"
-        # ];
+        extra-experimental-features = [
+          "pipe-operators"
+        ];
         warn-dirty = false;
         extra-substituters = [ "https://helix.cachix.org" ];
         extra-trusted-public-keys = [ "helix.cachix.org-1:ejp9KQpR1FBI2onstMQ34yogDm4OgU2ru6lIwPvuCVs=" ];
       };
+      extraOptions = ''
+        trusted-users = root ${username}
+      '';
       optimise = {
         automatic = true;
         dates = [ "04:00" ];
