@@ -1,16 +1,15 @@
 { lib, config, ... }:
 {
-  # Set hostname
-  # networking.hostName = lib.mkForce "isshin"; # Define your hostname.
   services = lib.mkIf (config.services ? ucodenix) {
     ucodenix.enable = true;
     ucodenix.cpuModelId = "00A70F41";
   };
 
-  hosts.laptop.enable = true;
-
-  # Eanble fingerprint for framework laptop
-  hosts.amd.enable = true;
+  hosts = {
+    laptop.enable = true;
+    amd.enable = true;
+  };
+  tpm.enable = false;
 
   # Fix 6GHz problem
   # https://community.frame.work/t/responded-amd-rz616-wifi-card-doesnt-work-with-6ghz-on-kernel-6-7/43226
