@@ -14,7 +14,7 @@
   config = lib.mkIf config.tpm.enable {
     services.ssh-tpm-agent = {
       enable = false;
-      package = pkgs.unstable.ssh-tpm-agent;
+      package = pkgs.ssh-tpm-agent;
       # userProxyPath = "yubikey-agent/yubikey-agent.sock";
     };
 
@@ -26,7 +26,7 @@
     };
 
     environment = {
-      systemPackages = with pkgs.unstable; [
+      systemPackages = with pkgs; [
         age-plugin-tpm
         # tpm2-tools
         tpm2-totp
