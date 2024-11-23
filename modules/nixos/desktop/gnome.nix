@@ -5,9 +5,7 @@
   ...
 }:
 {
-  options = {
-    gnome.enable = lib.mkEnableOption "Use the GNOME desktop environment";
-  };
+  options.gnome.enable = lib.mkEnableOption "Use the GNOME desktop environment";
 
   config = lib.mkIf config.gnome.enable {
     services = {
@@ -22,6 +20,8 @@
         sushi.enable = true;
       };
     };
+
+    programs.dconf.enable = lib.mkDefault true;
 
     environment = {
       systemPackages = with pkgs; [

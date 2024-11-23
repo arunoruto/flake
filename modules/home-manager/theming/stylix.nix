@@ -43,6 +43,8 @@
       targets = {
         nixvim.enable = false;
         vscode.enable = true;
+        gnome.enable = config.gnome.enable;
+        gtk.enable = config.gnome.enable;
       };
     };
 
