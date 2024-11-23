@@ -17,9 +17,9 @@
     ./services
     ./system
 
-    # ./pr.nix
-
     ./user.nix
+
+    # ./pr.nix
   ];
 
   desktop-environment.enable = lib.mkDefault true;

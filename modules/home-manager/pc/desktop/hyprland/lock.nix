@@ -38,9 +38,9 @@ in
           dots_size = 0.2; # Scale of input-field height, 0.2 - 0.8
           dots_spacing = 0.2; # Scale of dots' absolute size, 0.0 - 1.0
           dots_center = true;
-          outer_color = "rgba(0, 0, 0, 0)";
-          inner_color = "rgba(0, 0, 0, 0.5)";
-          font_color = "rgb(200, 200, 200)";
+          # outer_color = "rgba(0, 0, 0, 0)";
+          # inner_color = "rgba(0, 0, 0, 0.5)";
+          # font_color = "rgb(200, 200, 200)";
           fade_on_empty = false;
           # font_family = font;
           placeholder_text = ''<i><span foreground="##cdd6f4">Input Password...</span></i>'';

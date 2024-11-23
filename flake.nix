@@ -3,7 +3,7 @@
 
   inputs = {
     # Nixpkgs
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     # NixOS
     disko = {
@@ -28,7 +28,7 @@
     # nur.url = "github:nix-community/NUR";
     # Home Manager
     home-manager = {
-      url = "github:nix-community/home-manager/release-24.05";
+      url = "github:nix-community/home-manager/release-24.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     # hyprpanel.url = "github:Jas-SinghFSU/HyprPanel";
@@ -52,9 +52,10 @@
     # nixvim-flake.url = "github:arunoruto/nvim.nix";
     # Styling
     stylix = {
-      # url = "github:danth/stylix";
-      url = "github:danth/stylix/release-24.05";
+      url = "github:danth/stylix";
       inputs.nixpkgs.follows = "nixpkgs";
+      # url = "github:danth/stylix/release-24.05";
+      # inputs.nixpkgs.follows = "nixpkgs";
     };
     # ags.url = "github:Aylur/ags";
     # poetry2nix = {

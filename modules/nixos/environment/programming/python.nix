@@ -21,7 +21,7 @@ let
       numpy
       pandas
       plotly
-      streamlit
+      # streamlit
       # Misc
       manim
       psutil

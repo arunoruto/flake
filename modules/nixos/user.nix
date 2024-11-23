@@ -39,7 +39,10 @@ in
     };
   };
 
-  programs.zsh.enable = true;
+  # programs.${shell}.enable = lib.mkForce true;
+  programs = {
+    fish.enable = true;
+  };
 
   environment = {
     sessionVariables.FLAKE = "/home/${username}/.config/flake";

@@ -9,8 +9,10 @@
 
   config = lib.mkIf config.theming.cursors.enable {
     stylix.cursor = {
-      name = "catppuccin-macchiato-dark-cursors";
-      package = pkgs.catppuccin-cursors.macchiatoDark;
+      # name = "catppuccin-macchiato-dark-cursors";
+      # package = pkgs.catppuccin-cursors.macchiatoDark;
+      name = "Banana";
+      package = pkgs.banana-cursor;
       size = 24;
     };
 

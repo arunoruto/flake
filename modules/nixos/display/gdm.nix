@@ -20,7 +20,8 @@
     };
 
     programs = {
-      ssh.askPassword = lib.mkForce "${pkgs.gnome.seahorse.out}/bin/seahorse";
+      # ssh.askPassword = lib.mkForce "${pkgs.seahorse.out}/bin/seahorse";
+      ssh.askPassword = lib.mkForce "${lib.getExe pkgs.seahorse}";
       dconf.profiles.gdm.databases = [
         {
           settings = {

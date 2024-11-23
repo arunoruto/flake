@@ -28,12 +28,12 @@
         gnome-network-displays
         gthumb
         nautilus-open-any-terminal
-        gnome.nautilus-python
-        gnome.gnome-software
-        gnome.pomodoro
-        gnome.gnome-remote-desktop
-        gnome3.gnome-tweaks
-        gnome.zenity
+        nautilus-python
+        gnome-software
+        gnome-pomodoro
+        gnome-remote-desktop
+        gnome-tweaks
+        zenity
       ];
       # Excluding some GNOME applications from the default install
       gnome.excludePackages =
@@ -41,7 +41,7 @@
           gnome-photos
           gnome-tour
         ])
-        ++ (with pkgs.gnome; [
+        ++ (with pkgs; [
           #cheese # webcam tool
           gnome-music
           gnome-terminal
