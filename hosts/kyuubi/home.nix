@@ -1,3 +1,4 @@
+{ lib, pkgs, ... }:
 {
   home.file = {
     ".config/monitors.xml".source = ./monitors.xml;

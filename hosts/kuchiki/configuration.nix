@@ -30,7 +30,7 @@
   };
 
   hardware = {
-    opengl.extraPackages = with pkgs; [
+    graphics.extraPackages = with pkgs; [
       # OpenCL
       rocmPackages.clr.icd
       # AMDVLK
