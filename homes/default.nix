@@ -3,13 +3,13 @@
   # self',
   # self,
   # config,
-  # lib,
   inputs,
   username,
   theme,
   image,
   config,
   lib,
+  pkgs,
   ...
 }:
 let
@@ -60,7 +60,12 @@ in
     # users.${username} = (import ./${username}) // (import ../modules/home-manager/home.nix);
     users.${username} =
       (import ./${username})
-      // lib.optionalAttrs (builtins.pathExists host-home-config) (import host-home-config);
+      // lib.optionalAttrs (builtins.pathExists host-home-config) (
+        import host-home-config {
+          inherit lib;
+          inherit pkgs;
+        }
+      );
 
     # users = genAttrs config.modules.system.users (name: ./${name});
   };
