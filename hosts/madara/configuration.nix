@@ -1,5 +1,6 @@
 {
   pkgs,
+  config,
   # lib,
   ...
 }:
@@ -16,12 +17,12 @@ in
     workstation.enable = true;
     nvidia.enable = true;
   };
+  hardware.nvidia = {
+    nvidiaSettings = false;
+    package = config.boot.kernelPackages.nvidiaPackages.beta;
+  };
   yubikey.signing = "kanae";
   runners.YASF.enable = true;
-
-  # Define your hostname.
-  # networking.hostName = lib.mkForce "kyuubi";
-
   nfs.enable = true;
 
   # environment.sessionVariables.FLAKE = "/home/${username}/Development/nix";
