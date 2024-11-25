@@ -65,7 +65,7 @@
         };
       # Session
       "org/gnome/desktop/session" = {
-        idle-delay = if config.hosts.laptop.enable then "uint32 900" else "uint32 0";
+        idle-delay = lib.hm.gvariant.mkUint32 (if config.hosts.laptop.enable then 900 else 0);
       };
       # Set list of custom keybinding
       "org/gnome/settings-daemon/plugins/media-keys" = {
