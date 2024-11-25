@@ -57,7 +57,7 @@
           ambient-enabled = false;
           idle-dim = false;
         }
-        // lib.mkIf config.hosts.laptop.enable {
+        // lib.optionalAttrs config.hosts.laptop.enable {
           sleep-inactive-ac-timeout = 1800;
           sleep-inactive-ac-type = "suspend";
           sleep-inactive-battery-timeout = 900;
