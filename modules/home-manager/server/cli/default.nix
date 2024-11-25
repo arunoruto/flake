@@ -7,7 +7,7 @@
     # ./dprint
     # ./nvim
     ./helix
-    # ./tmux
+    ./tmux
     ./bat.nix
     # ./btop.nix
     ./editorconfig.nix

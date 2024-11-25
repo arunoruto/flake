@@ -7,14 +7,14 @@
 
   programs.tmux = {
     enable = true;
-    package = pkgs.unstable.tmux;
+    # package = pkgs.unstable.tmux;
     clock24 = true;
     shortcut = "Space";
     terminal = "screen-256color";
     keyMode = "vi";
     mouse = true;
     baseIndex = 1;
-    plugins = with pkgs; [
+    plugins = with pkgs.tmuxPlugins; [
       #   {
       #     plugin = tmuxPlugins.continuum;
       #     extraConfig = ''
@@ -29,8 +29,8 @@
       #       set -g @resurrect-capture-pane-contents 'on'
       #     '';
       #   }
-      tmuxPlugins.yank
-      tmuxPlugins.vim-tmux-navigator
+      yank
+      vim-tmux-navigator
     ];
     extraConfig = ''
       # Make TMUX work with yazi
