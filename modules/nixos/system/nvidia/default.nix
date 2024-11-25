@@ -16,6 +16,10 @@
     # Load nvidia driver for Xorg and Wayland
     services.xserver.videoDrivers = lib.mkDefault [ "nvidia" ];
 
+    environment.systemPackages = with pkgs; [
+      egl-wayland
+    ];
+
     hardware = {
       nvidia = {
         # Modesetting is required.

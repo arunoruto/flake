@@ -4,9 +4,9 @@
   ...
 }:
 {
-  options.wezterm.enable = lib.mkEnableOption "Enable wezterm terminal";
+  options.terminals.wezterm.enable = lib.mkEnableOption "Enable wezterm terminal";
 
-  config = lib.mkIf config.wezterm.enable {
+  config = lib.mkIf config.terminals.wezterm.enable {
     programs.wezterm = {
       enable = true;
       enableZshIntegration = config.programs.zsh.enable;
@@ -16,6 +16,7 @@
         config.audible_bell = "Disabled"
         config.enable_wayland = false
         config.front_end = "WebGpu"
+        -- config.enable_wayland = true
         -- config.front_end = "OpenGL"
         config.hide_tab_bar_if_only_one_tab = true
         -- config.window_decorations = 'TITLE | RESIZE'

@@ -4,14 +4,14 @@
   ...
 }:
 {
-  options.alacritty.enable = lib.mkEnableOption "Enable alacritty config";
+  options.terminals.alacritty.enable = lib.mkEnableOption "Enable alacritty config";
 
-  config = lib.mkIf config.alacritty.enable {
+  config = lib.mkIf config.terminals.alacritty.enable {
     programs.alacritty = {
       enable = true;
       settings = {
-        shell = {
-          program = "zsh";
+        terminal.shell = {
+          program = config.shell.main;
         };
         window = {
           decorations = "full";
