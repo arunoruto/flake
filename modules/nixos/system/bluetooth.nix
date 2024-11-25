@@ -3,7 +3,7 @@
   config = lib.mkIf config.facter.detected.bluetooth.enable {
     hardware.bluetooth.settings = {
       Policy = {
-        AutoEnable = false;
+        AutoEnable = !config.hosts.laptop.enable;
       };
     };
   };
