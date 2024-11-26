@@ -48,6 +48,7 @@ in
 
     gh = {
       enable = true;
+      # package = pkgs.unstable.gh;
       gitCredentialHelper.enable = true;
       settings = {
         git_protocol = "ssh";
@@ -57,7 +58,16 @@ in
           pv = "pr view";
         };
       };
+      extensions = with pkgs; [
+        gh-copilot
+        gh-dash
+      ];
     };
+
+    # gh-dash = {
+    #   enable = true;
+    #   # settings = { };
+    # };
 
     lazygit = {
       enable = true;
