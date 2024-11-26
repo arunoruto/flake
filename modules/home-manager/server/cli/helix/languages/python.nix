@@ -5,7 +5,7 @@
   ...
 }:
 let
-  ls = config.programs.helix.language-servers;
+  ls = config.programs.helix.languages.language-server;
 in
 {
   options.helix.python.enable = lib.mkEnableOption "Helix Python config";

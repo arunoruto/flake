@@ -6,6 +6,9 @@
   pkgs,
   ...
 }:
+let
+  ls = config.programs.helix.languages.language-server;
+in
 {
   options.helix.markdown.enable = lib.mkEnableOption "Helix Markdown config";
 
@@ -18,12 +21,16 @@
             auto-format = true;
             rulers = [ 120 ];
             language-servers =
-              lib.optionals config.helix.ltex.enable [
+              # lib.optionals config.helix.ltex.enable [
+              lib.optionals (ls ? ltex) [
                 "ltex"
               ]
               ++ [
                 "marksman"
                 "oxide"
+              ]
+              ++ lib.optionals (ls ? lsp-ai) [
+                "lsp-ai"
               ];
             formatter = {
               command = "prettier";
