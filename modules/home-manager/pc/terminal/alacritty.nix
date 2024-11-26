@@ -16,11 +16,11 @@
         window = {
           decorations = "full";
           dimensions = {
-            columns = 108;
-            lines = 36;
+            columns = config.terminals.width;
+            lines = config.terminals.height;
           };
           # opacity = 1;
-          blur = true;
+          # blur = true;
         };
         # font = {
         #   size = 12;

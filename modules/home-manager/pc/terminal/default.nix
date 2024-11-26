@@ -10,7 +10,21 @@
     ./wezterm.nix
   ];
 
-  options.terminals.enable = lib.mkEnableOption "Enable configured terminals";
+  options.terminals = {
+    enable = lib.mkEnableOption "Enable configured terminals";
+    width = lib.mkOption {
+      type = lib.types.int;
+      default = 108;
+      example = 108;
+      description = "Number of characters in width";
+    };
+    height = lib.mkOption {
+      type = lib.types.int;
+      default = 36;
+      example = 36;
+      description = "Number of characters in height";
+    };
+  };
 
   config = lib.mkIf config.terminals.enable {
     terminals = {
