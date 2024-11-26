@@ -21,8 +21,8 @@
         config.hide_tab_bar_if_only_one_tab = true
         -- config.window_decorations = 'TITLE | RESIZE'
         config.window_decorations = 'RESIZE'
-        config.initial_rows = ${builtins.toString config.terminals.width}
-        config.initial_cols = ${builtins.toString config.terminals.height}
+        config.initial_rows = ${builtins.toString config.terminals.height}
+        config.initial_cols = ${builtins.toString config.terminals.width}
         config.warn_about_missing_glyphs = false
         return config
       '';
