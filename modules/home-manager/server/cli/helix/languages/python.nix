@@ -4,6 +4,9 @@
   pkgs,
   ...
 }:
+let
+  ls = config.programs.helix.language-servers;
+in
 {
   options.helix.python.enable = lib.mkEnableOption "Helix Python config";
 
@@ -14,11 +17,17 @@
           {
             name = "python";
             auto-format = true;
-            language-servers = [
-              "pyright"
-              "ruff"
-              "gpt"
-            ];
+            language-servers =
+              [
+                "pyright"
+                "ruff"
+              ]
+              # ++ lib.optionals (ls ? gpt) [
+              #   "gpt"
+              # ]
+              ++ lib.optionals (ls ? lsp-ai) [
+                "lsp-ai"
+              ];
             formatter = {
               command = "bash";
               args = [

@@ -10,6 +10,7 @@
     ./gpt.nix
     ./julia.nix
     ./ltex.nix
+    ./lsp-ai.nix
     ./matlab.nix
     ./markdown.nix
     ./markup.nix
