@@ -23,7 +23,7 @@ in
     };
 
     services.github-runners.YASF = {
-      enable = lib.mkDefault false;
+      enable = lib.mkDefault true;
       url = "https://github.com/AGBV/YASF";
       tokenFile = config.sops.secrets."tokens/yasf-runner".path;
       # if cfg.enable then config.sops.secrets."tokens/yasf-runner".path else ./github-runner.nix;
