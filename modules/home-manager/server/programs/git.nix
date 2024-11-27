@@ -11,6 +11,7 @@ let
   glab-pkg = pkgs.unstable.glab;
   shellAliases = {
     gns = "git -c commit.gpgsign=false";
+    gnscm = "git -c commit.gpgsign=false commit -m";
   };
 in
 {
