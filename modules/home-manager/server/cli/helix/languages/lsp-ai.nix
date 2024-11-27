@@ -10,17 +10,19 @@
             models.model1 = {
               type = "open_ai";
               chat_endpoint = "https://api.githubcopilot.com/chat/completions";
-              completions_endpoint = "https://api.githubcopilot.com/chat/completions";
+              # completions_endpoint = "https://api.githubcopilot.com/chat/completions";
+              # completions_endpoint = "https://api.githubcopilot.com/v1/engines/copilot-codex/completions";
               model = "gpt-4";
-              auth_token_env_var_name = "COPILOT_API_KEY";
+              auth_token_env_var_name = "GH_AUTH_TOKEN";
+              # auth_token_env_var_name = "COPILOT_API_KEY";
             };
-            completion = {
-              model = "model1";
-              parameters = {
-                max_token = 500;
-                max_context = 1024;
-              };
-            };
+            # completion = {
+            #   model = "model1";
+            #   parameters = {
+            #     max_token = 500;
+            #     max_context = 1024;
+            #   };
+            # };
             chat = [
               {
                 trigger = "!C";
@@ -48,4 +50,8 @@
       };
     };
   };
+
+  home.packages = with pkgs; [
+    lsp-ai
+  ];
 }

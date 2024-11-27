@@ -29,9 +29,12 @@ in
                 "marksman"
                 "oxide"
               ]
-              ++ lib.optionals (ls ? lsp-ai) [
-                "lsp-ai"
+              ++ lib.optionals (ls ? gpt) [
+                "gpt"
               ];
+            # ++ lib.optionals (ls ? lsp-ai) [
+            #   "lsp-ai"
+            # ];
             formatter = {
               command = "prettier";
               args = [

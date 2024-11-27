@@ -5,6 +5,9 @@
   lib,
   ...
 }:
+let
+  ls = config.programs.helix.languages.language-server;
+in
 {
   options.helix.julia.enable = lib.mkEnableOption "Helix Julia config";
 
@@ -24,7 +27,13 @@
               "JuliaProject.toml"
             ];
             comment-token = "#";
-            language-servers = [ "julia-lsp" ];
+            language-servers =
+              [
+                "julia-lsp"
+              ]
+              ++ lib.optionals (ls ? gpt) [
+                "gpt"
+              ];
             formatter = {
               command = "julia";
               args = [

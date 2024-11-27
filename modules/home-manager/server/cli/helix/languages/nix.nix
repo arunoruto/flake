@@ -4,6 +4,9 @@
   lib,
   ...
 }:
+let
+  ls = config.programs.helix.languages.language-server;
+in
 {
   options.helix.nix.enable = lib.mkEnableOption "Helix Nix config";
 
@@ -16,10 +19,14 @@
             auto-format = true;
             formatter.command = "${lib.getExe pkgs.unstable.nixfmt-rfc-style}";
             # formatter.command = "${pkgs.alejandra}/bin/alejandra";
-            language-servers = [
-              "nixd"
-              "nil"
-            ];
+            language-servers =
+              [
+                "nixd"
+                "nil"
+              ]
+              ++ lib.optionals (ls ? gpt) [
+                "gpt"
+              ];
           }
         ];
         language-server = {

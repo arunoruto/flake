@@ -22,12 +22,12 @@ in
                 "pyright"
                 "ruff"
               ]
-              # ++ lib.optionals (ls ? gpt) [
-              #   "gpt"
-              # ]
-              ++ lib.optionals (ls ? lsp-ai) [
-                "lsp-ai"
+              ++ lib.optionals (ls ? gpt) [
+                "gpt"
               ];
+            # ++ lib.optionals (ls ? lsp-ai) [
+            #   "lsp-ai"
+            # ];
             formatter = {
               command = "bash";
               args = [

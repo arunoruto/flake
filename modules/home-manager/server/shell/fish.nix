@@ -23,6 +23,7 @@
 
           set -gx LS_COLORS $(vivid generate gruvbox-dark)
           set -gx NIX_LD_LIBRARY_PATH /run/current-system/sw/share/nix-ld/lib
+          set -gx GH_AUTH_TOKEN $(${lib.getExe config.programs.gh.package} auth token)
           set -gx COPILOT_API_KEY $(cat ${config.sops.secrets."tokens/copilot".path})
         '';
 
