@@ -11,6 +11,9 @@
         #   x = ":buffer-close";
         # };
       };
+      insert = {
+        "C-space" = "signature_help";
+      };
     };
 
     tmux.extraConfig = ''

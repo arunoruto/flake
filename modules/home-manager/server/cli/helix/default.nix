@@ -48,7 +48,10 @@ in
                 insert = "bar";
                 select = "underline";
               };
-              lsp.display-messages = true;
+              lsp = {
+                auto-signature-help = false;
+                display-messages = true;
+              };
             }
             // lib.optionalAttrs (!config.hosts.tinypc.enable) {
               inline-diagnostics = {
