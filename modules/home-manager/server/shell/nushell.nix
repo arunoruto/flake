@@ -116,9 +116,9 @@
             }
             plugin add ${lib.getExe pkgs.unstable.nushellPlugins.gstat}
           ''
-          + lib.optionalString config.skim.enable ''
-            plugin add ${lib.getExe pkgs.unstable.nushellPlugins.skim}
-          ''
+          # + lib.optionalString config.skim.enable ''
+          #   plugin add ${lib.getExe pkgs.unstable.nushellPlugins.skim}
+          # ''
           + (
             let
               path = osConfig.services.ssh-tpm-agent.userProxyPath;

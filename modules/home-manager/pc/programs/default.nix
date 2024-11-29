@@ -38,7 +38,7 @@
       # masterpdfeditor
       # mprime
       # unstable.mqtt-explorer
-      unstable.plex-desktop
+      plex-desktop
       remmina
       zoom-us
       zotero

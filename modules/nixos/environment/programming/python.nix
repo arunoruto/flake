@@ -38,7 +38,7 @@ in
   config = lib.mkIf config.python.enable {
     environment = {
       systemPackages = with pkgs; [
-        (python3.withPackages packages)
+        (unstable.python3.withPackages packages)
         manim
         manim-slides
         mkdocs
