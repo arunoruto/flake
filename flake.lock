@@ -109,11 +109,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1732540163,
-        "narHash": "sha256-5EYzmoTpem2IB9JWzd41sL98pz3lyyCSTiCjv08i4Uk=",
+        "lastModified": 1732894783,
+        "narHash": "sha256-7hBU7L07hYPNjamlm/v5scUUwsHQJvyb1a4flozHNt0=",
         "owner": "nix-community",
         "repo": "disko",
-        "rev": "2ed5e30fc7e34adf455db8b02b9151d3922a54ea",
+        "rev": "a75ba3b87b7ff230ca8b3a1fbfd4ad907a1a5fa2",
         "type": "github"
       },
       "original": {
@@ -295,11 +295,11 @@
         "rust-overlay": "rust-overlay"
       },
       "locked": {
-        "lastModified": 1732579614,
-        "narHash": "sha256-LREXerN4a4DHG38a2KZPum7E/OKNhYgrBtU6AsD5SnQ=",
+        "lastModified": 1732735497,
+        "narHash": "sha256-qaiRKT4T+kRAMwfFf1fIJ5pwCcaLp2dfNpT65C4uWuE=",
         "owner": "helix-editor",
         "repo": "helix",
-        "rev": "80709cee610f1758af1e62d53bde2eb8aa706a0c",
+        "rev": "e1d1a5c5a12127ded88dfcf66dd74aad1650977c",
         "type": "github"
       },
       "original": {
@@ -461,11 +461,11 @@
     },
     "nixpkgs-unstable": {
       "locked": {
-        "lastModified": 1732014248,
-        "narHash": "sha256-y/MEyuJ5oBWrWAic/14LaIr/u5E0wRVzyYsouYY3W6w=",
+        "lastModified": 1732521221,
+        "narHash": "sha256-2ThgXBUXAE1oFsVATK1ZX9IjPcS4nKFOAjhPNKuiMn0=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "23e89b7da85c3640bbc2173fe04f4bd114342367",
+        "rev": "4633a7c72337ea8fd23a4f2ba3972865e3ec685d",
         "type": "github"
       },
       "original": {
@@ -585,10 +585,10 @@
     "secrets": {
       "flake": false,
       "locked": {
-        "lastModified": 1732891085,
-        "narHash": "sha256-U+DGLyyzCSZiDHyibzJU+xKyszdzUX1N2kSkdkifbIQ=",
+        "lastModified": 1732906450,
+        "narHash": "sha256-fJs3Z2kdM7gd4p8SWHXkSpdcXFeufw2FsKruzP3Qlgc=",
         "ref": "main",
-        "rev": "ec86dc86eaf29e45e66e5e5249285a044ea85217",
+        "rev": "f1f46c8bcb8cb08e7ca15048c7eb27e5324d5e5b",
         "shallow": true,
         "type": "git",
         "url": "https://github.com/arunoruto/secrets.nix.git"
