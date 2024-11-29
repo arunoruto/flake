@@ -19,7 +19,7 @@ in
   };
   hardware.nvidia = {
     nvidiaSettings = false;
-    package = config.boot.kernelPackages.nvidiaPackages.beta;
+    # package = config.boot.kernelPackages.nvidiaPackages.beta;
   };
   yubikey.signing = "sanemi";
   runners.YASF.enable = true;
