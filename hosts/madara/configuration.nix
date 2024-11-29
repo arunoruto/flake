@@ -21,7 +21,7 @@ in
     nvidiaSettings = false;
     package = config.boot.kernelPackages.nvidiaPackages.beta;
   };
-  yubikey.signing = "kanae";
+  yubikey.signing = "sanemi";
   runners.YASF.enable = true;
   nfs.enable = true;
 
