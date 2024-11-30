@@ -5,6 +5,8 @@
 }:
 {
   hosts.tinypc.enable = true;
+  hosts.intel.enable = true;
+  kodi.enable = true;
   # tpm.enable = true;
 
   #efi.enable = false;

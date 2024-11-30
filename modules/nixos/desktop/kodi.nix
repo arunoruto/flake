@@ -3,9 +3,11 @@
   pkgs,
   lib,
   ...
-}: let
+}:
+let
   kodi-user = "kodi";
-in {
+in
+{
   options = {
     kodi.enable = lib.mkEnableOption "Use KODi as a desktop environment";
   };
@@ -13,14 +15,16 @@ in {
   config = lib.mkIf config.kodi.enable {
     services = {
       xserver = {
+        enable = lib.mkDefault true;
         desktopManager.kodi = {
           enable = true;
-          package = pkgs.kodi.withPackages (pkgs:
-            with pkgs; [
+          package = pkgs.kodi.withPackages (
+            pkgs: with pkgs; [
               jellycon
               netflix
               youtube
-            ]);
+            ]
+          );
         };
         displayManager.lightdm.greeter.enable = false;
       };
@@ -36,8 +40,8 @@ in {
     users.extraUsers.${kodi-user}.isNormalUser = true;
 
     networking.firewall = {
-      allowedTCPPorts = [8080];
-      allowedUDPPorts = [8080];
+      allowedTCPPorts = [ 8080 ];
+      allowedUDPPorts = [ 8080 ];
     };
   };
 }

@@ -10,6 +10,7 @@
     ./gnome.nix
     ./hyprland.nix
     # ./kde.nix
+    ./kodi.nix
     ./sway.nix
 
     ./wayland.nix
@@ -22,6 +23,7 @@
     # cosmic.enable = lib.mkDefault false;
     gnome.enable = lib.mkDefault true;
     # kde.enable = lib.mkDefault false;
+    kodi.enable = lib.mkDefault false;
 
     # WMs
     sway.enable = lib.mkDefault true;
