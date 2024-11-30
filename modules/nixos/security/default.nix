@@ -13,7 +13,6 @@
     ./yubikey
   ];
 
-  # facter.detected.fingerprint.enable = lib.mkOverride 2000 false;
   rssh.enable = lib.mkDefault (!config.yubikey.enable && config.ssh.enable);
   secrets.enable = lib.mkDefault true;
   tpm.enable = lib.mkOptionDefault false;
