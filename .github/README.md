@@ -129,6 +129,8 @@ similar to vimjoyer's `Ultimate NixOS Guide | Flakes | Home-Manager`
 
 ### Nix Language
 
+- [explainix](https://zaynetro.com/explainix) let's you hover over parts of an expression
+  and find out what the syntax means
 - [inherit keyword](https://www.ersocon.net/articles/master-nix-inherit-keyword-in-5-minutes~c464b126-0d57-4971-9a87-2515f9aa8d19)
 
 ## Clean-up
