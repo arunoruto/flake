@@ -23,7 +23,8 @@ in
       sansSerif = cantarell;
       monospace = {
         name = "FiraCode Nerd Font";
-        package = pkgs.fira-code-nerdfont;
+        package = pkgs.fira-code;
+        # package = pkgs.fira-code-nerdfont;
       };
     };
   };
