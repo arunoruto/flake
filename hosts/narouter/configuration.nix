@@ -30,30 +30,4 @@
   #   # initrd.kernelModules = ["i915"];
   # };
 
-  # hardware = {
-  #   opengl.extraPackages = with pkgs; [
-  #     # OpenCL
-  #     rocmPackages.clr.icd
-  #     # AMDVLK
-  #     amdvlk
-  #   ];
-  # };
-  # hardware.opengl = {
-  #   enable = true;
-  #   # package = pkgs.unstable.mesa.drivers;
-  #   extraPackages = with pkgs; [
-  #     intel-compute-runtime
-  #     intel-ocl
-  #     intel-media-driver # LIBVA_DRIVER_NAME=iHD
-  #     intel-vaapi-driver # LIBVA_DRIVER_NAME=i965 (older but works better for Firefox/Chromium)
-  #     vaapiVdpau
-  #     libvdpau-va-gl
-  #     # https://nixos.wiki/wiki/Intel_Graphics
-  #     unstable.vpl-gpu-rt
-  #     intel-media-sdk
-  #   ];
-  # };
-  # environment.sessionVariables = {
-  #   LIBVA_DRIVER_NAME = "iHD";
-  # }; # Force intel-media-driver
 }
