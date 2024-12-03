@@ -156,6 +156,10 @@ To clean up such systems, you can use the following commands:
 - Sonarr needs DotNET 6, which has reached EOL.
   Using [permit insecure packages](https://github.com/NixOS/nixpkgs/issues/360592#issuecomment-2513490613)
   we can allow those to be installed. Follow the issue for more information.
+  Affected locations:
+  - GitHub check action: remove impure when fixed
+  - arr module: nixpkgs config is not working tho...
+  - Kuchiki needs to be built with `NIXPKGS_ALLOW_INSECURE=1 nh os switch -- --impure`
 
 ## Credits
 

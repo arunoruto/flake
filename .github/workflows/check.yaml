@@ -27,4 +27,4 @@ jobs:
       # - name: Check Nix flake inputs
       #   uses: DeterminateSystems/flake-checker-action@v4
       - name: Check Flake
-        run: nix flake check --accept-flake-config
+        run: NIXPKGS_ALLOW_INSECURE=1 nix flake check --accept-flake-config --impure
