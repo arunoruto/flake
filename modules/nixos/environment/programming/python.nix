@@ -38,11 +38,12 @@ in
   config = lib.mkIf config.python.enable {
     environment = {
       systemPackages = with pkgs; [
-        (unstable.python3.withPackages packages)
+        (python3.withPackages packages)
         manim
         manim-slides
         mkdocs
         poetry
+        uv
       ];
 
       sessionVariables = {

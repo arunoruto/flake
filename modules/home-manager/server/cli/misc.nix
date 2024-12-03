@@ -93,6 +93,7 @@
     broot
     devenv
     fx
+    gping
     up
   ];
 }
