@@ -52,10 +52,10 @@
     # nixvim-flake.url = "github:arunoruto/nvim.nix";
     # Styling
     stylix = {
-      url = "github:danth/stylix";
-      inputs.nixpkgs.follows = "nixpkgs";
-      # url = "github:danth/stylix/release-24.05";
+      # url = "github:danth/stylix";
       # inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:danth/stylix/release-24.11";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     # ags.url = "github:Aylur/ags";
     # poetry2nix = {
@@ -97,7 +97,7 @@
       };
 
       ## Some customization
-      ## Schemes: https://tinted-theming.github.io/base16-gallery/ 
+      ## Schemes: https://tinted-theming.github.io/base16-gallery/
       # scheme = "catppuccin-macchiato";
       scheme = "tokyo-city-terminal-dark";
       # scheme = "outrun-dark";
