@@ -153,6 +153,9 @@ To clean up such systems, you can use the following commands:
 
 - Thick black borders in Gnome apps. Using `GSK_RENDERER=gl` to fix it for now.
   [Source](https://gitlab.gnome.org/GNOME/gtk/-/issues/6890#note_2232593)
+- Sonarr needs DotNET 6, which has reached EOL.
+  Using [permit insecure packages](https://github.com/NixOS/nixpkgs/issues/360592#issuecomment-2513490613)
+  we can allow those to be installed. Follow the issue for more information.
 
 ## Credits
 
