@@ -75,10 +75,6 @@
     # vivid = {
     #   enable = true;
     #   theme = "gruvbox-dark";
-    #   inherit enableBashIntegration;
-    #   inherit enableFishIntegration;
-    #   inherit enableNushellIntegration;
-    #   inherit enableZshIntegration;
     # };
 
     zoxide = {
@@ -95,5 +91,6 @@
     fx
     gping
     up
+    q
   ];
 }

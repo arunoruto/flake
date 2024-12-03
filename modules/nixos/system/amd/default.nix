@@ -29,10 +29,15 @@
       };
     };
 
-    environment.systemPackages = with pkgs; [
-      amdgpu_top
-      clinfo
-    ];
+    environment = {
+      systemPackages = with pkgs; [
+        amdgpu_top
+        clinfo
+      ];
+      sessionVariables = {
+        GSK_RENDERER = "gl";
+      };
+    };
 
     hardware.graphics = {
       enable = true;
