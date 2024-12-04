@@ -26,7 +26,7 @@
           }
           {
             name = "yaml";
-            # auto-format = true;
+            auto-format = true;
             formatter = {
               command = "prettier";
               args = [
@@ -37,11 +37,15 @@
           }
           {
             name = "toml";
-            # auto-format = true;
-            # formatter = {
-            #   command = "prettier";
-            #   args = ["--plugin=${pkgs.nodePackages.prettier-plugin-toml}/lib/node_modules/prettier-plugin-toml" "--parser" "toml"];
-            # };
+            auto-format = true;
+            formatter = {
+              command = lib.getExe pkgs.taplo;
+              args = [
+                "fmt"
+                "-"
+              ];
+            };
+            language-servers = [ "taplo" ];
           }
           {
             name = "xml";
@@ -62,11 +66,11 @@
             args = [ "--stdio" ];
           };
           lemminx.command = lib.getExe pkgs.lemminx;
+          taplo.command = "${lib.getExe pkgs.taplo} lsp stdio";
         };
       };
       extraPackages = with pkgs; [
         ansible-language-server
-        taplo
         yaml-language-server
         nodePackages.prettier
         nodePackages.prettier-plugin-toml
