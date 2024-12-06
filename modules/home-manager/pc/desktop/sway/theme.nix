@@ -62,11 +62,6 @@ in
     #       workspaceButtons = true;
     #       workspaceNumbers = false;
     #       trayOutput = "primary";
-    #       fonts = {
-    #         names = [ "FiraCode Nerd Font Mono" ];
-    #         style = "Regular";
-    #         size = 11.0;
-    #       };
     #       colors = {
     #         background         = "$base";
     #         statusline         = "$text";

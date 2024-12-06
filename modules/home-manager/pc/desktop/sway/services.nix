@@ -21,8 +21,6 @@
   config = lib.mkIf config.sway.services.enable {
     programs.rofi = {
       enable = true;
-      # font = "FiraCode Nerd Font Mono 14";
-      # theme = "${catppuccin-rofi}/basic/.local/share/rofi/themes/catppuccin-${flavor}.rasi";
     };
 
     # services.mako = {

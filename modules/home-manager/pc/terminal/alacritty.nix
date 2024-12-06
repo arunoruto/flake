@@ -32,14 +32,6 @@
         #     y = 0;
         #     x = 0;
         #   };
-        #   bold = {
-        #     style = "Bold";
-        #     family = "FiraCode Nerd Font";
-        #   };
-        #   normal = {
-        #     style = "Regular";
-        #     family = "FiraCode Nerd Font";
-        #   };
         # };
       };
     };

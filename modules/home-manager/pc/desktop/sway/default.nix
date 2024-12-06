@@ -34,11 +34,6 @@ in
       config = rec {
         modifier = "Mod4";
         terminal = "wezterm";
-        fonts = {
-          names = [ "FiraCode Nerd Font Mono" ];
-          style = "Regular";
-          size = 10.0;
-        };
         window = {
           border = 2;
           titlebar = false;
@@ -85,9 +80,9 @@ in
             workspaceNumbers = false;
             trayOutput = "primary";
             fonts = {
-              names = [ "FiraCode Nerd Font Mono" ];
+              names = [ config.stylix.fonts.sansSerif.name ];
               style = "Regular";
-              size = 11.0;
+              size = config.stylix.fonts.sizes.desktop + 0.0;
             };
           }
         ];
