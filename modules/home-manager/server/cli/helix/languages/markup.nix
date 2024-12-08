@@ -34,6 +34,7 @@
                 "yaml"
               ];
             };
+            language-servers = [ "yaml-lsp" ];
           }
           {
             name = "toml";
@@ -63,6 +64,10 @@
         language-server = {
           vscode-json-languageserver = {
             command = lib.getExe pkgs.nodePackages.vscode-json-languageserver;
+            args = [ "--stdio" ];
+          };
+          yaml-lsp = {
+            command = lib.getExe pkgs.yaml-language-server;
             args = [ "--stdio" ];
           };
           lemminx.command = lib.getExe pkgs.lemminx;
