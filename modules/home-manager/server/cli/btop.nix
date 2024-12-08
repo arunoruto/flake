@@ -9,12 +9,18 @@
   programs.btop =
     {
       enable = true;
+      settings = {
+        update_ms = 1000;
+      };
     }
     // lib.optionals (args ? nixosConfig) {
-      package = pkgs.btop.override {
-        rocmSupport = config.facter.detected.graphics.amd.enable;
-        cudaSupport = config.hosts.nvidia.enable;
-      };
+      package =
+        if osConfig.facter.detected.graphics.amd.enable then
+          pkgs.btop-rocm
+        else
+          pkgs.btop.override {
+            cudaSupport = osConfig.hosts.nvidia.enable;
+          };
     };
 
   # home.file.".config/btop/themes/catppuccin".source = pkgs.fetchFromGitHub {
