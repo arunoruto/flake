@@ -39,17 +39,20 @@
       };
     };
 
-    hardware.graphics = {
-      enable = true;
-      # driSupport = true;
-      enable32Bit = true;
-      extraPackages =
-        (with pkgs; [
-          amdvlk
-        ])
-        ++ (with pkgs.rocmPackages; [
-          clr.icd
-        ]);
+    hardware = {
+      amdgpu.opencl.enable = config.facter.detected.graphics.amd.enable;
+      graphics = {
+        enable = true;
+        # driSupport = true;
+        enable32Bit = true;
+        extraPackages =
+          (with pkgs; [
+            amdvlk
+          ])
+          ++ (with pkgs.rocmPackages; [
+            clr.icd
+          ]);
+      };
     };
   };
 }

@@ -26,9 +26,6 @@
     # Bash
     bash.initExtra = ''eval "$(direnv hook bash)"'';
 
-    # Htop alternative
-    btop.enable = true;
-
     direnv = {
       enable = true;
       nix-direnv.enable = true;

@@ -8,6 +8,7 @@
     (with pkgs; [
       aileron # helvetica
       jetbrains-mono
+      dejavu_fonts
       liberation_ttf # Times New Roman, Arial, and Courier New
       # (nerdfonts.override { fonts = [ "FiraCode" ]; })
       # unstable.nerd-fonts.fira-code

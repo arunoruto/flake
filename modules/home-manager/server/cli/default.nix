@@ -9,7 +9,7 @@
     ./helix
     ./tmux
     ./bat.nix
-    # ./btop.nix
+    ./btop.nix
     ./editorconfig.nix
     ./fzf.nix
     ./misc.nix
