@@ -1,5 +1,4 @@
 {
-  config,
   pkgs,
   lib,
   osConfig,
@@ -11,6 +10,8 @@
       enable = true;
       settings = {
         update_ms = 1000;
+        vim_keys = true;
+        graph_symbol = "braille";
       };
     }
     // lib.optionals (args ? nixosConfig) {

@@ -73,22 +73,25 @@ in
           }
         ];
         language-server = {
-          pyright.config.python.analysis.typeCheckingMode = "basic";
+          pyright = {
+            command = lib.getExe pkgs.unstable.basedpyright;
+            config.python.analysis.typeCheckingMode = "basic";
+          };
           ruff = {
-            command = "ruff";
+            command = lib.getExe pkgs.unstable.ruff;
             args = [
               "server"
-              "--preview"
+              # "--preview"
             ];
           };
-          # pylsp.config.pylsp = {
-          #   plugins.ruff.enabled = true;
-          #   plugins.ruff.formatEnabled = true;
-          # };
         };
       };
       extraPackages = with pkgs; [
-        python311Packages.debugpy
+        (python3.withPackages (
+          ps: with ps; [
+            debugpy
+          ]
+        ))
         pyright
         unstable.ruff
         unstable.isort
