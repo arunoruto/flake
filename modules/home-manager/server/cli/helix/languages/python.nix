@@ -19,6 +19,8 @@ in
             auto-format = true;
             language-servers =
               [
+                # "pylsp"
+                # "basedpyright"
                 "pyright"
                 "ruff"
               ]
@@ -73,16 +75,17 @@ in
           }
         ];
         language-server = {
-          pyright = {
-            command = lib.getExe pkgs.unstable.basedpyright;
-            config.python.analysis.typeCheckingMode = "basic";
+          pyright.config.python.analysis.typeCheckingMode = "basic";
+          pylsp.config.pylsp.plugins = {
+            pylsp_mypy = {
+              enabled = true;
+              live_mode = true;
+            };
+            ruff.enabled = true;
           };
           ruff = {
             command = lib.getExe pkgs.unstable.ruff;
-            args = [
-              "server"
-              # "--preview"
-            ];
+            args = [ "server" ];
           };
         };
       };
@@ -90,9 +93,15 @@ in
         (python3.withPackages (
           ps: with ps; [
             debugpy
+            # python-lsp-server
+            # python-lsp-ruff
+            # pylsp-mypy
+            # numpy
+            # pydantic
           ]
         ))
         pyright
+        # unstable.basedpyright
         unstable.ruff
         unstable.isort
       ];
