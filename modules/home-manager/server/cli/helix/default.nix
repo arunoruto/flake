@@ -52,6 +52,7 @@ in
                 auto-signature-help = false;
                 display-messages = true;
               };
+              end-of-line-diagnostics = "warning";
             }
             // lib.optionalAttrs (!config.hosts.tinypc.enable) {
               inline-diagnostics = {
