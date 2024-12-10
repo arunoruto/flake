@@ -1,6 +1,8 @@
 {
   config,
   lib,
+  pkgs,
+  inputs,
   ...
 }:
 {
@@ -9,6 +11,7 @@
   config = lib.mkIf config.terminals.wezterm.enable {
     programs.wezterm = {
       enable = true;
+      package = inputs.wezterm.packages.${pkgs.system}.default;
       enableZshIntegration = config.programs.zsh.enable;
       extraConfig = ''
         local wezterm = require 'wezterm'

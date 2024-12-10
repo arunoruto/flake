@@ -45,10 +45,8 @@
     #     home-manager.follows = "home-manager";
     #   };
     # };
-    helix = {
-      url = "github:helix-editor/helix";
-      # inputs.nixpkgs.follows = "nixpkgs-unstable";
-    };
+    helix.url = "github:helix-editor/helix";
+    wezterm.url = "github:wez/wezterm?dir=nix";
     # nixvim-flake.url = "github:arunoruto/nvim.nix";
     # Styling
     stylix = {
@@ -201,4 +199,13 @@
       # devShells.${system} = import ./shells nixpkgs.legacyPackages.${system};
       # packages.${system} = import ./pkgs nixpkgs.legacyPackages.${system};
     };
+
+  # nixConfig = {
+  #   extra-substituters = [
+  #     "https://wezterm.cachix.org"
+  #   ];
+  #   extra-trusted-public-keys = [
+  #     "wezterm.cachix.org-1:kAbhjYUC9qvblTE+s7S+kl5XM1zVa4skO+E/1IDWdH0="
+  #   ];
+  # };
 }
