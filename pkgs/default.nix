@@ -11,7 +11,6 @@ pkgs: rec {
   zluda-rocm5 = pkgs.callPackage ./zluda-rocm5/package.nix { };
   # candy-icons = pkgs.callPackage ./candy-icons/package.nix { };
   mstm = pkgs.callPackage ./mstm/parallel.nix { };
-  # zen-browser = pkgs.callPackage ./zen-browser/package.nix { };
   # wigxjpf = pkgs.callPackage ./wigxjpf/package.nix { };
   # pywigxjpf = pkgs.python3Packages.callPackage ./wigxjpf/pypackage.nix { };
 

@@ -47,6 +47,10 @@
     # };
     helix.url = "github:helix-editor/helix";
     wezterm.url = "github:wez/wezterm?dir=nix";
+    zen-browser = {
+      url = "github:youwen5/zen-browser-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     # nixvim-flake.url = "github:arunoruto/nvim.nix";
     # Styling
     stylix = {
