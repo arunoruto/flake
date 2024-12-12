@@ -1,15 +1,15 @@
 { lib, pkgs, ... }:
 {
-  dconf.settings = {
-    "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = lib.mkForce {
-      name = "Terminal Super";
-      #command = "env WAYLAND_DISPLAY= alacritty";
-      #command = "wezterm start --always-new-process";
-      command = "${lib.getExe pkgs.alacritty}";
-      binding = "<Super>Return";
-    };
-  };
-  terminals.alacritty.enable = true;
+  # dconf.settings = {
+  #   "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = lib.mkForce {
+  #     name = "Terminal Super";
+  #     #command = "env WAYLAND_DISPLAY= alacritty";
+  #     #command = "wezterm start --always-new-process";
+  #     command = "${lib.getExe pkgs.alacritty}";
+  #     binding = "<Super>Return";
+  #   };
+  # };
+  # terminals.alacritty.enable = true;
 
   home.file = {
     ".config/monitors.xml".source = ./monitors.xml;

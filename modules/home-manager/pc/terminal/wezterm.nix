@@ -19,9 +19,9 @@
           local config = {}
           config.audible_bell = "Disabled"
           config.enable_wayland = false
-          config.front_end = "WebGpu"
+          -- config.front_end = "WebGpu"
           -- config.enable_wayland = true
-          -- config.front_end = "OpenGL"
+          config.front_end = "OpenGL"
           config.hide_tab_bar_if_only_one_tab = true
           -- config.window_decorations = 'TITLE | RESIZE'
           config.window_decorations = 'RESIZE'

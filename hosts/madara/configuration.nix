@@ -25,8 +25,6 @@ in
   runners.YASF.enable = true;
   nfs.enable = true;
 
-  # environment.sessionVariables.FLAKE = "/home/${username}/Development/nix";
-
   # Disable Autosuspend for USB Bluetooth dongles
   # boot = {
   #   kernelModules = ["snd-hda-intel "];
