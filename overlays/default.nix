@@ -2,7 +2,15 @@
 { inputs, ... }:
 {
   # This one brings our custom packages from the 'pkgs' directory
-  additions = final: _prev: import ../pkgs final.pkgs;
+  additions = final: prev: import ../pkgs final.pkgs;
+
+  # Python package addition and override
+  python = final: prev: {
+    python3 = prev.python3.override {
+      packageOverrides = final: prev: import ../pkgs/python.nix final.pkgs;
+    };
+    pythonPackages = final.python3.pkgs;
+  };
 
   # This one contains whatever you want to overlay
   # You can change versions, add patches, set compilation flags, anything really.

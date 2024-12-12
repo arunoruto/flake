@@ -30,6 +30,9 @@ let
       # pillow
       # requests
       # scikit-image
+
+      # CLI tools
+      gruvbox-factory
     ];
 in
 {
