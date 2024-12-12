@@ -101,11 +101,11 @@
       ## Some customization
       ## Schemes: https://tinted-theming.github.io/base16-gallery/
       # scheme = "catppuccin-macchiato";
-      scheme = "tokyo-city-terminal-dark";
+      # scheme = "tokyo-city-terminal-dark";
       # scheme = "outrun-dark";
       # scheme = "pandora";
       # scheme = "heetch";
-      # scheme = "gruvbox-material-dark-hard";
+      scheme = "gruvbox-material-dark-hard";
       # scheme = "gruvbox-material-light-hard";
       # scheme = "rose-pine-dawn";
       # scheme = "rose-pine";
@@ -114,9 +114,9 @@
       # image = "anime/gruvbox/boonies.png";
       # image = "anime/dan-da-dan/op/okarun1.png";
       # image = "anime/dan-da-dan/op/okarun2.png";
-      # image = "anime/dan-da-dan/op/okarun3.png";
+      image = "anime/dan-da-dan/op/okarun3.png";
       # image = "anime/dan-da-dan/op/okarun4.png";
-      image = "anime/dan-da-dan/op/okarun5.png";
+      # image = "anime/dan-da-dan/op/okarun5.png";
       # image = "anime/dan-da-dan/op/jiji1.png";
       # image = "anime/dan-da-dan/op/turbogranny1.png";
 
@@ -158,6 +158,7 @@
                 config.allowUnfree = true;
                 overlays = [
                   self.overlays.additions
+                  self.overlays.python
                   self.overlays.unstable-packages
                   # inputs.hyprpanel.overlay
                 ];
