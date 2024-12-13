@@ -25,7 +25,8 @@
       xserver.videoDrivers = [ "amdgpu" ];
       ucodenix = {
         enable = lib.mkDefault true;
-        cpuModelId = lib.mkDefault "auto";
+        cpuModelId = lib.mkDefault config.facter.reportPath;
+        # cpuModelId = lib.mkDefault "auto";
       };
     };
 

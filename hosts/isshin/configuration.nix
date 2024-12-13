@@ -2,7 +2,7 @@
 {
   services = lib.mkIf (config.services ? ucodenix) {
     ucodenix.enable = true;
-    ucodenix.cpuModelId = "00A70F41";
+    # ucodenix.cpuModelId = "00A70F41";
   };
 
   hosts = {
