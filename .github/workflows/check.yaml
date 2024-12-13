@@ -4,14 +4,16 @@ on:
   workflow_dispatch:
   push:
     paths:
-    - '**.nix'
-    - '**.lock'
-    - '.github/workflows/check.yml'
+      - "**.nix"
+      - "flake.nix"
+      - "flake.lock"
+      - ".github/workflows/check.yaml"
 
 jobs:
   check-flake:
     name: Check Flake Setup
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - name: Checkout
         uses: actions/checkout@v4
