@@ -8,6 +8,15 @@
   options.hosts.nvidia.enable = lib.mkEnableOption "Setup Nvidia environment";
 
   config = lib.mkIf config.hosts.nvidia.enable {
+    nix.settings = {
+      extra-substituters = [
+        "https://cuda-maintainers.cachix.org"
+      ];
+      extra-trusted-public-keys = [
+        "cuda-maintainers.cachix.org-1:0dq3bujKpuEPMCX6U4WylrUDZ9JyUG0VpVZa7CNfq5E="
+      ];
+    };
+
     # Latest kernel does not work well with some web browsers...
     boot.kernelPackages = pkgs.linuxPackages;
 
