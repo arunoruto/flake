@@ -13,7 +13,10 @@
     services = {
       xserver = {
         displayManager = {
-          gdm.enable = true;
+          gdm = {
+            enable = true;
+            autoSuspend = !config.hosts.laptop.enable;
+          };
         };
       };
       # displayManager.preStart = "sleep 1";
