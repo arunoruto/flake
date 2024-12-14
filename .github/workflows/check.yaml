@@ -26,7 +26,13 @@ jobs:
           logger: pretty
       - name: Cache
         uses: DeterminateSystems/magic-nix-cache-action@main
-      # - name: Check Nix flake inputs
-      #   uses: DeterminateSystems/flake-checker-action@v4
+      - name: Check Nix flake inputs
+        uses: DeterminateSystems/flake-checker-action@v4
       - name: Check Flake
-        run: NIXPKGS_ALLOW_INSECURE=1 nix flake check --accept-flake-config --impure
+        run: |
+          NIXPKGS_ALLOW_INSECURE=1
+          nix flake check
+          --no-build
+          --impure
+          # --show-trace
+        # run: NIXPKGS_ALLOW_INSECURE=1 nix flake check --no-build --accept-flake-config --impure
