@@ -30,6 +30,7 @@
           settings = {
             "org/gnome/settings-daemon/plugins/power" = {
               ambient-enabled = false;
+              sleep-inactive-ac-timeout = lib.gvariant.mkUint32 0;
             };
             "org/gnome/login-screen" = {
               # enable-fingerprint-authentication = false;
@@ -39,5 +40,18 @@
         }
       ];
     };
+
+    # Disable auto suspend on login screen
+    security.polkit.extraConfig = ''
+      polkit.addRule(function(action, subject) {
+          if (action.id == "org.freedesktop.login1.suspend" ||
+              action.id == "org.freedesktop.login1.suspend-multiple-sessions" ||
+              action.id == "org.freedesktop.login1.hibernate" ||
+              action.id == "org.freedesktop.login1.hibernate-multiple-sessions")
+          {
+              return polkit.Result.NO;
+          }
+      });
+    '';
   };
 }

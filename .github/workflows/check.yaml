@@ -33,6 +33,11 @@ jobs:
           NIXPKGS_ALLOW_INSECURE=1
           nix flake check
           --no-build
+<<<<<<< HEAD
           --impure
           # --show-trace
+=======
+          # --show-trace
+          --impure
+>>>>>>> 2aa9948 (Try flake checker again)
         # run: NIXPKGS_ALLOW_INSECURE=1 nix flake check --no-build --accept-flake-config --impure
