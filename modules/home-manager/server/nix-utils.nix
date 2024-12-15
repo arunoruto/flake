@@ -61,14 +61,14 @@ in
           "flakes"
           # "pipe-operators"
         ];
-        extra-substituters = [
-          "https://helix.cachix.org"
-          "https://wezterm.cachix.org"
-        ];
-        extra-trusted-public-keys = [
-          "helix.cachix.org-1:ejp9KQpR1FBI2onstMQ34yogDm4OgU2ru6lIwPvuCVs="
-          "wezterm.cachix.org-1:kAbhjYUC9qvblTE+s7S+kl5XM1zVa4skO+E/1IDWdH0="
-        ];
+        # extra-substituters = [
+        #   "https://helix.cachix.org"
+        #   "https://wezterm.cachix.org"
+        # ];
+        # extra-trusted-public-keys = [
+        #   "helix.cachix.org-1:ejp9KQpR1FBI2onstMQ34yogDm4OgU2ru6lIwPvuCVs="
+        #   "wezterm.cachix.org-1:kAbhjYUC9qvblTE+s7S+kl5XM1zVa4skO+E/1IDWdH0="
+        # ];
       };
       extraOptions = ''
         trusted-users = root ${user}
