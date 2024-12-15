@@ -129,7 +129,7 @@
         "yoruichi" = "mirza"; # Crappy AMD Mini PC
         "shinji" = "mirza"; # M720q Mini PC
         "kenpachi" = "mirza"; # S740 Mini PC
-        "narouter" = "mirza"; # Firewall
+        # "narouter" = "mirza"; # Firewall
         "aizen" = "mirza";
         # Work
         "kyuubi" = "mar"; # Crappy Work PC

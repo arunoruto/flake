@@ -23,6 +23,7 @@
     dust
     riffdiff
     # unstable.ventoy
+    vim
     wget
   ];
 }

@@ -33,6 +33,7 @@ in
       };
       extraConfig =
         {
+          core.editor = "hx";
           pull.rebase = true;
           init.defaultBranch = "main";
           credential = {
