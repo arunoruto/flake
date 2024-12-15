@@ -25,7 +25,7 @@
     };
     pc.enable = lib.mkDefault osConfig.programs.enable;
 
-    hostname = lib.mkDefault osConfig.networking.hostName;
+    # hostname = lib.mkDefault osConfig.networking.hostName;
     keyboard = {
       layout = lib.mkDefault osConfig.services.xserver.xkb.layout;
       variant = lib.mkDefault osConfig.services.xserver.xkb.variant;

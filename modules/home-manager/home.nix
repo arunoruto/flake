@@ -1,7 +1,7 @@
 { user, ... }:
 {
   imports = [
-    ./hosts
+    # ./hosts
     ./environment.nix
     ./imports.nix
   ];
