@@ -19,7 +19,7 @@ If it deviates from this, set the env-variable `FLAKE` to the new path.
 When first time trying to install the flake, you need to run:
 
 ```sh
-sudo nixos-rebuild switch --flake ./#<device-name>
+sudo nixos-rebuild switch --flake ./#<device-name> --accept-flake-config
 ```
 
 ### Home Manager
@@ -27,7 +27,7 @@ sudo nixos-rebuild switch --flake ./#<device-name>
 Like NixOS, home-manager can be also updated from the flake file like follows:
 
 ```sh
-home-manager switch --flake ./#<username>
+home-manager switch --flake ./#<username> --accept-flake-config
 ```
 
 The flake specifications are surrounded by quotes, since some shells (e.g. zsh) are complaining due to the # symbol.
@@ -37,7 +37,7 @@ The flake specifications are surrounded by quotes, since some shells (e.g. zsh) 
 If nix is used as a package manager on a system, home manager can be installed using `nix run`:
 
 ```sh
-nix run nixpkgs#home-manager -- switch --flake .#<username>
+nix run nixpkgs#home-manager -- switch --flake .#<username> --accept-flake-config
 ```
 
 ## Nix Helper
