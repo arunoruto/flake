@@ -16,6 +16,8 @@
       nix-tree
       nix-output-monitor
       nvd
+
+      # nixpkgs-manual
     ];
 
     # Auto clean system
