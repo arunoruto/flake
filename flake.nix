@@ -124,16 +124,16 @@
         # Personal
         "isshin" = "mirza"; # Framework Laptop AMD 7040
         "zangetsu" = "mirza"; # Framework Case Intel 11th
-        # "yhwach" = "mirza"; # Tower PC
+        "yhwach" = "mirza"; # Tower PC
         "kuchiki" = "mirza"; # New NAS Server
         "yoruichi" = "mirza"; # Crappy AMD Mini PC
         "shinji" = "mirza"; # M720q Mini PC
-        # "kenpachi" = "mirza"; # S740 Mini PC
+        "kenpachi" = "mirza"; # S740 Mini PC
         "narouter" = "mirza"; # Firewall
         "aizen" = "mirza";
         # Work
         "kyuubi" = "mar"; # Crappy Work PC
-        # "madara" = "mar"; # Nice Work PC
+        "madara" = "mar"; # Nice Work PC
       };
     in
     {
