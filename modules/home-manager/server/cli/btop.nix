@@ -14,7 +14,7 @@
         graph_symbol = "braille";
       };
     }
-    // lib.optionals (args ? nixosConfig) {
+    // lib.optionalAttrs (args ? nixosConfig) {
       package =
         if osConfig.facter.detected.graphics.amd.enable then
           pkgs.btop-rocm
