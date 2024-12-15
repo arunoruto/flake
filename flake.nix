@@ -125,7 +125,7 @@
         "isshin" = "mirza"; # Framework Laptop AMD 7040
         "zangetsu" = "mirza"; # Framework Case Intel 11th
         "yhwach" = "mirza"; # Tower PC
-        "kuchiki" = "mirza"; # New NAS Server
+        # "kuchiki" = "mirza"; # New NAS Server
         "yoruichi" = "mirza"; # Crappy AMD Mini PC
         "shinji" = "mirza"; # M720q Mini PC
         "kenpachi" = "mirza"; # S740 Mini PC
