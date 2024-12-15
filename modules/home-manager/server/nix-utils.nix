@@ -52,12 +52,14 @@ in
 
   config = lib.mkIf config.nix-utils.enable {
     nix = {
-      package = lib.mkForce pkgs.unstable.nix;
+      # package = lib.mkForce pkgs.unstable.nix;
+      package = pkgs.nix;
       settings = {
+        warn-dirty = false;
         extra-experimental-features = [
           "nix-command"
           "flakes"
-          "pipe-operators"
+          # "pipe-operators"
         ];
         extra-substituters = [
           "https://helix.cachix.org"
