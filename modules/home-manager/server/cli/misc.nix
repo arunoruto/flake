@@ -3,7 +3,7 @@
   pkgs,
   lib,
   ...
-}:
+}@args:
 # let
 #   aliases = {
 #     ls = "${pkgs.lsd}/bin/lsd";
@@ -37,7 +37,7 @@
 
     thefuck = {
       enable = true;
-      enableInstantMode = true;
+      enableInstantMode = (args ? nixosConfig);
     };
 
     # lsd is an ls replacement
