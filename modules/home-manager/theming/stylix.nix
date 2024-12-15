@@ -41,6 +41,7 @@
       image = "${inputs.wallpapers}/${config.theming.image}";
       polarity = "dark";
       targets = {
+        kde.enable = lib.mkForce false;
         nixvim.enable = false;
         vscode.enable = true;
         gnome.enable = config.gnome.enable;
