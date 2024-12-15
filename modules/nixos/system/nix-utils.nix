@@ -25,9 +25,13 @@
       # package = pkgs.unstable.nix;
       settings = {
         sandbox = true;
-        # auto-optimise-store = true;
+        download-buffer-size = 134217728;
         warn-dirty = false;
         accept-flake-config = true;
+        trusted-users = [
+          "root"
+          "@wheel"
+        ];
         extra-experimental-features = [
           "nix-command"
           "flakes"
@@ -42,9 +46,9 @@
           "wezterm.cachix.org-1:kAbhjYUC9qvblTE+s7S+kl5XM1zVa4skO+E/1IDWdH0="
         ];
       };
-      extraOptions = ''
-        trusted-users = root ${username}
-      '';
+      # extraOptions = ''
+      #   trusted-users = root ${username}
+      # '';
       optimise = {
         automatic = true;
         dates = [ "04:00" ];
