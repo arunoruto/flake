@@ -17,6 +17,7 @@
       };
       gnome = {
         gnome-keyring.enable = true;
+        gnome-remote-desktop.enable = config.hosts.workstation.enable;
         sushi.enable = true;
       };
     };
