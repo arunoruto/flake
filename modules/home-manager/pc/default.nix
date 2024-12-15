@@ -7,7 +7,6 @@
   imports = [
     ./desktop
     ./documents
-    ./network
     ./programs
     ./terminal
 
