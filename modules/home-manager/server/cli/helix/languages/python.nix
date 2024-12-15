@@ -84,7 +84,7 @@ in
             ruff.enabled = true;
           };
           ruff = {
-            command = lib.getExe pkgs.unstable.ruff;
+            # command = lib.getExe pkgs.unstable.ruff;
             args = [ "server" ];
           };
         };
@@ -100,9 +100,9 @@ in
             # pydantic
           ]
         ))
-        pyright
         # unstable.basedpyright
-        unstable.ruff
+        pyright
+        (if config.programs.ruff.enable then config.programs.ruff.package else unstable.ruff)
         unstable.isort
       ];
     };

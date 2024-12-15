@@ -5,7 +5,6 @@
 {
   imports = [
     # ./dprint
-    # ./nvim
     ./helix
     ./tmux
     ./bat.nix
@@ -13,6 +12,7 @@
     ./editorconfig.nix
     ./fzf.nix
     ./misc.nix
+    ./ruff.nix
     ./serpl.nix
     ./skim.nix
     ./yazi.nix
