@@ -37,7 +37,8 @@
   config = {
     stylix = {
       enable = lib.mkDefault true;
-      base16Scheme = lib.mkDefault "${pkgs.unstable.base16-schemes}/share/themes/${config.theming.scheme}.yaml";
+      base16Scheme = lib.mkDefault "${pkgs.base16-schemes}/share/themes/${config.theming.scheme}.yaml";
+      # base16Scheme = lib.mkDefault "${pkgs.unstable.base16-schemes}/share/themes/${config.theming.scheme}.yaml";
       image = inputs.wallpapers + "/${config.theming.image}";
       polarity = config.home-manager.users.${username}.stylix.polarity;
       cursor =

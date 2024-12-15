@@ -35,4 +35,5 @@ jobs:
         #   --no-build
         #   --impure
         # --show-trace
-        run: NIXPKGS_ALLOW_INSECURE=1 nix flake check --no-build --accept-flake-config --impure
+        # run: NIXPKGS_ALLOW_INSECURE=1 nix flake check --no-build --accept-flake-config --impure
+        run: NIXPKGS_ALLOW_INSECURE=1 nix flake check --impure
