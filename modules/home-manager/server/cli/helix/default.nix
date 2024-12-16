@@ -5,8 +5,9 @@
   pkgs,
   inputs,
   ...
-}:
+}@args:
 let
+nightly = !config.hosts.tinypc.enable && (args ? nixosConfig);
   toml = pkgs.formats.toml { };
 in
 {
@@ -22,10 +23,10 @@ in
       helix = {
         enable = true;
         package =
-          if config.hosts.tinypc.enable then
-            pkgs.unstable.helix
+          if nightly then
+            inputs.helix.packages.${pkgs.system}.default
           else
-            inputs.helix.packages.${pkgs.system}.default;
+            pkgs.unstable.helix;
         # package = pkgs.helix;
         # package = pkgs.unstable.helix;
         # package = pkgs.unstable.evil-helix;
@@ -52,9 +53,9 @@ in
                 auto-signature-help = false;
                 display-messages = true;
               };
-              end-of-line-diagnostics = "warning";
             }
-            // lib.optionalAttrs (!config.hosts.tinypc.enable) {
+            // lib.optionalAttrs nightly {
+              end-of-line-diagnostics = "warning";
               inline-diagnostics = {
                 cursor-line = "hint";
                 other-lines = "error";

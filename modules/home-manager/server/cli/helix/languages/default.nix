@@ -4,7 +4,7 @@
   config,
   lib,
   ...
-}:
+}@args:
 {
   imports = [
     ./gpt.nix
@@ -22,7 +22,7 @@
     julia.enable = lib.mkDefault (!config.hosts.tinypc.enable);
     ltex = {
       enable = lib.mkDefault (!config.hosts.tinypc.enable);
-      ngram = lib.mkDefault (!config.hosts.tinypc.enable);
+      ngram = lib.mkDefault (!config.hosts.tinypc.enable && args ? nixosConfig);
     };
     matlab.enable = lib.mkDefault (!config.hosts.tinypc.enable);
     # markdown.enable = lib.mkDefault (!config.hosts.tinypc.enable);
