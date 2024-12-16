@@ -37,7 +37,7 @@ The flake specifications are surrounded by quotes, since some shells (e.g. zsh) 
 If nix is used as a package manager on a system, home manager can be installed using `nix run`:
 
 ```sh
-nix run nixpkgs#home-manager --experimental-features 'nix-command flakes' --accept-flake-config -- switch --flake .#<username>
+nix --experimental-features 'nix-command flakes' --accept-flake-config run nixpkgs#home-manager -- switch --flake .#<username>
 ```
 
 ## Nix Helper
