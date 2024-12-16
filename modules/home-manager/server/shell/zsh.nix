@@ -52,7 +52,7 @@
           zmodload zsh/zprof
 
           # Variables
-          export LS_COLORS="$(vivid generate gruvbox-dark)";
+          export LS_COLORS="$(${lib.getExe pkgs.unstable.vivid} generate gruvbox-dark)";
           export COPILOT_API_KEY="$(cat ${config.sops.secrets."tokens/copilot".path})"
           export CACHIX_AUTH_TOKEN="$(cat ${config.sops.secrets."tokens/cachix".path})"
 
