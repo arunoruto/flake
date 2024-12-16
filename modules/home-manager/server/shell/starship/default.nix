@@ -17,6 +17,7 @@
         format = "$hostname$directory$character";
         # format = "$directory";
         right_format = "$all";
+        command_timeout = 1000;
         add_newline = true;
         character = {
           success_symbol = "[[❄](green) ❯](maroon)";
