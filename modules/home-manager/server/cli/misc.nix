@@ -69,6 +69,8 @@
       enable = true;
     };
 
+    skim.enable = true;
+
     # vivid = {
     #   enable = true;
     #   theme = "gruvbox-dark";

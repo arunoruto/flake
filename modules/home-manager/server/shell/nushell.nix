@@ -134,6 +134,6 @@
       (with pkgs.unstable.nushellPlugins; [
         gstat
       ])
-      ++ lib.optionals config.skim.enable [ pkgs.unstable.nushellPlugins.skim ];
+      ++ lib.optionals config.programs.skim.enable [ pkgs.unstable.nushellPlugins.skim ];
   };
 }
