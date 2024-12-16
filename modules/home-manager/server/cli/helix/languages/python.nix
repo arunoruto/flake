@@ -84,7 +84,7 @@ in
             ruff.enabled = true;
           };
           ruff = {
-            # command = lib.getExe pkgs.unstable.ruff;
+            command = lib.getExe pkgs.unstable.ruff;
             args = [ "server" ];
           };
         };
