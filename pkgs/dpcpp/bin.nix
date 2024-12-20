@@ -47,9 +47,6 @@ stdenv.mkDerivation {
     cp -r . $out
   '';
 
-  # postInstallPhase = ''
-  # '';
-
   meta = with lib; {
     homepage = "https://www.intel.com/content/www/us/en/developer/tools/oneapi/dpc-compiler.html";
     description = "Intel's C, C++, SYCL, and Data Parallel C++ (DPC++) compilers for Intel processor-based systems";
