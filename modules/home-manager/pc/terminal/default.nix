@@ -14,6 +14,15 @@
 
   options.terminals = {
     enable = lib.mkEnableOption "Enable configured terminals";
+    main = lib.mkOption {
+      type = lib.types.str;
+      default = "";
+      example = "wezterm";
+      description = ''
+        Main terminal to be used, for example in shortcuts.
+        This one will be always enabled!
+      '';
+    };
     width = lib.mkOption {
       type = lib.types.int;
       default = 108;
@@ -29,8 +38,9 @@
   };
 
   config = lib.mkIf config.terminals.enable {
-    terminals = {
+    programs = {
       alacritty.enable = lib.mkDefault false;
+      ghostty.enable = lib.mkDefault true;
       warp.enable = lib.mkDefault false;
       wezterm.enable = lib.mkDefault true;
     };

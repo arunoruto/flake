@@ -13,9 +13,9 @@ let
   };
 in
 {
-  options.terminals.warp.enable = lib.mkEnableOption "Enable warp terminal";
+  options.programs.warp.enable = lib.mkEnableOption "Enable warp terminal";
 
-  config = lib.mkIf config.terminals.warp.enable {
+  config = lib.mkIf config.programs.warp.enable {
     home = {
       packages = with pkgs; [
         unstable.warp-terminal

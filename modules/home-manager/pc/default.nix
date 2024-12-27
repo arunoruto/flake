@@ -21,7 +21,10 @@
     desktop.enable = lib.mkDefault true;
     documents.enable = lib.mkDefault true;
     pc.programs.enable = lib.mkDefault true;
-    terminals.enable = lib.mkDefault true;
+    terminals = {
+      enable = lib.mkDefault true;
+      main = "ghostty";
+    };
 
     programs = {
       autorandr.enable = lib.mkDefault true;

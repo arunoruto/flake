@@ -80,7 +80,7 @@
         name = "Terminal Super";
         #command = "env WAYLAND_DISPLAY= alacritty";
         #command = "wezterm start --always-new-process";
-        command = "wezterm";
+        command = config.terminals.main;
         binding = "<Super>Return";
       };
       #"org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1" = {
