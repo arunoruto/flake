@@ -56,7 +56,10 @@ stdenv.mkDerivation {
   installPhase = ''
     mkdir -p $out
     ls -la $src/intel-dpcpp-cpp-compiler-${version}_offline/install.sh
-    $src/intel-dpcpp-cpp-compiler-${version}_offline/install.sh -s --eula=accept --install-dir=$out
+    $src/intel-dpcpp-cpp-compiler-${version}_offline/install.sh -s \
+      --eula=accept \
+      --log-dir=/build/log \
+      --install-dir=$out
   '';
 
   # postInstallPhase = ''

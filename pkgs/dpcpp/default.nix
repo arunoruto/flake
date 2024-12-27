@@ -1,51 +1,82 @@
 {
   lib,
   stdenv,
+  fetchFromGitHub,
 
-  autoPatchelfHook,
+  cmake,
+  python3,
+  ninja,
+  hwloc,
+  perl,
 
-  # cudatoolkit,
   level-zero,
-  libxml2,
-  libz,
-  ocl-icd,
-  rocmPackages,
 }:
 let
   date = "2024-12-19";
+
+  vc-intrinsics = fetchFromGitHub {
+    owner = "intel";
+    repo = "vc-intrinsics";
+    rev = "v0.21.0";
+    sha256 = "sha256-Ujekj1EeUuOsb1dXMk9XYYe0b1ZzKU7xygLkH8F71d8=";
+  };
+
+  unified-runtime = fetchFromGitHub {
+    owner = "oneapi-src";
+    repo = "unified-runtime";
+    rev = "v0.11.2";
+    sha256 = "sha256-fBdhdO5L9cU2Sd2zL0nGFClX0b3h7QhTFl234gXOTD4=";
+  };
+
+  compute-runtime = fetchFromGitHub {
+    owner = "intel";
+    repo = "compute-runtime";
+    rev = "24.39.31294.12";
+    sha256 = "sha256-7GNtAo20DgxAxYSPt6Nh92nuuaS9tzsQGH+sLnsvBKU=";
+  };
 in
 stdenv.mkDerivation {
   pname = "dpcpp";
   version = "0-unstable-${date}";
 
-  src = builtins.fetchTarball {
-    url = "https://github.com/intel/llvm/releases/download/nightly-${date}/sycl_linux.tar.gz";
-    sha256 = "sha256:1bkdn4bcml1n665rl435zf59gkxy9kc1b8bbdzmdb5p000wqq051";
+  src = fetchFromGitHub {
+    owner = "intel";
+    repo = "llvm";
+    rev = "nightly-${date}";
+    sha256 = "rtGeE/7cTSgTg+KxuZOfc6HDHG4Fgte0jjh4nYLo/E8=";
   };
 
-  autoPatchelfIgnoreMissingDeps = [
-    "libcuda.so.1"
-    "libcudart.so.1"
-  ];
-
   buildInputs = [
-    # cudatoolkit
     level-zero
-    libxml2
-    libz
-    ocl-icd
-    rocmPackages.clr
-    stdenv.cc.cc
   ];
 
   nativeBuildInputs = [
-    autoPatchelfHook
+    cmake
+    python3
+    ninja
+    hwloc
+    perl
   ];
 
-  installPhase = ''
-    mkdir -p $out
-    cp -r . $out
+  unpackPhase = ":";
+
+  configurePhase = ":";
+
+  buildPhase = ''
+    export LEVEL_ZERO_DIR=${level-zero}
+    python3 $src/buildbot/configure.py \
+      --obj-dir=$PWD \
+      --cmake-opt="-DLLVMGenXIntrinsics_SOURCE_DIR=${vc-intrinsics}" \
+      --cmake-opt="-DSYCL_UR_USE_FETCH_CONTENT=OFF" \
+      --cmake-opt="-DSYCL_UR_SOURCE_DIR=${unified-runtime}" \
+      --cmake-opt="-DUR_LEVEL_ZERO_LOADER_LIBRARY=${level-zero}/lib" \
+      --cmake-opt="-DUR_LEVEL_ZERO_INCLUDE_DIR=${level-zero}" \
+      --cmake-opt="-DCOMPUTE_RUNTIME_LEVEL_ZERO_INCLUDE=${compute-runtime}"
+    python3 $src/buildbot/compile.py
   '';
+
+  # installPhase = ''
+  # '';
 
   # postInstallPhase = ''
   # '';
