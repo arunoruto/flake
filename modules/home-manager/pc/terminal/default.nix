@@ -1,4 +1,5 @@
 {
+  inputs,
   lib,
   config,
   ...
@@ -6,6 +7,7 @@
 {
   imports = [
     ./alacritty.nix
+    ./ghostty.nix
     ./warp.nix
     ./wezterm.nix
   ];
@@ -32,5 +34,7 @@
       warp.enable = lib.mkDefault false;
       wezterm.enable = lib.mkDefault true;
     };
+
+    # home.packages = [ inputs.ghostty.packages.x86_64-linux.default ];
   };
 }
