@@ -51,6 +51,7 @@
       url = "github:youwen5/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    ghostty.url = "github:ghostty-org/ghostty";
     # nixvim-flake.url = "github:arunoruto/nvim.nix";
     # Styling
     stylix = {

@@ -34,6 +34,7 @@
       systemPackages = with pkgs; [
         amdgpu_top
         clinfo
+        nvtopPackages.amd
       ];
       sessionVariables = {
         GSK_RENDERER = "gl";
@@ -55,5 +56,7 @@
           ]);
       };
     };
+
+    # programs.nix-ld.libraries = config.hardware.graphics.extraPackages;
   };
 }
