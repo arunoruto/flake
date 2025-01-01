@@ -48,7 +48,6 @@ in
     ncdu
     ouch
     slides
-    unstable.vivid
 
     # nix
     unstable.nh

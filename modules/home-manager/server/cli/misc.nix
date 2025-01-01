@@ -15,6 +15,12 @@
 #   };
 # in
 {
+  imports = [
+    ./vivid-module.nix
+    ./vivid-filetype.nix
+    ./vivid-themes.nix
+  ];
+
   programs = {
     atuin = {
       enable = true;
@@ -71,10 +77,11 @@
 
     skim.enable = true;
 
-    # vivid = {
-    #   enable = true;
-    #   theme = "gruvbox-dark";
-    # };
+    vivid = {
+      enable = true;
+      package = pkgs.unstable.vivid;
+      theme = "gruvbox-dark";
+    };
 
     zoxide = {
       enable = true;
