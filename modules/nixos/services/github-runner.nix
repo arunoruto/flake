@@ -18,6 +18,7 @@ in
         group = gh-user;
         isSystemUser = true;
         description = "User for running GitHub related things";
+        packages = with pkgs; [ clang ];
       };
       groups.${gh-user} = { };
     };
