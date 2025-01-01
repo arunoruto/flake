@@ -7,7 +7,7 @@
   ...
 }@args:
 let
-nightly = !config.hosts.tinypc.enable && (args ? nixosConfig);
+  nightly = !config.hosts.tinypc.enable && (args ? nixosConfig);
   toml = pkgs.formats.toml { };
 in
 {
@@ -22,11 +22,7 @@ in
     programs = {
       helix = {
         enable = true;
-        package =
-          if nightly then
-            inputs.helix.packages.${pkgs.system}.default
-          else
-            pkgs.unstable.helix;
+        package = if nightly then inputs.helix.packages.${pkgs.system}.default else pkgs.unstable.helix;
         # package = pkgs.helix;
         # package = pkgs.unstable.helix;
         # package = pkgs.unstable.evil-helix;
@@ -52,6 +48,9 @@ in
               lsp = {
                 auto-signature-help = false;
                 display-messages = true;
+              };
+              file-picker = {
+                hidden = false;
               };
             }
             // lib.optionalAttrs nightly {

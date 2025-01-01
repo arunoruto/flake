@@ -7,6 +7,7 @@
 }@args:
 {
   imports = [
+    ./fortran.nix
     ./gpt.nix
     ./julia.nix
     ./ltex.nix
@@ -24,6 +25,7 @@
       enable = lib.mkDefault (!config.hosts.tinypc.enable);
       ngram = lib.mkDefault (!config.hosts.tinypc.enable && args ? nixosConfig);
     };
+    fortran.enable = lib.mkDefault (!config.hosts.tinypc.enable);
     matlab.enable = lib.mkDefault (!config.hosts.tinypc.enable);
     # markdown.enable = lib.mkDefault (!config.hosts.tinypc.enable);
     markdown.enable = true;
