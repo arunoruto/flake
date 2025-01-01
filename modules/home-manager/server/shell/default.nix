@@ -30,14 +30,21 @@ in
     programs.bash.package = lib.mkPackageOption pkgs "bash" { };
   };
 
-  config =
-    {
-      shell.starship.enable = lib.mkDefault true;
-
-      # completion manager
-      programs.carapace.enable = false;
-    }
-    // lib.genAttrs shells (
-      sh: lib.genAttrs [ "enable" ] (val: lib.mkDefault (if config.shell.main == sh then true else false))
-    );
+  config = {
+    programs =
+      {
+        # starship.enable = lib.mkDefault true;
+        starship.enable = true;
+        # completion manager
+        carapace.enable = false;
+      }
+      // lib.genAttrs shells (
+        # loops over all terminal attributes defined above
+        sh:
+        lib.genAttrs [ "enable" ] (
+          # for the enable attribute
+          val: lib.mkDefault (if config.shell.main == sh then true else false)
+        )
+      );
+  };
 }

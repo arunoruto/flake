@@ -50,10 +50,10 @@ in
       config.users.users.${username}.shell
     ];
     pathsToLink =
-      lib.optionals config.home-manager.users.${username}.zsh.enable [
+      lib.optionals config.home-manager.users.${username}.programs.zsh.enable [
         "/share/zsh"
       ]
-      ++ lib.optionals config.home-manager.users.${username}.fish.enable [
+      ++ lib.optionals config.home-manager.users.${username}.programs.fish.enable [
         "/share/fish"
       ];
   };
