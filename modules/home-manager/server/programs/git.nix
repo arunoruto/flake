@@ -42,9 +42,9 @@ in
           };
         }
         // lib.optionalAttrs (args ? nixosConfig) {
-          commit.gpgsign = osConfig.yubikey.enable;
-          user.signingkey = "${config.home.homeDirectory}/.ssh/id_${osConfig.yubikey.signing}_sign.pub";
-          gpg.format = "ssh";
+          # commit.gpgsign = osConfig.yubikey.enable;
+          # user.signingkey = "${config.home.homeDirectory}/.ssh/id_${osConfig.yubikey.signing}_sign.pub";
+          # gpg.format = "ssh";
         };
     };
 
