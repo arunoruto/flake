@@ -24,9 +24,10 @@
     #   kernelParams = [ "nvidia.NVreg_EnableGpuFirmware=0" ];
     # };
 
-    # environment.systemPackages = with pkgs; [
-    #   egl-wayland
-    # ];
+    environment.systemPackages = with pkgs; [
+      nvtopPackages.nvidia
+      # egl-wayland
+    ];
 
     hardware = {
       nvidia = {
