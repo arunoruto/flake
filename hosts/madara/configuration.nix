@@ -11,6 +11,7 @@ let
   monitorsConfig = pkgs.writeText "gdm_monitors.xml" (builtins.readFile ./monitors.xml);
 in
 {
+  # nixpkgs.config.cudaSupport = true;
   printing.enable = true;
   scanning.enable = true;
   hosts = {

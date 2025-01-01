@@ -14,10 +14,10 @@ let
       ipympl
       # Must
       jax
-      jaxlib
+      (if config.hosts.nvidia.enable then jaxlibWithCuda else jaxlib)
       matplotlib
-      numba
-      numba-scipy
+      (if config.hosts.nvidia.enable then numbaWithCuda else numba)
+      # numba-scipy
       numpy
       pandas
       plotly
