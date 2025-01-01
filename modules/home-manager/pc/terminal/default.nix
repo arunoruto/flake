@@ -4,6 +4,14 @@
   config,
   ...
 }:
+let
+  terminals = [
+    "alacritty"
+    "ghostty"
+    "warp"
+    "wezterm"
+  ];
+in
 {
   imports = [
     ./alacritty.nix
@@ -38,13 +46,18 @@
   };
 
   config = lib.mkIf config.terminals.enable {
-    programs = {
-      alacritty.enable = lib.mkDefault false;
-      ghostty.enable = lib.mkDefault true;
-      warp.enable = lib.mkDefault false;
-      wezterm.enable = lib.mkDefault true;
-    };
-
-    # home.packages = [ inputs.ghostty.packages.x86_64-linux.default ];
+    programs =
+      {
+        # # here you can force a terminal to be enabled!
+        # alacritty.enable = lib.mkForce true;
+      }
+      // lib.genAttrs terminals (
+        # loops over all terminal attributes defined above
+        term:
+        lib.genAttrs [ "enable" ] (
+          # for the enable attribute
+          val: lib.mkDefault (if config.terminals.main == term then true else false)
+        )
+      );
   };
 }
