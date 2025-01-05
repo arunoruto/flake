@@ -41,6 +41,12 @@ in
           user = "mar";
           # forwardX11 = "yes";
         };
+        marvin = {
+          host = "marvin";
+          hostname = "marvin.king-little.ts.net";
+          user = "mar";
+          extraOptions.PubkeyAuthentication = "no";
+        };
       };
     };
 
