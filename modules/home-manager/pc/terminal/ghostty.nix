@@ -1,7 +1,7 @@
 {
-  inputs,
   config,
   pkgs,
+  lib,
   ...
 }:
 {
@@ -12,8 +12,11 @@
 
   config = {
     programs.ghostty = {
-      # package = inputs.ghostty.packages.x86_64-linux.default;
       package = pkgs.unstable.ghostty;
+
+      enableBashIntegration = lib.mkDefault true;
+      enableFishIntegration = lib.mkDefault true;
+      enableZshIntegration = lib.mkDefault true;
 
       settings = {
         # background-blur-radius = 20;
