@@ -51,7 +51,6 @@
       url = "github:youwen5/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    ghostty.url = "github:ghostty-org/ghostty";
     # nixvim-flake.url = "github:arunoruto/nvim.nix";
     # Styling
     stylix = {
@@ -121,30 +120,61 @@
       # image = "anime/dan-da-dan/op/jiji1.png";
       # image = "anime/dan-da-dan/op/turbogranny1.png";
 
-      hostname-users = {
+      machines = {
         # Personal
-        "isshin" = "mirza"; # Framework Laptop AMD 7040
-        "zangetsu" = "mirza"; # Framework Case Intel 11th
-        "yhwach" = "mirza"; # Tower PC
-        # "kuchiki" = "mirza"; # New NAS Server
-        "yoruichi" = "mirza"; # Crappy AMD Mini PC
-        "shinji" = "mirza"; # M720q Mini PC
-        "kenpachi" = "mirza"; # S740 Mini PC
-        # "narouter" = "mirza"; # Firewall
-        "aizen" = "mirza";
+        isshin = {
+          usernames = [ "mirza" ];
+        }; # Framework Laptop AMD 7040
+        zangetsu = {
+          usernames = [ "mirza" ];
+        }; # Framework Case Intel 11th
+        yhwach = {
+          usernames = [ "mirza" ];
+        }; # Tower PC
+        # kuchiki = {
+        #   usernames = [ "mirza" ];
+        # }; # New NAS Server
+        yoruichi = {
+          usernames = [ "mirza" ];
+        }; # Crappy AMD Mini PC
+        shinji = {
+          usernames = [ "mirza" ];
+        }; # M720q Mini PC
+        kenpachi = {
+          usernames = [ "mirza" ];
+        }; # S740 Mini PC
+        # narouter = {
+        #   usernames = [ "mirza" ];
+        # }; # Firewall
+        aizen = {
+          usernames = [ "mirza" ];
+        };
         # Work
-        "kyuubi" = "mar"; # Crappy Work PC
-        "madara" = "mar"; # Nice Work PC
+        kyuubi = {
+          usernames = [ "mar" ];
+        }; # Crappy Work PC
+        madara = {
+          usernames = [ "mar" ];
+        }; # Nice Work PC
       };
+
+      unique-users = lib.lists.unique (
+        lib.lists.concatMap (x: x.usernames) (builtins.attrValues machines)
+      );
     in
     {
-      nixosConfigurations = lib.genAttrs (builtins.attrNames hostname-users) (
+      nixosConfigurations = lib.genAttrs (builtins.attrNames machines) (
         hostname:
+        let
+          # TODO: enable support for multiple users in the future
+          # Could be relevant for setting up a kodi or github-runner user
+          username = lib.lists.elemAt machines.${hostname}.usernames 0;
+        in
         lib.nixosSystem {
           inherit system;
           specialArgs = {
-            inherit inputs;
-            username = hostname-users."${hostname}";
+            inherit inputs username;
+            # username = machines."${hostname}";
           };
           modules = [
             # inputs.nur.nixosModules.nur
@@ -176,7 +206,8 @@
         }
       );
 
-      homeConfigurations = lib.genAttrs (lib.lists.unique (builtins.attrValues hostname-users)) (
+      # homeConfigurations = lib.genAttrs (lib.lists.unique (builtins.attrValues machines)) (
+      homeConfigurations = lib.genAttrs unique-users (
         user:
         home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
@@ -204,6 +235,7 @@
       packages.${system} = import ./pkgs pkgs;
       # devShells.${system} = import ./shells nixpkgs.legacyPackages.${system};
       # packages.${system} = import ./pkgs nixpkgs.legacyPackages.${system};
+
     };
 
   nixConfig = {
