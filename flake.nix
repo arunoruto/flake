@@ -236,6 +236,14 @@
       # devShells.${system} = import ./shells nixpkgs.legacyPackages.${system};
       # packages.${system} = import ./pkgs nixpkgs.legacyPackages.${system};
 
+      colmena = {
+        meta = {
+          nixpkgs = import nixpkgs {
+            inherit system;
+            overlays = [ ];
+          };
+        };
+      };
     };
 
   nixConfig = {
