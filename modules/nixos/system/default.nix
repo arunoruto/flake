@@ -1,4 +1,5 @@
 {
+  inputs,
   pkgs,
   lib,
   # image,
@@ -33,8 +34,11 @@
   };
 
   environment.systemPackages = with pkgs; [
+    inputs.colmena.packages.${pkgs.system}.colmena
+    deploy-rs
     lsof
     lshw
+    tree
   ];
 
   # This value determines the NixOS release from which the default
