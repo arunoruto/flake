@@ -10,6 +10,8 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    colmena.url = "github:zhaofengli/colmena";
+    deploy-rs.url = "github:serokell/deploy-rs";
     nixos-hardware.url = "github:nixos/nixos-hardware";
     ucodenix.url = "github:e-tho/ucodenix";
     nixos-facter-modules.url = "github:numtide/nixos-facter-modules";
@@ -82,6 +84,8 @@
       self,
       nixpkgs,
       home-manager,
+      colmena,
+      deploy-rs,
       ...
     }@inputs:
     let
@@ -95,6 +99,18 @@
         overlays = [
           self.overlays.unstable-packages
           # inputs.hyprpanel.overlay
+        ];
+      };
+      deployPkgs = import nixpkgs {
+        inherit system;
+        overlays = [
+          deploy-rs.overlay # or deploy-rs.overlays.default
+          (self: super: {
+            deploy-rs = {
+              inherit (pkgs) deploy-rs;
+              lib = super.deploy-rs.lib;
+            };
+          })
         ];
       };
 
@@ -124,37 +140,50 @@
         # Personal
         isshin = {
           usernames = [ "mirza" ];
+          deployment = {
+            allowLocalDeployment = true;
+            targetHost = null;
+          };
+
         }; # Framework Laptop AMD 7040
         zangetsu = {
           usernames = [ "mirza" ];
+          deployment.targetHost = null;
         }; # Framework Case Intel 11th
         yhwach = {
           usernames = [ "mirza" ];
+          deployment.targetHost = null;
         }; # Tower PC
         # kuchiki = {
         #   usernames = [ "mirza" ];
         # }; # New NAS Server
         yoruichi = {
           usernames = [ "mirza" ];
+          deployment.targetHost = null;
         }; # Crappy AMD Mini PC
         shinji = {
           usernames = [ "mirza" ];
+          deployment.tags = [ "tinypc" ];
         }; # M720q Mini PC
         kenpachi = {
           usernames = [ "mirza" ];
+          deployment.targetHost = null;
         }; # S740 Mini PC
         # narouter = {
         #   usernames = [ "mirza" ];
         # }; # Firewall
         aizen = {
           usernames = [ "mirza" ];
+          deployment.targetHost = null;
         };
         # Work
         kyuubi = {
           usernames = [ "mar" ];
+          deployment.targetHost = null;
         }; # Crappy Work PC
         madara = {
           usernames = [ "mar" ];
+          deployment.targetHost = null;
         }; # Nice Work PC
       };
 
@@ -163,17 +192,15 @@
       );
     in
     {
-      nixosConfigurations = lib.genAttrs (builtins.attrNames machines) (
-        hostname:
-        let
-          # TODO: enable support for multiple users in the future
-          # Could be relevant for setting up a kodi or github-runner user
-          username = lib.lists.elemAt machines.${hostname}.usernames 0;
-        in
+      nixosConfigurations = builtins.mapAttrs (
+        hostname: conf:
         lib.nixosSystem {
           inherit system;
           specialArgs = {
-            inherit inputs username;
+            inherit inputs;
+            # TODO: enable support for multiple users in the future
+            # Could be relevant for setting up a kodi or github-runner user
+            username = lib.lists.elemAt conf.usernames 0;
             # username = machines."${hostname}";
           };
           modules = [
@@ -204,7 +231,7 @@
             ./homes
           ];
         }
-      );
+      ) machines;
 
       # homeConfigurations = lib.genAttrs (lib.lists.unique (builtins.attrValues machines)) (
       homeConfigurations = lib.genAttrs unique-users (
@@ -236,28 +263,50 @@
       # devShells.${system} = import ./shells nixpkgs.legacyPackages.${system};
       # packages.${system} = import ./pkgs nixpkgs.legacyPackages.${system};
 
-      colmena = {
-        meta = {
-          nixpkgs = import nixpkgs {
-            inherit system;
-            overlays = [ ];
+      colmenaHive = colmena.lib.makeHive self.outputs.colmena;
+      colmena =
+        let
+          conf = self.nixosConfigurations;
+        in
+        {
+          meta = {
+            description = "my personal machines";
+            nixpkgs = import nixpkgs {
+              inherit system;
+              # overlays = [ ];
+            };
+            # nodeNixpkgs = builtins.mapAttrs (name: value: value.pkgs) conf;
+            nodeSpecialArgs = builtins.mapAttrs (name: value: value._module.specialArgs) conf;
           };
+        }
+        // builtins.mapAttrs (name: value: {
+          imports = value._module.args.modules;
+          inherit (machines.${name}) deployment;
+        }) conf;
+
+      checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
+      deploy.nodes = builtins.mapAttrs (hostname: conf: {
+        inherit hostname;
+        profiles.system = {
+          user = "root";
+          path = deployPkgs.deploy-rs.lib.activate.nixos conf;
+          remoteBuild = true;
         };
-      };
+      }) self.nixosConfigurations;
     };
 
   nixConfig = {
     extra-substituters = [
       "https://nix-community.cachix.org"
-      "https://helix.cachix.org"
+      "https://colmena.cachix.org"
+      # "https://helix.cachix.org"
       # "https://wezterm.cachix.org"
-      # "https://cuda-maintainers.cachix.org"
     ];
     extra-trusted-public-keys = [
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-      "helix.cachix.org-1:ejp9KQpR1FBI2onstMQ34yogDm4OgU2ru6lIwPvuCVs="
+      "colmena.cachix.org-1:7BzpDnjjH8ki2CT3f6GdOk7QAzPOl+1t3LvTLXqYcSg="
+      # "helix.cachix.org-1:ejp9KQpR1FBI2onstMQ34yogDm4OgU2ru6lIwPvuCVs="
       # "wezterm.cachix.org-1:kAbhjYUC9qvblTE+s7S+kl5XM1zVa4skO+E/1IDWdH0="
-      # "cuda-maintainers.cachix.org-1:0dq3bujKpuEPMCX6U4WylrUDZ9JyUG0VpVZa7CNfq5E="
     ];
   };
 }
