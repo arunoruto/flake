@@ -22,9 +22,9 @@ in
     programs = {
       helix = {
         enable = true;
-        package = if nightly then inputs.helix.packages.${pkgs.system}.default else pkgs.unstable.helix;
+        # package = if nightly then inputs.helix.packages.${pkgs.system}.default else pkgs.unstable.helix;
         # package = pkgs.helix;
-        # package = pkgs.unstable.helix;
+        package = pkgs.unstable.helix;
         # package = pkgs.unstable.evil-helix;
         settings = {
           theme = lib.mkForce "my-stylix";
