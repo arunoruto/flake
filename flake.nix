@@ -263,36 +263,36 @@
       # devShells.${system} = import ./shells nixpkgs.legacyPackages.${system};
       # packages.${system} = import ./pkgs nixpkgs.legacyPackages.${system};
 
-      colmenaHive = colmena.lib.makeHive self.outputs.colmena;
-      colmena =
-        let
-          conf = self.nixosConfigurations;
-        in
-        {
-          meta = {
-            description = "my personal machines";
-            nixpkgs = import nixpkgs {
-              inherit system;
-              # overlays = [ ];
-            };
-            # nodeNixpkgs = builtins.mapAttrs (name: value: value.pkgs) conf;
-            nodeSpecialArgs = builtins.mapAttrs (name: value: value._module.specialArgs) conf;
-          };
-        }
-        // builtins.mapAttrs (name: value: {
-          imports = value._module.args.modules;
-          inherit (machines.${name}) deployment;
-        }) conf;
+      # colmenaHive = colmena.lib.makeHive self.outputs.colmena;
+      # colmena =
+      #   let
+      #     conf = self.nixosConfigurations;
+      #   in
+      #   {
+      #     meta = {
+      #       description = "my personal machines";
+      #       nixpkgs = import nixpkgs {
+      #         inherit system;
+      #         # overlays = [ ];
+      #       };
+      #       # nodeNixpkgs = builtins.mapAttrs (name: value: value.pkgs) conf;
+      #       nodeSpecialArgs = builtins.mapAttrs (name: value: value._module.specialArgs) conf;
+      #     };
+      #   }
+      #   // builtins.mapAttrs (name: value: {
+      #     imports = value._module.args.modules;
+      #     inherit (machines.${name}) deployment;
+      #   }) conf;
 
-      checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
-      deploy.nodes = builtins.mapAttrs (hostname: conf: {
-        inherit hostname;
-        profiles.system = {
-          user = "root";
-          path = deployPkgs.deploy-rs.lib.activate.nixos conf;
-          remoteBuild = true;
-        };
-      }) self.nixosConfigurations;
+      # checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
+      # deploy.nodes = builtins.mapAttrs (hostname: conf: {
+      #   inherit hostname;
+      #   profiles.system = {
+      #     user = "root";
+      #     path = deployPkgs.deploy-rs.lib.activate.nixos conf;
+      #     remoteBuild = true;
+      #   };
+      # }) self.nixosConfigurations;
     };
 
   nixConfig = {
