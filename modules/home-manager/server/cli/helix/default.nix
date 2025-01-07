@@ -70,10 +70,36 @@ in
 
     home.file.".config/helix/themes/my-stylix.toml".source = toml.generate "my-stylix.toml" {
       inherits = "stylix";
-      "ui.cursor.match" = {
-        fg = "base08";
+      # "ui.selection" = {
+      #   fg = "base0A";
+      # };
+      # "ui.selection.primary" = {
+      #   fg = "base02";
+      # };
+      "ui.cursor" = {
+        fg = "base0B";
         modifiers = [ "reversed" ];
       };
+      "ui.cursor.primary" = {
+        fg = "base0A";
+        modifiers = [ "reversed" ];
+      };
+      "ui.cursor.match" = {
+        fg = "base0A";
+        modifiers = [ "underlined" ];
+      };
+      # ui.cursor = {
+      #   fg = "base0B";
+      #   modifiers = [ "reversed" ];
+      #   primary = {
+      #     fg = "base0A";
+      #     modifiers = [ "reversed" ];
+      #   };
+      #   match = {
+      #     fg = "base0A";
+      #     modifiers = [ "underlined" ];
+      #   };
+      # };
     };
   };
 }
