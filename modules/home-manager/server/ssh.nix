@@ -39,9 +39,9 @@ in
           #   "~/.ssh/id_sops"
           # ];
         };
-        ultron-tail = {
-          host = "ultron.tail";
-          hostname = "ultron";
+        ultron = {
+          host = "ultron";
+          hostname = "ultron.king-little.ts.net";
           user = "mar";
           # forwardX11 = "yes";
         };
