@@ -27,7 +27,11 @@ in
       enable = true;
       # Required for yubikey-agent
       addKeysToAgent = "yes";
+      extraConfig = ''
+        SetEnv TERM=xterm-256color
+      '';
       matchBlocks = {
+
         hublab = {
           host = "gitlab.com github.com";
           identitiesOnly = false;
