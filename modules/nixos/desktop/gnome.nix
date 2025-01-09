@@ -34,6 +34,8 @@
         gnome-pomodoro
         gnome-remote-desktop
         gnome-tweaks
+        xdg-desktop-portal
+        xdg-desktop-portal-gnome
         zenity
       ];
       # Excluding some GNOME applications from the default install

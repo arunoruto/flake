@@ -11,6 +11,7 @@ in
 {
   imports = [
     ./custom.nix
+    ./touch-detect.nix
   ];
 
   options.yubikey = {
@@ -44,15 +45,26 @@ in
       yubikey-manager
     ];
 
-    programs.yubikey-touch-detector = {
-      enable = lib.mkDefault true;
-      verbose = true;
-    };
-
     services = {
       pcscd.enable = true; # smartcard device
       udev.packages = [ pkgs.yubikey-personalization ];
       yubikey-agent.enable = true;
+      yubikey-touch-detector = {
+        enable = lib.mkDefault true;
+        # package = pkgs.unstable.yubikey-touch-detector;
+        package = pkgs.unstable.yubikey-touch-detector.overrideAttrs (
+          final: prev: {
+            src = pkgs.fetchFromGitHub {
+              owner = "maximbaz";
+              repo = "yubikey-touch-detector";
+              rev = "34fff8ba94f6c355f768b2e6ad5e61ac46ebe3a3";
+              hash = "sha256-3b94Y5WQ7YyyuR/V4/ZR11/4Dv0kTY7wmCRcDR7P0Pc=";
+            };
+            vendorHash = "sha256-x8Fmhsk6MtgAtLxgH/V3KusM0BXAOaSU+2HULR5boJQ=";
+          }
+        );
+        verbose = true;
+      };
     };
 
     security.pam = lib.optionalAttrs pkgs.stdenv.isLinux {
