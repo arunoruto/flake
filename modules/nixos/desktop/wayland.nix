@@ -12,10 +12,16 @@
       portal = {
         enable = true;
         wlr.enable = true;
-        extraPortals = with pkgs; [
-          # xdg-desktop-portal-wlr
-          # xdg-desktop-portal-gtk
-        ];
+        extraPortals =
+          with pkgs;
+          [
+            xdg-desktop-portal
+            xdg-desktop-portal-wlr
+            xdg-desktop-portal-gtk
+          ]
+          ++ lib.optionals config.services.xserver.desktopManager.gnome.enable [
+            pkgs.xdg-desktop-portal-gnome
+          ];
         xdgOpenUsePortal = true;
       };
     };
