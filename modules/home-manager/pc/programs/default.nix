@@ -21,10 +21,13 @@
     chrome.enable = lib.mkDefault true;
     firefox.enable = lib.mkDefault true;
     steam.enable = lib.mkDefault false;
-    thunderbird.enable = lib.mkDefault true;
     vscode.enable = lib.mkDefault true;
     zathura.enable = lib.mkDefault true;
     zed.enable = lib.mkDefault true;
+
+    programs = {
+      thunderbird.enable = lib.mkDefault true;
+    };
 
     home.packages = with pkgs; [
       vlc
