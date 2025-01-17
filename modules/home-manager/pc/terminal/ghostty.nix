@@ -6,7 +6,7 @@
 }:
 {
   imports = [
-    ./ghostty-module.nix
+    # ./ghostty-module.nix
     ./hm.nix
   ];
 
