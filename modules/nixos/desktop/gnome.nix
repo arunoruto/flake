@@ -20,6 +20,9 @@
         gnome-remote-desktop.enable = config.hosts.workstation.enable;
         sushi.enable = true;
       };
+      # For gestures
+      libinput.enable = true;
+      touchegg.enable = true;
     };
 
     programs.dconf.enable = lib.mkDefault true;
@@ -34,8 +37,6 @@
         gnome-pomodoro
         gnome-remote-desktop
         gnome-tweaks
-        xdg-desktop-portal
-        xdg-desktop-portal-gnome
         zenity
       ];
       # Excluding some GNOME applications from the default install
