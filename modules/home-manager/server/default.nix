@@ -43,17 +43,9 @@ in
     glow
     hexyl
     # hugo
-    marksman
     miller
     ncdu
     ouch
     slides
-
-    # nix
-    unstable.nh
-    nix-du
-    nix-tree
-    nix-output-monitor
-    nvd
   ];
 }
