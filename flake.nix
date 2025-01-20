@@ -16,7 +16,7 @@
     ucodenix.url = "github:e-tho/ucodenix";
     nixos-facter-modules.url = "github:numtide/nixos-facter-modules";
     nix-ld = {
-      url = "github:Mic92/nix-ld";
+      url = "github:nix-community/nix-ld";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     lanzaboote = {
@@ -33,7 +33,6 @@
       url = "github:nix-community/home-manager/release-24.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # hyprpanel.url = "github:Jas-SinghFSU/HyprPanel";
     # DEs
     # nixos-cosmic = {
     #   url = "github:lilyinstarlight/nixos-cosmic";
@@ -47,8 +46,7 @@
     #     home-manager.follows = "home-manager";
     #   };
     # };
-    helix.url = "github:helix-editor/helix";
-    # wezterm.url = "github:wez/wezterm?dir=nix";
+    # helix.url = "github:helix-editor/helix";
     zen-browser = {
       url = "github:youwen5/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -62,10 +60,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     # ags.url = "github:Aylur/ags";
-    # poetry2nix = {
-    #   url = "github:nix-community/poetry2nix";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
 
     # Private
     secrets = {
@@ -300,13 +294,11 @@
       "https://nix-community.cachix.org"
       "https://colmena.cachix.org"
       # "https://helix.cachix.org"
-      # "https://wezterm.cachix.org"
     ];
     extra-trusted-public-keys = [
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       "colmena.cachix.org-1:7BzpDnjjH8ki2CT3f6GdOk7QAzPOl+1t3LvTLXqYcSg="
       # "helix.cachix.org-1:ejp9KQpR1FBI2onstMQ34yogDm4OgU2ru6lIwPvuCVs="
-      # "wezterm.cachix.org-1:kAbhjYUC9qvblTE+s7S+kl5XM1zVa4skO+E/1IDWdH0="
     ];
   };
 }
