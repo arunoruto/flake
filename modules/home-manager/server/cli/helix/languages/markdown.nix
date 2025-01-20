@@ -49,12 +49,11 @@ in
           }
         ];
         language-server = {
-          oxide = {
-            command = lib.getExe pkgs.markdown-oxide;
-          };
+          oxide.command = "markdown-oxide";
         };
       };
       extraPackages = with pkgs; [
+        markdown-oxide
         marksman
         nodePackages.prettier
       ];

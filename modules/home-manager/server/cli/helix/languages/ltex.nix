@@ -13,16 +13,18 @@
   };
 
   config = lib.mkIf config.helix.ltex.enable {
-    programs.helix.languages.language-server.ltex = {
-      # command = lib.getExe pkgs.ltex-ls;
-      command = "${pkgs.ltex-ls}/bin/ltex-ls";
-      config.ltex = {
-        language = "en-GB";
-        # dictionary = {
-        #   "en-US" = [ ];
-        # };
-        additionalRules.languageModel = lib.optionalString config.helix.ltex.ngram "${config.home.homeDirectory}/.cache/ngrams";
+    programs.helix = {
+      languages.language-server.ltex = {
+        command = "ltex-ls";
+        config.ltex = {
+          language = "en-GB";
+          # dictionary = {
+          #   "en-US" = [ ];
+          # };
+          additionalRules.languageModel = lib.optionalString config.helix.ltex.ngram "${config.home.homeDirectory}/.cache/ngrams";
+        };
       };
+      extraPackages = with pkgs; [ ltex-ls ];
     };
 
     home.file = lib.mkIf config.helix.ltex.ngram {
