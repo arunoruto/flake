@@ -26,10 +26,10 @@ in
       primary = true;
       flavor = "gmail.com";
       inherit realName;
-      thunderbird = {
-        enable = true;
-        inherit profiles;
-      };
+      # thunderbird = {
+      #   enable = true;
+      #   inherit profiles;
+      # };
     };
     unimail = {
       address = "mirza.arnaut@tu-dortmund.de";
@@ -54,10 +54,10 @@ in
         '';
       };
       inherit realName;
-      thunderbird = {
-        enable = true;
-        inherit profiles;
-      };
+      # thunderbird = {
+      #   enable = true;
+      #   inherit profiles;
+      # };
     };
     dav = {
       address = "mirza.arnaut@dav-dortmund.de";
