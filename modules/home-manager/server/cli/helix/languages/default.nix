@@ -7,6 +7,7 @@
 }@args:
 {
   imports = [
+    ./shells.nix
     ./fortran.nix
     ./gpt.nix
     ./julia.nix
@@ -20,6 +21,7 @@
   ];
 
   helix = {
+    shells.enable = lib.mkDefault (!config.hosts.tinypc.enable);
     julia.enable = lib.mkDefault (!config.hosts.tinypc.enable);
     ltex = {
       enable = lib.mkDefault (!config.hosts.tinypc.enable);

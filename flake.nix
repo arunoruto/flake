@@ -15,10 +15,6 @@
     nixos-hardware.url = "github:nixos/nixos-hardware";
     ucodenix.url = "github:e-tho/ucodenix";
     nixos-facter-modules.url = "github:numtide/nixos-facter-modules";
-    nix-ld = {
-      url = "github:nix-community/nix-ld";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     lanzaboote = {
       url = "github:nix-community/lanzaboote/v0.4.1";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
@@ -27,6 +23,10 @@
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # nix-ld = {
+    #   url = "github:nix-community/nix-ld";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
     # nur.url = "github:nix-community/NUR";
     # Home Manager
     home-manager = {

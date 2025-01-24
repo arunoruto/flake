@@ -21,20 +21,14 @@ in
             auto-format = true;
             rulers = [ 120 ];
             language-servers =
-              # lib.optionals config.helix.ltex.enable [
-              lib.optionals (ls ? ltex) [
-                "ltex"
-              ]
+              lib.optionals (ls ? ltex) [ "ltex" ]
               ++ [
                 "marksman"
                 "oxide"
               ]
-              ++ lib.optionals (ls ? gpt) [
-                "gpt"
-              ];
-            # ++ lib.optionals (ls ? lsp-ai) [
-            #   "lsp-ai"
-            # ];
+              # ++ lib.optionals (ls ? lsp-ai) [ "lsp-ai" ]
+              ++ lib.optionals (ls ? gpt) [ "gpt" ]
+              ++ [ ];
             formatter = {
               command = "prettier";
               args = [
