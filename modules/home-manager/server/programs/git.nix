@@ -4,7 +4,6 @@
   config,
   pkgs,
   lib,
-  osConfig,
   ...
 }@args:
 let
@@ -13,17 +12,21 @@ let
     gns = "git -c commit.gpgsign=false";
     gnscm = "git -c commit.gpgsign=false commit -m";
   };
+  user = {
+    email = "mirza.arnaut45@gmail.com";
+    name = "Mirza Arnaut";
+  };
 in
 {
   home.packages = [
     glab-pkg # Gitlab CLI tool
-  ];
+  ] ++ (with pkgs; [ gitbutler ]);
 
   programs = {
     git = {
       enable = true;
-      userName = "Mirza Arnaut";
-      userEmail = "mirza.arnaut45@gmail.com";
+      userName = user.name;
+      userEmail = user.email;
       lfs.enable = true;
       delta = {
         enable = true;
@@ -46,6 +49,20 @@ in
           # user.signingkey = "${config.home.homeDirectory}/.ssh/id_${osConfig.yubikey.signing}_sign.pub";
           # gpg.format = "ssh";
         };
+    };
+
+    jujutsu = {
+      enable = true;
+      package = pkgs.unstable.jujutsu;
+      settings = {
+        inherit user;
+        ui = {
+          default-command = [
+            "log"
+            "--reversed"
+          ];
+        };
+      };
     };
 
     gh = {
