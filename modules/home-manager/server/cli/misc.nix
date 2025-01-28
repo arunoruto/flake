@@ -63,7 +63,8 @@
           "git"
           "name"
         ];
-        date = "+%a %d.%m.%y %X";
+        # date = "%d.%m.%Y %H:%M:%S";
+        date = "%F %T";
         sorting = {
           dir-grouping = "first";
         };
