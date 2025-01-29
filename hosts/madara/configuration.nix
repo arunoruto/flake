@@ -12,6 +12,7 @@ let
 in
 {
   # nixpkgs.config.cudaSupport = true;
+  ai.enable = true;
   printing.enable = true;
   scanning.enable = true;
   hosts = {
