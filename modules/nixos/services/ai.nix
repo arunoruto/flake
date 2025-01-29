@@ -7,7 +7,7 @@
 {
   options.ai.enable = lib.mkEnableOption ''Enable local AI services'';
 
-  config = {
+  config = lib.mkIf config.ai.enable {
     services = {
       open-webui = {
         enable = true;
@@ -30,7 +30,7 @@
         acceleration =
           if config.hosts.nvidia.enable then
             "cuda"
-          else if config.hosts.nvidia.amd.enable then
+          else if config.hosts.amd.enable then
             "rocm"
           else
             null;
