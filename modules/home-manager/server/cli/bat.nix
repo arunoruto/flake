@@ -8,7 +8,7 @@ let
 
   shellAliases = {
     cat = "bat -pp";
-    less = "bat --paging=always";
+    less = "bat --paging=always --wrap=never";
   };
 in
 {
