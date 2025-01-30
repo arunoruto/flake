@@ -132,53 +132,30 @@
 
       machines = {
         # Personal
-        isshin = {
-          usernames = [ "mirza" ];
-          deployment = {
-            allowLocalDeployment = true;
-            targetHost = null;
-          };
+        # Framework Laptop AMD 7040
+        isshin.usernames = [ "mirza" ];
+        # Framework Case Intel 11th
+        zangetsu.usernames = [ "mirza" ];
+        # Tower PC
+        yhwach.usernames = [ "mirza" ];
+        # New NAS Server
+        # kuchiki.usernames = [ "mirza" ];
+        # Crappy AMD Mini PC
+        yoruichi.usernames = [ "mirza" ];
+        # M720q Mini PC
+        shinji.usernames = [ "mirza" ];
+        # S740 Mini PC
+        kenpachi.usernames = [ "mirza" ];
+        # Firewall
+        # narouter.usernames = [ "mirza" ];
+        # Server
+        # aizen.usernames = [ "mirza" ];
 
-        }; # Framework Laptop AMD 7040
-        zangetsu = {
-          usernames = [ "mirza" ];
-          deployment.targetHost = null;
-        }; # Framework Case Intel 11th
-        yhwach = {
-          usernames = [ "mirza" ];
-          deployment.targetHost = null;
-        }; # Tower PC
-        # kuchiki = {
-        #   usernames = [ "mirza" ];
-        # }; # New NAS Server
-        yoruichi = {
-          usernames = [ "mirza" ];
-          deployment.targetHost = null;
-        }; # Crappy AMD Mini PC
-        shinji = {
-          usernames = [ "mirza" ];
-          deployment.tags = [ "tinypc" ];
-        }; # M720q Mini PC
-        kenpachi = {
-          usernames = [ "mirza" ];
-          deployment.targetHost = null;
-        }; # S740 Mini PC
-        # narouter = {
-        #   usernames = [ "mirza" ];
-        # }; # Firewall
-        aizen = {
-          usernames = [ "mirza" ];
-          deployment.targetHost = null;
-        };
         # Work
-        kyuubi = {
-          usernames = [ "mar" ];
-          deployment.targetHost = null;
-        }; # Crappy Work PC
-        madara = {
-          usernames = [ "mar" ];
-          deployment.targetHost = null;
-        }; # Nice Work PC
+        # Crappy Work PC
+        kyuubi.usernames = [ "mar" ];
+        # Nice Work PC
+        madara.usernames = [ "mar" ];
       };
 
       unique-users = lib.lists.unique (
@@ -257,26 +234,26 @@
       # devShells.${system} = import ./shells nixpkgs.legacyPackages.${system};
       # packages.${system} = import ./pkgs nixpkgs.legacyPackages.${system};
 
-      # colmenaHive = colmena.lib.makeHive self.outputs.colmena;
-      # colmena =
-      #   let
-      #     conf = self.nixosConfigurations;
-      #   in
-      #   {
-      #     meta = {
-      #       description = "my personal machines";
-      #       nixpkgs = import nixpkgs {
-      #         inherit system;
-      #         # overlays = [ ];
-      #       };
-      #       # nodeNixpkgs = builtins.mapAttrs (name: value: value.pkgs) conf;
-      #       nodeSpecialArgs = builtins.mapAttrs (name: value: value._module.specialArgs) conf;
-      #     };
-      #   }
-      #   // builtins.mapAttrs (name: value: {
-      #     imports = value._module.args.modules;
-      #     inherit (machines.${name}) deployment;
-      #   }) conf;
+      colmenaHive = colmena.lib.makeHive self.outputs.colmena;
+      colmena =
+        let
+          conf = self.nixosConfigurations;
+        in
+        {
+          meta = {
+            description = "my personal machines";
+            nixpkgs = import nixpkgs {
+              inherit system;
+              # overlays = [ ];
+            };
+            # nodeNixpkgs = builtins.mapAttrs (name: value: value.pkgs) conf;
+            nodeSpecialArgs = builtins.mapAttrs (name: value: value._module.specialArgs) conf;
+          };
+        }
+        // builtins.mapAttrs (name: value: {
+          imports = value._module.args.modules;
+          inherit (conf.${name}.config.colmena) deployment;
+        }) conf;
 
       # checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
       # deploy.nodes = builtins.mapAttrs (hostname: conf: {

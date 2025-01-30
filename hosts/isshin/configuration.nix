@@ -1,5 +1,7 @@
 { lib, config, ... }:
 {
+  colmena.deployment.allowLocalDeployment = lib.mkDefault true;
+
   services = lib.mkIf (config.services ? ucodenix) {
     ucodenix.enable = true;
     # ucodenix.cpuModelId = "00A70F41";

@@ -11,6 +11,7 @@
     ./boot
     ./types
     ./bluetooth.nix
+    ./deployment.nix
     ./locale.nix
     ./nix-utils.nix
     ./secure-boot.nix
