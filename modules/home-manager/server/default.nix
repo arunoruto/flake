@@ -36,16 +36,22 @@ in
     diagnostics = { };
   };
 
-  home.packages = with pkgs; [
-    speedtest-cli
+  home.packages =
+    with pkgs;
+    [
+      dust
+      speedtest-cli
+    ]
+    ++ lib.optionals (!config.hosts.tinypc.enable) (
+      with pkgs;
+      [
 
-    dust
-    glow
-    hexyl
-    # hugo
-    miller
-    ncdu
-    ouch
-    slides
-  ];
+        glow
+        hexyl
+        miller
+        ncdu
+        ouch
+        slides
+      ]
+    );
 }

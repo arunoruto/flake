@@ -59,7 +59,7 @@ in
     # users.${username} = import ../modules/home-manager/home.nix;
     # users.${username} = (import ./${username}) // (import ../modules/home-manager/home.nix);
     users.${username} =
-      (import ./${username})
+      (import ./${username} { inherit config lib; })
       // lib.optionalAttrs (builtins.pathExists host-home-config) (
         import host-home-config {
           inherit lib;

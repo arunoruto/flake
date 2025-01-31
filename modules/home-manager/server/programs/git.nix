@@ -20,7 +20,7 @@ in
 {
   home.packages = [
     glab-pkg # Gitlab CLI tool
-  ] ++ (with pkgs; [ gitbutler ]);
+  ] ++ lib.optionals (!config.hosts.tinypc.enable) (with pkgs; [ gitbutler ]);
 
   programs = {
     git = {
@@ -52,7 +52,7 @@ in
     };
 
     jujutsu = {
-      enable = true;
+      enable = !config.hosts.tinypc.enable;
       package = pkgs.unstable.jujutsu;
       settings = {
         inherit user;

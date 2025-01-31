@@ -1,8 +1,8 @@
-{ lib, ... }:
+{ config, lib, ... }:
 {
   imports = [
     ./nix-serve.nix
   ];
 
-  nix-serve.enable = lib.mkDefault true;
+  nix-serve.enable = lib.mkDefault (!config.hosts.tinypc.enable);
 }

@@ -43,7 +43,15 @@ in
         sh:
         lib.genAttrs [ "enable" ] (
           # for the enable attribute
-          val: lib.mkDefault (if config.shell.main == sh then true else false)
+          val:
+          (
+            if config.shell.main == sh then
+              (lib.mkDefault true)
+            else if config.hosts.tinypc.enable then
+              (lib.mkForce false)
+            else
+              (lib.mkDefault false)
+          )
         )
       );
   };

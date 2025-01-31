@@ -1,6 +1,7 @@
+{ config, ... }:
 {
   programs.papis = {
-    enable = true;
+    enable = !config.hosts.tinypc.enable;
     settings = {
       editor = "nvim";
       file-editor = "yazi";

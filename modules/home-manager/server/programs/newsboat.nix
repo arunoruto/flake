@@ -1,4 +1,4 @@
-{ ... }:
+{ config, ... }:
 #let
 #  catppuccin-newsboat = builtins.fetchGit {
 #    url = "https://github.com/catppuccin/newsboat";
@@ -7,7 +7,7 @@
 #in
 {
   programs.newsboat = {
-    enable = true;
+    enable = !config.hosts.tinypc.enable;
     extraConfig = ''
       # include ~/.newsboat/dark
     '';
