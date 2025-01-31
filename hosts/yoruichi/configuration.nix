@@ -5,6 +5,7 @@
 }:
 {
   hosts.tinypc.enable = true;
+  colmena.deployment.buildOnTarget = false;
 
   efi.enable = false;
   grub.enable = true;

@@ -7,6 +7,8 @@
   hosts.tinypc.enable = true;
   tpm.enable = true;
 
+  colmena.deployment.buildOnTarget = false;
+
   #efi.enable = false;
   #grub.enable = true;
   #systemd-boot.enable = false;
