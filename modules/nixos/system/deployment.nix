@@ -1,6 +1,8 @@
 {
   inputs,
   lib,
+  pkgs,
+  config,
   ...
 }:
 {
@@ -25,5 +27,15 @@
       ;
   };
 
-  config.colmena.deployment.buildOnTarget = lib.mkDefault true;
+  config = {
+    environment.systemPackages = lib.optionals (!config.hosts.tinypc.enable) (
+      with pkgs;
+      [
+        inputs.colmena.packages.${pkgs.system}.colmena
+        deploy-rs
+      ]
+    );
+
+    colmena.deployment.buildOnTarget = lib.mkDefault true;
+  };
 }
