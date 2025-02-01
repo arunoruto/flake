@@ -10,6 +10,10 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    snowfall-lib = {
+      url = "github:snowfallorg/lib";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     colmena.url = "github:zhaofengli/colmena";
     deploy-rs.url = "github:serokell/deploy-rs";
     nixos-hardware.url = "github:nixos/nixos-hardware";
@@ -78,6 +82,7 @@
       self,
       nixpkgs,
       home-manager,
+      snowfall-lib,
       colmena,
       deploy-rs,
       ...
@@ -163,6 +168,19 @@
       );
     in
     {
+      snowfall = snowfall-lib.mkFlake {
+        inherit inputs;
+        src = ./.;
+
+        snowfall = {
+          root = ./.;
+          namespace = "private";
+          meta = {
+            name = "my-awesome-flake";
+            title = "My Awesome Flake";
+          };
+        };
+      };
       nixosConfigurations = builtins.mapAttrs (
         hostname: conf:
         lib.nixosSystem {
