@@ -18,8 +18,8 @@
     inherit
       (lib.attrsets.getAttrFromPath [ "options" ] (
         inputs.colmena.nixosModules.deploymentOptions {
-          # name = config.networking.hostName;
-          name = null;
+          name = config.networking.hostName;
+          # name = null;
           inherit lib;
         }
       ))
