@@ -4,11 +4,11 @@
   ...
 }:
 {
-  imports = [
-    ./browsers
-    ./steam.nix
-    ./packages.nix
-  ];
+  # imports = [
+  #   ./browsers
+  #   ./steam.nix
+  #   ./packages.nix
+  # ];
 
   options.programs.enable = lib.mkEnableOption "Setup GUI Modules";
 

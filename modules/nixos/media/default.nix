@@ -4,10 +4,11 @@
   ...
 }:
 {
-  imports = [
-    ./arr.nix
-    ./plex.nix
-  ];
+  # imports = [
+  #   ./arr.nix
+  #   ./plex.nix
+  # ];
+
   options = {
     media.enable = lib.mkEnableOption "Enable media services";
   };

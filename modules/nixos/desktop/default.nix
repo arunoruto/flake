@@ -5,16 +5,16 @@
   ...
 }:
 {
-  imports = [
-    # ./cosmic.nix
-    ./gnome.nix
-    ./hyprland.nix
-    # ./kde.nix
-    ./kodi.nix
-    ./sway.nix
+  # imports = [
+  #   # ./cosmic.nix
+  #   ./gnome.nix
+  #   ./hyprland.nix
+  #   # ./kde.nix
+  #   ./kodi.nix
+  #   ./sway.nix
 
-    ./wayland.nix
-  ];
+  #   ./wayland.nix
+  # ];
 
   options.desktop-environment.enable = lib.mkEnableOption "Enable desktop environment and window manager support";
 

@@ -1,10 +1,10 @@
 { lib, ... }:
 {
-  imports = [
-    ./laptop.nix
-    ./tinypc.nix
-    ./workstation.nix
-  ];
+  # imports = [
+  #   ./laptop.nix
+  #   ./tinypc.nix
+  #   ./workstation.nix
+  # ];
 
   hosts = {
     laptop.enable = lib.mkDefault false;

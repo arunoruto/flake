@@ -2,17 +2,16 @@
   pkgs,
   lib,
   config,
-  username,
   ...
 }:
 let
-  homedir = if pkgs.stdenv.isLinux then "/home/${username}" else throw "Only setup for Linux!";
+  homedir = if pkgs.stdenv.isLinux then "/home/${config.username}" else throw "Only setup for Linux!";
 in
 {
-  imports = [
-    ./custom.nix
-    ./touch-detect.nix
-  ];
+  # imports = [
+  #   ./custom.nix
+  #   ./touch-detect.nix
+  # ];
 
   options.yubikey = {
     enable = lib.mkEnableOption "Enable yubikey support";

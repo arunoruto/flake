@@ -1,12 +1,12 @@
 { lib, ... }:
 {
-  imports = [
-    ./fwupd.nix
-    ./printing.nix
-    ./scanning.nix
-    ./ssd.nix
-    ./suid.nix
-  ];
+  # imports = [
+  #   ./fwupd.nix
+  #   ./printing.nix
+  #   ./scanning.nix
+  #   ./ssd.nix
+  #   ./suid.nix
+  # ];
 
   fwupd.enable = lib.mkDefault true;
   printing.enable = lib.mkDefault false;

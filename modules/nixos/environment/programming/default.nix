@@ -5,9 +5,9 @@
   ...
 }:
 {
-  imports = [
-    ./python.nix
-  ];
+  # imports = [
+  #   ./python.nix
+  # ];
 
   options.programming.enable = lib.mkEnableOption "Setup programming tools";
 

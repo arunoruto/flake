@@ -1,26 +1,26 @@
 {
   inputs,
   lib,
-  config,
-  username,
+  # config,
+  # username,
   ...
 }:
 {
-  imports = [
-    ./desktop
-    ./display
-    ./environment
-    ./media
-    ./network
-    ./programs
-    ./security
-    ./services
-    ./system
+  # imports = [
+  #   ./desktop
+  #   ./display
+  #   ./environment
+  #   ./media
+  #   ./network
+  #   ./programs
+  #   ./security
+  #   ./services
+  #   ./system
 
-    ./user.nix
+  #   ./user.nix
 
-    # ./pr.nix
-  ];
+  #   # ./pr.nix
+  # ];
 
   desktop-environment.enable = lib.mkDefault true;
   display-manager.enable = lib.mkDefault true;

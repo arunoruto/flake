@@ -78,41 +78,8 @@
   };
 
   outputs =
-    {
-      self,
-      nixpkgs,
-      home-manager,
-      snowfall-lib,
-      colmena,
-      deploy-rs,
-      ...
-    }@inputs:
+    inputs:
     let
-      # currently onlu x86 linux is used
-      # will maybe change in the future!
-      # -> look into flake parts/utils
-      system = "x86_64-linux";
-      lib = nixpkgs.lib;
-      pkgs = import nixpkgs {
-        inherit system;
-        overlays = [
-          self.overlays.unstable-packages
-          # inputs.hyprpanel.overlay
-        ];
-      };
-      deployPkgs = import nixpkgs {
-        inherit system;
-        overlays = [
-          deploy-rs.overlay # or deploy-rs.overlays.default
-          (self: super: {
-            deploy-rs = {
-              inherit (pkgs) deploy-rs;
-              lib = super.deploy-rs.lib;
-            };
-          })
-        ];
-      };
-
       ## Some customization
       ## Schemes: https://tinted-theming.github.io/base16-gallery/
       # scheme = "catppuccin-macchiato";
@@ -162,126 +129,132 @@
         # Nice Work PC
         madara.usernames = [ "mar" ];
       };
-
       unique-users = lib.lists.unique (
         lib.lists.concatMap (x: x.usernames) (builtins.attrValues machines)
       );
-    in
-    {
-      snowfall = snowfall-lib.mkFlake {
+
+      lib = inputs.snowfall-lib.mkLib {
         inherit inputs;
         src = ./.;
-
-        snowfall = {
-          root = ./.;
-          namespace = "private";
-          meta = {
-            name = "my-awesome-flake";
-            title = "My Awesome Flake";
-          };
-        };
       };
-      nixosConfigurations = builtins.mapAttrs (
-        hostname: conf:
-        lib.nixosSystem {
-          inherit system;
-          specialArgs = {
-            inherit inputs;
-            # TODO: enable support for multiple users in the future
-            # Could be relevant for setting up a kodi or github-runner user
-            username = lib.lists.elemAt conf.usernames 0;
-            # username = machines."${hostname}";
-          };
-          modules = [
-            # inputs.nur.nixosModules.nur
-            inputs.nixos-facter-modules.nixosModules.facter
-            {
-              users.users.root.openssh.authorizedKeys.keys = [
-                "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICVG8SSbWy37rel+Yhz9rjpNscmO1+Br57beNzWRdaQk"
-              ];
-              networking.hostName = lib.mkForce hostname;
-              facter.reportPath = lib.mkIf (lib.pathExists ./hosts/${hostname}/facter.json) ./hosts/${hostname}/facter.json;
-              nixpkgs = {
-                config.allowUnfree = true;
-                overlays = [
-                  self.overlays.additions
-                  self.overlays.python
-                  self.overlays.unstable-packages
-                  # inputs.hyprpanel.overlay
-                ];
-              };
-              theming = {
-                inherit scheme;
-                inherit image;
-              };
-            }
-            ./hosts/${hostname}
+    in
+    lib.mkFlake {
+
+      snowfall = {
+        channels-config = {
+          allowUnfree = true;
+        };
+
+        systems = {
+          modules.nixos = with inputs; [
             home-manager.nixosModules.home-manager
-            ./homes
+            nixos-facter-modules.nixosModules.facter
+            # nur.nixosModules.nur
           ];
-        }
-      ) machines;
+          hosts = builtins.mapAttrs (hostname: config-user: {
+            modules = [
+              #   # TODO: enable support for multiple users in the future
+              #   # Could be relevant for setting up a kodi or github-runner user
+              (
+                { lib, ... }:
+                {
+                  options.username = lib.mkOption {
+                    type = lib.types.str;
+                    default = lib.lists.elemAt config-user.usernames 0;
+                  };
+                  config.username = lib.mkForce (lib.lists.elemAt config-user.usernames 0);
+                }
+              )
+              {
+                # _module.args.username = lib.lists.elemAt config.usernames 0;
+                users.users.root.openssh.authorizedKeys.keys = [
+                  "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICVG8SSbWy37rel+Yhz9rjpNscmO1+Br57beNzWRdaQk"
+                ];
+                networking.hostName = lib.mkForce hostname;
+                facter.reportPath = lib.mkIf (lib.pathExists ./systems/x86_64-linux/${hostname}/facter.json) ./systems/x86_64-linux/${hostname}/facter.json;
+                theming = {
+                  inherit scheme;
+                  inherit image;
+                };
+              }
+              # ./systems/x86_64-linux/${hostname}
+              # ./homes
+            ];
+          }) machines;
+        };
 
-      # homeConfigurations = lib.genAttrs (lib.lists.unique (builtins.attrValues machines)) (
-      homeConfigurations = lib.genAttrs unique-users (
-        user:
-        home-manager.lib.homeManagerConfiguration {
-          inherit pkgs;
-          modules = [
+        homes = {
+          modules = with inputs; [
+            stylix.homeManagerModules.stylix
             # inputs.nur.hmModules.nur
-            # ./modules/home-manager/home.nix
-            ./homes/${user}
-            inputs.stylix.homeManagerModules.stylix
-            {
-              theming = {
-                inherit scheme;
-                inherit image;
-              };
-            }
           ];
-          extraSpecialArgs = {
-            inherit inputs;
-            inherit user;
-          };
-        }
-      );
+          users = lib.genAttrs unique-users (user: {
+            # inherit pkgs;
+            modules = [
+              (
+                { lib, ... }:
+                {
+                  options.username = lib.mkOption {
+                    type = lib.types.str;
+                    default = user;
+                  };
+                  config.user = lib.mkForce user;
+                }
+              )
+              # ./modules/home-manager/home.nix
+              # ./homes/x86_64-linux/${user}
+              {
+                theming = {
+                  inherit scheme;
+                  inherit image;
+                };
+              }
+            ];
+            # extraSpecialArgs = {
+            # specialArgs = {
+            #   inherit inputs;
+            #   inherit user;
+            # };
+          });
+        };
+        # overlays = import ./overlays/default-bak.nix { inherit inputs; };
+        # devShells.${system} = import ./shells pkgs lib;
+        # packages.${system} = import ./pkgs pkgs;
+        # # devShells.${system} = import ./shells nixpkgs.legacyPackages.${system};
+        # # packages.${system} = import ./pkgs nixpkgs.legacyPackages.${system};
 
-      overlays = import ./overlays { inherit inputs; };
-      devShells.${system} = import ./shells pkgs lib;
-      packages.${system} = import ./pkgs pkgs;
-      # devShells.${system} = import ./shells nixpkgs.legacyPackages.${system};
-      # packages.${system} = import ./pkgs nixpkgs.legacyPackages.${system};
+        # colmenaHive = colmena.lib.makeHive self.outputs.colmena;
+        # colmena =
+        #   let
+        #     conf = self.nixosConfigurations;
+        #   in
+        #   {
+        #     meta = {
+        #       description = "my personal machines";
+        #       nixpkgs = import nixpkgs {
+        #         inherit system;
+        #         # overlays = [ ];
+        #       };
+        #       # nodeNixpkgs = builtins.mapAttrs (name: value: value.pkgs) conf;
+        #       nodeSpecialArgs = builtins.mapAttrs (name: value: value._module.specialArgs) conf;
+        #     };
+        #   }
+        #   // builtins.mapAttrs (name: value: {
+        #     imports = value._module.args.modules;
+        #     inherit (conf.${name}.config.colmena) deployment;
+        #   }) conf;
 
-      colmenaHive = colmena.lib.makeHive self.outputs.colmena;
-      colmena =
-        let
-          conf = self.nixosConfigurations;
-        in
-        {
-          meta = {
-            description = "my personal machines";
-            nixpkgs = import nixpkgs {
-              inherit system;
-              # overlays = [ ];
-            };
-            # nodeNixpkgs = builtins.mapAttrs (name: value: value.pkgs) conf;
-            nodeSpecialArgs = builtins.mapAttrs (name: value: value._module.specialArgs) conf;
-          };
-        }
-        // builtins.mapAttrs (name: value: {
-          imports = value._module.args.modules;
-          inherit (conf.${name}.config.colmena) deployment;
-        }) conf;
+        # checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
+        # deploy.nodes = builtins.mapAttrs (hostname: conf: {
+        #   inherit hostname;
+        #   profiles.system = {
+        #     user = "root";
+        #     path = deployPkgs.deploy-rs.lib.activate.nixos conf;
+        #     remoteBuild = true;
+        #   };
+        # }) self.nixosConfigurations;
 
-      # checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
-      # deploy.nodes = builtins.mapAttrs (hostname: conf: {
-      #   inherit hostname;
-      #   profiles.system = {
-      #     user = "root";
-      #     path = deployPkgs.deploy-rs.lib.activate.nixos conf;
-      #     remoteBuild = true;
-      #   };
-      # }) self.nixosConfigurations;
+      };
     };
 
   nixConfig = {

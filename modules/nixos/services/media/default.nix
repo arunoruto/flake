@@ -1,8 +1,8 @@
 { lib, ... }:
 {
-  imports = [
-    ./sound.nix
-  ];
+  # imports = [
+  #   ./sound.nix
+  # ];
 
   pipewire.enable = lib.mkDefault true;
 }

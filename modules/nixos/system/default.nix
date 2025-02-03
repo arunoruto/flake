@@ -7,22 +7,22 @@
   ...
 }:
 {
-  imports = [
-    ./boot
-    ./types
-    ./bluetooth.nix
-    ./deployment.nix
-    ./locale.nix
-    ./nix-utils.nix
-    ./secure-boot.nix
-    ./systemd.nix
-    ./theming.nix
-    ./upgrade.nix
+  # imports = [
+  #   ./boot
+  #   ./types
+  #   ./bluetooth
+  #   ./deployment
+  #   ./locale
+  #   ./nix-utils
+  #   ./secureboot
+  #   ./systemd
+  #   ./theming
+  #   ./upgrade
 
-    ./amd
-    ./intel
-    ./nvidia
-  ];
+  #   ./amd
+  #   ./intel
+  #   ./nvidia
+  # ];
 
   nix-utils.enable = lib.mkDefault true;
   secureboot.enable = lib.mkDefault false;

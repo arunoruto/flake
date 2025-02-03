@@ -5,9 +5,9 @@
   ...
 }:
 {
-  imports = [
-    ./ssh-tpm-agent.nix
-  ];
+  # imports = [
+  #   ./ssh-tpm-agent.nix
+  # ];
 
   options.tpm.enable = lib.mkEnableOption "Enable TPM secuirty options";
 

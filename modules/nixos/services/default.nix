@@ -4,21 +4,21 @@
   ...
 }:
 {
-  imports = [
-    ./hardware
-    ./input
-    ./media
-    ./nas
-    ./network
+  # imports = [
+  #   ./hardware
+  #   ./input
+  #   ./media
+  #   ./nas
+  #   ./network
 
-    ./ai.nix
-    ./davmail.nix
-    ./github-runner.nix
-    ./flatpak.nix
-    ./ssh.nix
-    ./tlp.nix
-    ./ppd.nix
-  ];
+  #   ./ai.nix
+  #   ./davmail.nix
+  #   ./github-runner.nix
+  #   ./flatpak.nix
+  #   ./ssh.nix
+  #   ./tlp.nix
+  #   ./ppd.nix
+  # ];
 
   nas.enable = lib.mkDefault false;
 

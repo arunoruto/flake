@@ -5,9 +5,9 @@
   ...
 }:
 {
-  imports = [
-    ./oneapi.nix
-  ];
+  # imports = [
+  #   ./oneapi.nix
+  # ];
 
   options.hosts.intel.enable = lib.mkEnableOption "Setup intel tools";
 

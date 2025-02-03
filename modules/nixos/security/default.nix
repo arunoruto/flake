@@ -5,13 +5,13 @@
   ...
 }:
 {
-  imports = [
-    ./fingerprint.nix
-    ./rssh.nix
-    ./secrets.nix
-    ./tpm
-    ./yubikey
-  ];
+  # imports = [
+  #   ./fingerprint.nix
+  #   ./rssh.nix
+  #   ./secrets.nix
+  #   ./tpm
+  #   ./yubikey
+  # ];
 
   rssh.enable = lib.mkDefault (!config.yubikey.enable && config.ssh.enable);
   secrets.enable = lib.mkDefault true;

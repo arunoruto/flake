@@ -4,11 +4,11 @@
   ...
 }:
 {
-  imports = [
-    ./efi.nix
-    ./grub.nix
-    ./systemd-boot.nix
-  ];
+  # imports = [
+  #   ./efi.nix
+  #   ./grub.nix
+  #   ./systemd-boot.nix
+  # ];
 
   efi.enable = lib.mkDefault true;
   systemd-boot.enable = lib.mkDefault true;

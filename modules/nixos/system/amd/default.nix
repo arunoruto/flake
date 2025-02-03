@@ -6,11 +6,11 @@
   ...
 }:
 {
-  imports = [
+  imports = lib.optionals (inputs ? "ucodenix") [
     inputs.ucodenix.nixosModules.default
 
-    ./rocm.nix
-    ./zluda.nix
+    # ./rocm.nix
+    # ./zluda.nix
   ];
 
   options.hosts.amd.enable = lib.mkEnableOption "Setup amd tools";

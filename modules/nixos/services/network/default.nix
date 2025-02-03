@@ -1,11 +1,11 @@
 { lib, ... }:
 {
-  imports = [
-    ./avahi.nix
-    ./localsend.nix
-    ./netbird.nix
-    ./tailscale.nix
-  ];
+  # imports = [
+  #   ./avahi.nix
+  #   ./localsend.nix
+  #   ./netbird.nix
+  #   ./tailscale.nix
+  # ];
 
   local-resolv.enable = lib.mkDefault true;
   localsend.enable = lib.mkDefault true;

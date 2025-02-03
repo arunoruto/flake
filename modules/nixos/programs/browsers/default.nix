@@ -6,11 +6,11 @@
   ...
 }:
 {
-  imports = [
-    ./chrome.nix
-    ./firefox.nix
-    ./vivaldi.nix
-  ];
+  # imports = [
+  #   ./chrome.nix
+  #   ./firefox.nix
+  #   ./vivaldi.nix
+  # ];
 
   options.browsers.enable = lib.mkEnableOption "Enable browsers system-wide";
 

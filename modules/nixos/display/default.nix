@@ -4,10 +4,10 @@
   ...
 }:
 {
-  imports = [
-    ./gdm.nix
-    ./lightdm.nix
-  ];
+  # imports = [
+  #   ./gdm.nix
+  #   ./lightdm.nix
+  # ];
 
   options = {
     display-manager.enable = lib.mkEnableOption "Enable display manager support";

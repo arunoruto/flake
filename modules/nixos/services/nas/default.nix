@@ -4,10 +4,10 @@
   ...
 }:
 {
-  imports = [
-    ./drives.nix
-    ./nfs.nix
-  ];
+  # imports = [
+  #   ./drives.nix
+  #   ./nfs.nix
+  # ];
 
   options.nas.enable = lib.mkEnableOption "NAS utilities and config";
 
