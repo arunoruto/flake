@@ -27,7 +27,7 @@ in
       default = "bash";
       description = "Choose which shell should be configured for the user";
     };
-    programs.bash.package = lib.mkPackageOption pkgs "bash" { };
+    # programs.bash.package = lib.mkPackageOption pkgs "bash" { };
   };
 
   config = {
