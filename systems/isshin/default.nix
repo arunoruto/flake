@@ -7,6 +7,6 @@
     ./configuration.nix
     ./hardware-configuration.nix
 
-    ../../modules/nixos
+    # ../../modules/nixos
   ];
 }

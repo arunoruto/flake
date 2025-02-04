@@ -200,7 +200,7 @@
                 "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICVG8SSbWy37rel+Yhz9rjpNscmO1+Br57beNzWRdaQk"
               ];
               networking.hostName = lib.mkForce hostname;
-              facter.reportPath = lib.mkIf (lib.pathExists ./hosts/${hostname}/facter.json) ./hosts/${hostname}/facter.json;
+              facter.reportPath = lib.mkIf (lib.pathExists ./systems/${hostname}/facter.json) ./systems/${hostname}/facter.json;
               nixpkgs = {
                 config.allowUnfree = true;
                 overlays = [
@@ -215,8 +215,8 @@
                 inherit image;
               };
             }
-            ./hosts/${hostname}
             home-manager.nixosModules.home-manager
+            ./systems/${hostname}
             ./homes
           ];
         }

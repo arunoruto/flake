@@ -25,7 +25,7 @@ let
     inherit theme image inputs;
     user = username;
   };
-  host-home-config = ../hosts/${config.networking.hostName}/home.nix;
+  host-home-config = ../systems/${config.networking.hostName}/home.nix;
 in
 {
   # home-manager = mkIf env.useHomeManager {
