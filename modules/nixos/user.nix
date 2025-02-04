@@ -3,12 +3,10 @@
   config,
   pkgs,
   lib,
-  username,
-  theme,
-  image,
   ...
 }:
 let
+  username = config.username;
   shell = config.home-manager.users.${username}.shell.main;
 in
 {

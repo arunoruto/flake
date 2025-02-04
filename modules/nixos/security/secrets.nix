@@ -2,10 +2,10 @@
   inputs,
   config,
   lib,
-  username,
   ...
 }:
 let
+  username = config.username;
   user-conf = config.users.users.${username};
   secretspath = builtins.toString inputs.secrets;
 in

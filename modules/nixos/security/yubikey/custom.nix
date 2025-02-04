@@ -2,10 +2,10 @@
   pkgs,
   lib,
   config,
-  username,
   ...
 }:
 let
+  username = config.username;
   homedir = if pkgs.stdenv.isLinux then "/home/${username}" else throw "Only setup for Linux!";
   yubikey-up =
     let

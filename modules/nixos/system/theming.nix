@@ -3,9 +3,11 @@
   pkgs,
   lib,
   config,
-  username,
   ...
 }:
+let
+  username = config.username;
+in
 {
   imports = [ inputs.stylix.nixosModules.stylix ];
 
