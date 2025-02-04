@@ -4,12 +4,10 @@
   # self,
   # config,
   inputs,
-  username,
-  theme,
-  image,
   config,
   lib,
   pkgs,
+  flake,
   ...
 }:
 let
@@ -21,9 +19,10 @@ let
   # sys = modules.system;
   # defaults = sys.programs.default;
   # specialArgs = {inherit theme image inputs self inputs' self' defaults;};
+  username = config.username;
   specialArgs = {
-    inherit theme image inputs;
-    user = username;
+    inherit inputs;
+    # user = username;
   };
   host-home-config = ../systems/${config.networking.hostName}/home.nix;
 in
@@ -59,13 +58,23 @@ in
     # users.${username} = import ../modules/home-manager/home.nix;
     # users.${username} = (import ./${username}) // (import ../modules/home-manager/home.nix);
     users.${username} =
-      (import ./${username} { inherit config lib; })
-      // lib.optionalAttrs (builtins.pathExists host-home-config) (
+      # (import ./${username} { inherit config lib; })
+      lib.optionalAttrs (builtins.pathExists host-home-config) (
         import host-home-config {
           inherit lib;
           inherit pkgs;
         }
-      );
+      )
+      // {
+        imports = [
+          ./${username}
+          flake.homeManagerModules.default
+        ];
+        options.user = lib.mkOption {
+          type = lib.types.str;
+          default = username;
+        };
+      };
 
     # users = genAttrs config.modules.system.users (name: ./${name});
   };
