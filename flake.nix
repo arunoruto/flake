@@ -27,6 +27,7 @@
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-flatpak.url = "github:gmodena/nix-flatpak";
     # nix-ld = {
     #   url = "github:nix-community/nix-ld";
     #   inputs.nixpkgs.follows = "nixpkgs";

@@ -8,6 +8,7 @@
   imports = [
     ./chrome.nix
     ./firefox
+    ./flatpak.nix
     ./steam.nix
     ./thunderbird.nix
     ./vscode.nix
@@ -43,7 +44,7 @@
       # unstable.mqtt-explorer
       plex-desktop
       remmina
-      zoom-us
+      # zoom-us
       zotero
 
       # ladybird

@@ -552,6 +552,21 @@
         "type": "github"
       }
     },
+    "nix-flatpak": {
+      "locked": {
+        "lastModified": 1738175805,
+        "narHash": "sha256-fPjaARmK522JLJ7wxFebxG4eE/3HHSmuAA78iAZ+A7g=",
+        "owner": "gmodena",
+        "repo": "nix-flatpak",
+        "rev": "d4c75a33c4a7a16bf87cfd804fb5444a1ec53d49",
+        "type": "github"
+      },
+      "original": {
+        "owner": "gmodena",
+        "repo": "nix-flatpak",
+        "type": "github"
+      }
+    },
     "nix-github-actions": {
       "inputs": {
         "nixpkgs": [
@@ -717,6 +732,7 @@
         "disko": "disko",
         "home-manager": "home-manager",
         "lanzaboote": "lanzaboote",
+        "nix-flatpak": "nix-flatpak",
         "nixos-facter-modules": "nixos-facter-modules",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs_3",
