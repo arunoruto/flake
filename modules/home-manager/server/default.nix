@@ -2,11 +2,11 @@
   config,
   pkgs,
   lib,
-  user,
   osConfig,
   ...
 }@args:
 let
+  user = config.user;
   flake-location = config.home.sessionVariables.FLAKE;
 in
 {

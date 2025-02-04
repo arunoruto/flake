@@ -1,9 +1,11 @@
 {
   config,
   lib,
-  user,
   ...
 }:
+let
+  user = config.user;
+in
 {
   options = {
     mpd.enable = lib.mkEnableOption "Enable mpd";

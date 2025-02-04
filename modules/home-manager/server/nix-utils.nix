@@ -2,11 +2,11 @@
   config,
   lib,
   pkgs,
-  user,
   osConfig,
   ...
 }@args:
 let
+  user = config.user;
   nix-repl = pkgs.writeScriptBin "nix-repl" (
     ''
       #!${lib.getExe pkgs.expect}

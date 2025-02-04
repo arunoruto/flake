@@ -1,4 +1,7 @@
-{ user, ... }:
+{ config, ... }:
+let
+  user = config.user;
+in
 {
   imports = [
     # ./hosts
