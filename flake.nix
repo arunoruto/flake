@@ -100,18 +100,6 @@
           # inputs.hyprpanel.overlay
         ];
       };
-      deployPkgs = import nixpkgs {
-        inherit system;
-        overlays = [
-          deploy-rs.overlay # or deploy-rs.overlays.default
-          (self: super: {
-            deploy-rs = {
-              inherit (pkgs) deploy-rs;
-              lib = super.deploy-rs.lib;
-            };
-          })
-        ];
-      };
 
       ## Some customization
       ## Schemes: https://tinted-theming.github.io/base16-gallery/
@@ -181,20 +169,34 @@
           };
         };
       };
+      nixosModules.default = ./modules/nixos;
+      homeManagerModules.default = ./modules/home-manager/home.nix;
       nixosConfigurations = builtins.mapAttrs (
         hostname: conf:
         lib.nixosSystem {
           inherit system;
           specialArgs = {
             inherit inputs;
-            # TODO: enable support for multiple users in the future
-            # Could be relevant for setting up a kodi or github-runner user
-            username = lib.lists.elemAt conf.usernames 0;
-            # username = machines."${hostname}";
+            flake = self;
           };
           modules = [
             # inputs.nur.nixosModules.nur
+            self.nixosModules.default
             inputs.nixos-facter-modules.nixosModules.facter
+            home-manager.nixosModules.home-manager
+            # TODO: enable support for multiple users in the future
+            # Could be relevant for setting up a kodi or github-runner user
+            # username = lib.lists.elemAt conf.usernames 0;
+            # username = machines."${hostname}";
+            (
+              { lib, ... }:
+              {
+                options.username = lib.mkOption {
+                  type = lib.types.str;
+                  default = lib.lists.elemAt conf.usernames 0;
+                };
+              }
+            )
             {
               users.users.root.openssh.authorizedKeys.keys = [
                 "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICVG8SSbWy37rel+Yhz9rjpNscmO1+Br57beNzWRdaQk"
@@ -215,7 +217,6 @@
                 inherit image;
               };
             }
-            home-manager.nixosModules.home-manager
             ./systems/${hostname}
             ./homes
           ];
@@ -227,9 +228,20 @@
         user:
         home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
+          extraSpecialArgs = { inherit inputs; };
           modules = [
             # inputs.nur.hmModules.nur
             # ./modules/home-manager/home.nix
+            self.homeManagerModules.default
+            (
+              { lib, ... }:
+              {
+                options.user = lib.mkOption {
+                  type = lib.types.str;
+                  default = user;
+                };
+              }
+            )
             ./homes/${user}
             inputs.stylix.homeManagerModules.stylix
             {
@@ -239,10 +251,6 @@
               };
             }
           ];
-          extraSpecialArgs = {
-            inherit inputs;
-            inherit user;
-          };
         }
       );
 
@@ -274,14 +282,29 @@
         }) conf;
 
       # checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
-      # deploy.nodes = builtins.mapAttrs (hostname: conf: {
-      #   inherit hostname;
-      #   profiles.system = {
-      #     user = "root";
-      #     path = deployPkgs.deploy-rs.lib.activate.nixos conf;
-      #     remoteBuild = true;
-      #   };
-      # }) self.nixosConfigurations;
+      # deploy.nodes =
+      #   let
+      #     deployPkgs = import nixpkgs {
+      #       inherit system;
+      #       overlays = [
+      #         deploy-rs.overlay # or deploy-rs.overlays.default
+      #         (self: super: {
+      #           deploy-rs = {
+      #             inherit (pkgs) deploy-rs;
+      #             lib = super.deploy-rs.lib;
+      #           };
+      #         })
+      #       ];
+      #     };
+      #   in
+      #   builtins.mapAttrs (hostname: conf: {
+      #     inherit hostname;
+      #     profiles.system = {
+      #       user = "root";
+      #       path = deployPkgs.deploy-rs.lib.activate.nixos conf;
+      #       remoteBuild = true;
+      #     };
+      #   }) self.nixosConfigurations;
     };
 
   nixConfig = {
