@@ -1,6 +1,7 @@
 { lib, ... }:
 {
   imports = [
+    ./beszel.nix
     ./fwupd.nix
     ./printing.nix
     ./scanning.nix

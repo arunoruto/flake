@@ -27,6 +27,27 @@ in
   runners.YASF.enable = true;
   nfs.enable = true;
 
+  services = {
+    docker.enable = true;
+    beszel-agent = {
+      enable = true;
+      package = pkgs.unstable.beszel;
+      gpu = true;
+      keyFile = config.sops.secrets."tokens/beszel-marvin".path;
+      extraFilesystems = [
+        "nvme0n1p1"
+        "sda2"
+      ];
+      logLevel = "debug";
+    };
+  };
+
+  sops.secrets."tokens/beszel-marvin" = {
+    mode = "0444";
+    # owner = config.users.users.${gh-user}.name;
+    # inherit (config.users.users.${gh-user}) group;
+  };
+
   # hardware = {
   #   # Make logitech devices work easier
   #   logitech.wireless = {
