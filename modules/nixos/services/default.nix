@@ -5,6 +5,7 @@
 }:
 {
   imports = [
+    ./docker
     ./hardware
     ./input
     ./media
