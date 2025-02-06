@@ -774,10 +774,10 @@
     "secrets": {
       "flake": false,
       "locked": {
-        "lastModified": 1733145754,
-        "narHash": "sha256-QJipQWhN/6q0ShENMABa9A0TxagzTs9nmbbAvKMPklY=",
+        "lastModified": 1738863390,
+        "narHash": "sha256-1NIOUVGmJmRIP6Z2xqqWdTbinzMcpff/NVsvX3bBa4g=",
         "ref": "main",
-        "rev": "ec230d1f006b8dd8c60c652d1b53a5228db7bbd9",
+        "rev": "93d378ab55aae87a32ad504ab37debf69353e40e",
         "shallow": true,
         "type": "git",
         "url": "https://github.com/arunoruto/secrets.nix.git"
@@ -868,11 +868,11 @@
         "tinted-tmux": "tinted-tmux"
       },
       "locked": {
-        "lastModified": 1737924417,
-        "narHash": "sha256-Jt0F1wY2AcgQdSfOE1+B0YnBYDgFYXJKDyEIa6/2VFk=",
+        "lastModified": 1738025311,
+        "narHash": "sha256-O0iFoytYpSxQdWeggIvrHjU5kmX/SRC9mcah9GbwlHk=",
         "owner": "danth",
         "repo": "stylix",
-        "rev": "bcbd472edc8ed15624a378ce513b1e001d77594a",
+        "rev": "70505ba00ff09390b84cf50d52d48ee828727976",
         "type": "github"
       },
       "original": {
