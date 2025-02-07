@@ -30,8 +30,13 @@ in
       ];
     };
 
-    users.users.${username}.openssh.authorizedKeys.keys = lib.lists.forEach pubKeys (
-      key: builtins.readFile key
-    );
+    users.users = {
+      ${username}.openssh.authorizedKeys.keys = lib.lists.forEach pubKeys (key: builtins.readFile key);
+      root.openssh.authorizedKeys.keys = [
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICVG8SSbWy37rel+Yhz9rjpNscmO1+Br57beNzWRdaQk"
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGdbD+VJ30cDQ+SLFWnyLPII+T/ngTdBHFyXVbfgX1BH"
+      ];
+    };
+
   };
 }
