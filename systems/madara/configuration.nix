@@ -33,7 +33,8 @@ in
       enable = true;
       package = pkgs.unstable.beszel;
       gpu = true;
-      keyFile = config.sops.secrets."tokens/beszel-marvin".path;
+      key = builtins.readFile config.sops.secrets."tokens/beszel-marvin".path;
+      # keyFile = config.sops.secrets."tokens/beszel-marvin".path;
       extraFilesystems = [
         "nvme0n1p1"
         "sda2"
