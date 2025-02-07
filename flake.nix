@@ -143,7 +143,7 @@
         # Firewall
         # narouter.usernames = [ "mirza" ];
         # Server
-        # aizen.usernames = [ "mirza" ];
+        aizen.usernames = [ "mirza" ];
 
         # Work
         # Crappy Work PC
