@@ -31,6 +31,7 @@ in
             bufferline = "always";
             line-number = "relative";
             rulers = [ 80 ];
+            soft-wrap.enable = false;
             cursorline = true;
             color-modes = true;
             popup-border = "all";

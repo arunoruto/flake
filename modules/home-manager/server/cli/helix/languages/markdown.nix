@@ -40,6 +40,7 @@ in
             #   command = "dprint";
             #   args = ["--config" "~/.config/dprint.jsonc" "fmt" "--stdin" "md"];
             # };
+            soft-wrap.enable = true;
           }
         ];
         language-server = {
