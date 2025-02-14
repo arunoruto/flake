@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, pkgs, ... }:
 {
   imports = [
     # ./dns.nix
@@ -27,4 +27,8 @@
       ];
     };
   };
+
+  environment.systemPackages = with pkgs; [
+    bind
+  ];
 }
