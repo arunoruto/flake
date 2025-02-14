@@ -24,7 +24,7 @@
     steam.enable = lib.mkDefault false;
     vscode.enable = lib.mkDefault true;
     zathura.enable = lib.mkDefault true;
-    zed.enable = lib.mkDefault true;
+    zed.enable = lib.mkDefault false;
 
     programs = {
       thunderbird.enable = lib.mkDefault true;
