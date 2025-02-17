@@ -28,7 +28,7 @@ in
               ]
               # ++ lib.optionals (ls ? lsp-ai) [ "lsp-ai" ]
               ++ lib.optionals (ls ? gpt) [ "gpt" ]
-              ++ [ ];
+              ++ [ "iwe" ];
             formatter = {
               command = "prettier";
               args = [
@@ -45,9 +45,11 @@ in
         ];
         language-server = {
           oxide.command = "markdown-oxide";
+          iwe.command = "iwes";
         };
       };
       extraPackages = with pkgs; [
+        unstable.iwe
         markdown-oxide
         marksman
         nodePackages.prettier
