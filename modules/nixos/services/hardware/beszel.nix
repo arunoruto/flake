@@ -16,12 +16,12 @@
       description = "The port for the beszel agent service";
     };
     key = lib.mkOption {
-      type = lib.types.str;
+      type = with lib.types; (nullOr string);
       default = null;
       description = "The raw value of the key";
     };
     keyFile = lib.mkOption {
-      type = lib.types.path or lib.types.str;
+      type = with lib.types; (nullOr path);
       default = null;
       description = "The file location where the key for the beszel agent service is located";
     };
@@ -61,8 +61,8 @@
             Environment = lib.lists.map (x: ''"${x}"'') [
               "LOG_LEVEL=${cfg.logLevel}"
               "PORT=${builtins.toString cfg.port}"
-              "KEY=${cfg.key}"
-              "KEY_FILE=${cfg.keyFile}"
+              "KEY=${builtins.toString cfg.key}"
+              "KEY_FILE=${builtins.toString cfg.keyFile}"
               "GPU=${if cfg.gpu then "true" else "false"}"
               "EXTRA_FILESYSTEMS=${lib.strings.concatStringsSep "," cfg.extraFilesystems}"
             ];
