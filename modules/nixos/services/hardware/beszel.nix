@@ -16,7 +16,7 @@
       description = "The port for the beszel agent service";
     };
     key = lib.mkOption {
-      type = with lib.types; (nullOr string);
+      type = with lib.types; (nullOr str);
       default = null;
       description = "The raw value of the key";
     };
