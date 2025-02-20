@@ -15,7 +15,7 @@
   config = lib.mkIf config.helix.ltex.enable {
     programs.helix = {
       languages.language-server.ltex = {
-        command = "ltex-ls";
+        command = "ltex-ls-plus";
         config.ltex = {
           language = "en-GB";
           # dictionary = {

@@ -15,6 +15,10 @@
             name = "bash";
             auto-format = true;
             formatter.command = "shfmt";
+            indent = {
+              tab-width = 2;
+              unit = " ";
+            };
           }
           {
             name = "fish";

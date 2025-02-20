@@ -11,6 +11,7 @@
     ./fortran.nix
     ./gpt.nix
     ./julia.nix
+    ./latex.nix
     ./ltex.nix
     ./lsp-ai.nix
     ./matlab.nix
@@ -23,6 +24,7 @@
   helix = {
     shells.enable = lib.mkDefault (!config.hosts.tinypc.enable);
     julia.enable = lib.mkDefault (!config.hosts.tinypc.enable);
+    latex.enable = lib.mkDefault (!config.hosts.tinypc.enable);
     ltex = {
       enable = lib.mkDefault (!config.hosts.tinypc.enable);
       ngram = lib.mkDefault (!config.hosts.tinypc.enable && args ? nixosConfig);
