@@ -19,7 +19,7 @@
     options mt7921_common disable_clc=1
   '';
 
-  hardware.framework.enableKmod = false;
+  # hardware.framework.enableKmod = false;
 
   # Framework specific kernel Params
   # boot = {
