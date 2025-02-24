@@ -1,5 +1,4 @@
-# Run this command to set up the language server!
-# julia --startup-file=no --project=@helix-lsp -e 'import Pkg; Pkg.add(["LanguageServer", "PackageCompiler"]); Pkg.update();using PackageCompiler; create_sysimage(:LanguageServer, sysimage_path=dirname(Pkg.Types.Context().env.project_file) * "/languageserver.so")'
+# https://www.reddit.com/r/HelixEditor/comments/1iroqa1/latex_configuration/
 {
   config,
   lib,
