@@ -22,12 +22,12 @@
     chrome.enable = lib.mkDefault true;
     firefox.enable = lib.mkDefault true;
     steam.enable = lib.mkDefault false;
-    vscode.enable = lib.mkDefault true;
     zathura.enable = lib.mkDefault true;
     zed.enable = lib.mkDefault false;
 
     programs = {
       thunderbird.enable = lib.mkDefault true;
+      vscode.enable = lib.mkDefault false;
     };
 
     home.packages = with pkgs; [
