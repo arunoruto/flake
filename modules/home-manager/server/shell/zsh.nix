@@ -50,7 +50,6 @@
         zmodload zsh/zprof
 
         # Variables
-        export COPILOT_API_KEY="$(cat ${config.sops.secrets."tokens/copilot".path})"
         export CACHIX_AUTH_TOKEN="$(cat ${config.sops.secrets."tokens/cachix".path})"
 
         # Disable all sounds

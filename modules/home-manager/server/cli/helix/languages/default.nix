@@ -7,18 +7,15 @@
 }@args:
 {
   imports = [
+    ./ai
+    ./programming
+
     ./shells.nix
-    ./fortran.nix
-    ./gpt.nix
-    ./julia.nix
     ./latex.nix
     ./ltex.nix
-    ./lsp-ai.nix
-    ./matlab.nix
     ./markdown.nix
     ./markup.nix
     ./nix.nix
-    ./python.nix
   ];
 
   helix = {
