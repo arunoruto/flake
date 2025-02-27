@@ -25,7 +25,11 @@
       ollama = {
         enable = true;
         host = "0.0.0.0";
-        loadModels = [ "deepseek-r1:14b" ];
+        loadModels = [
+          "deepseek-r1:14b"
+          "gemma2:9b"
+          "mistral:7b"
+        ];
         openFirewall = true;
         acceleration =
           if config.hosts.nvidia.enable then
@@ -34,6 +38,9 @@
             "rocm"
           else
             null;
+        environmentVariables = {
+          OLLAMA_ORIGINS = "moz-extension://*";
+        };
       };
     };
   };
