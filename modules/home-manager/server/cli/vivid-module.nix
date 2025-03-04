@@ -19,41 +19,41 @@ with lib;
 
     package = mkPackageOption pkgs "vivid" { };
 
-    enableBashIntegration = mkOption {
-      default = true;
-      type = types.bool;
-      description = ''
-        Whether to enable Bash integration.
-        Adds LS_COLORS to Bash.
-      '';
-    };
+    # enableBashIntegration = mkOption {
+    #   default = true;
+    #   type = types.bool;
+    #   description = ''
+    #     Whether to enable Bash integration.
+    #     Adds LS_COLORS to Bash.
+    #   '';
+    # };
 
-    enableFishIntegration = mkOption {
-      default = true;
-      type = types.bool;
-      description = ''
-        Whether to enable Fish integration.
-        Adds LS_COLORS to Fish.
-      '';
-    };
+    # enableFishIntegration = mkOption {
+    #   default = true;
+    #   type = types.bool;
+    #   description = ''
+    #     Whether to enable Fish integration.
+    #     Adds LS_COLORS to Fish.
+    #   '';
+    # };
 
-    enableNushellIntegration = mkOption {
-      default = true;
-      type = types.bool;
-      description = ''
-        Whether to enable Nushell integration.
-        Adds LS_COLORS to Nushell.
-      '';
-    };
+    # enableNushellIntegration = mkOption {
+    #   default = true;
+    #   type = types.bool;
+    #   description = ''
+    #     Whether to enable Nushell integration.
+    #     Adds LS_COLORS to Nushell.
+    #   '';
+    # };
 
-    enableZshIntegration = mkOption {
-      default = true;
-      type = types.bool;
-      description = ''
-        Whether to enable Zsh integration.
-        Adds LS_COLORS to Zsh.
-      '';
-    };
+    # enableZshIntegration = mkOption {
+    #   default = true;
+    #   type = types.bool;
+    #   description = ''
+    #     Whether to enable Zsh integration.
+    #     Adds LS_COLORS to Zsh.
+    #   '';
+    # };
 
     theme = mkOption {
       type = with types; nullOr str;
@@ -118,22 +118,29 @@ with lib;
   config =
     let
       cfg = config.programs.vivid;
-      bin = lib.getExe cfg.package;
-      bashLine = theme: ''export LS_COLORS="$(${bin} generate ${theme})"'';
-      fishLine = theme: "set -gx LS_COLORS (${bin} generate ${theme})";
-      nushellLine = theme: "${bin} generate ${theme}";
-      zshLine = bashLine;
-    in
-    mkIf cfg.enable {
-      home.packages = [ cfg.package ];
-
-      programs.bash.initExtra = mkIf cfg.enableBashIntegration (bashLine cfg.theme);
-      programs.fish.interactiveShellInit = mkIf cfg.enableFishIntegration (fishLine cfg.theme);
-      programs.nushell.environmentVariables.LS_COLORS = mkIf cfg.enableNushellIntegration (
-        hm.nushell.mkNushellInline (nushellLine cfg.theme)
+      lsColors = builtins.readFile (
+        pkgs.runCommand "vivid-ls-colors" { } ''
+          ${lib.getExe pkgs.vivid} generate ${cfg.theme} > $out
+        ''
       );
-      programs.zsh.initExtra = mkIf cfg.enableZshIntegration (zshLine cfg.theme);
+    in
+    # bin = lib.getExe cfg.package;
+    # bashLine = theme: ''export LS_COLORS="$(${bin} generate ${theme})"'';
+    # fishLine = theme: "set -gx LS_COLORS (${bin} generate ${theme})";
+    # nushellLine = theme: "${bin} generate ${theme}";
+    # zshLine = bashLine;
+    mkIf cfg.enable {
+      home = {
+        packages = [ cfg.package ];
+        sessionVariables.LS_COLORS = "${lsColors}";
+      };
 
+      # programs.bash.initExtra = mkIf cfg.enableBashIntegration (bashLine cfg.theme);
+      # programs.fish.interactiveShellInit = mkIf cfg.enableFishIntegration (fishLine cfg.theme);
+      # programs.nushell.environmentVariables.LS_COLORS = mkIf cfg.enableNushellIntegration (
+      #   hm.nushell.mkNushellInline (nushellLine cfg.theme)
+      # );
+      # programs.zsh.initExtra = mkIf cfg.enableZshIntegration (zshLine cfg.theme);
       xdg.configFile =
         {
           "vivid/filetypes.yml" = mkIf (builtins.length (builtins.attrNames cfg.filetypes) > 0) {
