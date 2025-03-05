@@ -11,7 +11,7 @@
     services = {
       prowlarr = {
         enable = true;
-        package = pkgs.unstable.radarr;
+        package = pkgs.unstable.prowlarr;
       };
     };
 
