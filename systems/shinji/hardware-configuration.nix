@@ -17,7 +17,7 @@
   boot.initrd.availableKernelModules = [
     "xhci_pci"
     "ahci"
-    "usbhid"
+    "usb_storage"
     "sd_mod"
   ];
   boot.initrd.kernelModules = [ ];
@@ -38,6 +38,11 @@
     ];
   };
 
+  fileSystems."/mnt/hdd" = {
+    device = "/dev/disk/by-uuid/484B92FD03848142";
+    fsType = "ntfs";
+  };
+
   swapDevices = [ ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
@@ -46,6 +51,7 @@
   # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
   networking.useDHCP = lib.mkDefault true;
   # networking.interfaces.eno1.useDHCP = lib.mkDefault true;
+  # networking.interfaces.tailscale0.useDHCP = lib.mkDefault true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
