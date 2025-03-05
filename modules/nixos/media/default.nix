@@ -6,8 +6,10 @@
 {
   imports = [
     ./arr.nix
+    ./bosflix.nix
     ./plex.nix
   ];
+
   options = {
     media.enable = lib.mkEnableOption "Enable media services";
   };
