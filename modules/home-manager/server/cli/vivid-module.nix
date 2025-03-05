@@ -120,7 +120,7 @@ with lib;
       cfg = config.programs.vivid;
       lsColors = builtins.readFile (
         pkgs.runCommand "vivid-ls-colors" { } ''
-          ${lib.getExe pkgs.vivid} generate ${cfg.theme} > $out
+          ${lib.getExe cfg.package} generate ${cfg.theme} > $out
         ''
       );
     in
