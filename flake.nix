@@ -32,7 +32,10 @@
     #   url = "github:nix-community/nix-ld";
     #   inputs.nixpkgs.follows = "nixpkgs";
     # };
-    # nur.url = "github:nix-community/NUR";
+    nur = {
+      url = "github:nix-community/NUR";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     # Home Manager
     home-manager = {
       url = "github:nix-community/home-manager/release-24.11";
@@ -98,6 +101,8 @@
         inherit system;
         overlays = [
           self.overlays.unstable-packages
+          inputs.nur.overlay
+          # inputs.nur.overlays.default
           # inputs.hyprpanel.overlay
         ];
       };
@@ -207,6 +212,7 @@
                   self.overlays.additions
                   self.overlays.python
                   self.overlays.unstable-packages
+                  inputs.nur.overlay
                   # inputs.hyprpanel.overlay
                 ];
               };
