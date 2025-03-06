@@ -5,6 +5,9 @@
   username,
   ...
 }:
+let
+  clean_nh_over_nix = true;
+in
 {
   options = {
     nix-utils.enable = lib.mkEnableOption "Enable nix-utils";
@@ -12,13 +15,23 @@
 
   config = lib.mkIf config.nix-utils.enable {
     environment.systemPackages = with pkgs; [
-      unstable.nh
       nix-tree
       nix-output-monitor
       nvd
 
       # nixpkgs-manual
     ];
+
+    programs.nh = {
+      enable = true;
+      package = pkgs.unstable.nh;
+      clean = {
+        enable = clean_nh_over_nix;
+        extraArgs = "--keep-since 4d --keep 3";
+      };
+      flake = ../../../.;
+      # flake = "~/.config/flake";
+    };
 
     # Auto clean system
     nix = {
@@ -56,7 +69,7 @@
         dates = [ "04:00" ];
       };
       gc = {
-        automatic = true;
+        automatic = !clean_nh_over_nix;
         dates = "weekly";
         options = "--delete-older-than 7d";
       };

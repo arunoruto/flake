@@ -75,11 +75,22 @@ in
       '';
     };
 
+    programs.nh = {
+      enable = true;
+      package = pkgs.unstable.nh;
+      clean = {
+        enable = true;
+        extraArgs = "--keep-since 4d --keep 3";
+      };
+      flake = ../../../.;
+      # flake = ./. + builtins.toPath "";
+      # flake = /. + builtins.toPath "/home/${config.user}/.config/flake";
+    };
+
     home.packages =
       (with pkgs; [
         unstable.nixfmt-rfc-style
 
-        unstable.nh
         nix-du
         nix-index # for developing nixpkgs
         nix-tree

@@ -46,7 +46,7 @@ in
   };
 
   environment = {
-    sessionVariables.FLAKE = "/home/${username}/.config/flake";
+    # sessionVariables.FLAKE = "/home/${username}/.config/flake";
     shells = [
       config.users.users.${username}.shell
     ];
