@@ -17,8 +17,7 @@
         # Disable greeting
         set fish_greeting
 
-        set -gx NIX_LD_LIBRARY_PATH /run/current-system/sw/share/nix-ld/lib
-        set -gx GH_AUTH_TOKEN $(${lib.getExe config.programs.gh.package} auth token)
+        # set -gx GH_AUTH_TOKEN $(${lib.getExe config.programs.gh.package} auth token)
       '';
 
       functions = {

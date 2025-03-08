@@ -18,9 +18,24 @@ let
   };
 in
 {
-  home.packages = [
-    glab-pkg # Gitlab CLI tool
-  ] ++ lib.optionals (!config.hosts.tinypc.enable) (with pkgs; [ gitbutler ]);
+  home = {
+    packages = [
+      glab-pkg # Gitlab CLI tool
+    ] ++ lib.optionals (!config.hosts.tinypc.enable) (with pkgs; [ gitbutler ]);
+    sessionVariables =
+      let
+        # token = builtins.readFile (
+        #   pkgs.runCommand "github-auth-token" { } ''
+        #     ${lib.getExe config.programs.gh.package} auth token > $out
+        #   ''
+        # );
+        token = "$(${lib.getExe config.programs.gh.package} auth token)";
+      in
+      {
+        GH_AUTH_TOKEN = "${token}";
+        GITHUB_TOKEN = "${token}";
+      };
+  };
 
   programs = {
     git = {
