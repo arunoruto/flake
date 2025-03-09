@@ -101,8 +101,7 @@
         inherit system;
         overlays = [
           self.overlays.unstable-packages
-          inputs.nur.overlay
-          # inputs.nur.overlays.default
+          inputs.nur.overlays.default
           # inputs.hyprpanel.overlay
         ];
       };
@@ -208,13 +207,16 @@
               facter.reportPath = lib.mkIf (lib.pathExists ./systems/${hostname}/facter.json) ./systems/${hostname}/facter.json;
               nixpkgs = {
                 config.allowUnfree = true;
-                overlays = [
-                  self.overlays.additions
-                  self.overlays.python
-                  self.overlays.unstable-packages
-                  inputs.nur.overlay
-                  # inputs.hyprpanel.overlay
-                ];
+                overlays =
+                  (with self.overlays; [
+                    additions
+                    python
+                    unstable-packages
+                  ])
+                  ++ (with inputs; [
+                    nur.overlays.default
+                    # inputs.hyprpanel.overlay
+                  ]);
               };
               theming = {
                 inherit scheme;
