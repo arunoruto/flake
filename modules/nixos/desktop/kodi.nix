@@ -18,7 +18,7 @@ in
         enable = lib.mkDefault true;
         desktopManager.kodi = {
           enable = true;
-          package = pkgs.kodi.withPackages (
+          package = pkgs.unstable.kodi.withPackages (
             pkgs: with pkgs; [
               jellycon
               netflix
