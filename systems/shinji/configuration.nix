@@ -16,6 +16,7 @@
   # tpm.enable = true;
 
   services = {
+    devmon.enable = true;
     udisks2.enable = true;
   };
 
