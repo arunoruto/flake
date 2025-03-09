@@ -19,4 +19,8 @@
     udisks2.enable = true;
   };
 
+  security.pki.certificateFiles = [
+    ./rhtv.pem
+  ];
+
 }
