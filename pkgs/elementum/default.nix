@@ -1,34 +1,66 @@
 {
   lib,
-  buildKodiAddon,
+  kodiPackages,
   fetchFromGitHub,
-  flake8,
-# requests,
-# inputstream-adaptive,
-# inputstreamhelper,
+  python3Packages,
+  stdenv,
+  autoPatchelfHook,
 }:
-buildKodiAddon rec {
+let
+  arch =
+    {
+      aarch64-linux = "arm64";
+      x86_64-darwin = "x64";
+      x86_64-linux = "x64";
+    }
+    ."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  os =
+    {
+      aarch64-linux = "linux";
+      x86_64-darwin = "darwin";
+      x86_64-linux = "linux";
+    }
+    ."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+in
+kodiPackages.buildKodiAddon rec {
   pname = "elementum";
-  namespace = "plugin.video.elementum ";
+  namespace = "plugin.video.elementum";
   version = "0.1.109";
 
   src = fetchFromGitHub {
     owner = "elgatito";
     repo = namespace;
-    rev = "v${version}";
-    hash = "";
+    tag = "v${version}";
+    hash = "sha256-ZxvmRAMCKrorxnB0UqyYw7EgDlFHnNo/muREfu01sOU=";
+    fetchSubmodules = true;
   };
 
-  propagatedBuildInputs = [
-    flake8
-    # requests
-    # inputstream-adaptive
-    # inputstreamhelper
+  nativeBuildInputs = [
+    autoPatchelfHook
   ];
 
-  # passthru = {
-  #   pythonPath = "resources/lib";
-  # };
+  propagatedBuildInputs =
+    # [ git ]
+    # ++
+    (
+      with python3Packages;
+      [
+        flake8
+        six
+        requests
+      ]
+    );
+
+  buildPhase = ":";
+
+  postInstall = ''
+    rm -r $out/share/kodi/addons/plugin.video.elementum/resources/bin/*
+    cp -r $src/resources/bin/${os}_${arch} $out/share/kodi/addons/plugin.video.elementum/resources/bin/
+  '';
+
+  passthru = {
+    pythonPath = "resources/site-packages";
+  };
 
   meta = with lib; {
     homepage = "https://github.com/elgatito/plugin.video.elementum";
