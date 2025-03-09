@@ -38,14 +38,14 @@
     ];
   };
 
-  fileSystems."/mnt/hdd" = {
-    device = "/dev/disk/by-uuid/86336459-5d8c-448e-93c3-f3e17c00d3b9";
-    fsType = "ext4";
-    options = [
-      "fmask=0777"
-      "dmask=0777"
-    ];
-  };
+  # fileSystems."/mnt/hdd" = {
+  #   device = "/dev/disk/by-uuid/86336459-5d8c-448e-93c3-f3e17c00d3b9";
+  #   fsType = "ext4";
+  #   options = [
+  #     "fmask=0777"
+  #     "dmask=0777"
+  #   ];
+  # };
 
   swapDevices = [ ];
 
