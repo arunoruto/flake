@@ -8,6 +8,7 @@
 # }:
 pkgs: {
   copilot-language-server = pkgs.callPackage ./copilot-language-server { };
+  elementum = pkgs.callPackage ./elementum { };
   # spirv-reflect = pkgs.callPackage ./spirv-reflect { };
   # dpcpp = pkgs.callPackage ./dpcpp { };
   # dpcpp-bin = pkgs.callPackage ./dpcpp/bin.nix { };
