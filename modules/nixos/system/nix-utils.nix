@@ -2,11 +2,11 @@
   config,
   pkgs,
   lib,
-  username,
   ...
 }:
 let
   clean_nh_over_nix = true;
+  username = config.username;
 in
 {
   options = {
@@ -14,13 +14,16 @@ in
   };
 
   config = lib.mkIf config.nix-utils.enable {
-    environment.systemPackages = with pkgs; [
-      nix-tree
-      nix-output-monitor
-      nvd
+    environment = {
+      systemPackages = with pkgs; [
+        nix-tree
+        nix-output-monitor
+        nvd
 
-      # nixpkgs-manual
-    ];
+        # nixpkgs-manual
+      ];
+      sessionVariables.FLAKE = "/home/${username}/.config/flake";
+    };
 
     programs.nh = {
       enable = true;
@@ -29,7 +32,7 @@ in
         enable = clean_nh_over_nix;
         extraArgs = "--keep-since 4d --keep 3";
       };
-      flake = ../../../.;
+      # flake = ../../../.;
       # flake = "~/.config/flake";
     };
 

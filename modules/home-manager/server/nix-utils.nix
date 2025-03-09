@@ -82,24 +82,28 @@ in
         enable = true;
         extraArgs = "--keep-since 4d --keep 3";
       };
-      flake = ../../../.;
+      # flake = ../../../.;
       # flake = ./. + builtins.toPath "";
       # flake = /. + builtins.toPath "/home/${config.user}/.config/flake";
     };
 
-    home.packages =
-      (with pkgs; [
-        unstable.nixfmt-rfc-style
+    home = {
+      packages =
+        (with pkgs; [
+          unstable.nixfmt-rfc-style
 
-        nix-du
-        nix-index # for developing nixpkgs
-        nix-tree
-        nix-output-monitor
-        nvd
-        unstable.nixpkgs-review
-      ])
-      ++ [
-        nix-repl # my nix repl wrapper
-      ];
+          nix-du
+          nix-index # for developing nixpkgs
+          nix-tree
+          nix-output-monitor
+          nvd
+          unstable.nixpkgs-review
+        ])
+        ++ [
+          nix-repl # my nix repl wrapper
+        ];
+      sessionVariables.FLAKE = "/home/${user}/.config/flake";
+      # sessionVariables.FLAKE = "/home/${config.home.username}/.config/flake";
+    };
   };
 }
