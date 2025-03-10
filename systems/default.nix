@@ -85,7 +85,7 @@ builtins.mapAttrs (
         };
       }
       ./${hostname}
-      ../homes
+      ../homes/nixos.nix
     ];
   }
 ) machines

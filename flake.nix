@@ -175,6 +175,7 @@
           };
         };
       };
+      lib = lib;
       nixosModules.default = ./modules/nixos;
       homeManagerModules.default = ./modules/home-manager/home.nix;
       nixosConfigurations = import ./systems {
@@ -189,35 +190,45 @@
       };
       #
       # homeConfigurations = lib.genAttrs (lib.lists.unique (builtins.attrValues machines)) (
-      homeConfigurations = lib.genAttrs unique-users (
-        user:
-        home-manager.lib.homeManagerConfiguration {
-          inherit pkgs;
-          extraSpecialArgs = { inherit inputs; };
-          modules = [
-            # inputs.nur.hmModules.nur
-            # ./modules/home-manager/home.nix
-            self.homeManagerModules.default
-            (
-              { lib, ... }:
-              {
-                options.user = lib.mkOption {
-                  type = lib.types.str;
-                  default = user;
-                };
-              }
-            )
-            ./homes/${user}
-            inputs.stylix.homeManagerModules.stylix
-            {
-              theming = {
-                inherit scheme;
-                inherit image;
-              };
-            }
-          ];
-        }
-      );
+      homeConfigurations = import ./homes {
+        inherit
+          inputs
+          self
+          lib
+          pkgs
+          scheme
+          image
+          ;
+      };
+      # lib.genAttrs unique-users (
+      #   user:
+      #   home-manager.lib.homeManagerConfiguration {
+      #     inherit pkgs;
+      #     extraSpecialArgs = { inherit inputs; };
+      #     modules = [
+      #       # inputs.nur.hmModules.nur
+      #       # ./modules/home-manager/home.nix
+      #       self.homeManagerModules.default
+      #       (
+      #         { lib, ... }:
+      #         {
+      #           options.user = lib.mkOption {
+      #             type = lib.types.str;
+      #             default = user;
+      #           };
+      #         }
+      #       )
+      #       ./homes/${user}
+      #       inputs.stylix.homeManagerModules.stylix
+      #       {
+      #         theming = {
+      #           inherit scheme;
+      #           inherit image;
+      #         };
+      #       }
+      #     ];
+      #   }
+      # );
 
       overlays = import ./overlays { inherit inputs; };
       devShells.${system} = import ./shells pkgs lib;
