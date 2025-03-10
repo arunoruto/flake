@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/dmckwski/MSTM";
     description = "Multiple Sphere T Matrix code in Fortran";
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ arunoruto ];
     mainProgram = "mstm";
   };
