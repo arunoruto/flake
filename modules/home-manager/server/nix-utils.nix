@@ -77,10 +77,10 @@ in
     programs.nh = {
       enable = true;
       package = pkgs.unstable.nh;
-      clean = {
-        enable = true;
-        extraArgs = "--keep-since 4d --keep 3";
-      };
+      # clean = {
+      #   enable = true;
+      #   extraArgs = "--keep-since 4d --keep 3";
+      # };
       # flake = ../../../.;
       # flake = ./. + builtins.toPath "";
       # flake = /. + builtins.toPath "/home/${config.user}/.config/flake";
