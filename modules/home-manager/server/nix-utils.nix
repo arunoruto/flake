@@ -18,9 +18,8 @@ let
       }
       send -- ":lf ${config.home.sessionVariables.FLAKE}\r"
       expect -r "Added (\\d+) variables."
-      send -- ":lf nixpkgs\r"
-      expect -r "Added (\\d+) variables."
-      send -- "pkgs = legacyPackages.${pkgs.system}\r"
+      send -- {pkgs = import inputs.nixpkgs { system = "${pkgs.system}"; overlays = [ overlays.unstable-packages overlays.additions overlays.python overlays.kodi ]; }}
+      send -- "\r"
       send -- "hm = homeConfigurations.${config.home.username}\r"
     ''
     + lib.optionalString (args ? nixosConfig) ''
