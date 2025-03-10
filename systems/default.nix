@@ -45,47 +45,49 @@ builtins.mapAttrs (
       inherit inputs;
       flake = self;
     };
-    modules = [
-      # inputs.nur.nixosModules.nur
-      self.nixosModules.default
-      inputs.nixos-facter-modules.nixosModules.facter
-      inputs.home-manager.nixosModules.home-manager
-      # TODO: enable support for multiple users in the future
-      # Could be relevant for setting up a kodi or github-runner user
-      # username = lib.lists.elemAt conf.usernames 0;
-      # username = machines."${hostname}";
-      (
-        { lib, ... }:
+    modules =
+      [
+        self.nixosModules.default
+        # TODO: enable support for multiple users in the future
+        # Could be relevant for setting up a kodi or github-runner user
+        # username = lib.lists.elemAt conf.usernames 0;
+        # username = machines."${hostname}";
+        (
+          { lib, ... }:
+          {
+            options.username = lib.mkOption {
+              type = lib.types.str;
+              default = lib.lists.elemAt conf.usernames 0;
+            };
+          }
+        )
         {
-          options.username = lib.mkOption {
-            type = lib.types.str;
-            default = lib.lists.elemAt conf.usernames 0;
+          networking.hostName = lib.mkForce hostname;
+          facter.reportPath = lib.mkIf (lib.pathExists ./${hostname}/facter.json) ./${hostname}/facter.json;
+          nixpkgs = {
+            config.allowUnfree = true;
+            overlays =
+              (with self.overlays; [
+                additions
+                python
+                unstable-packages
+              ])
+              ++ (with inputs; [
+                nur.overlays.default
+              ]);
+          };
+          theming = {
+            inherit scheme;
+            inherit image;
           };
         }
-      )
-      {
-        networking.hostName = lib.mkForce hostname;
-        facter.reportPath = lib.mkIf (lib.pathExists ./${hostname}/facter.json) ./${hostname}/facter.json;
-        nixpkgs = {
-          config.allowUnfree = true;
-          overlays =
-            (with self.overlays; [
-              additions
-              python
-              unstable-packages
-            ])
-            ++ (with inputs; [
-              nur.overlays.default
-              # inputs.hyprpanel.overlay
-            ]);
-        };
-        theming = {
-          inherit scheme;
-          inherit image;
-        };
-      }
-      ./${hostname}
-      ../homes/nixos.nix
-    ];
+        ./${hostname}
+        ../homes/nixos.nix
+      ]
+      ++ (with inputs; [
+        nixos-facter-modules.nixosModules.facter
+        home-manager.nixosModules.home-manager
+        # nur.nixosModules.nur
+      ]);
   }
 ) machines
