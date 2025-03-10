@@ -95,8 +95,9 @@
       # currently onlu x86 linux is used
       # will maybe change in the future!
       # -> look into flake parts/utils
+      mkLib = nixpkgs: nixpkgs.lib.extend (final: prev: (import ./lib final));
+      lib = mkLib nixpkgs;
       system = "x86_64-linux";
-      lib = nixpkgs.lib;
       pkgs = import nixpkgs {
         inherit system;
         overlays = [
@@ -176,59 +177,17 @@
       };
       nixosModules.default = ./modules/nixos;
       homeManagerModules.default = ./modules/home-manager/home.nix;
-      nixosConfigurations = builtins.mapAttrs (
-        hostname: conf:
-        lib.nixosSystem {
-          inherit system;
-          specialArgs = {
-            inherit inputs;
-            flake = self;
-          };
-          modules = [
-            # inputs.nur.nixosModules.nur
-            self.nixosModules.default
-            inputs.nixos-facter-modules.nixosModules.facter
-            home-manager.nixosModules.home-manager
-            # TODO: enable support for multiple users in the future
-            # Could be relevant for setting up a kodi or github-runner user
-            # username = lib.lists.elemAt conf.usernames 0;
-            # username = machines."${hostname}";
-            (
-              { lib, ... }:
-              {
-                options.username = lib.mkOption {
-                  type = lib.types.str;
-                  default = lib.lists.elemAt conf.usernames 0;
-                };
-              }
-            )
-            {
-              networking.hostName = lib.mkForce hostname;
-              facter.reportPath = lib.mkIf (lib.pathExists ./systems/${hostname}/facter.json) ./systems/${hostname}/facter.json;
-              nixpkgs = {
-                config.allowUnfree = true;
-                overlays =
-                  (with self.overlays; [
-                    additions
-                    python
-                    unstable-packages
-                  ])
-                  ++ (with inputs; [
-                    nur.overlays.default
-                    # inputs.hyprpanel.overlay
-                  ]);
-              };
-              theming = {
-                inherit scheme;
-                inherit image;
-              };
-            }
-            ./systems/${hostname}
-            ./homes
-          ];
-        }
-      ) machines;
-
+      nixosConfigurations = import ./systems {
+        inherit
+          inputs
+          self
+          lib
+          system
+          scheme
+          image
+          ;
+      };
+      #
       # homeConfigurations = lib.genAttrs (lib.lists.unique (builtins.attrValues machines)) (
       homeConfigurations = lib.genAttrs unique-users (
         user:
