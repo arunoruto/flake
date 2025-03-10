@@ -10,10 +10,6 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    snowfall-lib = {
-      url = "github:snowfallorg/lib";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     colmena.url = "github:zhaofengli/colmena";
     deploy-rs.url = "github:serokell/deploy-rs";
     nixos-hardware.url = "github:nixos/nixos-hardware";
@@ -86,27 +82,11 @@
       self,
       nixpkgs,
       home-manager,
-      snowfall-lib,
       colmena,
       deploy-rs,
       ...
     }@inputs:
     let
-      # currently onlu x86 linux is used
-      # will maybe change in the future!
-      # -> look into flake parts/utils
-      mkLib = nixpkgs: nixpkgs.lib.extend (final: prev: (import ./lib final));
-      lib = mkLib nixpkgs;
-      system = "x86_64-linux";
-      pkgs = import nixpkgs {
-        inherit system;
-        overlays = [
-          self.overlays.unstable-packages
-          inputs.nur.overlays.default
-          # inputs.hyprpanel.overlay
-        ];
-      };
-
       ## Some customization
       ## Schemes: https://tinted-theming.github.io/base16-gallery/
       # scheme = "catppuccin-macchiato";
@@ -129,53 +109,22 @@
       # image = "anime/dan-da-dan/op/jiji1.png";
       # image = "anime/dan-da-dan/op/turbogranny1.png";
 
-      machines = {
-        # Personal
-        # Framework Laptop AMD 7040
-        isshin.usernames = [ "mirza" ];
-        # Framework Case Intel 11th
-        zangetsu.usernames = [ "mirza" ];
-        # Tower PC
-        yhwach.usernames = [ "mirza" ];
-        # New NAS Server
-        # kuchiki.usernames = [ "mirza" ];
-        # Crappy AMD Mini PC
-        yoruichi.usernames = [ "mirza" ];
-        # M720q Mini PC
-        shinji.usernames = [ "mirza" ];
-        # S740 Mini PC
-        kenpachi.usernames = [ "mirza" ];
-        # Firewall
-        # narouter.usernames = [ "mirza" ];
-        # Server
-        aizen.usernames = [ "mirza" ];
-
-        # Work
-        # Crappy Work PC
-        kyuubi.usernames = [ "mar" ];
-        # Nice Work PC
-        madara.usernames = [ "mar" ];
+      # currently onlu x86 linux is used
+      # will maybe change in the future!
+      # -> look into flake parts/utils
+      mkLib = nixpkgs: nixpkgs.lib.extend (final: prev: (import ./lib final));
+      lib = mkLib nixpkgs;
+      system = "x86_64-linux";
+      pkgs = import nixpkgs {
+        inherit system;
+        overlays = [
+          self.overlays.unstable-packages
+          inputs.nur.overlays.default
+        ];
       };
-
-      unique-users = lib.lists.unique (
-        lib.lists.concatMap (x: x.usernames) (builtins.attrValues machines)
-      );
     in
     {
-      snowfall = snowfall-lib.mkFlake {
-        inherit inputs;
-        src = ./.;
-
-        snowfall = {
-          root = ./.;
-          namespace = "private";
-          meta = {
-            name = "my-awesome-flake";
-            title = "My Awesome Flake";
-          };
-        };
-      };
-      lib = lib;
+      inherit lib;
       nixosModules.default = ./modules/nixos;
       homeManagerModules.default = ./modules/home-manager/home.nix;
       nixosConfigurations = import ./systems {
@@ -200,41 +149,10 @@
           image
           ;
       };
-      # lib.genAttrs unique-users (
-      #   user:
-      #   home-manager.lib.homeManagerConfiguration {
-      #     inherit pkgs;
-      #     extraSpecialArgs = { inherit inputs; };
-      #     modules = [
-      #       # inputs.nur.hmModules.nur
-      #       # ./modules/home-manager/home.nix
-      #       self.homeManagerModules.default
-      #       (
-      #         { lib, ... }:
-      #         {
-      #           options.user = lib.mkOption {
-      #             type = lib.types.str;
-      #             default = user;
-      #           };
-      #         }
-      #       )
-      #       ./homes/${user}
-      #       inputs.stylix.homeManagerModules.stylix
-      #       {
-      #         theming = {
-      #           inherit scheme;
-      #           inherit image;
-      #         };
-      #       }
-      #     ];
-      #   }
-      # );
 
       overlays = import ./overlays { inherit inputs; };
       devShells.${system} = import ./shells pkgs lib;
       packages.${system} = import ./pkgs pkgs;
-      # devShells.${system} = import ./shells nixpkgs.legacyPackages.${system};
-      # packages.${system} = import ./pkgs nixpkgs.legacyPackages.${system};
 
       colmenaHive = colmena.lib.makeHive self.outputs.colmena;
       colmena =
