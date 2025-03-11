@@ -14,7 +14,11 @@
 
   # KODi packages
   kodi = final: prev: {
-    kodiPackages = import ../pkgs/kodi.nix final.pkgs;
+    kodiPackages = prev.kodiPackages // (import ../pkgs/kodi.nix final);
+
+    # kodi = prev.kodi.override {
+    #   withPackages = f: prev.kodi.withPackages (oldPkgs: f final.kodiPackages);
+    # };
   };
 
   # This one contains whatever you want to overlay
