@@ -113,10 +113,12 @@
       system = "x86_64-linux";
       pkgs = import nixpkgs {
         inherit system;
-        overlays = [
-          self.overlays.unstable-packages
-          inputs.nur.overlays.default
-        ];
+        overlays =
+          (with self.overlays; [
+            additions
+            unstable-packages
+          ])
+          ++ (with inputs; [ nur.overlays.default ]);
       };
     in
     {
@@ -159,10 +161,11 @@
         {
           meta = {
             description = "my personal machines";
-            nixpkgs = import nixpkgs {
-              inherit system;
-              # overlays = [ ];
-            };
+            nixpkgs = pkgs;
+            # nixpkgs = import nixpkgs {
+            #   inherit system;
+            #   # overlays = [ ];
+            # };
             # nodeNixpkgs = builtins.mapAttrs (name: value: value.pkgs) conf;
             nodeSpecialArgs = builtins.mapAttrs (name: value: value._module.specialArgs) conf;
           };
