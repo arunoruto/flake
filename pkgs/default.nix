@@ -6,7 +6,8 @@
 #     };
 #   },
 # }:
-pkgs: {
+pkgs:
+{
   copilot-language-server = pkgs.callPackage ./copilot-language-server { };
   # spirv-reflect = pkgs.callPackage ./spirv-reflect { };
   # dpcpp = pkgs.callPackage ./dpcpp { };
@@ -37,5 +38,6 @@ pkgs: {
   # kodiPackages = pkgs.kodiPackages.overrideDerivation (prev: import ./kodi.nix pkgs);
   # kodiPackages = pkgs.kodiPackages // (import ./kodi.nix pkgs);
   # kodiPackages = pkgs.kodiPackages;
-  customKodiPackages = import ./kodi.nix pkgs;
+  # customKodiPackages = import ./kodi.nix pkgs;
 }
+// (import ./kodi.nix pkgs)

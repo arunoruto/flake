@@ -24,7 +24,7 @@ in
               netflix
               youtube
 
-              pkgs.customKodiPackages.elementum
+              pkgs.elementum
             ]
           );
         };
@@ -46,7 +46,7 @@ in
       allowedUDPPorts = [ 8080 ];
     };
 
-    environment.systemPackages = [ pkgs.customKodiPackages.elementum ];
+    environment.systemPackages = [ pkgs.elementum ];
 
     # systemd.services = {
     #   kodi-http-fix-plugin = {
