@@ -11,7 +11,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     colmena.url = "github:zhaofengli/colmena";
-    deploy-rs.url = "github:serokell/deploy-rs";
     nixos-hardware.url = "github:nixos/nixos-hardware";
     ucodenix.url = "github:e-tho/ucodenix";
     nixos-facter-modules.url = "github:numtide/nixos-facter-modules";
@@ -63,7 +62,6 @@
       url = "github:danth/stylix/release-24.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # ags.url = "github:Aylur/ags";
 
     # Private
     secrets = {
@@ -81,9 +79,7 @@
     {
       self,
       nixpkgs,
-      home-manager,
       colmena,
-      deploy-rs,
       ...
     }@inputs:
     let
@@ -124,7 +120,7 @@
       };
     in
     {
-      inherit lib;
+      inherit lib pkgs;
       nixosModules.default = ./modules/nixos;
       homeManagerModules.default = ./modules/home-manager/home.nix;
 
@@ -175,31 +171,6 @@
           imports = value._module.args.modules;
           inherit (conf.${name}.config.colmena) deployment;
         }) conf;
-
-      # checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
-      # deploy.nodes =
-      #   let
-      #     deployPkgs = import nixpkgs {
-      #       inherit system;
-      #       overlays = [
-      #         deploy-rs.overlay # or deploy-rs.overlays.default
-      #         (self: super: {
-      #           deploy-rs = {
-      #             inherit (pkgs) deploy-rs;
-      #             lib = super.deploy-rs.lib;
-      #           };
-      #         })
-      #       ];
-      #     };
-      #   in
-      #   builtins.mapAttrs (hostname: conf: {
-      #     inherit hostname;
-      #     profiles.system = {
-      #       user = "root";
-      #       path = deployPkgs.deploy-rs.lib.activate.nixos conf;
-      #       remoteBuild = true;
-      #     };
-      #   }) self.nixosConfigurations;
     };
 
   nixConfig = {
