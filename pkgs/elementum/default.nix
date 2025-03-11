@@ -1,6 +1,7 @@
 {
   lib,
   kodiPackages,
+  buildKodiAddon,
   fetchFromGitHub,
   python3Packages,
   stdenv,
@@ -22,7 +23,8 @@ let
     }
     ."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 in
-kodiPackages.buildKodiAddon rec {
+# kodiPackages.buildKodiAddon rec {
+buildKodiAddon rec {
   pname = "elementum";
   namespace = "plugin.video.elementum";
   version = "0.1.109";
@@ -40,16 +42,15 @@ kodiPackages.buildKodiAddon rec {
   ];
 
   propagatedBuildInputs =
-    # [ git ]
+    # [ flake8 ]
     # ++
-    (
-      with python3Packages;
-      [
-        flake8
-        six
-        requests
-      ]
-    );
+    (with python3Packages; [
+      flake8
+      six
+      requests
+    ])
+    # ++ (with kodiPackages; [ xbmcswift2 ])
+    ++ [ ];
 
   buildPhase = ":";
 

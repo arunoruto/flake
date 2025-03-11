@@ -1,3 +1,3 @@
 pkgs: {
-  elementum = pkgs.callPackage ./elementum { };
+  elementum = pkgs.kodiPackages.callPackage ./elementum { };
 }

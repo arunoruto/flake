@@ -33,4 +33,9 @@ pkgs: {
   # python3 = pkgs.python3.override {
   #   packageOverrides = final: prev: import ./python.nix pkgs;
   # };
+
+  # kodiPackages = pkgs.kodiPackages.overrideDerivation (prev: import ./kodi.nix pkgs);
+  # kodiPackages = pkgs.kodiPackages // (import ./kodi.nix pkgs);
+  # kodiPackages = pkgs.kodiPackages;
+  customKodiPackages = import ./kodi.nix pkgs;
 }
