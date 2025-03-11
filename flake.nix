@@ -127,6 +127,7 @@
       inherit lib;
       nixosModules.default = ./modules/nixos;
       homeManagerModules.default = ./modules/home-manager/home.nix;
+
       nixosConfigurations = import ./systems {
         inherit
           inputs
@@ -137,7 +138,7 @@
           image
           ;
       };
-      #
+
       # homeConfigurations = lib.genAttrs (lib.lists.unique (builtins.attrValues machines)) (
       homeConfigurations = import ./homes {
         inherit
