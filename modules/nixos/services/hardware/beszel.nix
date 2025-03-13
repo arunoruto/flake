@@ -1,94 +1,89 @@
 {
-  config,
   lib,
+  config,
   pkgs,
   ...
 }:
+let
+  cfg = config.services.beszel.agent;
+in
 {
-  meta.maintainers = with lib.maintainers; [ arunoruto ];
+  meta.maintainers = with lib.maintainers; [
+    BonusPlay
+    arunoruto
+  ];
 
-  options.services.beszel-agent = {
-    enable = lib.mkEnableOption "Enable the beszel agent service";
+  options.services.beszel.agent = {
+    enable = lib.mkEnableOption "beszel agent";
+
     package = lib.mkPackageOption pkgs "beszel" { };
-    port = lib.mkOption {
-      type = lib.types.port;
-      default = 45876;
-      description = "The port for the beszel agent service";
+
+    environment = lib.mkOption {
+      type = lib.types.attrs;
+      default = { };
+      description = ''
+        Environment variables for configuring the beszel-agent service.
+        This field will end up public in /nix/store, for secret values use `environmentFile`.
+      '';
     };
-    key = lib.mkOption {
-      type = with lib.types; (nullOr str);
+    environmentFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
-      description = "The raw value of the key";
+      description = ''
+        File path containing environment variables for configuring the beszel-agent service in the format of an EnvironmentFile. See {manpage}`systemd.exec(5)`.
+      '';
     };
-    keyFile = lib.mkOption {
-      type = with lib.types; (nullOr path);
-      default = null;
-      description = "The file location where the key for the beszel agent service is located";
-    };
-    extraFilesystems = lib.mkOption {
-      type = lib.types.listOf lib.types.str;
+    extraPath = lib.mkOption {
+      type = lib.types.listOf lib.types.package;
       default = [ ];
-      description = "The extra filesystems to be mounted";
-    };
-    gpu = lib.mkEnableOption "Enable GPU support";
-    logLevel = lib.mkOption {
-      type = lib.types.enum [
-        "debug"
-        "info"
-        "warn"
-        "error"
-      ];
-      default = "info";
-      description = "The log level for the beszel agent service. Valid values are debug, info, warn, error.";
+      description = ''
+        Extra packages to add to beszel path (such as nvidia-smi or rocm-smi).
+      '';
     };
   };
 
-  config =
-    let
-      cfg = config.services.beszel-agent;
-    in
-    lib.mkIf cfg.enable {
-      systemd = {
-        services.beszel-agent = {
-          # This ensures that nvidia-smi is in the path if GPU=true
-          path = [ "/run/current-system/sw" ];
-          unitConfig = {
-            Description = "Beszel Agent Service";
-            Wants = "network-online.target";
-            After = "network-online.target";
-          };
-          serviceConfig = {
-            Environment = lib.lists.map (x: ''"${x}"'') [
-              "LOG_LEVEL=${cfg.logLevel}"
-              "PORT=${builtins.toString cfg.port}"
-              "KEY=${builtins.toString cfg.key}"
-              "KEY_FILE=${builtins.toString cfg.keyFile}"
-              "GPU=${if cfg.gpu then "true" else "false"}"
-              "EXTRA_FILESYSTEMS=${lib.strings.concatStringsSep "," cfg.extraFilesystems}"
-            ];
-            ExecStart = "${cfg.package}/bin/beszel-agent";
-            # User = "beszel";
-            Restart = "on-failure";
-            RestartSec = "5";
-            StateDirectory = "beszel-agent";
+  config = lib.mkIf cfg.enable {
+    systemd.services.beszel-agent = {
+      description = "Beszel Agent";
 
-            # Security/sandboxing settings
-            KeyringMode = "private";
-            LockPersonality = "yes";
-            NoNewPrivileges = "yes";
-            PrivateTmp = "yes";
-            ProtectClock = "yes";
-            ProtectHome = "read-only";
-            ProtectHostname = "yes";
-            ProtectKernelLogs = "yes";
-            ProtectKernelTunables = "yes";
-            ProtectSystem = "strict";
-            RemoveIPC = "yes";
-            RestrictSUIDSGID = "true";
-            SystemCallArchitectures = "native";
-          };
-          wantedBy = [ "multi-user.target" ];
-        };
+      wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
+      after = [ "network-online.target" ];
+
+      environment = cfg.environment;
+      path = cfg.extraPath;
+
+      serviceConfig = {
+        ExecStart = ''
+          ${cfg.package}/bin/beszel-agent
+        '';
+
+        EnvironmentFile = cfg.environmentFile;
+
+        DynamicUser = true;
+        LockPersonality = true;
+        NoNewPrivileges = true;
+        # PrivateDevices = true;
+        PrivateTmp = true;
+        PrivateUsers = true;
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectSystem = "strict";
+        Restart = "on-failure";
+        RestartSec = "30s";
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        SystemCallErrorNumber = "EPERM";
+        SystemCallFilter = [ "@system-service" ];
+        Type = "simple";
+        UMask = 27;
       };
     };
+  };
 }

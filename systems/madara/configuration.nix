@@ -1,7 +1,7 @@
 {
   pkgs,
   config,
-  # lib,
+  lib,
   ...
 }:
 let
@@ -29,18 +29,25 @@ in
 
   services = {
     docker.enable = true;
-    beszel-agent = {
+    # beszel-agent = {
+    beszel.agent = {
       enable = true;
       package = pkgs.unstable.beszel;
-      gpu = true;
-      # key = builtins.readFile config.sops.secrets."tokens/beszel-marvin".path;
-      # key = "";
-      keyFile = config.sops.secrets."tokens/beszel-marvin".path;
-      extraFilesystems = [
-        "nvme0n1p1"
-        "sda2"
-      ];
-      logLevel = "debug";
+      environment = {
+        # LOG_LEVEL = "debug";
+        LOG_LEVEL = "info";
+        GPU = "true";
+        KEY_FILE = config.sops.secrets."tokens/beszel-marvin".path;
+        EXTRA_FILESYSTEMS = lib.strings.concatStringsSep "," [
+          "nvme0n1p1"
+          # "sda2"
+        ];
+      };
+      # extraFilesystems = [
+      #   "nvme0n1p1"
+      #   # "sda2"
+      # ];
+      extraPath = [ (lib.getBin config.boot.kernelPackages.nvidiaPackages.stable) ];
     };
   };
 
