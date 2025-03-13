@@ -79,4 +79,7 @@ in
   #     "L+ /run/gdm/.config/monitors.xml - - - - ${monitorsConfig}"
   #   ];
   # };
+  environment.systemPackages = with pkgs; [
+    signal-desktop
+  ];
 }
