@@ -3,6 +3,7 @@
   lib,
   pkgs,
   osConfig,
+  inputs,
   ...
 }@args:
 let
@@ -97,6 +98,7 @@ in
           nix-output-monitor
           nvd
           unstable.nixpkgs-review
+          inputs.nixpkgs-update.packages.x86_64-linux.nixpkgs-update
         ])
         ++ [
           nix-repl # my nix repl wrapper
