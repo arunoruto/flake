@@ -94,7 +94,7 @@ in
     };
 
     networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [
-      45876
+      (if (builtins.hasAttr "PORT" cfg.environment) then cfg.environment.PORT else 45876)
     ];
   };
 }
