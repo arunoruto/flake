@@ -39,7 +39,7 @@ jobs:
         with:
           logger: pretty
       - name: Cache
-        uses: DeterminateSystems/magic-nix-cache-action@main
+        uses: DeterminateSystems/flakehub-cache-action@main
       - name: Check Flake
         run: nix flake check --accept-flake-config
         # run: |
@@ -52,7 +52,7 @@ jobs:
         # run: NIXPKGS_ALLOW_INSECURE=1 nix flake check --accept-flake-config --impure
 
   check-flake-debug:
-    name: Check Flake
+    name: Check Flake (debug mode)
     runs-on: ubuntu-latest
     timeout-minutes: 30
     needs: [check-flake]
@@ -68,6 +68,6 @@ jobs:
         with:
           logger: pretty
       - name: Cache
-        uses: DeterminateSystems/magic-nix-cache-action@main
+        uses: DeterminateSystems/flakehub-cache-action@main
       - name: Check Flake
         run: nix flake check --accept-flake-config --debug
