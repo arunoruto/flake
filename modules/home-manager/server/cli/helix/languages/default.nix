@@ -27,6 +27,7 @@
       ngram = lib.mkDefault (!config.hosts.tinypc.enable && args ? nixosConfig);
     };
     fortran.enable = lib.mkDefault (!config.hosts.tinypc.enable);
+    go.enable = lib.mkDefault (!config.hosts.tinypc.enable);
     matlab.enable = lib.mkDefault (!config.hosts.tinypc.enable);
     # markdown.enable = lib.mkDefault (!config.hosts.tinypc.enable);
     markdown.enable = true;

@@ -25,6 +25,11 @@
       defaultWindowManager = "kodi";
     };
     # x2goserver.enable = true;
+    ipv64-dyndns = {
+      enable = true;
+      domainPath = config.sops.secrets."tokens/ipv64/orahovica".path;
+      keyPath = config.sops.secrets."tokens/ipv64/orahovica".key;
+    };
   };
 
   security.pki.certificateFiles = [
