@@ -14,17 +14,15 @@
   kodi.enable = true;
   bosflix.enable = true;
   # tpm.enable = true;
+  media.external-drives.enable = true;
 
   plex.enable = true;
   services.plex.accelerationDevices = [ "/dev/dri/renderD128" ];
   services = {
-    devmon.enable = true;
-    udisks2.enable = true;
     xrdp = {
       enable = true;
       defaultWindowManager = "kodi";
     };
-    # x2goserver.enable = true;
     ipv64-dyndns = {
       enable = true;
       domainPath = config.sops.secrets."tokens/ipv64/orahovica".path;
