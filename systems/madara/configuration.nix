@@ -47,7 +47,7 @@ in
       #   "nvme0n1p1"
       #   # "sda2"
       # ];
-      extraPath = [ (lib.getBin config.boot.kernelPackages.nvidiaPackages.stable) ];
+      # extraPath = [ (lib.getBin config.boot.kernelPackages.nvidiaPackages.stable) ];
     };
   };
 
