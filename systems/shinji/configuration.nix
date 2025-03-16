@@ -12,7 +12,10 @@
   hosts.tinypc.enable = true;
   hosts.intel.enable = true;
   kodi.enable = true;
-  bosflix.enable = true;
+  bosflix = {
+    enable = true;
+    drivePath = /media/86336459-5d8c-448e-93c3-f3e17c00d3b9;
+  };
   # tpm.enable = true;
   media.external-drives.enable = true;
 
@@ -25,8 +28,7 @@
     };
     ipv64-dyndns = {
       enable = true;
-      domainPath = config.sops.secrets."tokens/ipv64/orahovica".path;
-      keyPath = config.sops.secrets."tokens/ipv64/orahovica".key;
+      domainKeyPath = config.sops.secrets."tokens/ipv64/orahovica".path;
     };
   };
 

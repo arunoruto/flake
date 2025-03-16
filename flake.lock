@@ -781,10 +781,10 @@
     "secrets": {
       "flake": false,
       "locked": {
-        "lastModified": 1742126030,
-        "narHash": "sha256-1C5ktFa9EzjEaNBxcDxq4oRsyk+0I3ot7TrkDHAA5AY=",
+        "lastModified": 1742128882,
+        "narHash": "sha256-kFV8Iq6+82qEAYxvi1iPoUCophDzibp+bqYNpUwQt78=",
         "ref": "main",
-        "rev": "4b030a6bebea99f4363b592beb32b4cc1a475284",
+        "rev": "c96b1cee4ddb707e87b03329351a2924a29386d6",
         "shallow": true,
         "type": "git",
         "url": "https://github.com/arunoruto/secrets.nix.git"
