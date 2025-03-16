@@ -2,6 +2,7 @@
 {
   imports = [
     ./avahi.nix
+    ./ipv64.nix
     ./localsend.nix
     ./netbird.nix
     ./tailscale.nix
