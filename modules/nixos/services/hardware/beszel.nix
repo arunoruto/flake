@@ -40,6 +40,7 @@ in
         Extra packages to add to beszel path (such as nvidia-smi or rocm-smi).
       '';
     };
+    openFirewall = lib.mkEnableOption "Open the firewall port.";
   };
 
   config = lib.mkIf cfg.enable {
@@ -91,5 +92,9 @@ in
         UMask = 27;
       };
     };
+
+    networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [
+      45876
+    ];
   };
 }
