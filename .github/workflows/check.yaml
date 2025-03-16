@@ -21,7 +21,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 1
       - name: Check Nix flake inputs
-        uses: DeterminateSystems/flake-checker-action@v4
+        uses: DeterminateSystems/flake-checker-action@main
 
   check-flake:
     name: Check Flake
@@ -38,8 +38,8 @@ jobs:
         uses: DeterminateSystems/nix-installer-action@main
         with:
           logger: pretty
-      - name: Cache
-        uses: DeterminateSystems/flakehub-cache-action@main
+      # - name: Cache
+      #   uses: DeterminateSystems/flakehub-cache-action@main
       - name: Check Flake
         run: nix flake check --accept-flake-config
         # run: |
@@ -51,23 +51,23 @@ jobs:
         # run: NIXPKGS_ALLOW_INSECURE=1 nix flake check --no-build --accept-flake-config --impure
         # run: NIXPKGS_ALLOW_INSECURE=1 nix flake check --accept-flake-config --impure
 
-  check-flake-debug:
-    name: Check Flake (debug mode)
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    needs: [check-flake]
-    if: ${{ failure() }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 1
-      - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@main
-        with:
-          logger: pretty
-      - name: Cache
-        uses: DeterminateSystems/flakehub-cache-action@main
-      - name: Check Flake
-        run: nix flake check --accept-flake-config --debug
+  # check-flake-debug:
+  #   name: Check Flake (debug mode)
+  #   runs-on: ubuntu-latest
+  #   timeout-minutes: 30
+  #   needs: [check-flake]
+  #   if: ${{ failure() }}
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
+  #       with:
+  #         token: ${{ secrets.GITHUB_TOKEN }}
+  #         fetch-depth: 1
+  #     - name: Install Nix
+  #       uses: DeterminateSystems/nix-installer-action@main
+  #       with:
+  #         logger: pretty
+  #     - name: Cache
+  #       uses: DeterminateSystems/flakehub-cache-action@main
+  #     - name: Check Flake
+  #       run: nix flake check --accept-flake-config --debug
