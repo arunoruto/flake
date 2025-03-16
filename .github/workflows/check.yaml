@@ -10,10 +10,24 @@ on:
       - ".github/workflows/check.yaml"
 
 jobs:
-  check-flake:
-    name: Check Flake Setup
+  check-lock:
+    name: Check Lock
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 2
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 1
+      - name: Check Nix flake inputs
+        uses: DeterminateSystems/flake-checker-action@v4
+
+  check-flake:
+    name: Check Flake
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs: [check-lock]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -26,9 +40,8 @@ jobs:
           logger: pretty
       - name: Cache
         uses: DeterminateSystems/magic-nix-cache-action@main
-      - name: Check Nix flake inputs
-        uses: DeterminateSystems/flake-checker-action@v4
       - name: Check Flake
+        run: nix flake check --accept-flake-config
         # run: |
         #   NIXPKGS_ALLOW_INSECURE=1
         #   nix flake check
@@ -37,4 +50,3 @@ jobs:
         # --show-trace
         # run: NIXPKGS_ALLOW_INSECURE=1 nix flake check --no-build --accept-flake-config --impure
         # run: NIXPKGS_ALLOW_INSECURE=1 nix flake check --accept-flake-config --impure
-        run: nix flake check --accept-flake-config
