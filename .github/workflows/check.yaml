@@ -28,14 +28,18 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     needs: [check-lock]
-    strategy:
-      fail-fast: false
+    # strategy:
+    #   fail-fast: false
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 1
+      - name: Set Swap Space
+        uses: pierotofy/set-swap-space@master
+        with:
+          swap-size-gb: 10
       - name: Install Nix
         uses: DeterminateSystems/nix-installer-action@main
         with:
