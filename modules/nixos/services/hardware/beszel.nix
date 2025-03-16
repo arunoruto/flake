@@ -51,7 +51,14 @@ in
       after = [ "network-online.target" ];
 
       environment = cfg.environment;
-      path = cfg.extraPath;
+      path =
+        cfg.extraPath
+        ++ lib.optionals (builtins.elem "nvidia" config.services.xserver.videoDrivers) [
+          (lib.getBin config.hardware.nvidia.package)
+        ]
+        ++ lib.optionals (builtins.elem "amdgpu" config.services.xserver.videoDrivers) [
+          (lib.getBin pkgs.rocmPackages.rocm-smi)
+        ];
 
       serviceConfig = {
         ExecStart = ''
@@ -63,7 +70,6 @@ in
         DynamicUser = true;
         LockPersonality = true;
         NoNewPrivileges = true;
-        # PrivateDevices = true;
         PrivateTmp = true;
         PrivateUsers = true;
         ProtectClock = true;
