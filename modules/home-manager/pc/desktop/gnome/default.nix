@@ -25,6 +25,7 @@
       emoji-copy
       # focus
       pip-on-top
+      tactile
       tailscale-status
       tiling-shell
       # transparent-top-bar
