@@ -54,7 +54,14 @@
         # );
       };
 
-      graphics.enable = lib.mkDefault true;
+      graphics = {
+        enable = lib.mkDefault true;
+        enable32Bit = true;
+        extraPackages = with pkgs; [
+          nvidia-vaapi-driver
+          libva
+        ];
+      };
     };
   };
 }
