@@ -15,7 +15,7 @@
   options.browsers.enable = lib.mkEnableOption "Enable browsers system-wide";
 
   config = lib.mkIf config.browsers.enable {
-    chrome.enable = lib.mkDefault true;
+    # chrome.enable = lib.mkDefault true;
     firefox.enable = lib.mkDefault false;
     vivaldi.enable = lib.mkDefault false;
 
