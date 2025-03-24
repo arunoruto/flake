@@ -11,13 +11,10 @@
     ./pwa.nix
   ];
 
-  options.firefox.enable = lib.mkEnableOption "Enable firefox for browsing the web";
-
-  config = lib.mkIf config.firefox.enable {
+  config = lib.mkIf config.programs.firefox.enable {
     firefox.pwa.enable = true;
 
     programs.firefox = {
-      enable = true;
       # languagePacks = ["de" "en-US"];
 
       profiles.mirza = {

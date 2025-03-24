@@ -6,33 +6,32 @@
 }:
 {
   imports = [
-    ./chrome.nix
-    ./firefox
+    ./browsers
+
     ./flatpak.nix
-    ./steam.nix
+    # ./steam.nix
     ./thunderbird.nix
     ./vscode.nix
     ./zathura.nix
-    ./zed.nix
   ];
 
   options.pc.programs.enable = lib.mkEnableOption "Enable GUI programs";
 
   config = lib.mkIf config.pc.programs.enable {
-    chrome.enable = lib.mkDefault true;
-    firefox.enable = lib.mkDefault true;
-    steam.enable = lib.mkDefault false;
+    # steam.enable = lib.mkDefault false;
     zathura.enable = lib.mkDefault true;
-    zed.enable = lib.mkDefault false;
 
     programs = {
       thunderbird.enable = lib.mkDefault true;
       vscode.enable = lib.mkDefault false;
+      zed-editor = {
+        enable = lib.mkDefault false;
+        package = pkgs.unstable.zed-editor;
+      };
     };
 
     home.packages = with pkgs; [
       vlc
-      # unstable.vscode
 
       discord
       # jabref
@@ -50,10 +49,5 @@
       # ladybird
       # unstable.spacedrive
     ];
-
-    # home.sessionVariables = {
-    #   # Firefox
-    #   BROWSER = "${config.programs.firefox.finalPackage}/bin/firefox";
-    # };
   };
 }
