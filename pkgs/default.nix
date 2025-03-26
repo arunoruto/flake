@@ -7,8 +7,9 @@
 #   },
 # }:
 pkgs:
-{
+rec {
   copilot-language-server = pkgs.callPackage ./copilot-language-server { };
+  copilot-language-server-fhs = copilot-language-server.fhs;
   # spirv-reflect = pkgs.callPackage ./spirv-reflect { };
   # dpcpp = pkgs.callPackage ./dpcpp { };
   # dpcpp-bin = pkgs.callPackage ./dpcpp/bin.nix { };
