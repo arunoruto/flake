@@ -14,9 +14,12 @@
     colmena.url = "github:zhaofengli/colmena";
     nixos-hardware.url = "github:nixos/nixos-hardware";
     ucodenix.url = "github:e-tho/ucodenix";
-    nixos-facter-modules.url = "github:numtide/nixos-facter-modules";
+    nixos-facter-modules = {
+      url = "github:numtide/nixos-facter-modules";
+      # inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
     lanzaboote = {
-      url = "github:nix-community/lanzaboote/v0.4.1";
+      url = "github:nix-community/lanzaboote/v0.4.2";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
     sops-nix = {
