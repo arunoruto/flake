@@ -5,9 +5,9 @@
 }@args:
 {
   imports = [
+    ./background
+    ./foreground
     ./media
-    ./pc
-    ./server
     ./theming
   ];
 
@@ -23,7 +23,7 @@
       laptop.enable = lib.mkDefault osConfig.hosts.laptop.enable;
       tinypc.enable = lib.mkDefault osConfig.hosts.tinypc.enable;
     };
-    pc.enable = lib.mkDefault osConfig.programs.enable;
+    foreground.enable = lib.mkDefault osConfig.programs.enable;
 
     # hostname = lib.mkDefault osConfig.networking.hostName;
     keyboard = {

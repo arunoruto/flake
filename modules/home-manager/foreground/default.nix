@@ -14,9 +14,9 @@
     ./input.nix
   ];
 
-  options.pc.enable = lib.mkEnableOption "PC config";
+  options.foreground.enable = lib.mkEnableOption "PC config";
 
-  config = lib.mkIf config.pc.enable {
+  config = lib.mkIf config.foreground.enable {
     avatar.enable = lib.mkDefault true;
     desktop.enable = lib.mkDefault true;
     documents.enable = lib.mkDefault true;
