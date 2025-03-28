@@ -3,7 +3,7 @@
     <layoutmode>logical</layoutmode>
     <logicalmonitor>
       <x>1200</x>
-      <y>287</y>
+      <y>266</y>
       <scale>1</scale>
       <primary>yes</primary>
       <monitor>
@@ -17,6 +17,46 @@
           <width>3440</width>
           <height>1440</height>
           <rate>59.973</rate>
+        </mode>
+      </monitor>
+    </logicalmonitor>
+    <logicalmonitor>
+      <x>5720</x>
+      <y>1512</y>
+      <scale>1</scale>
+      <monitor>
+        <monitorspec>
+          <connector>HDMI-4</connector>
+          <vendor>VCS</vendor>
+          <product>Connector</product>
+          <serial>0x00451531</serial>
+        </monitorspec>
+        <mode>
+          <width>1920</width>
+          <height>1080</height>
+          <rate>60.000</rate>
+        </mode>
+      </monitor>
+    </logicalmonitor>
+    <logicalmonitor>
+      <x>4640</x>
+      <y>0</y>
+      <scale>1</scale>
+      <transform>
+        <rotation>left</rotation>
+        <flipped>no</flipped>
+      </transform>
+      <monitor>
+        <monitorspec>
+          <connector>DP-5</connector>
+          <vendor>DEL</vendor>
+          <product>DELL P2414H</product>
+          <serial>36WJX4632D6L</serial>
+        </monitorspec>
+        <mode>
+          <width>1920</width>
+          <height>1080</height>
+          <rate>60.000</rate>
         </mode>
       </monitor>
     </logicalmonitor>
@@ -39,28 +79,6 @@
           <width>1920</width>
           <height>1200</height>
           <rate>59.950</rate>
-        </mode>
-      </monitor>
-    </logicalmonitor>
-    <logicalmonitor>
-      <x>4640</x>
-      <y>3</y>
-      <scale>1</scale>
-      <transform>
-        <rotation>left</rotation>
-        <flipped>no</flipped>
-      </transform>
-      <monitor>
-        <monitorspec>
-          <connector>DP-5</connector>
-          <vendor>DEL</vendor>
-          <product>DELL P2414H</product>
-          <serial>36WJX4632D6L</serial>
-        </monitorspec>
-        <mode>
-          <width>1920</width>
-          <height>1080</height>
-          <rate>60.000</rate>
         </mode>
       </monitor>
     </logicalmonitor>
@@ -149,6 +167,72 @@
       <monitor>
         <monitorspec>
           <connector>DP-1</connector>
+          <vendor>DEL</vendor>
+          <product>DELL P2414H</product>
+          <serial>36WJX4632D6L</serial>
+        </monitorspec>
+        <mode>
+          <width>1920</width>
+          <height>1080</height>
+          <rate>60.000</rate>
+        </mode>
+      </monitor>
+    </logicalmonitor>
+  </configuration>
+  <configuration>
+    <layoutmode>logical</layoutmode>
+    <logicalmonitor>
+      <x>1200</x>
+      <y>287</y>
+      <scale>1</scale>
+      <primary>yes</primary>
+      <monitor>
+        <monitorspec>
+          <connector>DP-6</connector>
+          <vendor>DEL</vendor>
+          <product>DELL P3424WE</product>
+          <serial>D07F6T3</serial>
+        </monitorspec>
+        <mode>
+          <width>3440</width>
+          <height>1440</height>
+          <rate>59.973</rate>
+        </mode>
+      </monitor>
+    </logicalmonitor>
+    <logicalmonitor>
+      <x>0</x>
+      <y>0</y>
+      <scale>1</scale>
+      <transform>
+        <rotation>left</rotation>
+        <flipped>no</flipped>
+      </transform>
+      <monitor>
+        <monitorspec>
+          <connector>DVI-D-1</connector>
+          <vendor>DEL</vendor>
+          <product>DELL 2407WFP</product>
+          <serial>UY54573E1DVS </serial>
+        </monitorspec>
+        <mode>
+          <width>1920</width>
+          <height>1200</height>
+          <rate>59.950</rate>
+        </mode>
+      </monitor>
+    </logicalmonitor>
+    <logicalmonitor>
+      <x>4640</x>
+      <y>3</y>
+      <scale>1</scale>
+      <transform>
+        <rotation>left</rotation>
+        <flipped>no</flipped>
+      </transform>
+      <monitor>
+        <monitorspec>
+          <connector>DP-5</connector>
           <vendor>DEL</vendor>
           <product>DELL P2414H</product>
           <serial>36WJX4632D6L</serial>
@@ -316,58 +400,6 @@
     </logicalmonitor>
   </configuration>
   <configuration>
-    <layoutmode>physical</layoutmode>
-    <logicalmonitor>
-      <x>0</x>
-      <y>0</y>
-      <scale>1</scale>
-      <transform>
-        <rotation>left</rotation>
-        <flipped>no</flipped>
-      </transform>
-      <monitor>
-        <monitorspec>
-          <connector>DP-4</connector>
-          <vendor>DEL</vendor>
-          <product>DELL 2407WFP</product>
-          <serial>UY54573E1DVS </serial>
-        </monitorspec>
-        <mode>
-          <width>1920</width>
-          <height>1200</height>
-          <rate>59.950</rate>
-        </mode>
-      </monitor>
-    </logicalmonitor>
-    <logicalmonitor>
-      <x>1200</x>
-      <y>428</y>
-      <scale>1</scale>
-      <primary>yes</primary>
-      <monitor>
-        <monitorspec>
-          <connector>DP-5</connector>
-          <vendor>DEL</vendor>
-          <product>DELL P2414H</product>
-          <serial>36WJX4632D6L</serial>
-        </monitorspec>
-        <mode>
-          <width>1920</width>
-          <height>1080</height>
-          <rate>60.000</rate>
-        </mode>
-      </monitor>
-    </logicalmonitor>
-    <disabled>
-      <monitorspec>
-        <connector>None-1</connector>
-        <vendor>unknown</vendor>
-        <product>unknown</product>
-        <serial>unknown</serial>
-      </monitorspec>
-    </disabled>
-  </configuration>
-  <configuration>
     <layoutmode>logical</layoutmode>
     <logicalmonitor>
       <x>0</x>
@@ -421,6 +453,58 @@
   </configuration>
   <configuration>
     <layoutmode>logical</layoutmode>
+    <logicalmonitor>
+      <x>0</x>
+      <y>0</y>
+      <scale>1</scale>
+      <transform>
+        <rotation>left</rotation>
+        <flipped>no</flipped>
+      </transform>
+      <monitor>
+        <monitorspec>
+          <connector>DP-4</connector>
+          <vendor>DEL</vendor>
+          <product>DELL 2407WFP</product>
+          <serial>UY54573E1DVS </serial>
+        </monitorspec>
+        <mode>
+          <width>1920</width>
+          <height>1200</height>
+          <rate>59.950</rate>
+        </mode>
+      </monitor>
+    </logicalmonitor>
+    <logicalmonitor>
+      <x>1200</x>
+      <y>428</y>
+      <scale>1</scale>
+      <primary>yes</primary>
+      <monitor>
+        <monitorspec>
+          <connector>DP-5</connector>
+          <vendor>DEL</vendor>
+          <product>DELL P2414H</product>
+          <serial>36WJX4632D6L</serial>
+        </monitorspec>
+        <mode>
+          <width>1920</width>
+          <height>1080</height>
+          <rate>60.000</rate>
+        </mode>
+      </monitor>
+    </logicalmonitor>
+    <disabled>
+      <monitorspec>
+        <connector>None-1</connector>
+        <vendor>unknown</vendor>
+        <product>unknown</product>
+        <serial>unknown</serial>
+      </monitorspec>
+    </disabled>
+  </configuration>
+  <configuration>
+    <layoutmode>physical</layoutmode>
     <logicalmonitor>
       <x>0</x>
       <y>0</y>
