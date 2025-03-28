@@ -4,7 +4,8 @@
   buildFHSEnv,
   fetchzip,
   nix-update-script,
-  versionCheckHook,
+
+  testers,
 }:
 
 let
@@ -29,37 +30,34 @@ let
 
   executableName = "copilot-language-server";
   fhs =
-    { copilot-language-server }:
+    { package }:
     buildFHSEnv {
-      name = executableName;
+      name = package.meta.mainProgram;
+      version = package.version;
       targetPkgs = pkgs: [ pkgs.stdenv.cc.cc.lib ];
-      runScript = "${copilot-language-server}/bin/${executableName}";
+      runScript = lib.getExe package;
 
-      meta = copilot-language-server.meta // {
+      meta = package.meta // {
         description =
-          copilot-language-server.meta.description
+          package.meta.description
           + " (FHS-wrapped). Use this version if you have trouble with the normal one.";
       };
     };
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "copilot-language-server";
-  version = "1.290.0";
+  version = "1.292.0";
 
   src = fetchzip {
     url = "https://github.com/github/copilot-language-server-release/releases/download/${finalAttrs.version}/copilot-language-server-native-${finalAttrs.version}.zip";
-    hash = "sha256-ELOSeb3Z7AI8pjDhtUIRoaf+4UXjXKEu/OJ2CLQno6A=";
+    hash = "sha256-nWhAKf9TiAXbOkjnXPWs/FDDFFN3hp/7hWMQ4MP8cto=";
     stripRoot = false;
   };
-
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
 
   installPhase = ''
     runHook preInstall
 
-    install -Dt "$out"/bin "${os}-${arch}"/${executableName}
+    install "${os}-${arch}/${executableName}" -Dm755 -t "$out"/bin
 
     runHook postInstall
   '';
@@ -68,7 +66,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = nix-update-script { };
-    fhs = fhs { copilot-language-server = finalAttrs.finalPackage; };
+    fhs = fhs { package = finalAttrs.finalPackage; };
+    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
   };
 
   meta = {
