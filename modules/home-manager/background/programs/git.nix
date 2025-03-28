@@ -19,9 +19,18 @@ let
 in
 {
   home = {
-    packages = [
-      glab-pkg # Gitlab CLI tool
-    ] ++ lib.optionals (!config.hosts.tinypc.enable) (with pkgs; [ gitbutler ]);
+    packages =
+      [
+        glab-pkg # Gitlab CLI tool
+      ]
+      ++ lib.optionals (!config.hosts.tinypc.enable) (with pkgs; [ gitbutler ])
+      ++ lib.optionals config.programs.jujutsu.enable (
+        with pkgs.unstable;
+        [
+          lazyjj
+          jjui
+        ]
+      );
     sessionVariables =
       let
         # token = builtins.readFile (
@@ -74,7 +83,8 @@ in
         ui = {
           default-command = [
             "log"
-            "--reversed"
+            "--no-pager"
+            # "--reversed"
           ];
         };
       };
