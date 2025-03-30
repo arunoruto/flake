@@ -9,6 +9,7 @@
     ./bosflix.nix
     ./external-drives.nix
     ./plex.nix
+    ./qbittorrent.nix
   ];
 
   options.media.enable = lib.mkEnableOption "Enable media services";
