@@ -70,7 +70,7 @@
           };
 
           deluge = {
-            enable = true;
+            enable = false;
             web.enable = true;
             # declarative = true;
             config = {
