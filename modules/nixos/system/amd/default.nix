@@ -57,6 +57,7 @@
       };
     };
 
+    boot.kernelParams = lib.optionals config.services.ucodenix.enable [ "microcode.amd_sha_check=off" ];
     # programs.nix-ld.libraries = config.hardware.graphics.extraPackages;
   };
 }
