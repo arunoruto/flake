@@ -14,7 +14,7 @@
   kodi.enable = true;
   bosflix = {
     enable = true;
-    drivePath = /media/86336459-5d8c-448e-93c3-f3e17c00d3b9;
+    drivePath = /media/86336459-5d8c-448e-93c3-f3e17c00d3b91;
   };
   # tpm.enable = true;
   media.external-drives.enable = true;
@@ -29,6 +29,10 @@
     ipv64-dyndns = {
       enable = true;
       domainKeyPath = config.sops.secrets."tokens/ipv64/orahovica".path;
+    };
+    qbittorrent = {
+      enable = true;
+      webuiPort = 8081;
     };
   };
 
