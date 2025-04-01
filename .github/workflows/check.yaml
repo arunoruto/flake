@@ -56,6 +56,10 @@ jobs:
         # --show-trace
         # run: NIXPKGS_ALLOW_INSECURE=1 nix flake check --no-build --accept-flake-config --impure
         # run: NIXPKGS_ALLOW_INSECURE=1 nix flake check --accept-flake-config --impure
+      - name: Flake Statistics
+        run: |
+          echo "## Tokei Summary" >> $GITHUB_STEP_SUMMARY
+          nix run nixpkgs#tokei >> $GITHUB_STEP_SUMMARY
 
   # check-flake-debug:
   #   name: Check Flake (debug mode)
