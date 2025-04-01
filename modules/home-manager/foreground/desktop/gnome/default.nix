@@ -24,6 +24,7 @@
       appindicator
       emoji-copy
       # focus
+      forge
       pip-on-top
       tactile
       tailscale-status
