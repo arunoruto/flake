@@ -19,6 +19,7 @@ rec {
   # candy-icons = pkgs.callPackage ./candy-icons/package.nix { };
   mstm = pkgs.callPackage ./mstm { enableMPI = false; };
   # wigxjpf = pkgs.callPackage ./wigxjpf/package.nix { };
+  # taichi = pkgs.python3Packages.callPackage ./taichi { };
 
   # Work testing
   # isis = pkgs.callPackage ./isis/package.nix {
