@@ -23,7 +23,7 @@ in
       [
         glab-pkg # Gitlab CLI tool
       ]
-      ++ lib.optionals (!config.hosts.tinypc.enable) (with pkgs; [ gitbutler ])
+      # ++ lib.optionals (!config.hosts.tinypc.enable) (with pkgs; [ gitbutler ])
       ++ lib.optionals config.programs.jujutsu.enable (
         with pkgs.unstable;
         [
