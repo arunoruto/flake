@@ -25,7 +25,7 @@
     sway.enable = lib.mkDefault false;
 
     home.packages = with pkgs; [
-      # gimp
+      gimp
       inkscape
       jabref
       # obs-studio
