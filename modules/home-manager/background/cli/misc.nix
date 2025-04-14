@@ -41,10 +41,8 @@
       enable = true;
     };
 
-    thefuck = {
-      enable = true;
-      enableInstantMode = (args ? nixosConfig);
-    };
+    jq.enable = true;
+    # jqp.enable = true;
 
     # lsd is an ls replacement
     lsd = {
@@ -63,20 +61,23 @@
           "git"
           "name"
         ];
-        # date = "+%d.%m.%Y %H:%M:%S";
         date = "+%F %T";
         sorting = {
           dir-grouping = "first";
         };
       };
     };
-    # nushell.shellAliases = lib.mkIf config.programs.nushell.enable aliases;
 
     ripgrep = {
       enable = true;
     };
 
     skim.enable = true;
+
+    thefuck = {
+      enable = true;
+      enableInstantMode = (args ? nixosConfig);
+    };
 
     vivid = {
       enable = true;
