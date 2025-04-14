@@ -20,6 +20,7 @@ rec {
   mstm = pkgs.callPackage ./mstm { enableMPI = false; };
   # wigxjpf = pkgs.callPackage ./wigxjpf/package.nix { };
   # taichi = pkgs.python3Packages.callPackage ./taichi { };
+  numba-cuda = pkgs.python3Packages.callPackage ./numba-cuda { };
 
   # Work testing
   # isis = pkgs.callPackage ./isis/package.nix {
