@@ -92,17 +92,17 @@
     "cpu-microcodes": {
       "flake": false,
       "locked": {
-        "lastModified": 1743875756,
-        "narHash": "sha256-Sx25LSwhoGtHIdrbSH4hNE4wVbDE3WYlJTJgxMhHwI8=",
+        "lastModified": 1744580596,
+        "narHash": "sha256-0WgBGViIPozInkjUZSUKyndN9ldZGtCKlUiiw8VAK3o=",
         "owner": "platomav",
         "repo": "CPUMicrocodes",
-        "rev": "ea9a847812d33c7671edb073d3149767ac674668",
+        "rev": "58897a4b77be3ebb17ee41c12002cd986d3da6ed",
         "type": "github"
       },
       "original": {
         "owner": "platomav",
         "repo": "CPUMicrocodes",
-        "rev": "ea9a847812d33c7671edb073d3149767ac674668",
+        "rev": "58897a4b77be3ebb17ee41c12002cd986d3da6ed",
         "type": "github"
       }
     },
@@ -393,11 +393,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1744117652,
-        "narHash": "sha256-t7dFCDl4vIOOUMhEZnJF15aAzkpaup9x4ZRGToDFYWI=",
+        "lastModified": 1744743431,
+        "narHash": "sha256-iyn/WBYDc7OtjSawbegINDe/gIkok888kQxk3aVnkgg=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "b4e98224ad1336751a2ac7493967a4c9f6d9cb3f",
+        "rev": "c61bfe3ae692f42ce688b5865fac9e0de58e1387",
         "type": "github"
       },
       "original": {
@@ -479,11 +479,11 @@
     },
     "nix-flatpak": {
       "locked": {
-        "lastModified": 1741903049,
-        "narHash": "sha256-8Y8brH04JjSLrCLvBEbhK9vOu7lhQhqUBW4kI3tifdI=",
+        "lastModified": 1744659587,
+        "narHash": "sha256-xJnbmRVte13akgn+Prg06IaRHJ5OX3uVltwsCP/mxoc=",
         "owner": "gmodena",
         "repo": "nix-flatpak",
-        "rev": "42c7fb2702219b86a8f5969c3475ce594c28f5d0",
+        "rev": "928d868a9141b48f152d3b2b00c433e688d4b106",
         "type": "github"
       },
       "original": {
@@ -530,11 +530,11 @@
     },
     "nixos-hardware": {
       "locked": {
-        "lastModified": 1744366945,
-        "narHash": "sha256-OuLhysErPHl53BBifhesrRumJNhrlSgQDfYOTXfgIMg=",
+        "lastModified": 1744633460,
+        "narHash": "sha256-fbWE4Xpw6eH0Q6in+ymNuDwTkqmFmtxcQEmtRuKDTTk=",
         "owner": "nixos",
         "repo": "nixos-hardware",
-        "rev": "1fe3cc2bc5d2dc9c81cb4e63d2f67c1543340df1",
+        "rev": "9a049b4a421076d27fee3eec664a18b2066824cb",
         "type": "github"
       },
       "original": {
@@ -577,11 +577,11 @@
     },
     "nixpkgs-unstable": {
       "locked": {
-        "lastModified": 1744232761,
-        "narHash": "sha256-gbl9hE39nQRpZaLjhWKmEu5ejtQsgI5TWYrIVVJn30U=",
+        "lastModified": 1744463964,
+        "narHash": "sha256-LWqduOgLHCFxiTNYi3Uj5Lgz0SR+Xhw3kr/3Xd0GPTM=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "f675531bc7e6657c10a18b565cfebd8aa9e24c14",
+        "rev": "2631b0b7abcea6e640ce31cd78ea58910d31e650",
         "type": "github"
       },
       "original": {
@@ -614,11 +614,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1744309437,
-        "narHash": "sha256-QZnNHM823am8apCqKSPdtnzPGTy2ZB4zIXOVoBp5+W0=",
+        "lastModified": 1744440957,
+        "narHash": "sha256-FHlSkNqFmPxPJvy+6fNLaNeWnF1lZSgqVCl/eWaJRc4=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "f9ebe33a928b5d529c895202263a5ce46bdf12f7",
+        "rev": "26d499fc9f1d567283d5d56fcf367edd815dba1d",
         "type": "github"
       },
       "original": {
@@ -651,11 +651,11 @@
         "treefmt-nix": "treefmt-nix_2"
       },
       "locked": {
-        "lastModified": 1744487119,
-        "narHash": "sha256-f0PEoPr4zSwJcpn+NTdvK8qNndH8+bKwmKVjVu87s1U=",
+        "lastModified": 1744922860,
+        "narHash": "sha256-buyvi7Js0S+VeifiOXza/mLFG4bfBGkgn5kLfCYrggE=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "22052cde27aad8bc9525218230d4e048c7dade19",
+        "rev": "b0434d5a5f1020a6df6f400bb9938fb14ca228f2",
         "type": "github"
       },
       "original": {
@@ -752,10 +752,10 @@
     "secrets": {
       "flake": false,
       "locked": {
-        "lastModified": 1742128882,
-        "narHash": "sha256-kFV8Iq6+82qEAYxvi1iPoUCophDzibp+bqYNpUwQt78=",
+        "lastModified": 1744809930,
+        "narHash": "sha256-x4dfJIiOmH5cyQKsoYGjfVeRzUhGrc8nHQp4pztQnJU=",
         "ref": "main",
-        "rev": "c96b1cee4ddb707e87b03329351a2924a29386d6",
+        "rev": "380291f0afae2adf798f9f82252fc2b4ee78d164",
         "shallow": true,
         "type": "git",
         "url": "https://github.com/arunoruto/secrets.nix.git"
@@ -774,11 +774,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1744103455,
-        "narHash": "sha256-SR6+qjkPjGQG+8eM4dCcVtss8r9bre/LAxFMPJpaZeU=",
+        "lastModified": 1744669848,
+        "narHash": "sha256-pXyanHLUzLNd3MX9vsWG+6Z2hTU8niyphWstYEP3/GU=",
         "owner": "Mic92",
         "repo": "sops-nix",
-        "rev": "69d5a5a4635c27dae5a742f36108beccc506c1ba",
+        "rev": "61154300d945f0b147b30d24ddcafa159148026a",
         "type": "github"
       },
       "original": {
@@ -965,11 +965,11 @@
         "cpu-microcodes": "cpu-microcodes"
       },
       "locked": {
-        "lastModified": 1744026351,
-        "narHash": "sha256-xSxc/dfjRY2glLaoZX20r6dXoghkFtI+PTMy8Gw37KQ=",
+        "lastModified": 1744630518,
+        "narHash": "sha256-xRbcLC6AVjB8etaw1T9MEywqjuRWeZZu5Ee8RU3q4R0=",
         "owner": "e-tho",
         "repo": "ucodenix",
-        "rev": "0c6cc55dcd709aaa1445581f671eb257c64b58d0",
+        "rev": "b26e195f4272306f6bd30445bb73657449a1f574",
         "type": "github"
       },
       "original": {
@@ -1003,11 +1003,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1744430744,
-        "narHash": "sha256-7/iXNbDckcDMRYhaRcI9KhVzgvHXx2SXx5c8Q/DN+v4=",
+        "lastModified": 1744689966,
+        "narHash": "sha256-a0BjlNdCQthLPKJgjN5/1XS5LEZ9z43gUsQDCPgBBe4=",
         "owner": "youwen5",
         "repo": "zen-browser-flake",
-        "rev": "d4bfded0b15963d1e3d86f97272b6d2837d05bde",
+        "rev": "d5181260f73840f5b258fc3efc7cae3f6bfb82e4",
         "type": "github"
       },
       "original": {
