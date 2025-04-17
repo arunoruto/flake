@@ -1,6 +1,6 @@
 {
   lib,
-  pkgs,
+  config,
   ...
 }:
 {
@@ -12,9 +12,11 @@
     ./fonts.nix
     ./latex.nix
     ./ld.nix
+    ./typst.nix
   ];
 
   cachix.enable = lib.mkDefault false;
   latex.enable = lib.mkDefault false;
   programming.enable = lib.mkDefault true;
+  programs.typst.enable = config.latex.enable;
 }
