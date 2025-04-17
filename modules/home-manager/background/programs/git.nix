@@ -66,6 +66,8 @@ in
           credential = {
             "https://gitlab.com".helper = "${lib.getExe glab-pkg} auth git-credential";
             "https://gitlab.bv.e-technik.tu-dortmund.de".helper = "${lib.getExe glab-pkg} auth git-credential";
+            "https://git.overleaf.com".helper =
+              "store --file ${config.home.homeDirectory}/.config/git/overleaf";
           };
         }
         // lib.optionalAttrs (args ? nixosConfig) {
@@ -151,4 +153,6 @@ in
       inherit shellAliases;
     };
   };
+
+  sops.secrets."tokens/overleaf-cred".path = "${config.home.homeDirectory}/.config/git/overleaf";
 }
