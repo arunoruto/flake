@@ -24,19 +24,21 @@
     hyprland.enable = lib.mkDefault true;
     sway.enable = lib.mkDefault false;
 
-    home.packages = with pkgs; [
-      gimp
-      inkscape
-      jabref
-      # obs-studio
-      #okular
-      rnote
-      telegram-desktop
-      # via
-      # vial
-      #qbittorrent
+    home.packages =
+      (with pkgs; [
+        # gimp
+        inkscape
+        jabref
+        # obs-studio
+        #okular
+        rnote
+        telegram-desktop
+        # via
+        # vial
+        #qbittorrent
 
-      exercism
-    ];
+        exercism
+      ])
+      ++ (with pkgs.unstable; [ gimp3 ]);
   };
 }
