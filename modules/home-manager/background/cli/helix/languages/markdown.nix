@@ -29,6 +29,7 @@ in
               # ++ lib.optionals (ls ? lsp-ai) [ "lsp-ai" ]
               # ++ lib.optionals (ls ? gpt) [ "gpt" ]
               ++ lib.optionals (ls ? copilot) [ "copilot" ]
+              ++ lib.optionals (ls ? codebook) [ "codebook" ]
               ++ [ "iwe" ];
             formatter = {
               command = "prettier";

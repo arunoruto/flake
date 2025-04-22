@@ -10,6 +10,7 @@
     ./ai
     ./programming
 
+    ./codebook.nix
     ./shells.nix
     ./latex.nix
     ./ltex.nix
@@ -20,6 +21,7 @@
   ];
 
   helix = {
+    codebook.enable = lib.mkDefault (!config.hosts.tinypc.enable);
     shells.enable = lib.mkDefault (!config.hosts.tinypc.enable);
     latex.enable = lib.mkDefault (!config.hosts.tinypc.enable);
     ltex = {
