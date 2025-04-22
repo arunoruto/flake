@@ -12,15 +12,17 @@ let
       ipython
       python-lsp-server
       ipympl
-      # Must
+      # computing
       jax
       (if config.hosts.nvidia.enable then jaxlibWithCuda else jaxlib)
-      matplotlib
       (if config.hosts.nvidia.enable then numbaWithCuda else numba)
       # numba-scipy
       numpy
       pandas
+      # plotting
+      matplotlib
       plotly
+      pyvista
       streamlit
       # Misc
       manim
