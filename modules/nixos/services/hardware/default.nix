@@ -3,6 +3,7 @@
   imports = [
     ./beszel.nix
     ./fwupd.nix
+    ./mouse.nix
     ./printing.nix
     ./scanning.nix
     ./ssd.nix

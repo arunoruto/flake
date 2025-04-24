@@ -19,9 +19,12 @@ in
     workstation.enable = true;
     nvidia.enable = true;
   };
-  hardware.nvidia = {
-    nvidiaSettings = false;
-    # package = config.boot.kernelPackages.nvidiaPackages.beta;
+  hardware = {
+    mouse.enable = true;
+    nvidia = {
+      nvidiaSettings = false;
+      # package = config.boot.kernelPackages.nvidiaPackages.beta;
+    };
   };
   yubikey.signing = "sanemi";
   runners.YASF.enable = true;
