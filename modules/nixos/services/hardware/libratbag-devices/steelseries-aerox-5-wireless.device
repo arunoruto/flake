@@ -1,12 +1,13 @@
 [Device]
-DeviceMatch=usb:1038:1852
+# 2.4 Ghz wireless mode; Wired mode
+DeviceMatch=usb:1038:1852;usb:1038:1854
 DeviceType=mouse
 Driver=steelseries
 Name=SteelSeries Aerox 5 Wireless
 
 [Driver/steelseries]
 Buttons=9
-DeviceVersion=5
+DeviceVersion=1
 DpiRange=100:18000@100
 Leds=3
 MacroLength=0
