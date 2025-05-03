@@ -17,6 +17,7 @@
         # };
       };
       insert = {
+        "C-p" = "signature_help";
         "C-space" = "signature_help";
       };
     };
