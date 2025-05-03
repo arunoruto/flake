@@ -22,7 +22,7 @@ in
 
         # nixpkgs-manual
       ];
-      sessionVariables.FLAKE = "/home/${username}/.config/flake";
+      sessionVariables.NH_FLAKE = "/home/${username}/.config/flake";
     };
 
     programs.nh = {

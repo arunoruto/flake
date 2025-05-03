@@ -17,7 +17,7 @@ let
         "Welcome to Nix" {}
         -r "Nix (\\d+\\.\\d+\\.\\d+)" {}
       }
-      send -- ":lf ${config.home.sessionVariables.FLAKE}\r"
+      send -- ":lf ${config.home.sessionVariables.NH_FLAKE}\r"
       expect -r "Added (\\d+) variables."
       # send -- {pkgs = import inputs.nixpkgs { system = "${pkgs.system}"; overlays = [ overlays.unstable-packages overlays.additions overlays.python overlays.kodi ]; }}
       # send -- "\r"
@@ -103,7 +103,7 @@ in
         ++ [
           nix-repl # my nix repl wrapper
         ];
-      sessionVariables.FLAKE = "/home/${user}/.config/flake";
+      sessionVariables.NH_FLAKE = "/home/${user}/.config/flake";
       # sessionVariables.FLAKE = "/home/${config.home.username}/.config/flake";
     };
   };

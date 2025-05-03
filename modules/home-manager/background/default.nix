@@ -7,7 +7,7 @@
 }@args:
 let
   user = config.user;
-  flake-location = config.home.sessionVariables.FLAKE;
+  flake-location = config.home.sessionVariables.NH_FLAKE;
 in
 {
   imports = [
