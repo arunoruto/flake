@@ -20,7 +20,10 @@ in
     nvidia.enable = true;
   };
   hardware = {
-    mouse.enable = true;
+    custom = {
+      keyboard.enable = true;
+      mouse.enable = true;
+    };
     nvidia = {
       nvidiaSettings = false;
       # package = config.boot.kernelPackages.nvidiaPackages.beta;
