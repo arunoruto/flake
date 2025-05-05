@@ -8,8 +8,9 @@ pkgs.lib.genAttrs
   (
     shell:
     import ./${shell}.nix {
-      inherit pkgs;
-      inherit lib;
+      inherit pkgs lib;
+      # inherit pkgs;
+      # inherit lib;
     }
   )
 # ] (shell: import ./${shell}.nix { inherit pkgs; })
