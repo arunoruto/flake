@@ -8,9 +8,9 @@ let
   devices = pkgs.copyPathToStore ./libratbag-devices;
 in
 {
-  options.hardware.mouse.enable = lib.mkEnableOption "Enable mouse config";
+  options.hardware.custom.mouse.enable = lib.mkEnableOption "Enable mouse config";
 
-  config = lib.mkIf config.hardware.mouse.enable {
+  config = lib.mkIf config.hardware.custom.mouse.enable {
     services.ratbagd = {
       enable = true;
       package = pkgs.libratbag.overrideAttrs (old: {
