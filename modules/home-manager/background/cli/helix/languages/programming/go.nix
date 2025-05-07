@@ -38,8 +38,8 @@
       extraPackages = with pkgs; [
         delve
         go
-        # golangci-lint
-        # golangci-lint-langserver
+        golangci-lint
+        golangci-lint-langserver
         gopls
       ];
     };
