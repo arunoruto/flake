@@ -13,7 +13,14 @@
     };
     colmena.url = "github:zhaofengli/colmena";
     nixos-hardware.url = "github:nixos/nixos-hardware";
-    ucodenix.url = "github:e-tho/ucodenix";
+    cpu-microcodes = {
+      url = "github:platomav/CPUMicrocodes/ec5200961ecdf78cf00e55d73902683e835edefd";
+      flake = false;
+    };
+    ucodenix = {
+      url = "github:e-tho/ucodenix";
+      inputs.cpu-microcodes.follows = "cpu-microcodes";
+    };
     nixos-facter-modules = {
       url = "github:numtide/nixos-facter-modules";
       # inputs.nixpkgs.follows = "nixpkgs-unstable";
