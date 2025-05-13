@@ -74,6 +74,9 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # PRs
+    # matlab-pr.url = "https://github.com/james-atkins/nixpkgs/tree/pr/matlab";
+
     # Private
     secrets = {
       # url = "git+ssh://git@github.com/arunoruto/secrets.nix.git?ref=main&shallow=1";
@@ -130,6 +133,21 @@
             unstable-packages
           ])
           ++ (with inputs; [ nur.overlays.default ]);
+        # ++ [
+        #   (
+        #     prev: final:
+        #     (
+        #       let
+        #         mypkgs = import inputs.matlab-pr {
+        #           inherit (prev) system;
+        #         };
+        #       in
+        #       {
+        #         fcitx5-mozc = mypkgs.fcitx5-mozc;
+        #       }
+        #     )
+        #   )
+        # ];
         config = {
           allowUnfree = true;
           # nvidia.acceptLicense = true;
