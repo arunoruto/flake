@@ -40,6 +40,7 @@ in
     with pkgs;
     [
       dust
+      dysk
       speedtest-cli
     ]
     ++ lib.optionals (!config.hosts.tinypc.enable) (
