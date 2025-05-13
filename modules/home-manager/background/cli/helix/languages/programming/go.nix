@@ -4,6 +4,9 @@
   pkgs,
   ...
 }:
+let
+  ls = config.programs.helix.languages.language-server;
+in
 {
   options.helix.go.enable = lib.mkEnableOption "Helix Go config";
 
@@ -16,7 +19,10 @@
             # scope = "source.f90";
             # file-types = [ "f90" ];
             # comment-token = "!";
-            # language-servers = [ "matlab-ls" ];
+            language-servers = [
+              "gopls"
+              "golangci-lint-langserver"
+            ] ++ lib.optionals (ls ? codebook) [ "codebook" ];
             auto-format = true;
             formatter = {
               command = "gofmt";
@@ -28,12 +34,12 @@
             };
           }
         ];
-        # language-server = {
-        #   golangci-lint-langserver = {
-        #     command = "golangci-lint-langserver";
-        #     # args = [ "--stdio" ];
-        #   };
-        # };
+        language-server = {
+          golangci-lint-langserver = {
+            command = "golangci-lint-langserver";
+            # args = [ "--stdio" ];
+          };
+        };
       };
       extraPackages = with pkgs; [
         delve
