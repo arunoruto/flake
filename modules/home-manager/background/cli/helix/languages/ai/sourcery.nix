@@ -8,4 +8,6 @@
 
     extraPackages = with pkgs.unstable; [ sourcery ];
   };
+
+  home.packages = with pkgs.unstable; [ sourcery ];
 }
