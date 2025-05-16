@@ -15,6 +15,7 @@
 
     settings = {
       # background-blur-radius = 20;
+      background-blur = 20;
       window-height = config.terminals.height;
       window-width = config.terminals.width;
       keybind = [
