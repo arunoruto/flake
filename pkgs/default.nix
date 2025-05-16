@@ -18,6 +18,7 @@ rec {
   zluda-rocm5 = pkgs.callPackage ./zluda-rocm5/package.nix { };
   # candy-icons = pkgs.callPackage ./candy-icons/package.nix { };
   mstm = pkgs.callPackage ./mstm { enableMPI = false; };
+  teaftp = pkgs.callPackage ./teaftp/package.nix { };
   # wigxjpf = pkgs.callPackage ./wigxjpf/package.nix { };
   # taichi = pkgs.python3Packages.callPackage ./taichi { };
   numba-cuda = pkgs.python3Packages.callPackage ./numba-cuda { };
