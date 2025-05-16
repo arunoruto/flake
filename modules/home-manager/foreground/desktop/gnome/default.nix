@@ -22,6 +22,7 @@
 
     home.packages = with pkgs.gnomeExtensions; [
       appindicator
+      blur-my-shell
       emoji-copy
       # focus
       forge
