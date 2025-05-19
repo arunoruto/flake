@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   stdenvNoCC,
   buildFHSEnv,
   fetchzip,
@@ -9,24 +10,26 @@
 }:
 
 let
+  env = stdenv;
+  # env = stdenvNoCC;
   arch =
     {
       aarch64-darwin = "arm64";
       aarch64-linux = "arm64";
+      arm64-apple-darwin = "arm64";
       x86_64-darwin = "x64";
       x86_64-linux = "x64";
     }
-    ."${stdenvNoCC.hostPlatform.system}"
-      or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
+    ."${env.hostPlatform.system}" or (throw "Unsupported system: ${env.hostPlatform.system}");
   os =
     {
       aarch64-darwin = "darwin";
       aarch64-linux = "linux";
+      arm64-apple-darwin = "darwin";
       x86_64-darwin = "darwin";
       x86_64-linux = "linux";
     }
-    ."${stdenvNoCC.hostPlatform.system}"
-      or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
+    ."${env.hostPlatform.system}" or (throw "Unsupported system: ${env.hostPlatform.system}");
 
   executableName = "copilot-language-server";
   fhs =
@@ -44,13 +47,13 @@ let
       };
     };
 in
-stdenvNoCC.mkDerivation (finalAttrs: {
+env.mkDerivation (finalAttrs: {
   pname = "copilot-language-server";
-  version = "1.292.0";
+  version = "1.322.0";
 
   src = fetchzip {
     url = "https://github.com/github/copilot-language-server-release/releases/download/${finalAttrs.version}/copilot-language-server-native-${finalAttrs.version}.zip";
-    hash = "sha256-nWhAKf9TiAXbOkjnXPWs/FDDFFN3hp/7hWMQ4MP8cto=";
+    hash = "sha256-3AJTC4TI+sqTi1/B1XQZght7CClplWwIxjGmrt1E2ME=";
     stripRoot = false;
   };
 
@@ -87,6 +90,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       "aarch64-linux"
       "x86_64-darwin"
       "aarch64-darwin"
+      "arm64-apple-darwin"
     ];
     maintainers = with lib.maintainers; [
       arunoruto
