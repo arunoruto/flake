@@ -124,14 +124,27 @@ Some nice intro is provided by [thiscute.world](https://nixos-and-flakes.thiscut
 - [Is NixOS The Best Gaming Distro | Linux Gaming Setup](https://www.youtube.com/watch?v=qlfm3MEbqYA):
   nix can be used for gaming too! This video gives nice tips to configure your system for a specific hardware too
 
-[Ampersand](https://www.youtube.com/watch?v=nLwbNhSxLd4) has a nice video about configuring a NixOS system
+[Ampersand](https://www.youtube.com/watch?v=nLwbNhSxLd4)
+has a nice video about configuring a NixOS system
 similar to vimjoyer's `Ultimate NixOS Guide | Flakes | Home-Manager`
+
+[A Gentle Introduction to Nix Flakes](https://ebzzry.com/en/flakes/) breaks down a flake setup, what each attribute means, and a small introduction to flake-utils.
+
+[Why you don't need flake-utils](https://ayats.org/blog/no-flake-utils) explains why flake-utils are not really needed and alternative custom nix code (or use flake-parts? but I am a numtide fan :))
 
 ### Nix Language
 
 - [explainix](https://zaynetro.com/explainix) let's you hover over parts of an expression
   and find out what the syntax means
 - [inherit keyword](https://www.ersocon.net/articles/master-nix-inherit-keyword-in-5-minutes~c464b126-0d57-4971-9a87-2515f9aa8d19)
+
+### High Level Libraries
+
+[flake-utils](https://github.com/numtide/flake-utils)
+
+[flake-parts](https://flake.parts/)
+
+[snowfall](https://snowfall.org/) has many projects, but the most relevant one here is [snowfall lib](https://snowfall.org/guides/lib/quickstart/). This flake repository is trying to use the underlying folder structure of snowfall lib.
 
 ## Clean-up
 
