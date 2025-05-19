@@ -183,8 +183,8 @@
       };
 
       overlays = import ./overlays { inherit inputs; };
-      devShells.${system} = import ./shells pkgs lib;
-      packages.${system} = import ./pkgs pkgs;
+      # devShells.${system} = import ./shells pkgs lib;
+      # packages.${system} = import ./pkgs pkgs;
 
       colmenaHive = colmena.lib.makeHive self.outputs.colmena;
       colmena =
@@ -207,7 +207,33 @@
           imports = value._module.args.modules;
           inherit (conf.${name}.config.colmena) deployment;
         }) conf;
-    };
+    }
+    // (
+      let
+        systems = [
+          "aarch64-darwin"
+          "aarch64-linux"
+          "x86_64-darwin"
+          "x86_64-linux"
+        ];
+      in
+      lib.systemConfig.eachSystem systems (
+        system:
+        let
+          pkgs-system = import inputs.nixpkgs-unstable {
+            inherit system;
+            config = {
+              allowUnfree = true;
+              # nvidia.acceptLicense = true;
+            };
+          };
+        in
+        {
+          devShells = import ./shells pkgs-system lib;
+          packages = import ./pkgs pkgs-system;
+        }
+      )
+    );
 
   nixConfig = {
     extra-substituters = [
