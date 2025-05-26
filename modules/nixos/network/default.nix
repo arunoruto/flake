@@ -25,6 +25,9 @@
         1313 # hugo
         3390 # RDP
       ];
+      allowedUDPPorts = [
+        # 69 # tftp
+      ];
     };
   };
 
