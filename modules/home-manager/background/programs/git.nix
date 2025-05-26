@@ -44,6 +44,42 @@ in
         GH_AUTH_TOKEN = "${token}";
         GITHUB_TOKEN = "${token}";
       };
+    file.".config/git/template".text = ''
+      # feat: ✨ 
+      # feat: 🔍 
+      # feat: 🔗 
+      # feat: 🔒 
+
+      # fix: 🐛 
+      # fix: 🐞 
+      # fix: 🩹 
+      # fix: 🚑️ 
+
+      # style: 💅 
+      # style: 🎨 
+      # style: 💄 
+
+      # ci: 🦊 
+      # ci: 📦 
+
+      # deploy: 🚀 
+      # deploy: 📦 
+
+      # chore: 🧹 
+      # chore: 🔧 
+      # chore: ⚙️ 
+      # docs: 📜 
+
+      # refactor: 🔨 
+      # perf: 🚀 
+
+      # test: 🚦 
+      # debug: 🧪 
+
+      # BREAKING CHANGE: 🚨 
+      # BREAKING CHANGE: 💥 
+      # BREAKING CHANGE: 💣 
+    '';
   };
 
   programs = {
@@ -60,8 +96,26 @@ in
       };
       extraConfig =
         {
-          core.editor = "hx";
-          pull.rebase = true;
+          core = {
+            editor = "hx";
+            compression = 9;
+            whitespace = "error";
+            preloadindex = true;
+          };
+          push = {
+            autoSetupRemote = true;
+            default = "current";
+            # followTags = true;
+          };
+          pull = {
+            default = "current";
+            rebase = true;
+          };
+          rebase = {
+            autoStash = true;
+            missingCommitsCheck = "warn";
+          };
+          log.abbrevCommit = true;
           init.defaultBranch = "main";
           credential = {
             "https://gitlab.com".helper = "${lib.getExe glab-pkg} auth git-credential";
