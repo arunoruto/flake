@@ -14,18 +14,20 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "puhitaku";
     repo = pname;
-    tag = "v${version}";
-    hash = "";
+    tag = version;
+    hash = "sha256-So0Ejc0N+dDSAPkbkurF0MXxobFaX9g0i/vNe97FPV8=";
   };
 
-  vendorHash = null;
+  vendorHash = "sha256-9b6uXJALMpbbOgtN9+X8jmr88LiDV8q84b1Wv8Eyhkk=";
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "^v([0-9.]+)$"
-    ];
-  };
+  doCheck = false;
+
+  # passthru.updateScript = nix-update-script {
+  #   extraArgs = [
+  #     "--version-regex"
+  #     "^v([0-9.]+)$"
+  #   ];
+  # };
 
   meta = {
     description = "Single-binary TFTP server and client that you can use right now. No package installation, no configuration, no frustration. ";
