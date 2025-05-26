@@ -2,8 +2,18 @@
   description = "Mirzas Nix Config";
 
   inputs = {
+    # Stable
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
+    home-manager = {
+      url = "github:nix-community/home-manager/release-25.05";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    stylix = {
+      url = "github:danth/stylix/release-25.05";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # Nixpkgs
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-update.url = "github:nix-community/nixpkgs-update";
     # NixOS
@@ -42,11 +52,6 @@
       url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # Home Manager
-    home-manager = {
-      url = "github:nix-community/home-manager/release-24.11";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     # DEs
     # nixos-cosmic = {
     #   url = "github:lilyinstarlight/nixos-cosmic";
@@ -66,13 +71,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     # nixvim-flake.url = "github:arunoruto/nvim.nix";
-    # Styling
-    stylix = {
-      # url = "github:danth/stylix";
-      # inputs.nixpkgs.follows = "nixpkgs";
-      url = "github:danth/stylix/release-24.11";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
 
     # PRs
     # matlab-pr.url = "https://github.com/james-atkins/nixpkgs/tree/pr/matlab";

@@ -45,7 +45,7 @@
       };
       # defaultKeymap = "vim";
 
-      initExtra = ''
+      initContent = ''
         # Enable zprof, but don't execute it on each startup
         zmodload zsh/zprof
 

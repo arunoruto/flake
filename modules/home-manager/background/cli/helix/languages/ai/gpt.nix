@@ -14,7 +14,7 @@
     };
 
     # Environmental Variables
-    zsh.initExtra = ''
+    zsh.initContent = ''
       export COPILOT_API_KEY="$(cat ${config.sops.secrets."tokens/copilot".path})"
       export HANDLER=copilot
     '';

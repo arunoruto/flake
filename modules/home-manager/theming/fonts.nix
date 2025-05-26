@@ -25,7 +25,8 @@ in
         name = "FiraCode Nerd Font Mono";
         # package = pkgs.unstable.nerd-fonts.fira-code;
         # package = pkgs.fira-code;
-        package = pkgs.fira-code-nerdfont;
+        # package = pkgs.fira-code-nerdfont;
+        package = pkgs.nerd-fonts.fira-code;
       };
     };
   };

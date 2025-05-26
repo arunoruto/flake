@@ -27,7 +27,7 @@
         # FZF_ALT_C_OPTIONS = "--prview 'eza --tree --color=always {} | head -200'";
       };
 
-      initExtra = ''
+      initContent = ''
         _fzf_comprun() {
           local command=$1
           shift

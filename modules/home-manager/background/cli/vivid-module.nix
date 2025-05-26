@@ -140,7 +140,7 @@ with lib;
       programs.nushell.environmentVariables.LS_COLORS = mkIf cfg.enableNushellIntegration (
         hm.nushell.mkNushellInline (nushellLine cfg.theme)
       );
-      programs.zsh.initExtra = mkIf cfg.enableZshIntegration (zshLine cfg.theme);
+      programs.zsh.initContent = mkIf cfg.enableZshIntegration (zshLine cfg.theme);
       xdg.configFile =
         {
           "vivid/filetypes.yml" = mkIf (builtins.length (builtins.attrNames cfg.filetypes) > 0) {

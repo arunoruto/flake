@@ -47,7 +47,10 @@
     # lsd is an ls replacement
     lsd = {
       enable = true;
-      enableAliases = true;
+      # enableAliases = true;
+      enableBashIntegration = config.programs.bash.enable;
+      enableFishIntegration = config.programs.fish.enable;
+      enableZshIntegration = config.programs.zsh.enable;
       settings = {
         ignore-globs = [
           ".DS_Store"

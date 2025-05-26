@@ -78,7 +78,7 @@
         ansible-language-server
         yaml-language-server
         nodePackages.prettier
-        nodePackages.prettier-plugin-toml
+        # nodePackages.prettier-plugin-toml
       ];
     };
   };
