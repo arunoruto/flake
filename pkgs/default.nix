@@ -19,6 +19,7 @@ rec {
   # candy-icons = pkgs.callPackage ./candy-icons/package.nix { };
   mstm = pkgs.callPackage ./mstm { enableMPI = false; };
   teaftp = pkgs.callPackage ./teaftp/package.nix { };
+  tftp-now = pkgs.callPackage ./tftp-now/package.nix { };
   # wigxjpf = pkgs.callPackage ./wigxjpf/package.nix { };
   # taichi = pkgs.python3Packages.callPackage ./taichi { };
   numba-cuda = pkgs.python3Packages.callPackage ./numba-cuda { };

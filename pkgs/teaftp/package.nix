@@ -6,7 +6,7 @@
 }:
 let
   pname = "teaftp";
-  version = "1.3.1";
+  version = "1.3.2";
 in
 buildGoModule {
   inherit pname version;
@@ -15,7 +15,9 @@ buildGoModule {
     owner = "xyproto";
     repo = pname;
     tag = "v${version}";
-    hash = "sha256-kY7l/YZLQXw9aQzTwGmLPi9WA5rhaNc5zZjBT/7UQkk=";
+    hash = "sha256-7KE1BiBRXcHfPm1KbGJn6/VVWGMA+FQ5sbL3k2NVv68=";
+    # hash = "sha256-kY7l/YZLQXw9aQzTwGmLPi9WA5rhaNc5zZjBT/7UQkk="; # 1.3.1
+    # hash = "sha256-Xdx2DAwXK/nhIkF8GFKjjA7oYpj0L8yZ2e+ByYpUU4M="; # 1.3.0
   };
 
   vendorHash = null;
