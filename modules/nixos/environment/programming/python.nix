@@ -6,7 +6,9 @@
 }:
 let
   packages =
-    ps: with ps; [
+    ps:
+    with ps;
+    [
       # Jupyter
       jupyter
       ipython
@@ -14,7 +16,7 @@ let
       ipympl
       # computing
       jax
-      (if config.hosts.nvidia.enable then jaxlibWithCuda else jaxlib)
+      jaxlib
       (if config.hosts.nvidia.enable then numbaWithCuda else numba)
       # numba-scipy
       numpy
@@ -35,7 +37,10 @@ let
 
       # CLI tools
       gruvbox-factory
-    ];
+    ]
+    ++ (lib.optionals config.hosts.nvidia.enable [
+      jax-cuda12-plugin
+    ]);
 in
 {
   options.python.enable = lib.mkEnableOption "Setup a python environment";
