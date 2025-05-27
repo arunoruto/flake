@@ -23,6 +23,7 @@ in
                 # "basedpyright"
                 "pyright"
                 "ruff"
+                "ty"
               ]
               # ++ lib.optionals (ls ? lsp-ai) [ "lsp-ai" ]
               ++ lib.optionals (ls ? gpt) [ "gpt" ]
@@ -83,27 +84,37 @@ in
             ruff.enabled = true;
           };
           ruff = {
-            command = lib.getExe pkgs.unstable.ruff;
+            command = "ruff";
+            args = [ "server" ];
+          };
+          ty = {
+            command = "ty";
             args = [ "server" ];
           };
         };
       };
-      extraPackages = with pkgs; [
-        (python3.withPackages (
-          ps: with ps; [
-            debugpy
-            # python-lsp-server
-            # python-lsp-ruff
-            # pylsp-mypy
-            # numpy
-            # pydantic
-          ]
-        ))
-        # unstable.basedpyright
-        pyright
-        (if config.programs.ruff.enable then config.programs.ruff.package else unstable.ruff)
-        unstable.isort
-      ];
+      extraPackages =
+        (with pkgs; [
+          (python3.withPackages (
+            ps: with ps; [
+              debugpy
+              # python-lsp-server
+              # python-lsp-ruff
+              # pylsp-mypy
+              # numpy
+              # pydantic
+            ]
+          ))
+          # unstable.basedpyright
+          pyright
+        ])
+        ++ (with pkgs.unstable; [
+          isort
+          ty
+        ])
+        ++ [
+          (if config.programs.ruff.enable then config.programs.ruff.package else pkgs.unstable.ruff)
+        ];
     };
   };
 }

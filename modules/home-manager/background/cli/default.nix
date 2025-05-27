@@ -5,6 +5,7 @@
 {
   imports = [
     # ./dprint
+    ./astral.nix
     ./helix
     ./tmux
     ./bat.nix
@@ -12,7 +13,6 @@
     ./editorconfig.nix
     ./fzf.nix
     ./misc.nix
-    ./ruff.nix
     ./serpl.nix
     ./yazi.nix
     ./zellij.nix
