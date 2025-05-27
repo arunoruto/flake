@@ -22,9 +22,13 @@ in
       serif = cantarell;
       sansSerif = cantarell;
       monospace = {
-        name = "JetBrains Mono";
-        package = pkgs.nerd-fonts.jetbrains-mono;
+        name = "CaskaydiaCove Nerd Font Mono";
+        package = pkgs.nerd-fonts.caskaydia-cove;
       };
+      # monospace = {
+      #   name = "JetBrains Mono";
+      #   package = pkgs.nerd-fonts.jetbrains-mono;
+      # };
       # monospace = {
       #   name = "FiraCode Nerd Font Mono";
       #   # package = pkgs.unstable.nerd-fonts.fira-code;
