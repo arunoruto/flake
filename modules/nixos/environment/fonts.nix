@@ -14,6 +14,7 @@
       # unstable.nerd-fonts.fira-code
       noto-fonts-color-emoji
     ])
+    ++ (with pkgs.nerd-fonts; [ fira-code ])
     ++ [
       config.stylix.fonts.monospace.package
       config.stylix.fonts.serif.package
