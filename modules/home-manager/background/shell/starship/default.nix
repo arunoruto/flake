@@ -16,7 +16,7 @@
       command_timeout = 1000;
       add_newline = true;
       character = {
-        success_symbol = "[[❄](green) ❯](maroon)";
+        success_symbol = "[[❄](green)  ❯](maroon)";
         error_symbol = "[❯](red)";
         vimcmd_symbol = "[❮](green)";
       };
