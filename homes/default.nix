@@ -29,7 +29,8 @@ lib.genAttrs unique-users (
         }
       )
       ./${user}
-      inputs.stylix.homeManagerModules.stylix
+      # inputs.stylix.homeManagerModules.stylix
+      inputs.stylix.homeModules.stylix
       {
         theming = {
           inherit scheme;
