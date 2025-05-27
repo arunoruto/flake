@@ -18,70 +18,6 @@ let
   };
 in
 {
-  home = {
-    packages =
-      [
-        glab-pkg # Gitlab CLI tool
-      ]
-      # ++ lib.optionals (!config.hosts.tinypc.enable) (with pkgs; [ gitbutler ])
-      ++ lib.optionals config.programs.jujutsu.enable (
-        with pkgs.unstable;
-        [
-          lazyjj
-          jjui
-        ]
-      );
-    sessionVariables =
-      let
-        # token = builtins.readFile (
-        #   pkgs.runCommand "github-auth-token" { } ''
-        #     ${lib.getExe config.programs.gh.package} auth token > $out
-        #   ''
-        # );
-        token = "$(${lib.getExe config.programs.gh.package} auth token)";
-      in
-      {
-        GH_AUTH_TOKEN = "${token}";
-        GITHUB_TOKEN = "${token}";
-      };
-    file.".config/git/template".text = ''
-      # feat: ✨ 
-      # feat: 🔍 
-      # feat: 🔗 
-      # feat: 🔒 
-
-      # fix: 🐛 
-      # fix: 🐞 
-      # fix: 🩹 
-      # fix: 🚑️ 
-
-      # style: 💅 
-      # style: 🎨 
-      # style: 💄 
-
-      # ci: 🦊 
-      # ci: 📦 
-
-      # deploy: 🚀 
-      # deploy: 📦 
-
-      # chore: 🧹 
-      # chore: 🔧 
-      # chore: ⚙️ 
-      # docs: 📜 
-
-      # refactor: 🔨 
-      # perf: 🚀 
-
-      # test: 🚦 
-      # debug: 🧪 
-
-      # BREAKING CHANGE: 🚨 
-      # BREAKING CHANGE: 💥 
-      # BREAKING CHANGE: 💣 
-    '';
-  };
-
   programs = {
     git = {
       enable = true;
@@ -102,6 +38,7 @@ in
             whitespace = "error";
             preloadindex = true;
           };
+          commit.template = "~/.config/git/template";
           push = {
             autoSetupRemote = true;
             default = "current";
@@ -209,4 +146,69 @@ in
   };
 
   sops.secrets."tokens/overleaf-cred".path = "${config.home.homeDirectory}/.config/git/overleaf";
+
+  home = {
+    packages =
+      [
+        glab-pkg # Gitlab CLI tool
+      ]
+      # ++ lib.optionals (!config.hosts.tinypc.enable) (with pkgs; [ gitbutler ])
+      ++ lib.optionals config.programs.jujutsu.enable (
+        with pkgs.unstable;
+        [
+          # lazyjj
+          jjui
+        ]
+      );
+    sessionVariables =
+      let
+        # token = builtins.readFile (
+        #   pkgs.runCommand "github-auth-token" { } ''
+        #     ${lib.getExe config.programs.gh.package} auth token > $out
+        #   ''
+        # );
+        token = "$(${lib.getExe config.programs.gh.package} auth token)";
+      in
+      {
+        GH_AUTH_TOKEN = "${token}";
+        GITHUB_TOKEN = "${token}";
+      };
+    file.".config/git/template".text = ''
+
+      # feat: ✨ 
+      # feat: 🔍 
+      # feat: 🔗 
+      # feat: 🔒 
+
+      # fix: 🐛 
+      # fix: 🐞 
+      # fix: 🩹 
+      # fix: 🚑️ 
+
+      # style: 💅 
+      # style: 🎨 
+      # style: 💄 
+
+      # ci: 🦊 
+      # ci: 📦 
+
+      # deploy: 🚀 
+      # deploy: 📦 
+
+      # chore: 🧹 
+      # chore: 🔧 
+      # chore: ⚙️ 
+      # docs: 📜 
+
+      # refactor: 🔨 
+      # perf: 🚀 
+
+      # test: 🚦 
+      # debug: 🧪 
+
+      # BREAKING CHANGE: 🚨 
+      # BREAKING CHANGE: 💥 
+      # BREAKING CHANGE: 💣 
+    '';
+  };
 }
