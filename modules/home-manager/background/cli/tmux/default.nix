@@ -33,54 +33,62 @@
       yank
       vim-tmux-navigator
     ];
-    extraConfig =
-      ''
-        # Make TMUX work with yazi
-        set -g allow-passthrough on
-        set -ga update-environment TERM
-        set -ga update-environment TERM_PROGRAM
+    extraConfig = ''
+      # Make TMUX work with yazi
+      set -g allow-passthrough on
+      set -ga update-environment TERM
+      set -ga update-environment TERM_PROGRAM
 
-        # set -g status-right "#{pomodoro_status}"
-        # https://stackoverflow.com/questions/41783367/tmux-tmux-true-color-is-not-working-properly/41786092#41786092
-        set -g default-terminal "tmux-256color"
-        set-option -sa terminal-overrides ",xterm*:Tc"
+      # set -g status-right "#{pomodoro_status}"
+      # https://stackoverflow.com/questions/41783367/tmux-tmux-true-color-is-not-working-properly/41786092#41786092
+      set -g default-terminal "tmux-256color"
+      set-option -sa terminal-overrides ",xterm*:Tc"
 
-        # Move bar to top
-        set-option -g status-position top
+      # Move bar to top
+      set-option -g status-position top
 
-        # Renumber windows if one is closed
-        set-option -g renumber-windows on
+      # Renumber windows if one is closed
+      set-option -g renumber-windows on
 
-        # Create some space between bar and rest
-        # setw -g pane-border-status top
-        # setw -g pane-border-format '-'
+      # Create some space between bar and rest
+      # setw -g pane-border-status top
+      # setw -g pane-border-format '-'
 
-        # resize like vim
-        bind -r h resize-pane -L 5
-        bind -r j resize-pane -D 5
-        bind -r k resize-pane -U 5
-        bind -r l resize-pane -R 5
+      # resize like vim
+      bind -r h resize-pane -L 5
+      bind -r j resize-pane -D 5
+      bind -r k resize-pane -U 5
+      bind -r l resize-pane -R 5
 
-        # maximize pane
-        bind -r m resize-pane -Z
+      # maximize pane
+      bind -r m resize-pane -Z
 
-        # Set copy command
-        set -s copy-command 'wl-copy'
-        # select and copy like in vim
-        bind-key -T copy-mode-vi 'v' send -X begin-selection
-        bind-key -T copy-mode-vi 'y' send -X copy-selection
+      # Set copy command
+      set -s copy-command 'wl-copy'
+      # select and copy like in vim
+      bind-key -T copy-mode-vi 'v' send -X begin-selection
+      bind-key -T copy-mode-vi 'y' send -X copy-selection
 
-        unbind -T copy-mode-vi MouseDragEnd1Pane
-      ''
-      + (
-        let
-          inherit (config.lib.stylix.colors) withHashtag;
-        in
-        ''
-          set -g @catppuccin_window_status_style "rounded"
-          set -ogq @thm_bg "${withHashtag.base00}"
-          set -ogq @thm_fg "${withHashtag.base05}"
-        ''
-      );
+      unbind -T copy-mode-vi MouseDragEnd1Pane
+
+      # Status bar
+      set -g status-style bg=default,fg=black,bright
+
+      set -g window-status-format " #I "
+      set -g window-status-current-format " #I "
+
+      set -g window-status-bell-style "bg=red,nobold"
+      set -g window-status-current-style "#{?window_zoomed_flag,bg=yellow,bg=magenta,nobold}"
+    '';
+    # + (
+    #   let
+    #     inherit (config.lib.stylix.colors) withHashtag;
+    #   in
+    #   ''
+    #     set -g @catppuccin_window_status_style "rounded"
+    #     set -ogq @thm_bg "${withHashtag.base00}"
+    #     set -ogq @thm_fg "${withHashtag.base05}"
+    #   ''
+    # );
   };
 }
