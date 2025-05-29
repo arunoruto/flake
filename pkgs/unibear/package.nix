@@ -3,7 +3,8 @@
   stdenv,
   fetchFromGitHub,
   nix-update-script,
-
+  versionCheckHook,
+  makeWrapper,
   deno,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -17,22 +18,25 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ATySOd/oqmImLtSO/Am4LahEqbj91ns0ZZxRmpOUpD4=";
   };
 
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ deno ];
 
-  # dontStrip = true;
-
-  postUnpack = ''
-    deno cache src/main.ts 
-  '';
-
-  buildPhase = ''
-    deno compile -A -o unibear src/main.ts
-  '';
+  dontBuild = true;
 
   installPhase = ''
-    mkdir -p $out/bin
-    install -m755 -t $out/bin unibear
+    runHook preInstall
+
+    mkdir -p $out/{bin,lib}
+    cp -r $src/{src,LICENSE.md,README.md} $out/lib
+    makeWrapper ${lib.getExe deno} $out/bin/unibear \
+      --set DENO_NO_UPDATE_CHECK "1" \
+      --add-flags "run -A $out/lib/src/main.ts"
+
+    runHook postInstall
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   passthru = {
     updateScript = nix-update-script { };

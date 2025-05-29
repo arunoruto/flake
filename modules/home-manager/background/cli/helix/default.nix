@@ -3,7 +3,7 @@
   config,
   lib,
   pkgs,
-  inputs,
+  # inputs,
   ...
 }@args:
 let
@@ -14,6 +14,7 @@ in
   imports = [
     ./keys.nix
     ./languages
+    ./unibear.nix
   ];
 
   options.helix.enable = lib.mkEnableOption "Enable the Helix editor";
