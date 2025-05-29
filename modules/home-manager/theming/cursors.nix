@@ -21,6 +21,15 @@
       banana-cursor
       catppuccin-cursors
     ];
+    home.pointerCursor = {
+      enable = true;
+      # name = "Banana";
+      # package = pkgs.banana-cursor;
+      # size = 24;
+      # x11.enable = true;
+      # gtk.enable = true;
+    };
+
     # home.file = {
     #   ".local/share/icons/candy-icons" = {
     #     # recursive = true;
