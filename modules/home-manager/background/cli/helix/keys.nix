@@ -2,6 +2,10 @@
   programs = {
     helix.settings.keys = {
       normal = {
+        X = [
+          "extend_line_up"
+          "extend_to_line_bounds"
+        ];
         space.W = [ ":toggle soft-wrap.enable" ];
         space.X = [ ":buffer-close" ];
         space.i = {
