@@ -17,9 +17,9 @@ let
     # Tower PC
     yhwach.usernames = [ "mirza" ];
     # New NAS Server
-    # kuchiki.usernames = [ "mirza" ];
+    kuchiki.usernames = [ "mirza" ];
     # Crappy AMD Mini PC
-    # yoruichi.usernames = [ "mirza" ];
+    yoruichi.usernames = [ "mirza" ];
     # M720q Mini PC
     shinji.usernames = [ "mirza" ];
     # S740 Mini PC
