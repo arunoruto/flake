@@ -38,8 +38,8 @@
 
         flaresolverr = {
           enable = true;
-          package = pkgs.nur.repos.xddxdd.flaresolverr-21hsmw;
-          # package = pkgs.unstable.flaresolverr;
+          # package = pkgs.nur.repos.xddxdd.flaresolverr-21hsmw;
+          package = pkgs.unstable.flaresolverr;
         };
 
         syncthing = {
