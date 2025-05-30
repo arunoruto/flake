@@ -151,5 +151,8 @@
       # ];
 
       # environment.systemPackages = with pkgs.unstable; [ qbittorrent ];
+
+      sops.secrets."config/bosflix" = { };
     };
+
 }

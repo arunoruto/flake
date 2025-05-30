@@ -37,6 +37,24 @@
       enable = true;
       webuiPort = 8081;
     };
+    traefik.enable = true;
+    cloudflared = {
+      enable = true;
+      package = pkgs.cloudflared;
+      tunnels = {
+        "bosflix" = {
+          credentialsFile = "${config.sops.secrets."config/bosflix".path}";
+          default = "http_status:404";
+          # ingress = {
+          #   "*.domain1.com" = {
+          #     service = "http://localhost:80";
+          #     path = "/*.(jpg|png|css|js)";
+          #   };
+          #   "*.domain2.com" = "http://localhost:80";
+          # };
+        };
+      };
+    };
   };
 
   security.pki.certificateFiles = [
