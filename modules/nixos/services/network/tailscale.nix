@@ -51,40 +51,40 @@ in
       "net.ipv6.conf.all.forwarding" = 1;
     };
 
-    systemd = {
-      timers.delayed-tailscale-restart = {
-        wantedBy = [ "sysinit-reactivation.target" ];
-        timerConfig = {
-          OnActiveSec = "10m";
-          Unit = "delayed-tailscale-restart.service";
-          RemainAfterElapse = false;
-        };
-      };
+    # systemd = {
+    #   timers.delayed-tailscale-restart = {
+    #     wantedBy = [ "sysinit-reactivation.target" ];
+    #     timerConfig = {
+    #       OnActiveSec = "10m";
+    #       Unit = "delayed-tailscale-restart.service";
+    #       RemainAfterElapse = false;
+    #     };
+    #   };
 
-      services = {
-        delayed-tailscale-restart = {
-          serviceConfig.Type = "oneshot";
-          script = ''
-            old_tailscale_path=$(
-              systemctl show tailscaled.service --property=ExecStart --value |
-              grep -oP 'path=\K[^;]+'
-            )
-            new_tailscale_path=${config.services.tailscale.package}/bin/tailscaled
+    #   services = {
+    #     delayed-tailscale-restart = {
+    #       serviceConfig.Type = "oneshot";
+    #       script = ''
+    #         old_tailscale_path=$(
+    #           systemctl show tailscaled.service --property=ExecStart --value |
+    #           grep -oP 'path=\K[^;]+'
+    #         )
+    #         new_tailscale_path=${config.services.tailscale.package}/bin/tailscaled
 
-            if [ "$old_tailscale_path" != "$new_tailscale_path" ]; then
-              echo "Tailscale updated "
-              echo "old: $old_tailscale_path"
-              echo "new: $new_tailscale_path"
-              echo "Restarting..."
-              systemctl restart tailscaled
-            else
-              echo "Tailscale version unchanged. No restart needed."
-            fi
-          '';
-        };
+    #         if [ "$old_tailscale_path" != "$new_tailscale_path" ]; then
+    #           echo "Tailscale updated "
+    #           echo "old: $old_tailscale_path"
+    #           echo "new: $new_tailscale_path"
+    #           echo "Restarting..."
+    #           systemctl restart tailscaled
+    #         else
+    #           echo "Tailscale version unchanged. No restart needed."
+    #         fi
+    #       '';
+    #     };
 
-        tailscaled.restartIfChanged = false;
-      };
-    };
+    #     tailscaled.restartIfChanged = false;
+    #   };
+    # };
   };
 }
