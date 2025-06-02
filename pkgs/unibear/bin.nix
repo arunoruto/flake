@@ -3,9 +3,9 @@
   stdenvNoCC,
   fetchurl,
   nix-update-script,
-  autoPatchelfHook,
+# autoPatchelfHook,
 
-  libgcc,
+# libgcc,
 }:
 let
   os-arch-options = {
@@ -41,13 +41,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   dontUnpack = true;
 
-  nativeBuildInputs = [ autoPatchelfHook ];
+  # nativeBuildInputs = [ autoPatchelfHook ];
 
-  builInputs = [ libgcc.lib ];
+  # builInputs = [ libgcc.lib ];
 
-  preBuild = ''
-    addAutoPatchelfSearchPath ${lib.makeLibraryPath [ libgcc ]}
-  '';
+  # preBuild = ''
+  #   addAutoPatchelfSearchPath ${lib.makeLibraryPath [ libgcc ]}
+  # '';
 
   installPhase = ''
     runHook preInstall
