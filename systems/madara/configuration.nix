@@ -17,6 +17,11 @@ in
     # "x86_64-darwin"
     # "aarch64-darwin"
   ];
+  colmena.deployment = {
+    buildOnTarget = true;
+    targetHost = "madara.king-little.ts.net";
+
+  };
   # nixpkgs.config.cudaSupport = true;
   ai.enable = true;
   printing.enable = true;
