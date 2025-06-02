@@ -22,13 +22,13 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "unibear";
-  version = "0.4.1";
+  version = "0.4.2";
 
   src = fetchurl {
     url = "https://github.com/kamilmac/unibear/releases/download/v${finalAttrs.version}/${os-arch}";
-    hash = "sha256-r4c4bMy1Al5h9BJ+Oyh+S1qb82ihDJ0Yohxc3H9nuGQ=";
-    inherit (finalAttrs) pname;
-    name = finalAttrs.pname;
+    hash = "sha256-4ahYZvdrRBIeI9+xV6SL+03JQALiq83hGmq5ZEZnIPA=";
+    # inherit (finalAttrs) pname;
+    # name = finalAttrs.pname;
     # stripRoot = false;
   };
 
