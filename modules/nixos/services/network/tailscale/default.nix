@@ -8,13 +8,9 @@ let
   tailscale-port = 41641;
 in
 {
-  options = {
-    tailscale.enable = lib.mkEnableOption "tailscale";
-  };
-
-  config = lib.mkIf config.tailscale.enable {
+  imports = [ ./derper.nix ];
+  config = lib.mkIf config.services.tailscale.enable {
     services.tailscale = {
-      enable = true;
       package = pkgs.unstable.tailscale;
       port = tailscale-port;
       useRoutingFeatures = "client";

@@ -1,3 +1,4 @@
+{ config, ... }:
 {
   hosts.tinypc.enable = true;
 
@@ -33,7 +34,6 @@
         http = {
           routers = {
             www-arnaut = {
-              # rule = "PathPrefix(`/`)";
               rule = "Host(`arnaut.me`)";
               tls.certresolver = "cf";
               entrypoints = "websecure";
