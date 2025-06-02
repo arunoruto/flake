@@ -11,6 +11,12 @@ let
   monitorsConfig = pkgs.writeText "gdm_monitors.xml" (builtins.readFile ./monitors.xml);
 in
 {
+  boot.binfmt.emulatedSystems = [
+    # "x86_64-linux"
+    "aarch64-linux"
+    # "x86_64-darwin"
+    # "aarch64-darwin"
+  ];
   # nixpkgs.config.cudaSupport = true;
   ai.enable = true;
   printing.enable = true;
