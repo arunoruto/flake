@@ -7,6 +7,7 @@
     ./ipv64.nix
     ./localsend.nix
     ./netbird.nix
+    ./traefik.nix
   ];
 
   local-resolv.enable = lib.mkDefault true;
