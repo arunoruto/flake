@@ -2,7 +2,7 @@
   lib,
   stdenvNoCC,
   fetchurl,
-  nix-update-script,
+# nix-update-script,
 # autoPatchelfHook,
 
 # libgcc,
@@ -57,7 +57,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
+  # preFixup = ''
+  #   patchelf \
+  #     --set-rpath "${lib.makeLibraryPath [ libgcc ]}" \
+  #     "$out"/bin/${finalAttrs.meta.mainProgram}
+  # '';
+
+  # passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Lean TUI AI assistant";
