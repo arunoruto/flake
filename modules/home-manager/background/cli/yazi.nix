@@ -5,11 +5,8 @@
   ...
 }:
 {
-  options.yazi.enable = lib.mkEnableOption "Enable terminal file exporer";
-
-  config = lib.mkIf config.yazi.enable {
+  config = lib.mkIf config.programs.yazi.enable {
     programs.yazi = {
-      enable = true;
       # package = pkgs.unstable.yazi;
       enableBashIntegration = lib.mkDefault config.programs.bash.enable;
       enableFishIntegration = lib.mkDefault config.programs.fish.enable;
