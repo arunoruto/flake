@@ -23,7 +23,7 @@ in
                 # "basedpyright"
                 "pyright"
                 "ruff"
-                "ty"
+                # "ty"
               ]
               # ++ lib.optionals (ls ? lsp-ai) [ "lsp-ai" ]
               ++ lib.optionals (ls ? gpt) [ "gpt" ]
