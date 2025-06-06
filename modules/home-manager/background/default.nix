@@ -46,7 +46,6 @@ in
     ++ lib.optionals (!config.hosts.tinypc.enable) (
       with pkgs;
       [
-
         glow
         hexyl
         miller
