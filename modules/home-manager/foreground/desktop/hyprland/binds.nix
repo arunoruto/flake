@@ -5,7 +5,6 @@
   ...
 }:
 let
-  terminal = "wezterm";
   menu = "${lib.getExe config.programs.wofi.package} --show drun --normal-window";
 
   # left = "left";
@@ -24,7 +23,7 @@ in
     wayland.windowManager.hyprland.settings = {
       "$mod" = "SUPER";
       bind = [
-        "$mod, Return, exec, ${terminal}"
+        "$mod, Return, exec, ${config.terminals.main}"
         "$mod, SPACE, togglefloating"
         "$mod, D, exec, ${menu}"
         "$mod, F, fullscreen"
