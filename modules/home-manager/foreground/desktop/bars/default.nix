@@ -1,14 +1,31 @@
-{ lib, ... }:
+{
+  inputs,
+  pkgs,
+  lib,
+  ...
+}:
 {
   imports = [
     # ./ags
     ./eww
+    ./quickshell
     ./waybar
   ];
 
   bars = {
     # ags.enable = lib.mkDefault false;
-    eww.enable = lib.mkDefault true;
-    waybar.enable = lib.mkDefault true;
+    eww.enable = lib.mkDefault false;
+    waybar.enable = lib.mkDefault false;
+  };
+
+  programs = {
+    quickshell = {
+      enable = lib.mkDefault true;
+      package = lib.mkDefault inputs.quickshell.packages."${pkgs.system}".default;
+      config-name = lib.mkDefault "caelestia";
+      target = lib.mkDefault "hyprland-session";
+
+      caelestia.enable = lib.mkDefault true;
+    };
   };
 }
