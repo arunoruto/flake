@@ -12,7 +12,12 @@
     settings = {
       format = "$hostname$directory$character";
       # format = "$directory";
-      right_format = "$all";
+      right_format = ''
+        $git_branch
+        $git_commit
+        $git_state
+        $git_metrics
+        $git_status'';
       command_timeout = 1000;
       add_newline = true;
       character = {
