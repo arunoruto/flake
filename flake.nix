@@ -70,10 +70,6 @@
     #     home-manager.follows = "home-manager";
     #   };
     # };
-    quickshell = {
-      url = "git+https://git.outfoxxed.me/outfoxxed/quickshell";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
 
     # helix.url = "github:helix-editor/helix";
     zen-browser = {

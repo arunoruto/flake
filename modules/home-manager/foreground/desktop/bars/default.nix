@@ -1,5 +1,4 @@
 {
-  inputs,
   pkgs,
   lib,
   ...
@@ -20,8 +19,8 @@
 
   programs = {
     quickshell = {
-      enable = lib.mkDefault true;
-      package = lib.mkDefault inputs.quickshell.packages."${pkgs.system}".default;
+      # enable = lib.mkDefault true;
+      # package = lib.mkDefault pkgs.unstable.quickshell;
       config-name = lib.mkDefault "caelestia";
       target = lib.mkDefault "hyprland-session";
 
