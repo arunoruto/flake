@@ -20,8 +20,9 @@
   media.external-drives.enable = true;
 
   plex.enable = true;
-  services.plex.accelerationDevices = [ "/dev/dri/renderD128" ];
   services = {
+    cloudflared.enable = true;
+    plex.accelerationDevices = [ "/dev/dri/renderD128" ];
     xrdp = {
       enable = true;
       defaultWindowManager = "kodi";
