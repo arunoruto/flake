@@ -16,7 +16,7 @@ in
           credentialsFile = config.sops.secrets."${secret-file}".path;
           default = "http_status:404";
           ingress = {
-            "infra.arnaut." = {
+            "infra.arnaut.me" = {
               path = "/prowlarr.*";
               service = "http://localhost:9696";
             };
@@ -28,5 +28,6 @@ in
       # mode = "0440";
       # inherit (config.services.traefik) group;
     };
+    networking.firewall.allowedUDPPorts = [ 7844 ];
   };
 }
