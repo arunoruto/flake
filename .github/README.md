@@ -161,6 +161,7 @@ To clean up such systems, you can use the following commands:
 
 - Integrate [disko](https://github.com/nix-community/disko) for each system,
   so it can be built easier later on.
+- Alternative way of managing host types -> colmena host tags could be for fine control!
 
 ## Fixes
 
