@@ -22,9 +22,7 @@
           };
         };
       };
-      plugins = [
-        pkgs.hyprlandPlugins.hy3
-      ];
+      plugins = [ pkgs.hyprlandPlugins.hy3 ];
     };
   };
 }

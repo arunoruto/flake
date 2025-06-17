@@ -130,9 +130,7 @@
           "10,defautName:9"
         ];
 
-        # debug = {
-        #   disable_logs = false;
-        # };
+        debug.disable_logs = false;
       };
       xwayland = {
         enable = true;
