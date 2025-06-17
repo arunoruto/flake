@@ -5,11 +5,7 @@
   ...
 }:
 {
-  options = {
-    hyprland.enable = lib.mkEnableOption "Use the Hyprland window manager";
-  };
-
-  config = lib.mkIf config.hyprland.enable {
+  config = lib.mkIf config.programs.hyprland.enable {
     #environment.systemPackages = with pkgs; [
     #  dbus   # make dbus-update-activation-environment available in the path
     #  dbus-sway-environment
@@ -32,7 +28,6 @@
     programs = {
       # Enable hyprland and xwayland
       hyprland = {
-        enable = true;
         # package = pkgs.unstable.hyprland;
         xwayland.enable = true;
       };

@@ -17,9 +17,8 @@
     #  ./waybar
   ];
 
-  options.hyprland.enable = lib.mkEnableOption "Custom hyprland config";
-
-  config = lib.mkIf config.hyprland.enable {
+  # config = lib.mkIf config.wayland.windowManager.hyprland.enable {
+  config = {
     hypr = {
       binds.enable = true;
       idle.enable = true;
@@ -29,7 +28,7 @@
       plugins.enable = true;
     };
     wayland.windowManager.hyprland = {
-      enable = true;
+      # enable = true;
       # package = pkgs.unstable.hyprland;
       settings = {
         # monitor = ",preferred,auto,1.175";

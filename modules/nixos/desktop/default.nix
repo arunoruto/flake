@@ -26,8 +26,10 @@
     kodi.enable = lib.mkDefault false;
 
     # WMs
-    sway.enable = lib.mkDefault true;
-    hyprland.enable = lib.mkDefault true;
+    programs = {
+      sway.enable = lib.mkDefault false;
+      hyprland.enable = lib.mkDefault true;
+    };
 
     # Compositor
     wayland.enable = lib.mkDefault true;

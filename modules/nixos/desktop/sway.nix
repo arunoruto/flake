@@ -46,11 +46,7 @@ let
   };
 in
 {
-  options = {
-    sway.enable = lib.mkEnableOption "Use the Sway window manager";
-  };
-
-  config = lib.mkIf config.sway.enable {
+  config = lib.mkIf config.programs.sway.enable {
     environment.systemPackages = with pkgs; [
       dbus # make dbus-update-activation-environment available in the path
       dbus-sway-environment
@@ -78,7 +74,6 @@ in
 
     # enable sway window manager
     programs.sway = {
-      enable = true;
       wrapperFeatures.gtk = true;
       extraPackages = with pkgs; [
         swaylock
