@@ -17,7 +17,8 @@
                 # completions_endpoint = "https://api.githubcopilot.com/v1/engines/copilot-codex/completions";
                 # completions_endpoint = "https://api.githubcopilot.com/chat/completions";
                 model = "";
-                auth_token_env_var_name = "GH_AUTH_TOKEN";
+                auth_token_env_var_name = "GITHUB_TOKEN";
+                # auth_token_env_var_name = "GH_AUTH_TOKEN";
               };
               deepseek-ollama =
                 let
@@ -33,8 +34,8 @@
             };
 
             completion = rec {
-              # model = "copilot";
-              model = "deepseek-ollama";
+              model = "copilot";
+              # model = "deepseek-ollama";
               parameters =
                 {
                   max_token = 500;
