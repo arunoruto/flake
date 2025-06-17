@@ -20,22 +20,25 @@
 
     dconf.enable = lib.mkForce config.gnome.dconf.enable;
 
-    home.packages = with pkgs.gnomeExtensions; [
-      appindicator
-      blur-my-shell
-      emoji-copy
-      # focus
-      forge
-      pip-on-top
-      tactile
-      tailscale-status
-      tiling-shell
-      # transparent-top-bar
-      transparent-top-bar-adjustable-transparency
-    ];
-    # ++ (with pkgs.unstable.gnomeExtensions; [
-    #   # pip-on-top
-    #   # tiling-shell
-    # ]);
+    home.packages =
+      with pkgs.gnomeExtensions;
+      [
+        appindicator
+        blur-my-shell
+        emoji-copy
+        # focus
+        forge
+        pip-on-top
+        tactile
+        tiling-shell
+        # transparent-top-bar
+        transparent-top-bar-adjustable-transparency
+      ]
+      ++ (with pkgs.unstable.gnomeExtensions; [
+        # pip-on-top
+        tailscale-status
+        tailscale-qs
+        # tiling-shell
+      ]);
   };
 }
