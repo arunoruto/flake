@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, pkgs, ... }:
 {
   imports = [
     ./tailscale
@@ -18,4 +18,6 @@
   services = {
     tailscale.enable = lib.mkDefault true;
   };
+
+  environment.systemPackages = with pkgs; [ wireguard-tools ];
 }
