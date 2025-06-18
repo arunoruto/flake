@@ -87,7 +87,6 @@ builtins.mapAttrs (
       ++ (with inputs; [
         nixos-facter-modules.nixosModules.facter
         home-manager.nixosModules.home-manager
-        nixai.nixosModules.default
         # lix-module.nixosModules.default
         # determinate.nixosModules.default
         # nur.nixosModules.nur
