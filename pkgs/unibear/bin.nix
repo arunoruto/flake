@@ -43,10 +43,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   # nativeBuildInputs = [ autoPatchelfHook ];
 
-  # builInputs = [ libgcc.lib ];
+  # buildInputs = [ libgcc.lib ];
 
   # preBuild = ''
-  #   addAutoPatchelfSearchPath ${lib.makeLibraryPath [ libgcc ]}
+  #   addAutoPatchelfSearchPath ${lib.makeLibraryPath finalAttrs.buildInputs}
   # '';
 
   installPhase = ''
@@ -59,7 +59,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   # preFixup = ''
   #   patchelf \
-  #     --set-rpath "${lib.makeLibraryPath [ libgcc ]}" \
+  #     --set-rpath "${lib.makeLibraryPath finalAttrs.buildInputs}" \
   #     "$out"/bin/${finalAttrs.meta.mainProgram}
   # '';
 
