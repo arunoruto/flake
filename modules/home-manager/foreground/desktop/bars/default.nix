@@ -23,8 +23,8 @@
 
     programs = {
       quickshell = {
-        # enable = lib.mkDefault true;
-        # package = lib.mkDefault pkgs.unstable.quickshell;
+        enable = lib.mkDefault true;
+        package = lib.mkDefault pkgs.unstable.quickshell;
         config-name = lib.mkDefault "caelestia";
         target = lib.mkDefault "hyprland-session";
 
