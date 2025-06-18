@@ -141,21 +141,6 @@
             unstable-packages
           ])
           ++ (with inputs; [ nur.overlays.default ]);
-        # ++ [
-        #   (
-        #     prev: final:
-        #     (
-        #       let
-        #         mypkgs = import inputs.matlab-pr {
-        #           inherit (prev) system;
-        #         };
-        #       in
-        #       {
-        #         fcitx5-mozc = mypkgs.fcitx5-mozc;
-        #       }
-        #     )
-        #   )
-        # ];
         config = {
           allowUnfree = true;
           # nvidia.acceptLicense = true;
@@ -178,7 +163,6 @@
           ;
       };
 
-      # homeConfigurations = lib.genAttrs (lib.lists.unique (builtins.attrValues machines)) (
       homeConfigurations = import ./homes {
         inherit
           inputs
@@ -191,8 +175,6 @@
       };
 
       overlays = import ./overlays { inherit inputs; };
-      # devShells.${system} = import ./shells pkgs lib;
-      # packages.${system} = import ./pkgs pkgs;
 
       colmenaHive = colmena.lib.makeHive self.outputs.colmena;
       colmena =
@@ -203,11 +185,6 @@
           meta = {
             description = "my personal machines";
             nixpkgs = pkgs;
-            # nixpkgs = import nixpkgs {
-            #   inherit system;
-            #   # overlays = [ ];
-            # };
-            # nodeNixpkgs = builtins.mapAttrs (name: value: value.pkgs) conf;
             nodeSpecialArgs = builtins.mapAttrs (name: value: value._module.specialArgs) conf;
           };
         }
