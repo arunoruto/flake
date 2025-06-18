@@ -18,7 +18,11 @@
         set fish_greeting
 
         # set -gx GH_AUTH_TOKEN $(${lib.getExe config.programs.gh.package} auth token)
+        bind \ck 'fg'
       '';
+      # binds = {
+      #   "ctrl-k".command = "fg %";
+      # };
 
       functions = {
         bind_bang.body = ''
