@@ -8,6 +8,9 @@
 # }:
 pkgs:
 rec {
+  adda = pkgs.callPackage ./adda/package.nix { };
+  adda-mpi = pkgs.callPackage ./adda/package.nix { target = "mpi"; };
+  adda-ocl = pkgs.callPackage ./adda/package.nix { target = "ocl"; };
   copilot-language-server = pkgs.callPackage ./copilot-language-server { };
   copilot-language-server-fhs = copilot-language-server.fhs;
   # spirv-reflect = pkgs.callPackage ./spirv-reflect { };
