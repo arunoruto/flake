@@ -8,12 +8,11 @@
 {
   imports = [
     ./ai
+    ./grammar
     ./programming
 
-    ./codebook.nix
     ./shells.nix
     ./latex.nix
-    ./ltex.nix
     ./markdown.nix
     ./markup.nix
     ./nix.nix
