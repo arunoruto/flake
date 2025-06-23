@@ -10,9 +10,12 @@
 
   # Fix 6GHz problem
   # https://community.frame.work/t/responded-amd-rz616-wifi-card-doesnt-work-with-6ghz-on-kernel-6-7/43226
-  boot.extraModprobeConfig = ''
-    options mt7921_common disable_clc=1
-  '';
+  boot = {
+    extraModprobeConfig = ''
+      options mt7921_common disable_clc=1
+    '';
+    blacklistedKernelModules = [ "hid_sensor_hub" ];
+  };
 
   # hardware.framework.enableKmod = false;
 
