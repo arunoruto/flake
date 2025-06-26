@@ -2,9 +2,12 @@
   lib,
   stdenv,
   stdenvNoCC,
+  makeWrapper,
   buildFHSEnv,
   fetchzip,
   nix-update-script,
+  autoPatchelfHook,
+  glibc,
 
   testers,
 }:
@@ -44,6 +47,10 @@ let
         description =
           package.meta.description
           + " (FHS-wrapped). Use this version if you have trouble with the normal one.";
+        platforms = [
+          "x86_64-linux"
+          "aarch64-linux"
+        ];
       };
     };
 in
@@ -57,12 +64,26 @@ env.mkDerivation (finalAttrs: {
     stripRoot = false;
   };
 
+  nativeBuildInputs = [
+    # autoPatchelfHook
+    makeWrapper
+  ];
+  buildInputs = [
+    stdenv.cc.cc.lib
+    glibc
+  ];
+
   installPhase = ''
     runHook preInstall
 
     install "${os}-${arch}/${executableName}" -Dm755 -t "$out"/bin
 
     runHook postInstall
+  '';
+
+  postInstall = ''
+    wrapProgram $out/bin/${executableName} \
+      --set LD_LIBRARY_PATH ${lib.makeLibraryPath [ stdenv.cc.cc.lib ]} 
   '';
 
   dontStrip = true;
@@ -90,7 +111,6 @@ env.mkDerivation (finalAttrs: {
       "aarch64-linux"
       "x86_64-darwin"
       "aarch64-darwin"
-      "arm64-apple-darwin"
     ];
     maintainers = with lib.maintainers; [
       arunoruto
