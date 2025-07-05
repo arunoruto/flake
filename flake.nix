@@ -150,7 +150,7 @@
     {
       inherit lib pkgs;
       nixosModules.default = ./modules/nixos;
-      homeManagerModules.default = ./modules/home-manager/home.nix;
+      homeModules.default = ./modules/home-manager/home.nix;
 
       nixosConfigurations = import ./systems {
         inherit

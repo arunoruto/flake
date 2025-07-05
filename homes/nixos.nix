@@ -68,7 +68,7 @@ in
       // {
         imports = [
           ./${username}
-          flake.homeManagerModules.default
+          flake.homeModules.default
         ];
         options.user = lib.mkOption {
           type = lib.types.str;

@@ -19,7 +19,7 @@ lib.genAttrs unique-users (
       [
         # inputs.nur.hmModules.nur
         # ./modules/home-manager/home.nix
-        self.homeManagerModules.default
+        self.homeModules.default
         (
           { lib, ... }:
           {
