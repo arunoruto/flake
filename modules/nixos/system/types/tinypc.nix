@@ -14,7 +14,6 @@
     latex.enable = false;
     programming.enable = false;
     upgrades.enable = true;
-    stylix.enable = false;
 
     programs.nix-ld.enable = lib.mkForce false;
     services = {
