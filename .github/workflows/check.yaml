@@ -30,6 +30,9 @@ jobs:
     needs: [check-lock]
     # strategy:
     #   fail-fast: false
+    concurrency:
+      group: ${{ github.workflow }}-flake
+      cancel-in-progress: false
     steps:
       - name: Checkout
         uses: actions/checkout@v4
