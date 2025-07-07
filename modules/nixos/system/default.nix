@@ -19,6 +19,7 @@
     ./systemd.nix
     ./theming.nix
     ./upgrade.nix
+    ./zfs.nix
 
     ./amd
     ./intel
