@@ -157,6 +157,12 @@ To clean up such systems, you can use the following commands:
   but extends it with the `--delete-older-than` and `--delete-old` flag.
 - `nh clean all`: clean everything using the `nh` tool.
 
+## Non-Nix related stuff
+
+### ZFS
+
+A nice guide on how to setup ZFS on NixOS is provided by [return12](https://www.return12.net/zfs-on-nixos/).
+
 ## TODO
 
 - Integrate [disko](https://github.com/nix-community/disko) for each system,
