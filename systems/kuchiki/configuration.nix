@@ -5,7 +5,15 @@
   ...
 }:
 {
-  hosts.amd.enable = true;
+  hosts = {
+    amd = {
+      enable = true;
+      gpu.enable = true;
+    };
+    zfs.enable = true;
+  };
+  networking.hostId = "7923f829";
+
   # display-manager.enable = lib.mkForce false;
   # desktop-environment.enable = lib.mkForce false;
   display-manager.enable = false;
@@ -17,10 +25,6 @@
   # steam.enable = false;
   # home.pc.enable = false;
   programs.enable = false;
-
-  boot = {
-    kernelModules = [ "amdgpu" ];
-  };
 
   services = {
     # hddfancontrol = {
