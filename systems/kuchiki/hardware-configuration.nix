@@ -46,6 +46,11 @@
   fileSystems."/mnt/storage/media" = {
     device = "storage/media";
     fsType = "zfs";
+    options = [
+      "zfsutil"
+      "rw"
+      "acl"
+    ];
   };
 
   swapDevices = [ ];

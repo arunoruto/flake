@@ -18,7 +18,6 @@
   # desktop-environment.enable = lib.mkForce false;
   display-manager.enable = false;
   desktop-environment.enable = false;
-  media.enable = true;
 
   # firefox.enable = false;
   # chrome.enable = false;
@@ -27,6 +26,12 @@
   programs.enable = false;
 
   services = {
+    media = {
+      enable = true;
+      openFirewall = true;
+    };
+    jellyfin.openFirewall = true;
+    # plex.openFirewall = true;
     # hddfancontrol = {
     #   enable = false;
     #   disks = [
@@ -46,6 +51,8 @@
         KEY_FILE = config.sops.secrets."tokens/beszel-marvin".path;
         EXTRA_FILESYSTEMS = lib.strings.concatStringsSep "," [
           "nvme0n1p1"
+          "/mnt/storage"
+          "/mnt/storage/media"
         ];
       };
       openFirewall = true;
