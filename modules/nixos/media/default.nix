@@ -9,6 +9,7 @@
     ./bosflix.nix
     ./external-drives.nix
     ./jellyfin.nix
+    ./paperless.nix
     ./plex.nix
     ./qbittorrent.nix
   ];
