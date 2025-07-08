@@ -24,7 +24,7 @@
 
   desktop-environment.enable = lib.mkDefault true;
   display-manager.enable = lib.mkDefault true;
-  media.enable = lib.mkDefault false;
+  services.media.enable = lib.mkDefault false;
   programs.enable = lib.mkDefault true;
 
   nix = {

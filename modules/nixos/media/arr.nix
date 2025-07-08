@@ -5,23 +5,24 @@
   ...
 }:
 {
-  options = {
-    arr.enable = lib.mkEnableOption "Enable arr frameworks";
-  };
+  options.services.arr.enable = lib.mkEnableOption "Enable arr frameworks";
 
-  config = lib.mkIf config.arr.enable {
+  config = lib.mkIf config.services.arr.enable {
     services = {
       radarr = {
-        enable = true;
-        package = pkgs.unstable.radarr;
+        enable = lib.mkDefault true;
+        package = lib.mkDefault pkgs.unstable.radarr;
+        openFirewall = lib.mkDefault config.services.media.openFirewall;
       };
       sonarr = {
-        enable = true;
-        package = pkgs.unstable.sonarr;
+        enable = lib.mkDefault true;
+        package = lib.mkDefault pkgs.unstable.sonarr;
+        openFirewall = lib.mkDefault config.services.media.openFirewall;
       };
       bazarr = {
-        enable = true;
-        # package = pkgs.unstable.bazarr;
+        enable = lib.mkDefault true;
+        package = lib.mkDefault pkgs.unstable.bazarr;
+        openFirewall = lib.mkDefault config.services.media.openFirewall;
       };
     };
 

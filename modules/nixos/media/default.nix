@@ -8,15 +8,22 @@
     ./arr.nix
     ./bosflix.nix
     ./external-drives.nix
+    ./jellyfin.nix
     ./plex.nix
     ./qbittorrent.nix
   ];
 
-  options.media.enable = lib.mkEnableOption "Enable media services";
+  options.services.media = {
+    enable = lib.mkEnableOption "Enable media services";
+    openFirewall = lib.mkEnableOption "Open all firewall ports of media services";
+  };
 
-  config = lib.mkIf config.media.enable {
-    arr.enable = lib.mkDefault true;
-    plex.enable = lib.mkDefault true;
+  config = lib.mkIf config.services.media.enable {
+    services = {
+      arr.enable = lib.mkDefault true;
+      jellyfin.enable = lib.mkDefault true;
+      plex.enable = lib.mkDefault true;
+    };
 
     media.external-drives.enable = lib.mkDefault true;
   };
