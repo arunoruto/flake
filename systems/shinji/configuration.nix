@@ -19,10 +19,12 @@
   # tpm.enable = true;
   media.external-drives.enable = true;
 
-  plex.enable = true;
   services = {
     cloudflared.enable = true;
-    plex.accelerationDevices = [ "/dev/dri/renderD128" ];
+    plex = {
+      enable = true;
+      accelerationDevices = [ "/dev/dri/renderD128" ];
+    };
     xrdp = {
       enable = true;
       defaultWindowManager = "kodi";
