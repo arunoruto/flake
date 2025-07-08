@@ -161,7 +161,9 @@ To clean up such systems, you can use the following commands:
 
 ### ZFS
 
-A nice guide on how to setup ZFS on NixOS is provided by [return12](https://www.return12.net/zfs-on-nixos/).
+- A nice guide on how to setup ZFS on NixOS is provided by [return12](https://www.return12.net/zfs-on-nixos/).
+- [Some Dude Says: The Basic Guide to Working with ZFS](https://somedudesays.com/2021/08/the-basic-guide-to-working-with-zfs/)
+- [LevelOneTechs: ZFS Guide for starters and advanced users. Concepts, pool config, tuning, troubleshooting](https://forum.level1techs.com/t/zfs-guide-for-starters-and-advanced-users-concepts-pool-config-tuning-troubleshooting/196035)
 
 ## TODO
 
