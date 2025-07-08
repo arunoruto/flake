@@ -8,7 +8,7 @@
   # desktop-environment.enable = lib.mkForce false;
   display-manager.enable = false;
   desktop-environment.enable = false;
-  media.enable = true;
+  services.media.enable = true;
 
   firefox.enable = false;
   chrome.enable = false;
