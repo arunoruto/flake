@@ -96,12 +96,14 @@
     };
   };
 
-  home.packages = with pkgs; [
-    broot
-    devenv
-    fx
-    gping
-    up
-    q
-  ];
+  home.packages =
+    (with pkgs; [
+      broot
+      devenv
+      fx
+      gping
+      up
+      q
+    ])
+    ++ (with pkgs.unstable; [ gemini-cli ]);
 }
