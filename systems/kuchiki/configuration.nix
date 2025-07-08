@@ -31,8 +31,7 @@
       dataDir = "/mnt/storage/appdata";
       openFirewall = true;
     };
-    jellyfin.openFirewall = true;
-    # plex.openFirewall = true;
+    syncthing.enable = true;
     # hddfancontrol = {
     #   enable = false;
     #   disks = [

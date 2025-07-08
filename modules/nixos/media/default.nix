@@ -12,13 +12,14 @@
     ./paperless.nix
     ./plex.nix
     ./qbittorrent.nix
+    ./syncthing.nix
   ];
 
   options.services.media = {
     enable = lib.mkEnableOption "Enable media services";
     dataDir = lib.mkOption {
       type = lib.types.path;
-      default = "/var/lib/media";
+      default = "/var/lib";
       description = "Directory to store media data";
     };
     openFirewall = lib.mkEnableOption "Open all firewall ports of media services";

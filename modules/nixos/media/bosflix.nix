@@ -44,7 +44,6 @@
 
         syncthing = {
           enable = true;
-          guiAddress = "0.0.0.0:8384";
 
           settings = {
             devices = {
@@ -57,11 +56,23 @@
                 ];
                 id = "ARZDFKU-CFAXQEM-ZTBEVH6-DGU7E55-JNLRTVM-VKG7JW5-D6B25X3-IRPISQH";
               };
+              kuchiki = {
+                addresses = [
+                  "dynamic"
+                  "tcp://kuchiki"
+                  "tcp://kuchiki:22000"
+                  "quic://kuchiki:22000"
+                ];
+                id = "C4TO46K-P5LXFD6-NULLWDR-A5MYGJ2-EQDBNOC-CZHYJNJ-33DJHWA-SPQ6RQ7";
+              };
             };
             folders."downloads shinji" = {
               enable = true;
               path = completedPath;
-              devices = [ "lil-nas-x" ];
+              devices = [
+                "lil-nas-x"
+                "kuchiki"
+              ];
             };
           };
         };
