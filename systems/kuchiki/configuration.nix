@@ -28,6 +28,7 @@
   services = {
     media = {
       enable = true;
+      dataDir = "/mnt/storage/appdata";
       openFirewall = true;
     };
     jellyfin.openFirewall = true;
