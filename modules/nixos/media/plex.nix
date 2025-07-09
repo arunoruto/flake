@@ -15,5 +15,7 @@
         dataDir = lib.mkDefault "${cfg.dataDir}/plex";
         openFirewall = lib.mkDefault cfg.openFirewall;
       };
+
+    users.users.plex.extraGroups = [ config.users.groups.media.name ];
   };
 }

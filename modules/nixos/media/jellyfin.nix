@@ -15,5 +15,7 @@
         dataDir = lib.mkDefault "${cfg.dataDir}/jellyfin";
         openFirewall = lib.mkDefault config.services.media.openFirewall;
       };
+
+    users.users.jellyfin.extraGroups = [ config.users.groups.media.name ];
   };
 }

@@ -5,7 +5,6 @@
 }:
 {
   imports = [
-    ./arr.nix
     ./bosflix.nix
     ./external-drives.nix
     ./jellyfin.nix
@@ -13,6 +12,8 @@
     ./plex.nix
     ./qbittorrent.nix
     ./syncthing.nix
+
+    ./arr
   ];
 
   options.services.media = {
@@ -32,6 +33,12 @@
       plex.enable = lib.mkDefault true;
     };
 
+    users.groups.media = {
+      gid = 420;
+      members = [ config.username ];
+    };
+
     media.external-drives.enable = lib.mkDefault true;
+
   };
 }
