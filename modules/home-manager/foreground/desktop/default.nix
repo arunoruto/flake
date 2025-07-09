@@ -25,6 +25,7 @@
       hyprland.enable = lib.mkDefault true;
       sway.enable = lib.mkDefault false;
     };
+    xdg.portal.enable = lib.mkDefault true;
 
     home.packages =
       (with pkgs; [

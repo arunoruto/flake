@@ -20,6 +20,11 @@
 
     dconf.enable = lib.mkForce config.gnome.dconf.enable;
 
+    xdg.portal.extraPortals = with pkgs; [
+      xdg-desktop-portal-gtk
+      xdg-desktop-portal-gnome
+    ];
+
     home.packages =
       with pkgs.gnomeExtensions;
       [
