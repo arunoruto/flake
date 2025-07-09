@@ -16,6 +16,8 @@
         openFirewall = lib.mkDefault config.services.media.openFirewall;
       };
 
-    users.users.jellyfin.extraGroups = [ config.users.groups.media.name ];
+    users.users.jellyfin.extraGroups = lib.optionals (config.users.groups ? "media") [
+      config.users.groups.media.name
+    ];
   };
 }

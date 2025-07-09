@@ -251,7 +251,9 @@
           };
         };
       };
-    users.users.sonarr.extraGroups = [ config.users.groups.media.name ];
+    users.users.sonarr.extraGroups = lib.optionals (config.users.groups ? "media") [
+      config.users.groups.media.name
+    ];
 
     sops.secrets."tokens/arr/sonarr" = {
       mode = "0660";

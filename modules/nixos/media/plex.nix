@@ -16,6 +16,8 @@
         openFirewall = lib.mkDefault cfg.openFirewall;
       };
 
-    users.users.plex.extraGroups = [ config.users.groups.media.name ];
+    users.users.plex.extraGroups = lib.optionals (config.users.groups ? "media") [
+      config.users.groups.media.name
+    ];
   };
 }

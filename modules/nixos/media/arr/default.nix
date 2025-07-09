@@ -35,8 +35,12 @@
       };
 
     users.users = {
-      bazarr.extraGroups = [ config.users.groups.media.name ];
-      recyclarr.extraGroups = [ config.users.groups.media.name ];
+      bazarr.extraGroups = lib.optionals (config.users.groups ? "media") [
+        config.users.groups.media.name
+      ];
+      recyclarr.extraGroups = lib.optionals (config.users.groups ? "media") [
+        config.users.groups.media.name
+      ];
     };
   };
 }

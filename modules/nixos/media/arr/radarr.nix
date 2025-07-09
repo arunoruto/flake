@@ -18,6 +18,14 @@
           package = lib.mkDefault pkgs.unstable.radarr;
           dataDir = lib.mkDefault "${cfg.dataDir}/radarr";
           openFirewall = lib.mkDefault cfg.openFirewall;
+          environmentFiles = lib.mkDefault [
+            (pkgs.writeTextFile {
+              name = "radarr-env";
+              text = ''
+                RADARR__AUTH__METHOD=External
+              '';
+            }).outPath
+          ];
         };
         recyclarr.configuration.radarr = lib.optionalAttrs config.services.radarr.enable {
           movies = {
@@ -250,7 +258,10 @@
           };
         };
       };
-    users.users.radarr.extraGroups = [ config.users.groups.media.name ];
+
+    users.users.radarr.extraGroups = lib.optionals (config.users.groups ? "media") [
+      config.users.groups.media.name
+    ];
 
     sops.secrets."tokens/arr/radarr" = {
       mode = "0660";
