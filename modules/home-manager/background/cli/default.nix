@@ -6,6 +6,7 @@
   imports = [
     # ./dprint
     ./astral.nix
+    ./fastfetch.nix
     ./helix
     ./tmux
     ./bat.nix
