@@ -7,14 +7,14 @@
 {
 
   programs.ghostty = {
-    # package = pkgs.unstable.ghostty;
-    package = pkgs.unstable.ghostty.overrideAttrs (_: {
-      preBuild = ''
-        shopt -s globstar
-        sed -i 's/^const xev = @import("xev");$/const xev = @import("xev").Epoll;/' **/*.zig
-        shopt -u globstar
-      '';
-    });
+    package = pkgs.unstable.ghostty;
+    # package = pkgs.unstable.ghostty.overrideAttrs (_: {
+    #   preBuild = ''
+    #     shopt -s globstar
+    #     sed -i 's/^const xev = @import("xev");$/const xev = @import("xev").Epoll;/' **/*.zig
+    #     shopt -u globstar
+    #   '';
+    # });
 
     enableBashIntegration = lib.mkDefault true;
     enableFishIntegration = lib.mkDefault true;
