@@ -18,6 +18,14 @@
           package = lib.mkDefault pkgs.unstable.sonarr;
           dataDir = lib.mkDefault "${cfg.dataDir}/sonarr";
           openFirewall = lib.mkDefault cfg.openFirewall;
+          environmentFiles = lib.mkDefault [
+            (pkgs.writeTextFile {
+              name = "sonarr-env";
+              text = ''
+                SONARR__AUTH__METHOD=External
+              '';
+            }).outPath
+          ];
         };
         recyclarr.configuration.sonarr = lib.optionalAttrs config.services.sonarr.enable {
           series = {
@@ -256,7 +264,7 @@
     ];
 
     sops.secrets."tokens/arr/sonarr" = {
-      mode = "0660";
+      mode = "0666";
       inherit (config.services.recyclarr) group;
     };
   };

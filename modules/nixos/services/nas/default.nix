@@ -6,6 +6,7 @@
 {
   imports = [
     ./drives.nix
+    ./homepage.nix
     ./nfs.nix
   ];
 

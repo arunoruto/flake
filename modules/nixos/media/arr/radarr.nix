@@ -23,6 +23,7 @@
               name = "radarr-env";
               text = ''
                 RADARR__AUTH__METHOD=External
+                # RADARR__SERVER__URLBASE=/radarr
               '';
             }).outPath
           ];
@@ -264,7 +265,7 @@
     ];
 
     sops.secrets."tokens/arr/radarr" = {
-      mode = "0660";
+      mode = "0666";
       inherit (config.services.recyclarr) group;
     };
   };

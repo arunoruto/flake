@@ -26,6 +26,7 @@
   programs.enable = false;
 
   services = {
+    homepage-dashboard.enable = true;
     media = {
       enable = true;
       dataDir = "/mnt/storage/appdata";
