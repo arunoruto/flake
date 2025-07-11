@@ -131,6 +131,10 @@ in
       };
     };
 
+    gitui = {
+      enable = true;
+    };
+
     bash = lib.mkIf config.programs.bash.enable {
       inherit shellAliases;
     };
