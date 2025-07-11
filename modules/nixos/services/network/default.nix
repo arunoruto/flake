@@ -12,12 +12,13 @@
   ];
 
   local-resolv.enable = lib.mkDefault true;
-  localsend.enable = lib.mkDefault true;
   netbird.enable = lib.mkDefault false;
 
   services = {
     tailscale.enable = lib.mkDefault true;
   };
-
+  programs = {
+    localsend.enable = lib.mkDefault true;
+  };
   environment.systemPackages = with pkgs; [ wireguard-tools ];
 }
