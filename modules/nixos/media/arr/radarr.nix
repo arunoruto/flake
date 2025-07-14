@@ -11,6 +11,8 @@
     services =
       let
         cfg = config.services.media;
+        service = "radarr";
+        url-path = "/${service}";
       in
       {
         radarr = {
@@ -23,7 +25,7 @@
               name = "radarr-env";
               text = ''
                 RADARR__AUTH__METHOD=External
-                # RADARR__SERVER__URLBASE=/radarr
+                RADARR__SERVER__URLBASE=${url-path}
               '';
             }).outPath
           ];
@@ -254,6 +256,21 @@
                   "bfd8eb01832d646a0a89c4deb46f8564" # Upscaled
                   "dc98083864ea246d05a42df0d05f81cc" # x265 (HD)
                 ];
+              }
+            ];
+          };
+        };
+        traefik.dynamicConfigOptions = lib.optionalAttrs config.services.tailscale.enable {
+          http = {
+            routers."${service}" = {
+              rule = "Host(`${config.networking.hostName}.${config.services.tailscale.tailnet}.ts.net`) && PathPrefix(`${url-path}`)";
+              tls.certresolver = "ts";
+              entrypoints = [ "websecure" ];
+              service = service;
+            };
+            services."${service}".loadbalancer.servers = [
+              {
+                url = "http://localhost:${builtins.toString config.services.${service}.settings.server.port}";
               }
             ];
           };

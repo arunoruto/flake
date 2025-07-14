@@ -11,6 +11,8 @@
     services =
       let
         cfg = config.services.media;
+        service = "sonarr";
+        url-path = "/${service}";
       in
       {
         sonarr = {
@@ -23,6 +25,7 @@
               name = "sonarr-env";
               text = ''
                 SONARR__AUTH__METHOD=External
+                SONARR__SERVER__URLBASE=${url-path}
               '';
             }).outPath
           ];
@@ -254,6 +257,21 @@
                   "23297a736ca77c0fc8e70f8edd7ee56c" # Upscaled
                   "47435ece6b99a0b477caf360e79ba0bb" # x265 (HD)
                 ];
+              }
+            ];
+          };
+        };
+        traefik.dynamicConfigOptions = lib.optionalAttrs config.services.tailscale.enable {
+          http = {
+            routers."${service}" = {
+              rule = "Host(`${config.networking.hostName}.${config.services.tailscale.tailnet}.ts.net`) && PathPrefix(`${url-path}`)";
+              tls.certresolver = "ts";
+              entrypoints = [ "websecure" ];
+              service = service;
+            };
+            services."${service}".loadbalancer.servers = [
+              {
+                url = "http://localhost:${builtins.toString config.services.${service}.settings.server.port}";
               }
             ];
           };

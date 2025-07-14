@@ -38,19 +38,29 @@
     ];
   };
 
-  fileSystems."/mnt/storage" = {
-    device = "storage";
+  fileSystems."/mnt/storage/appdata" = {
+    device = "storage/appdata";
+    fsType = "zfs";
+  };
+
+  fileSystems."/mnt/storage/downloads" = {
+    device = "storage/downloads";
     fsType = "zfs";
   };
 
   fileSystems."/mnt/storage/media" = {
     device = "storage/media";
     fsType = "zfs";
-    options = [
-      "zfsutil"
-      "rw"
-      "acl"
-    ];
+    # options = [
+    #   "zfsutil"
+    #   "rw"
+    #   "acl"
+    # ];
+  };
+
+  fileSystems."/mnt/storage" = {
+    device = "storage";
+    fsType = "zfs";
   };
 
   swapDevices = [ ];

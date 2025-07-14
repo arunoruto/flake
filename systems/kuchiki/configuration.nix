@@ -10,8 +10,10 @@
       enable = true;
       gpu.enable = true;
     };
+    nvidia.enable = true;
     zfs.enable = true;
   };
+  systemd.services.zfs-mount.enable = false;
   networking.hostId = "7923f829";
 
   # display-manager.enable = lib.mkForce false;
@@ -26,6 +28,7 @@
   programs.enable = false;
 
   services = {
+    traefik.enable = true;
     homepage-dashboard.enable = true;
     media = {
       enable = true;
