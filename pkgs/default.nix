@@ -20,10 +20,14 @@ rec {
   # dpcpp = pkgs.callPackage ./dpcpp { };
   # dpcpp-bin = pkgs.callPackage ./dpcpp/bin.nix { };
   dpcpp-prop = pkgs.callPackage ./dpcpp/proprietary4.nix { };
+  # fileflows = pkgs.callPackage ./fileflows/package.nix { };
   # banana-cursor = pkgs.callPackage ./banana-cursor/package.nix {};
   # zluda-rocm5 = pkgs.callPackage ./zluda-rocm5/package.nix { };
   # candy-icons = pkgs.callPackage ./candy-icons/package.nix { };
   mstm = pkgs.callPackage ./mstm { enableMPI = false; };
+  # tdarr = pkgs.callPackage ./tdarr/package.nix { };
+  # tdarr-node = pkgs.callPackage ./tdarr/node.nix { };
+  # tdarr-server = pkgs.callPackage ./tdarr/server.nix { };
   teaftp = pkgs.callPackage ./teaftp/package.nix { };
   tftp-now = pkgs.callPackage ./tftp-now/package.nix { };
   unibear = pkgs.callPackage ./unibear/bin.nix { };
