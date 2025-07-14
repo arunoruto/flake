@@ -1,9 +1,15 @@
-{ lib, config, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 {
   options.hosts.zfs.enable = lib.mkEnableOption "Enable ZFS config for host";
 
   config = lib.mkIf config.hosts.zfs.enable {
     boot = {
+      kernelPackages = lib.mkDefault pkgs.linuxPackages;
       supportedFilesystems = {
         zfs = lib.mkDefault true;
       };
