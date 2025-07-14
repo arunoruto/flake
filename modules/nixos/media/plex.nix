@@ -19,5 +19,8 @@
     users.users.plex.extraGroups = lib.optionals (config.users.groups ? "media") [
       config.users.groups.media.name
     ];
+
+    # libva conflicts with plex
+    # hardware.graphics.extraPackages = lib.mkForce (with pkgs; [ nvidia-vaapi-driver ]);
   };
 }

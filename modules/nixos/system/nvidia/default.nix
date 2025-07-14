@@ -24,6 +24,7 @@
 
     hardware = {
       nvidia = {
+        open = lib.mkDefault false;
         powerManagement = {
           enable = lib.mkDefault false;
           finegrained = lib.mkDefault false;
@@ -57,10 +58,14 @@
       graphics = {
         enable = lib.mkDefault true;
         enable32Bit = true;
-        extraPackages = with pkgs; [
-          nvidia-vaapi-driver
-          libva
-        ];
+        extraPackages =
+          with pkgs;
+          [
+            nvidia-vaapi-driver
+          ]
+          ++ lib.optionals (!config.services.plex.enable) [
+            libva
+          ];
       };
     };
   };
