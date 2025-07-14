@@ -9,6 +9,13 @@ let
 in
 {
   imports = [ ./derper.nix ];
+
+  options.services.tailscale.tailnet = lib.mkOption {
+    type = lib.types.nullOr lib.types.str;
+    default = null;
+    description = "Tailnet name for Tailscale.";
+  };
+
   config = lib.mkIf config.services.tailscale.enable {
     services.tailscale = {
       package = pkgs.unstable.tailscale;
@@ -24,6 +31,7 @@ in
       extraSetFlags = lib.optionals (config.hosts.tinypc.enable) [
         "--advertise-exit-node"
       ];
+      permitCertUid = if config.services.traefik.enable then "traefik" else null;
     };
 
     networking = {
