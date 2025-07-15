@@ -8,8 +8,8 @@ let
   catppuccin-warp = pkgs.fetchFromGitHub {
     owner = "catppuccin";
     repo = "warp";
-    rev = "7e3328b346ebe5ca7c59cfaa2b4bce755db62094";
-    sha256 = "sha256-pUmO0po/fSPXIcKstWocCSX+Yg5l+H9JsEva+pCLNhI=";
+    rev = "b6891cc339b3a1bb70a5c3063add4bdbd0455603";
+    hash = "sha256-ypzSeSWT2XfdjfdeE/lLdiRgRmxewAqiWhGp6jjF7hE=";
   };
 in
 {
@@ -17,9 +17,7 @@ in
 
   config = lib.mkIf config.programs.warp.enable {
     home = {
-      packages = with pkgs; [
-        unstable.warp-terminal
-      ];
+      packages = [ pkgs.unstable.warp-terminal ];
 
       file.".local/share/warp-terminal/themes/catppuccin" = {
         source = "${catppuccin-warp}/themes";
