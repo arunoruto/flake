@@ -1,13 +1,11 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 {
-  options = {
-    pipewire.enable = lib.mkEnableOption "Enable pipewire";
-  };
-  config = lib.mkIf config.pipewire.enable {
+  config = lib.mkIf config.services.pipewire.enable {
     # Enable sound with pipewire.
     # sound.enable = lib.mkForce false;
     services.pulseaudio.enable = false;
@@ -16,7 +14,6 @@
 
     # Helpful config: https://nixos.wiki/wiki/PipeWire
     services.pipewire = {
-      enable = true;
       audio.enable = true;
       alsa = {
         enable = true;
@@ -26,5 +23,7 @@
       # If you want to use JACK applications, uncomment this
       jack.enable = true;
     };
+
+    environment.systemPackages = [ pkgs.easyeffects ];
   };
 }

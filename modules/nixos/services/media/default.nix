@@ -4,5 +4,5 @@
     ./sound.nix
   ];
 
-  pipewire.enable = lib.mkDefault true;
+  services.pipewire.enable = lib.mkDefault true;
 }
