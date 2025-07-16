@@ -8,7 +8,7 @@
     # Enable TLP and powertop for better battery life
     services = {
       # PPD and TLP don't work together!
-      # power-profiles-daemon.enable = lib.mkDefault false;
+      # power-profiles-daemon.enable = lib.mkForce false;
       tlp.settings = {
         CPU_BOOST_ON_AC = 1;
         CPU_BOOST_ON_BAT = 0;

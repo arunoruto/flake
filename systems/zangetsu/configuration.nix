@@ -25,7 +25,7 @@
   # Enable TLP and powertop for better battery life
   services = {
     tlp.enable = true;
-    # power-profiles-daemon.enable = false;
+    power-profiles-daemon.enable = false;
     # tlp = {
     #   enable = true;
     #   settings = {
