@@ -9,7 +9,7 @@
 
   config = lib.mkIf config.hosts.zfs.enable {
     boot = {
-      kernelPackages = lib.mkDefault pkgs.linuxPackages;
+      kernelPackages = pkgs.linuxPackages;
       supportedFilesystems = {
         zfs = lib.mkDefault true;
       };
