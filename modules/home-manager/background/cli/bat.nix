@@ -5,20 +5,16 @@
   ...
 }:
 let
-
   shellAliases = {
     cat = "bat -pp";
     less = "bat --paging=always --wrap=never";
   };
 in
 {
-  options.bat.enable = lib.mkEnableOption "Enable cat rust alternative";
-
-  config = lib.mkIf config.bat.enable {
+  config = lib.mkIf config.programs.bat.enable {
     programs =
       {
         bat = {
-          enable = true;
           # config = {
           #   #paging = "never";
           #   #style = "plain";

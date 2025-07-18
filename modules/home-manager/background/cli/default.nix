@@ -5,6 +5,7 @@
 {
   imports = [
     # ./dprint
+    ./atuin.nix
     ./astral.nix
     ./fastfetch.nix
     ./helix
@@ -20,13 +21,14 @@
   ];
 
   config = {
-    bat.enable = lib.mkDefault true;
     helix.enable = lib.mkDefault true;
-    serpl.enable = lib.mkDefault true;
-    zellij.enable = lib.mkDefault true;
 
     programs = {
+      atuin.enable = lib.mkDefault true;
+      bat.enable = lib.mkDefault true;
+      serpl.enable = lib.mkDefault true;
       yazi.enable = lib.mkDefault true;
+      zellij.enable = lib.mkDefault true;
     };
   };
 }
