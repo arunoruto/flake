@@ -1,3 +1,4 @@
+{ config, lib, ... }:
 {
   programs = {
     helix.settings.keys = {
@@ -19,6 +20,15 @@
         #   l = "goto_next_buffer";
         #   x = ":buffer-close";
         # };
+        "C-y" = [
+          ":sh rm -f /tmp/unique-file"
+          ":insert-output ${lib.getExe config.programs.yazi.package} %{buffer_name} --chooser-file=/tmp/unique-file"
+          ":insert-output echo '\x1b[?1049h\x1b[?2004h' > /dev/tty"
+          ":open %sh{cat /tmp/unique-file}"
+          ":redraw"
+          ":set mouse false"
+          ":set mouse true"
+        ];
       };
       insert = {
         "C-p" = "signature_help";
