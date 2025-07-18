@@ -22,13 +22,6 @@
   ];
 
   programs = {
-    atuin = {
-      enable = true;
-      flags = [
-        "--disable-up-arrow"
-      ];
-    };
-
     # Bash
     bash.initExtra = ''eval "$(direnv hook bash)"'';
 
