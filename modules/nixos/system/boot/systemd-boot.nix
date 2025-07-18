@@ -12,7 +12,7 @@
         enable = lib.mkDefault true;
         memtest86.enable = true;
       };
-      efi.canTouchEfiVariables = config.efi.enable;
+      efi.canTouchEfiVariables = lib.mkDefault true;
     };
   };
 }
