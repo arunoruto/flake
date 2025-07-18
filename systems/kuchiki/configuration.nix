@@ -10,7 +10,8 @@
       enable = true;
       gpu.enable = true;
     };
-    nvidia.enable = true;
+    intel.gpu.enable = true;
+    # nvidia.enable = true;
     zfs.enable = true;
   };
   systemd.services.zfs-mount.enable = false;
