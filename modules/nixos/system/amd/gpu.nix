@@ -14,7 +14,9 @@
     environment = {
       systemPackages = with pkgs; [
         amdgpu_top
+        radeontop
         nvtopPackages.amd
+        rocmPackages.amdsmi
       ];
       sessionVariables = {
         GSK_RENDERER = "gl";
