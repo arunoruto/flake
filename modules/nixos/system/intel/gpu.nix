@@ -10,6 +10,7 @@
   config = lib.mkIf config.hosts.intel.gpu.enable {
     environment.systemPackages = with pkgs; [
       intel-gpu-tools
+      nvtopPackages.intel
     ];
 
     hardware.graphics = {
