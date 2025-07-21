@@ -1,5 +1,10 @@
 { config, ... }:
 {
+  nix.settings = {
+    max-jobs = 1;
+    cores = 0;
+  };
+
   hosts.tinypc.enable = true;
 
   fwupd.enable = false;
@@ -28,7 +33,9 @@
           dashboard = true;
           insecure = true;
         };
-
+        accessLog = {
+          format = "common";
+        };
       };
       dynamicConfigOptions = {
         http = {
@@ -47,6 +54,13 @@
               tls.certresolver = "cf";
               service = "whoami";
             };
+            plex = {
+              # rule = "Host(`bosflix.arnaut.me`) && Path(`/web`)";
+              rule = "Host(`bosflix.arnaut.me`)";
+              entrypoints = "websecure";
+              tls.certresolver = "cf";
+              service = "plex";
+            };
           };
           middlewares.www-arnaut.redirectregex = {
             regex = "^https://arnaut\\.me/(.*)";
@@ -58,6 +72,13 @@
               loadbalancer.servers = [
                 {
                   url = "http://localhost:${builtins.toString config.services.whoami.port}";
+                }
+              ];
+            };
+            plex = {
+              loadbalancer.servers = [
+                {
+                  url = "http://kuchiki.sparrow-yo.ts.net:32400";
                 }
               ];
             };
