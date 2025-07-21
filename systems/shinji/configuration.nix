@@ -21,6 +21,7 @@
 
   services = {
     cloudflared.enable = true;
+    traefik.enable = true;
     plex = {
       enable = true;
       accelerationDevices = [ "/dev/dri/renderD128" ];

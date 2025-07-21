@@ -28,6 +28,8 @@
 
   config = lib.mkIf config.services.media.enable {
     services = {
+      radarr.enable = lib.mkDefault true;
+      sonarr.enable = lib.mkDefault true;
       arr.enable = lib.mkDefault true;
       jellyfin.enable = lib.mkDefault true;
       plex.enable = lib.mkDefault true;
