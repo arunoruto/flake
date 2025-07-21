@@ -28,6 +28,10 @@
   programs.enable = false;
 
   services = {
+    scrutiny.collector = {
+      enable = true;
+      settings.api.endpoint = "https://scrutiny.bv.e-technik.tu-dortmund.de";
+    };
     # traefik.enable = true;
     # homepage-dashboard.enable = true;
     # media = {

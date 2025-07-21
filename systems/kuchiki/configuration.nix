@@ -16,6 +16,7 @@
   };
   systemd.services.zfs-mount.enable = false;
   networking.hostId = "7923f829";
+  nas.enable = true;
 
   # display-manager.enable = lib.mkForce false;
   # desktop-environment.enable = lib.mkForce false;
@@ -29,6 +30,10 @@
   programs.enable = false;
 
   services = {
+    scrutiny.collector = {
+      enable = true;
+      settings.api.endpoint = "https://scrutiny.bv.e-technik.tu-dortmund.de";
+    };
     traefik.enable = true;
     homepage-dashboard.enable = true;
     media = {
