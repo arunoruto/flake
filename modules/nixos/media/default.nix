@@ -9,11 +9,11 @@
     ./external-drives.nix
     ./jellyfin.nix
     ./paperless.nix
-    ./plex.nix
     ./qbittorrent.nix
     ./syncthing.nix
 
     ./arr
+    ./plex
   ];
 
   options.services.media = {
@@ -33,6 +33,7 @@
       arr.enable = lib.mkDefault true;
       jellyfin.enable = lib.mkDefault true;
       plex.enable = lib.mkDefault true;
+      tautulli.enable = lib.mkDefault true;
     };
 
     users.groups.media = {

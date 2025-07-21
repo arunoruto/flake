@@ -5,6 +5,8 @@
   ...
 }:
 {
+  imports = [ ./tautulli.nix ];
+
   config = lib.mkIf config.services.plex.enable {
     services.plex =
       let
