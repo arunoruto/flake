@@ -31,11 +31,13 @@
         appindicator
         blur-my-shell
         emoji-copy
+        framework-fan-control
         # focus
         forge
         pip-on-top
         tactile
         tiling-shell
+        tophat
         # transparent-top-bar
         transparent-top-bar-adjustable-transparency
       ]
