@@ -6,6 +6,7 @@
 {
   imports = [
     ./drives.nix
+    ./hd-idle.nix
     ./homepage.nix
     ./nfs.nix
 
@@ -18,8 +19,9 @@
     drives.enable = lib.mkDefault true;
     nfs.enable = lib.mkDefault false;
 
-    # services = {
-    #   scrutiny.enable = false;
-    # };
+    services = {
+      # scrutiny.enable = false;
+      # hd-idle.enable = true;
+    };
   };
 }
