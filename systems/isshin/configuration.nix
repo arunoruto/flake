@@ -1,4 +1,8 @@
-{ lib, ... }:
+{
+  lib,
+  pkgs,
+  ...
+}:
 {
   colmena.deployment.allowLocalDeployment = lib.mkDefault true;
 
@@ -23,6 +27,11 @@
     blacklistedKernelModules = [ "hid_sensor_hub" ];
   };
 
-  # hardware.framework.enableKmod = false;
-
+  hardware = {
+    fw-fanctrl = {
+      enable = true;
+      package = pkgs.unstable.fw-fanctrl;
+    };
+    # framework.enableKmod = false;
+  };
 }
