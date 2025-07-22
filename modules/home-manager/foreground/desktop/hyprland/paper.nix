@@ -20,5 +20,17 @@
         ipc = false;
       };
     };
+
+    systemd.user.services.hyprpaper =
+      let
+        session = "hyprland-session.target";
+      in
+      {
+        Install.WantedBy = lib.mkForce [ session ];
+        Unit = {
+          After = lib.mkForce [ session ];
+          PartOf = lib.mkForce [ session ];
+        };
+      };
   };
 }

@@ -28,6 +28,20 @@
           }
         ];
       };
+      # NOTE: 25.11
+      # systemdTarget = "hyprland-session.target";
     };
+
+    systemd.user.services.hypridle =
+      let
+        session = "hyprland-session.target";
+      in
+      {
+        Install.WantedBy = lib.mkForce [ session ];
+        Unit = {
+          After = lib.mkForce [ session ];
+          PartOf = lib.mkForce [ session ];
+        };
+      };
   };
 }
