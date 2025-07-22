@@ -2,6 +2,7 @@
 {
   imports = [
     ./beszel.nix
+    ./fw-fanctrl.nix
     ./fwupd.nix
     ./keyboard.nix
     ./mouse.nix
