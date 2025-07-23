@@ -20,6 +20,7 @@ rec {
   # dpcpp = pkgs.callPackage ./dpcpp { };
   # dpcpp-bin = pkgs.callPackage ./dpcpp/bin.nix { };
   dpcpp-prop = pkgs.callPackage ./dpcpp/proprietary4.nix { };
+  gemini-cli-custom = pkgs.callPackage ./gemini-cli/package.nix { };
   # fileflows = pkgs.callPackage ./fileflows/package.nix { };
   # banana-cursor = pkgs.callPackage ./banana-cursor/package.nix {};
   # zluda-rocm5 = pkgs.callPackage ./zluda-rocm5/package.nix { };
