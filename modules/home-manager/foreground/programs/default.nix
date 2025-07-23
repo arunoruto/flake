@@ -43,6 +43,7 @@
       # unstable.mqtt-explorer
       plex-desktop
       remmina
+      # rustdesk
       # zoom-us
       zotero
 

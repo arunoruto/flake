@@ -19,6 +19,7 @@ in
     ./nix-utils.nix
     ./secrets.nix
     ./ssh.nix
+    ./token.nix
   ];
 
   nix-utils.enable = true;
