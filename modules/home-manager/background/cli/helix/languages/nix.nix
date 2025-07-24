@@ -17,7 +17,7 @@ in
           {
             name = "nix";
             auto-format = true;
-            formatter.command = "nixfmt";
+            formatter.command = "nix fmt";
             # formatter.command = "${pkgs.alejandra}/bin/alejandra";
             language-servers = [
               "nixd"
@@ -39,7 +39,7 @@ in
       extraPackages = with pkgs; [
         nil
         unstable.nixd
-        unstable.nixfmt-rfc-style
+        # unstable.nixfmt-rfc-style
         # alejandra
       ];
     };
