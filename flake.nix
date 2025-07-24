@@ -57,6 +57,10 @@
     #   url = "github:nix-community/nix-ld";
     #   inputs.nixpkgs.follows = "nixpkgs";
     # };
+    pre-commit-hooks = {
+      url = "github:cachix/git-hooks.nix";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
     nur = {
       url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -216,7 +220,15 @@
         {
           devShells = import ./shells pkgs-system lib;
           packages = import ./pkgs pkgs-system;
-          formatter = nixpkgs.legacyPackages.${system}.nixfmt-tree;
+          formatter = pkgs-system.nixfmt-tree;
+          checks = {
+            pre-commit-check = inputs.pre-commit-hooks.lib.${system}.run {
+              src = ./.;
+              # hooks = {
+              #   nixfmt-rfc-style.enable = true;
+              # };
+            };
+          };
         }
       )
     );
