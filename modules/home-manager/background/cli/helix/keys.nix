@@ -20,7 +20,7 @@
         #   l = "goto_next_buffer";
         #   x = ":buffer-close";
         # };
-        "C-y" = [
+        "C-e" = [
           ":sh rm -f /tmp/unique-file"
           ":insert-output ${lib.getExe config.programs.yazi.package} %{buffer_name} --chooser-file=/tmp/unique-file"
           ":insert-output echo '\x1b[?1049h\x1b[?2004h' > /dev/tty"
