@@ -66,6 +66,12 @@ in
       # ];
       # extraPath = [ (lib.getBin config.boot.kernelPackages.nvidiaPackages.stable) ];
     };
+    xrdp = {
+      # enable = true;
+      # defaultWindowManager = "gnome-remote-desktop";
+      defaultWindowManager = "${pkgs.gnome-session}/bin/gnome-session";
+      openFirewall = true;
+    };
   };
 
   sops.secrets."tokens/beszel-marvin" = {
@@ -98,11 +104,17 @@ in
 
   # };
 
-  # systemd = {
-  #   tmpfiles.rules = [
-  #     "L+ /run/gdm/.config/monitors.xml - - - - ${monitorsConfig}"
-  #   ];
-  # };
+  systemd = {
+    # tmpfiles.rules = [
+    #   "L+ /run/gdm/.config/monitors.xml - - - - ${monitorsConfig}"
+    # ];
+    targets = {
+      sleep.enable = false;
+      suspend.enable = false;
+      hibernate.enable = false;
+      hybrid-sleep.enable = false;
+    };
+  };
   environment.systemPackages = with pkgs; [
     signal-desktop
   ];
