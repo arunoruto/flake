@@ -20,7 +20,7 @@ in
             formatter.command = "nix fmt";
             # formatter.command = "${pkgs.alejandra}/bin/alejandra";
             language-servers = [
-              "nixd"
+              # "nixd"
               "nil"
             ]
             # ++ lib.optionals (ls ? lsp-ai) [ "lsp-ai" ]
@@ -33,6 +33,25 @@ in
           nixd = {
             command = "nixd";
             config = config.nixd-config;
+          };
+          nil = {
+            command = "nil";
+            config.nil = {
+              formatting.command = [ "nix fmt" ];
+              diagnostics = {
+                ignored = [ ];
+                excludeFiles = [ ];
+              };
+              nix = {
+                binary = "nix";
+                maxMemoryMB = 2560;
+                flake = {
+                  autoArchive = true;
+                  autoEvalInputs = false;
+                  nixpkgsInputName = "nixpkgs";
+                };
+              };
+            };
           };
         };
       };

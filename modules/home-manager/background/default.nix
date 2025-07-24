@@ -27,7 +27,7 @@ in
 
   nixd-config = {
     nixpkgs.expr = "import (builtins.getFlake ''${flake-location}'').inputs.nixpkgs { }";
-    formatting.command = [ "nixfmt" ];
+    formatting.command = [ "nix fmt" ];
     options = {
       nixos.expr =
         lib.optionalString (args ? nixosConfig)
