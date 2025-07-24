@@ -15,13 +15,12 @@
   config = lib.mkIf config.foreground.enable {
     programs =
       let
-        commandLineArgs =
-          [
-            "--enable-features=TouchpadOverscrollHistoryNavigation,UseOzonePlatform"
-          ]
-          ++ lib.optionals (args ? nixosConfig && !osConfig.hosts.nvidia.enable) [
-            "--ozone-platform=wayland"
-          ];
+        commandLineArgs = [
+          "--enable-features=TouchpadOverscrollHistoryNavigation,UseOzonePlatform"
+        ]
+        ++ lib.optionals (args ? nixosConfig && !osConfig.hosts.nvidia.enable) [
+          "--ozone-platform=wayland"
+        ];
         extensions = [
           { id = "nngceckbapebfimnlniiiahkandclblb"; } # bitwarden
           { id = "epcnnfbjfcgphgdmggkamkmgojdagdnn"; } # ublock (normal)
@@ -52,7 +51,8 @@
     home = {
       packages = [
         inputs.zen-browser.packages.${pkgs.system}.default
-      ] ++ lib.optionals config.programs.vivaldi.enable [ pkgs.vivaldi-ffmpeg-codecs ];
+      ]
+      ++ lib.optionals config.programs.vivaldi.enable [ pkgs.vivaldi-ffmpeg-codecs ];
       # sessionVariables = {
       #   # Firefox
       #   BROWSER = "${config.programs.firefox.finalPackage}/bin/firefox";

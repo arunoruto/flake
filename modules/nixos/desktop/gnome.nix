@@ -66,11 +66,13 @@
       allowedTCPPorts = [
         7236
         7250
-      ] ++ lib.optionals config.services.gnome.gnome-remote-desktop.enable [ 3389 ];
+      ]
+      ++ lib.optionals config.services.gnome.gnome-remote-desktop.enable [ 3389 ];
       allowedUDPPorts = [
         7236
         5353
-      ] ++ lib.optionals config.services.gnome.gnome-remote-desktop.enable [ 3389 ];
+      ]
+      ++ lib.optionals config.services.gnome.gnome-remote-desktop.enable [ 3389 ];
     };
 
     systemd.services.gnome-remote-desktop = {

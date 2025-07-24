@@ -27,13 +27,12 @@ in
               "JuliaProject.toml"
             ];
             comment-token = "#";
-            language-servers =
-              [
-                "julia-lsp"
-              ]
-              ++ lib.optionals (ls ? gpt) [
-                "gpt"
-              ];
+            language-servers = [
+              "julia-lsp"
+            ]
+            ++ lib.optionals (ls ? gpt) [
+              "gpt"
+            ];
             formatter = {
               command = "julia";
               args = [

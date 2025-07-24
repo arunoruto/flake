@@ -141,17 +141,16 @@ with lib;
         hm.nushell.mkNushellInline (nushellLine cfg.theme)
       );
       programs.zsh.initContent = mkIf cfg.enableZshIntegration (zshLine cfg.theme);
-      xdg.configFile =
-        {
-          "vivid/filetypes.yml" = mkIf (builtins.length (builtins.attrNames cfg.filetypes) > 0) {
-            source = yaml.generate "filetypes.yml" cfg.filetypes;
-          };
+      xdg.configFile = {
+        "vivid/filetypes.yml" = mkIf (builtins.length (builtins.attrNames cfg.filetypes) > 0) {
+          source = yaml.generate "filetypes.yml" cfg.filetypes;
+        };
+      }
+      // mapAttrs' (
+        name: value:
+        nameValuePair "vivid/themes/${name}.yml" {
+          source = yaml.generate "${name}.yml" value;
         }
-        // mapAttrs' (
-          name: value:
-          nameValuePair "vivid/themes/${name}.yml" {
-            source = yaml.generate "${name}.yml" value;
-          }
-        ) cfg.themes;
+      ) cfg.themes;
     };
 }

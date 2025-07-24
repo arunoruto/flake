@@ -61,47 +61,46 @@
         };
 
         # Gnome
-        home.file.".config/monitors.xml".text =
-          ''
-            <monitors version="2">
-            <configuration>
+        home.file.".config/monitors.xml".text = ''
+          <monitors version="2">
+          <configuration>
 
-          ''
-          + builtins.concatStringsSep "\n" (
-            builtins.map (
-              monitor:
-              let
-                selected = cfg.${monitor.serial};
-              in
-              ''
-                <logicalmonitor>
-                  <x>${builtins.toString selected.x}</x>
-                  <y>${builtins.toString selected.y}</y>
-                  <scale>${if (selected ? gnomeScale) then selected.gnomeScale else selected.scale}</scale>
-                  <primary>${if selected.primary then "yes" else "no"}</primary>
-                  <monitor>
-                    <monitorspec>
-                      <connector>${selected.connector}</connector>
-                      <vendor>${if monitor.vendor.name == "BOE CQ" then "BOE" else monitor.vendor.name}</vendor>
-                      <product>0x${monitor.device.hex}</product>
-                      <serial>${if (monitor.serial == "0") then "0x00000000" else monitor.serial}</serial>
-                    </monitorspec>
-                    <mode>
-                      <width>${builtins.toString monitor.detail.width}</width>
-                      <height>${builtins.toString monitor.detail.height}</height>
-                      <rate>${
-                        builtins.toString (if selected ? gnomeRate then selected.gnomeRate else selected.rate)
-                      }</rate>
-                    </mode>
-                  </monitor>
-                </logicalmonitor>
-              ''
-            ) osConfig.facter.report.hardware.monitor
-          )
-          + ''
+        ''
+        + builtins.concatStringsSep "\n" (
+          builtins.map (
+            monitor:
+            let
+              selected = cfg.${monitor.serial};
+            in
+            ''
+              <logicalmonitor>
+                <x>${builtins.toString selected.x}</x>
+                <y>${builtins.toString selected.y}</y>
+                <scale>${if (selected ? gnomeScale) then selected.gnomeScale else selected.scale}</scale>
+                <primary>${if selected.primary then "yes" else "no"}</primary>
+                <monitor>
+                  <monitorspec>
+                    <connector>${selected.connector}</connector>
+                    <vendor>${if monitor.vendor.name == "BOE CQ" then "BOE" else monitor.vendor.name}</vendor>
+                    <product>0x${monitor.device.hex}</product>
+                    <serial>${if (monitor.serial == "0") then "0x00000000" else monitor.serial}</serial>
+                  </monitorspec>
+                  <mode>
+                    <width>${builtins.toString monitor.detail.width}</width>
+                    <height>${builtins.toString monitor.detail.height}</height>
+                    <rate>${
+                      builtins.toString (if selected ? gnomeRate then selected.gnomeRate else selected.rate)
+                    }</rate>
+                  </mode>
+                </monitor>
+              </logicalmonitor>
+            ''
+          ) osConfig.facter.report.hardware.monitor
+        )
+        + ''
 
-            </configuration>
-            </monitors>
-          '';
+          </configuration>
+          </monitors>
+        '';
       };
 }

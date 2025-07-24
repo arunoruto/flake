@@ -17,19 +17,18 @@ in
           {
             name = "python";
             auto-format = true;
-            language-servers =
-              [
-                # "pylsp"
-                # "basedpyright"
-                "pyright"
-                "ruff"
-                # "ty"
-              ]
-              # ++ lib.optionals (ls ? lsp-ai) [ "lsp-ai" ]
-              ++ lib.optionals (ls ? gpt) [ "gpt" ]
-              ++ lib.optionals (ls ? sourcery) [ "sourcery" ]
-              # ++ lib.optionals (ls ? codebook) [ "codebook" ]
-              ++ [ ];
+            language-servers = [
+              # "pylsp"
+              # "basedpyright"
+              "pyright"
+              "ruff"
+              # "ty"
+            ]
+            # ++ lib.optionals (ls ? lsp-ai) [ "lsp-ai" ]
+            ++ lib.optionals (ls ? gpt) [ "gpt" ]
+            ++ lib.optionals (ls ? sourcery) [ "sourcery" ]
+            # ++ lib.optionals (ls ? codebook) [ "codebook" ]
+            ++ [ ];
             formatter = {
               command = "bash";
               args = [

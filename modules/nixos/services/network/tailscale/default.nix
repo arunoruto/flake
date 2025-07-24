@@ -21,16 +21,15 @@ in
       package = pkgs.unstable.tailscale;
       port = tailscale-port;
       useRoutingFeatures = "client";
-      extraUpFlags =
-        [
-          "--accept-routes"
-        ]
-        ++ lib.optionals (config.hosts.tinypc.enable) [
-          "--ssh"
-        ]
-        ++ lib.optionals (!config.hosts.tinypc.enable) [
-          "--exit-node-allow-lan-access"
-        ];
+      extraUpFlags = [
+        "--accept-routes"
+      ]
+      ++ lib.optionals (config.hosts.tinypc.enable) [
+        "--ssh"
+      ]
+      ++ lib.optionals (!config.hosts.tinypc.enable) [
+        "--exit-node-allow-lan-access"
+      ];
       extraSetFlags = lib.optionals (config.hosts.tinypc.enable) [
         "--advertise-exit-node"
       ];

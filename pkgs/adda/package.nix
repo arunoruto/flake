@@ -52,21 +52,20 @@ stdenv.mkDerivation (finalAttrs: {
     # hash = "sha256-mGCWrmdut3sgWATo/Y0HCVlA67425lH8n2A1RdL7Kzg=";
   };
 
-  nativeBuildInputs =
-    [
-      which
-      gfortran
-      fftw
-    ]
-    ++ (lib.optionals (target == "mpi") [
-      mpi
-    ])
-    ++ (lib.optionals (target == "ocl") [
-      opencl-headers
-      ocl-icd
-      clfft
-      clblas
-    ]);
+  nativeBuildInputs = [
+    which
+    gfortran
+    fftw
+  ]
+  ++ (lib.optionals (target == "mpi") [
+    mpi
+  ])
+  ++ (lib.optionals (target == "ocl") [
+    opencl-headers
+    ocl-icd
+    clfft
+    clblas
+  ]);
 
   preBuild = ''
     makeFlagsArray+=(${flags})

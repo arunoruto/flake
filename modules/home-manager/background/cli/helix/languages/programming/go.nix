@@ -22,7 +22,8 @@ in
             language-servers = [
               "gopls"
               "golangci-lint-langserver"
-            ] ++ lib.optionals (ls ? codebook) [ "codebook" ];
+            ]
+            ++ lib.optionals (ls ? codebook) [ "codebook" ];
             auto-format = true;
             formatter = {
               command = "gofmt";

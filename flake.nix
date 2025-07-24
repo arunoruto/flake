@@ -216,6 +216,7 @@
         {
           devShells = import ./shells pkgs-system lib;
           packages = import ./pkgs pkgs-system;
+          formatter = nixpkgs.legacyPackages.${system}.nixfmt-tree;
         }
       )
     );

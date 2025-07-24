@@ -30,42 +30,41 @@ in
           side-by-side = true;
         };
       };
-      extraConfig =
-        {
-          core = {
-            editor = "hx";
-            compression = 9;
-            whitespace = "error";
-            preloadindex = true;
-          };
-          commit.template = "~/.config/git/template";
-          push = {
-            autoSetupRemote = true;
-            default = "current";
-            # followTags = true;
-          };
-          pull = {
-            default = "current";
-            rebase = true;
-          };
-          rebase = {
-            autoStash = true;
-            missingCommitsCheck = "warn";
-          };
-          log.abbrevCommit = true;
-          init.defaultBranch = "main";
-          credential = {
-            "https://gitlab.com".helper = "${lib.getExe glab-pkg} auth git-credential";
-            "https://gitlab.bv.e-technik.tu-dortmund.de".helper = "${lib.getExe glab-pkg} auth git-credential";
-            "https://git.overleaf.com".helper =
-              "store --file ${config.home.homeDirectory}/.config/git/overleaf";
-          };
-        }
-        // lib.optionalAttrs (args ? nixosConfig) {
-          # commit.gpgsign = osConfig.yubikey.enable;
-          # user.signingkey = "${config.home.homeDirectory}/.ssh/id_${osConfig.yubikey.signing}_sign.pub";
-          # gpg.format = "ssh";
+      extraConfig = {
+        core = {
+          editor = "hx";
+          compression = 9;
+          whitespace = "error";
+          preloadindex = true;
         };
+        commit.template = "~/.config/git/template";
+        push = {
+          autoSetupRemote = true;
+          default = "current";
+          # followTags = true;
+        };
+        pull = {
+          default = "current";
+          rebase = true;
+        };
+        rebase = {
+          autoStash = true;
+          missingCommitsCheck = "warn";
+        };
+        log.abbrevCommit = true;
+        init.defaultBranch = "main";
+        credential = {
+          "https://gitlab.com".helper = "${lib.getExe glab-pkg} auth git-credential";
+          "https://gitlab.bv.e-technik.tu-dortmund.de".helper = "${lib.getExe glab-pkg} auth git-credential";
+          "https://git.overleaf.com".helper =
+            "store --file ${config.home.homeDirectory}/.config/git/overleaf";
+        };
+      }
+      // lib.optionalAttrs (args ? nixosConfig) {
+        # commit.gpgsign = osConfig.yubikey.enable;
+        # user.signingkey = "${config.home.homeDirectory}/.ssh/id_${osConfig.yubikey.signing}_sign.pub";
+        # gpg.format = "ssh";
+      };
     };
 
     jujutsu = {
@@ -152,18 +151,17 @@ in
   sops.secrets."tokens/overleaf-cred".path = "${config.home.homeDirectory}/.config/git/overleaf";
 
   home = {
-    packages =
+    packages = [
+      glab-pkg # Gitlab CLI tool
+    ]
+    # ++ lib.optionals (!config.hosts.tinypc.enable) (with pkgs; [ gitbutler ])
+    ++ lib.optionals config.programs.jujutsu.enable (
+      with pkgs.unstable;
       [
-        glab-pkg # Gitlab CLI tool
+        # lazyjj
+        jjui
       ]
-      # ++ lib.optionals (!config.hosts.tinypc.enable) (with pkgs; [ gitbutler ])
-      ++ lib.optionals config.programs.jujutsu.enable (
-        with pkgs.unstable;
-        [
-          # lazyjj
-          jjui
-        ]
-      );
+    );
     sessionVariables =
       let
         # token = builtins.readFile (

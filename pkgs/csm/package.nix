@@ -36,13 +36,11 @@ stdenv.mkDerivation {
   #       GIT_CONFIG_VALUE_0 = "git@github.com:";
   #     });
 
-  nativeBuildInputs =
-    [
-    ];
+  nativeBuildInputs = [
+  ];
 
-  buildInputs =
-    [
-    ];
+  buildInputs = [
+  ];
 
   configurePhase = ":";
 

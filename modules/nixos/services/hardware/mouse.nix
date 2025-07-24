@@ -14,11 +14,9 @@ in
     services.ratbagd = {
       enable = true;
       package = pkgs.libratbag.overrideAttrs (old: {
-        postInstall =
-          (old.postInstall or "")
-          + ''
-            install -Dm444 ${devices}/* $out/share/libratbag
-          '';
+        postInstall = (old.postInstall or "") + ''
+          install -Dm444 ${devices}/* $out/share/libratbag
+        '';
       });
     };
     environment.systemPackages = [ pkgs.piper ];

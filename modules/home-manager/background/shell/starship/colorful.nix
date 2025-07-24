@@ -180,6 +180,7 @@ in
 
       # package.disabled = true;
       palette = "catppuccin_${flavour}";
-    } // builtins.fromTOML (builtins.readFile (catppuccin-starship + /palettes/${flavour}.toml));
+    }
+    // builtins.fromTOML (builtins.readFile (catppuccin-starship + /palettes/${flavour}.toml));
   };
 }

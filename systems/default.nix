@@ -47,51 +47,50 @@ builtins.mapAttrs (
       inherit inputs;
       flake = self;
     };
-    modules =
-      [
-        self.nixosModules.default
-        # TODO: enable support for multiple users in the future
-        # Could be relevant for setting up a kodi or github-runner user
-        # username = lib.lists.elemAt conf.usernames 0;
-        # username = machines."${hostname}";
-        (
-          { lib, ... }:
-          {
-            options.username = lib.mkOption {
-              type = lib.types.str;
-              default = lib.lists.elemAt conf.usernames 0;
-            };
-          }
-        )
+    modules = [
+      self.nixosModules.default
+      # TODO: enable support for multiple users in the future
+      # Could be relevant for setting up a kodi or github-runner user
+      # username = lib.lists.elemAt conf.usernames 0;
+      # username = machines."${hostname}";
+      (
+        { lib, ... }:
         {
-          networking.hostName = lib.mkForce hostname;
-          facter.reportPath = lib.mkIf (lib.pathExists ./${hostname}/facter.json) ./${hostname}/facter.json;
-          nixpkgs = {
-            config.allowUnfree = true;
-            overlays =
-              (with self.overlays; [
-                additions
-                python
-                unstable-packages
-              ])
-              ++ (with inputs; [
-                nur.overlays.default
-              ]);
-          };
-          theming = {
-            inherit scheme;
-            inherit image;
+          options.username = lib.mkOption {
+            type = lib.types.str;
+            default = lib.lists.elemAt conf.usernames 0;
           };
         }
-        ./${hostname}
-        ../homes/nixos.nix
-      ]
-      ++ (with inputs; [
-        nixos-facter-modules.nixosModules.facter
-        home-manager.nixosModules.home-manager
-        # lix-module.nixosModules.default
-        # determinate.nixosModules.default
-        # nur.nixosModules.nur
-      ]);
+      )
+      {
+        networking.hostName = lib.mkForce hostname;
+        facter.reportPath = lib.mkIf (lib.pathExists ./${hostname}/facter.json) ./${hostname}/facter.json;
+        nixpkgs = {
+          config.allowUnfree = true;
+          overlays =
+            (with self.overlays; [
+              additions
+              python
+              unstable-packages
+            ])
+            ++ (with inputs; [
+              nur.overlays.default
+            ]);
+        };
+        theming = {
+          inherit scheme;
+          inherit image;
+        };
+      }
+      ./${hostname}
+      ../homes/nixos.nix
+    ]
+    ++ (with inputs; [
+      nixos-facter-modules.nixosModules.facter
+      home-manager.nixosModules.home-manager
+      # lix-module.nixosModules.default
+      # determinate.nixosModules.default
+      # nur.nixosModules.nur
+    ]);
   }
 ) machines

@@ -26,39 +26,38 @@ in
       package = pkgs.unstable.helix;
       settings = {
         theme = lib.mkForce "stylix-custom";
-        editor =
-          {
-            true-color = true;
-            bufferline = "always";
-            line-number = "relative";
-            rulers = [ 80 ];
-            soft-wrap.enable = false;
-            cursorline = true;
-            color-modes = true;
-            popup-border = "all";
-            indent-guides = {
-              render = true;
-            };
-            cursor-shape = {
-              normal = "block";
-              insert = "bar";
-              select = "underline";
-            };
-            lsp = {
-              auto-signature-help = false;
-              display-messages = true;
-            };
-            file-picker = {
-              hidden = false;
-            };
-          }
-          // lib.optionalAttrs nightly {
-            end-of-line-diagnostics = "warning";
-            inline-diagnostics = {
-              cursor-line = "hint";
-              other-lines = "error";
-            };
+        editor = {
+          true-color = true;
+          bufferline = "always";
+          line-number = "relative";
+          rulers = [ 80 ];
+          soft-wrap.enable = false;
+          cursorline = true;
+          color-modes = true;
+          popup-border = "all";
+          indent-guides = {
+            render = true;
           };
+          cursor-shape = {
+            normal = "block";
+            insert = "bar";
+            select = "underline";
+          };
+          lsp = {
+            auto-signature-help = false;
+            display-messages = true;
+          };
+          file-picker = {
+            hidden = false;
+          };
+        }
+        // lib.optionalAttrs nightly {
+          end-of-line-diagnostics = "warning";
+          inline-diagnostics = {
+            cursor-line = "hint";
+            other-lines = "error";
+          };
+        };
       };
       ignores = [
         ".build/"

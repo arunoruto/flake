@@ -27,12 +27,11 @@ in
             #   "JuliaProject.toml"
             # ];
             # comment-token = "#";
-            language-servers =
-              [
-                "texlab"
-              ]
-              ++ lib.optionals (ls ? ltex) [ "ltex" ]
-              ++ lib.optionals (ls ? gpt) [ "gpt" ];
+            language-servers = [
+              "texlab"
+            ]
+            ++ lib.optionals (ls ? ltex) [ "ltex" ]
+            ++ lib.optionals (ls ? gpt) [ "gpt" ];
             # formatter = {
             #   command = "julia";
             #   args = [

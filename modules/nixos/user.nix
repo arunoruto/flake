@@ -20,23 +20,22 @@ in
       # shell = pkgs.${config.home-manager.users.${username}.shell};
       shell = config.home-manager.users.${username}.programs.${shell}.package;
       description = "Mirza";
-      extraGroups =
-        [
-          "dialout"
-          "networkmanager"
-          "wheel"
-          "scanner"
-          "lp"
-          "pipewire"
-          "audio"
-          "video"
-          "render"
-          "input"
-          "uinput"
-          "tss" # tss group has access to TPM devices
-        ]
-        ++ lib.optionals config.virtualisation.docker.enable [ "docker" ]
-        ++ lib.optionals config.virtualisation.podman.enable [ "podman" ];
+      extraGroups = [
+        "dialout"
+        "networkmanager"
+        "wheel"
+        "scanner"
+        "lp"
+        "pipewire"
+        "audio"
+        "video"
+        "render"
+        "input"
+        "uinput"
+        "tss" # tss group has access to TPM devices
+      ]
+      ++ lib.optionals config.virtualisation.docker.enable [ "docker" ]
+      ++ lib.optionals config.virtualisation.podman.enable [ "podman" ];
     };
   };
 

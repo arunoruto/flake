@@ -6,6 +6,7 @@
 }:
 let
   configFormat = pkgs.formats.json { };
+  cfg = config.hardware.fw-fanctrl;
 in
 {
   options.hardware.fw-fanctrl = {
@@ -94,18 +95,17 @@ in
 
   config =
     let
-      cfg = config.hardware.fw-fanctrl;
-
       defaultConfig = builtins.fromJSON (builtins.readFile "${cfg.package}/share/fw-fanctrl/config.json");
       finalConfig = lib.attrsets.recursiveUpdate defaultConfig cfg.config;
       configFile = configFormat.generate "custom.json" finalConfig;
     in
     lib.mkIf cfg.enable {
-      environment.systemPackages =
-        [ cfg.package ]
-        ++ (with pkgs; [
-          fw-ectool
-        ]);
+      environment.systemPackages = [
+        cfg.package
+      ]
+      ++ (with pkgs; [
+        fw-ectool
+      ]);
 
       systemd.services.fw-fanctrl = {
         description = "Framework Fan Controller";
@@ -125,6 +125,6 @@ in
     };
 
   meta = {
-    maintainers = config.hardware.fw-fanctrl.package.meta.maintainers;
+    maintainers = cfg.package.meta.maintainers;
   };
 }

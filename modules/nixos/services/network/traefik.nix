@@ -74,27 +74,26 @@
                 forwardedHeaders.trustedIPs = lib.optionals config.services.cloudflared.enable cloudflareIPs;
               };
             };
-            providers =
-              {
-                providersThrottleDuration = "2s";
-              }
-              # // lib.optionalAttrs (!config.virtualisation.docker.enable) {
-              #   file = {
-              #     watch = true;
-              #     # directory = "${config.services.traefik.dataDir}/dynamic";
-              #   };
-              # }
-              // lib.optionalAttrs config.virtualisation.docker.enable {
-                docker = {
-                  watch = true;
-                  network = "web";
-                  # Default host rule to containername.domain.example
-                  defaultRule = "Host(`{{ lower (trimPrefix `/` .Name )}}.homelab.arnaut.me`)"; # Replace with your domain
-                  # swarmModeRefreshSeconds = "15s";
-                  exposedByDefault = false;
-                  endpoint = "unix:///var/run/docker.sock";
-                };
+            providers = {
+              providersThrottleDuration = "2s";
+            }
+            # // lib.optionalAttrs (!config.virtualisation.docker.enable) {
+            #   file = {
+            #     watch = true;
+            #     # directory = "${config.services.traefik.dataDir}/dynamic";
+            #   };
+            # }
+            // lib.optionalAttrs config.virtualisation.docker.enable {
+              docker = {
+                watch = true;
+                network = "web";
+                # Default host rule to containername.domain.example
+                defaultRule = "Host(`{{ lower (trimPrefix `/` .Name )}}.homelab.arnaut.me`)"; # Replace with your domain
+                # swarmModeRefreshSeconds = "15s";
+                exposedByDefault = false;
+                endpoint = "unix:///var/run/docker.sock";
               };
+            };
             certificatesResolvers =
               let
                 email = "mirza.arnaut45@gmail.com";
