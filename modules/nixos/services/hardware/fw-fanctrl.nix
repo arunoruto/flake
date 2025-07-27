@@ -14,6 +14,8 @@ in
 
     package = lib.mkPackageOption pkgs "fw-fanctrl" { };
 
+    ectoolPackage = lib.mkPackageOption pkgs "fw-ectool" { };
+
     disableBatteryTempCheck = lib.mkOption {
       type = lib.types.bool;
       default = false;
@@ -102,10 +104,8 @@ in
     lib.mkIf cfg.enable {
       environment.systemPackages = [
         cfg.package
-      ]
-      ++ (with pkgs; [
-        fw-ectool
-      ]);
+        cfg.ectoolPackage
+      ];
 
       systemd.services.fw-fanctrl = {
         description = "Framework Fan Controller";
@@ -114,7 +114,7 @@ in
           Type = "simple";
           Restart = "always";
           ExecStart = "${lib.getExe cfg.package} --output-format JSON run --config ${configFile} --silent ${lib.optionalString cfg.disableBatteryTempCheck "--no-battery-sensors"}";
-          ExecStopPost = "${lib.getExe pkgs.fw-ectool} autofanctrl";
+          ExecStopPost = "${lib.getExe cfg.ectoolPackage} autofanctrl";
         };
         wantedBy = [ "multi-user.target" ];
       };
@@ -125,6 +125,6 @@ in
     };
 
   meta = {
-    maintainers = cfg.package.meta.maintainers;
+    maintainers = [ lib.maintainers.Svenum ];
   };
 }
