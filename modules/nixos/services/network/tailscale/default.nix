@@ -30,7 +30,10 @@ in
       ++ lib.optionals (!config.hosts.tinypc.enable) [
         "--exit-node-allow-lan-access"
       ];
-      extraSetFlags = lib.optionals (config.hosts.tinypc.enable) [
+      extraSetFlags = [
+        "--operator=${config.username}"
+      ]
+      ++ lib.optionals (config.hosts.tinypc.enable) [
         "--advertise-exit-node"
       ];
       permitCertUid = if config.services.traefik.enable then "traefik" else null;
