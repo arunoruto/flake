@@ -1,9 +1,11 @@
 {
   lib,
   pkgs,
+  inputs,
   ...
 }:
 {
+  imports = [ "${inputs.nixpkgs-unstable.outPath}/nixos/modules/hardware/fw-fanctrl.nix" ];
   colmena.deployment.allowLocalDeployment = lib.mkDefault true;
 
   hosts = {
