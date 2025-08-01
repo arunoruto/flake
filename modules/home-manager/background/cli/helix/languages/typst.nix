@@ -38,7 +38,7 @@ in
           # iwe.command = "iwes";
         };
       };
-      extraPackages = with pkgs.unstable; [
+      extraPackages = with pkgs; [
         tinymist
         typstyle
       ];

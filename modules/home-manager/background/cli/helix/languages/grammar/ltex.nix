@@ -24,7 +24,7 @@
           additionalRules.languageModel = lib.optionalString config.helix.ltex.ngram "${config.home.homeDirectory}/.cache/ngrams";
         };
       };
-      extraPackages = with pkgs; [ unstable.ltex-ls-plus ];
+      extraPackages = with pkgs; [ ltex-ls-plus ];
     };
 
     home.file = lib.mkIf config.helix.ltex.ngram {

@@ -18,7 +18,7 @@
           dialect = "American";
         };
       };
-      extraPackages = with pkgs; [ unstable.harper ];
+      extraPackages = with pkgs; [ harper ];
     };
   };
 }

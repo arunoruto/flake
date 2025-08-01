@@ -51,7 +51,7 @@ in
         };
       };
       extraPackages = with pkgs; [
-        unstable.iwe
+        iwe
         markdown-oxide
         marksman
         nodePackages.prettier
