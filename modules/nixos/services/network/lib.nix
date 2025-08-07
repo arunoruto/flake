@@ -17,7 +17,7 @@ lib: {
     {
       http = {
         routers."${serviceName}" = {
-          rule = "(${host}) && PathPrefix(`/${path}`)";
+          rule = "(${host}) && PathPrefix(`${path}`)";
           tls.certresolver = cert;
           entrypoints = [ "websecure" ];
           service = serviceName;
