@@ -18,6 +18,8 @@ let
     yhwach.usernames = [ "mirza" ];
     # New NAS Server
     kuchiki.usernames = [ "mirza" ];
+    # NVMe NAS Server
+    sado.usernames = [ "mirza" ];
     # New NAS Server
     lil-nas-x.usernames = [ "mirza" ];
     # Crappy AMD Mini PC
