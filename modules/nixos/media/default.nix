@@ -7,6 +7,7 @@
   imports = [
     ./bosflix.nix
     ./external-drives.nix
+    ./immich.nix
     ./jellyfin.nix
     ./paperless.nix
     ./qbittorrent.nix
