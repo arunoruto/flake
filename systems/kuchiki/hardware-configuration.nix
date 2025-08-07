@@ -38,6 +38,11 @@
     ];
   };
 
+  fileSystems."/mnt/storage" = {
+    device = "storage";
+    fsType = "zfs";
+  };
+
   fileSystems."/mnt/storage/appdata" = {
     device = "storage/appdata";
     fsType = "zfs";
@@ -58,10 +63,25 @@
     # ];
   };
 
-  fileSystems."/mnt/storage" = {
-    device = "storage";
-    fsType = "zfs";
-  };
+  #fileSystems."/mnt/flash" = {
+  #  device = "flash";
+  #  fsType = "zfs";
+  #};
+
+  #fileSystems."/mnt/flash/appdata" = {
+  #  device = "flash/appdata";
+  #  fsType = "zfs";
+  #};
+
+  #fileSystems."/mnt/flash/photos" = {
+  #  device = "flash/photos";
+  #  fsType = "zfs";
+  #};
+
+  #fileSystems."/mnt/flash/documents" = {
+  #  device = "flash/documents";
+  #  fsType = "zfs";
+  #};
 
   swapDevices = [ ];
 
