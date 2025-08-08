@@ -10,7 +10,7 @@
     ./immich.nix
     ./jellyfin.nix
     ./paperless.nix
-    ./qbittorrent.nix
+    # ./qbittorrent.nix
     ./syncthing.nix
 
     ./arr
