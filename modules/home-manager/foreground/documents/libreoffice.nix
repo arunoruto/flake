@@ -18,6 +18,8 @@
         hunspellDicts.en-us
         hunspellDicts.en-gb-ise
         hunspellDicts.de-de
+        hyphenDicts.de-de
+        hyphenDicts.en-us
       ]);
   };
 }
