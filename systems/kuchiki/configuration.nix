@@ -54,6 +54,7 @@
     homepage-dashboard.enable = true;
     media = {
       enable = true;
+      services = true;
       dataDir = "/mnt/storage/appdata";
       openFirewall = true;
     };

@@ -18,7 +18,8 @@
   ];
 
   options.services.media = {
-    enable = lib.mkEnableOption "Enable media services";
+    enable = lib.mkEnableOption "Enable media module";
+    services = lib.mkEnableOption "Enable media services";
     dataDir = lib.mkOption {
       type = lib.types.path;
       default = "/var/lib";
@@ -27,22 +28,27 @@
     openFirewall = lib.mkEnableOption "Open all firewall ports of media services";
   };
 
-  config = lib.mkIf config.services.media.enable {
-    services = {
-      radarr.enable = lib.mkDefault true;
-      sonarr.enable = lib.mkDefault true;
-      arr.enable = lib.mkDefault true;
-      jellyfin.enable = lib.mkDefault true;
-      plex.enable = lib.mkDefault true;
-      tautulli.enable = lib.mkDefault true;
+  config =
+    let
+      cfg = config.services.media;
+    in
+    lib.mkIf cfg.enable {
+      services =
+        # lib.optionalAttrs cfg.services {
+        {
+          radarr.enable = lib.mkDefault cfg.services;
+          sonarr.enable = lib.mkDefault cfg.services;
+          arr.enable = lib.mkDefault cfg.services;
+          jellyfin.enable = lib.mkDefault cfg.services;
+          plex.enable = lib.mkDefault cfg.services;
+          tautulli.enable = lib.mkDefault cfg.services;
+        };
+
+      users.groups.media = {
+        gid = 420;
+        members = [ config.username ];
+      };
+
+      media.external-drives.enable = lib.mkDefault true;
     };
-
-    users.groups.media = {
-      gid = 420;
-      members = [ config.username ];
-    };
-
-    media.external-drives.enable = lib.mkDefault true;
-
-  };
 }
