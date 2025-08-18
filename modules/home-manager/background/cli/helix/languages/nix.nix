@@ -20,15 +20,14 @@ in
             auto-format = true;
             formatter.command = "nix fmt";
             # formatter.command = "${pkgs.alejandra}/bin/alejandra";
-            language-servers =
-              [
-                "nixd"
-                "nil"
-              ]
-              # ++ lib.optionals (ls ? lsp-ai) [ "lsp-ai" ]
-              ++ lib.optionals (ls ? gpt) [ "gpt" ]
-              ++ lib.optionals (ls ? copilot) [ "copilot" ]
-              ++ [ ];
+            language-servers = [
+              "nixd"
+              "nil"
+            ]
+            # ++ lib.optionals (ls ? lsp-ai) [ "lsp-ai" ]
+            ++ lib.optionals (ls ? gpt) [ "gpt" ]
+            ++ lib.optionals (ls ? copilot) [ "copilot" ]
+            ++ [ ];
           }
         ];
         language-server = {

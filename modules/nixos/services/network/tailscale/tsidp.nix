@@ -79,43 +79,42 @@
         wants = [ "network-online.target" ];
         wantedBy = [ "multi-user.target" ];
 
-        serviceConfig =
-          {
-            User = "root";
-            Group = "root";
-            Type = "simple";
+        serviceConfig = {
+          User = "root";
+          Group = "root";
+          Type = "simple";
 
-            # Use the package specified in the options.
-            ExecStart =
-              "${cfg.package}/bin/tsidp ${
-                lib.strings.concatStringsSep " " [
-                  "-hostname ${cfg.hostname}"
-                  "-port ${builtins.toString cfg.port}"
-                  "-local-port ${builtins.toString cfg.localPort}"
-                ]
-              }"
-              + lib.optionalString (cfg.useLocalTailscaled) " -use-local-tailscaled"
-              + lib.optionalString (cfg.verbose) " -verbose";
+          # Use the package specified in the options.
+          ExecStart =
+            "${cfg.package}/bin/tsidp ${
+              lib.strings.concatStringsSep " " [
+                "-hostname ${cfg.hostname}"
+                "-port ${builtins.toString cfg.port}"
+                "-local-port ${builtins.toString cfg.localPort}"
+              ]
+            }"
+            + lib.optionalString (cfg.useLocalTailscaled) " -use-local-tailscaled"
+            + lib.optionalString (cfg.verbose) " -verbose";
 
-            Restart = "always";
-            RestartSec = "5s";
+          Restart = "always";
+          RestartSec = "5s";
 
-            # Create /var/lib/tsidp with 0700 permissions, owned by root:root.
-            StateDirectory = "tsidp";
-            WorkingDirectory = workDir;
+          # Create /var/lib/tsidp with 0700 permissions, owned by root:root.
+          StateDirectory = "tsidp";
+          WorkingDirectory = workDir;
 
-            # Set environment variables from the module options.
-            Environment = [
-              "TS_HOSTNAME=${cfg.hostname}"
-              "TS_STATE_DIR=${workDir}"
-              "TS_USERSPACE=false"
-              "TAILSCALE_USE_WIP_CODE=1"
-            ];
-          }
-          // lib.optionalAttrs (cfg.authKeyFile != null) {
-            # Use the auth key file specified in the options.
-            EnvironmentFile = cfg.authKeyFile;
-          };
+          # Set environment variables from the module options.
+          Environment = [
+            "TS_HOSTNAME=${cfg.hostname}"
+            "TS_STATE_DIR=${workDir}"
+            "TS_USERSPACE=false"
+            "TAILSCALE_USE_WIP_CODE=1"
+          ];
+        }
+        // lib.optionalAttrs (cfg.authKeyFile != null) {
+          # Use the auth key file specified in the options.
+          EnvironmentFile = cfg.authKeyFile;
+        };
       };
     };
 }
