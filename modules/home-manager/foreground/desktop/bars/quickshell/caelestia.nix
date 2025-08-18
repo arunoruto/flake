@@ -24,7 +24,7 @@
           bluez
           ddcutil
           brightnessctl
-          imagemagick
+          imagemagickBig
         ])
         ++ (with pkgs.pythonPackages; [
           aubio
