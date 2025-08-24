@@ -189,7 +189,9 @@
           meta = {
             description = "my personal machines";
             nixpkgs = pkgs;
-            nodeSpecialArgs = builtins.mapAttrs (name: value: value._module.specialArgs) conf;
+            nodeSpecialArgs = builtins.mapAttrs (
+              name: value: (value._module.specialArgs // { inherit lib; })
+            ) conf;
           };
         }
         // builtins.mapAttrs (name: value: {
