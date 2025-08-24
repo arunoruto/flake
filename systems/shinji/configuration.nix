@@ -8,7 +8,10 @@
   colmena.deployment = {
     targetHost = config.networking.hostName;
   };
-  system.tags = [ "tinypc" ];
+  system.tags = [
+    "tinypc"
+    "headless"
+  ];
   hosts.intel.enable = true;
   kodi.enable = true;
   bosflix = {

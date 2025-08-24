@@ -1,6 +1,9 @@
 { ... }:
 {
-  system.tags = [ "tinypc" ];
+  system.tags = [
+    "tinypc"
+    "headless"
+  ];
   colmena.deployment.buildOnTarget = false;
 
   boot.loader = {

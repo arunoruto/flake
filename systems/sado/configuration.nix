@@ -1,7 +1,10 @@
 { ... }:
 {
   # colmena.deployment.buildOnTarget = true;
-  system.tags = [ "tinypc" ];
+  system.tags = [
+    "tinypc"
+    "headless"
+  ];
   hosts = {
     intel = {
       enable = true;

@@ -5,10 +5,6 @@
 }:
 {
   config = lib.mkIf (lib.elem "tinypc" config.system.tags) {
-    display-manager.enable = false;
-    desktop-environment.enable = false;
-    programs.enable = false;
-
     latex.enable = false;
     programming.enable = false;
     upgrades.enable = true;

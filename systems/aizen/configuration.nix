@@ -5,7 +5,10 @@
     cores = 0;
   };
 
-  system.tags = [ "tinypc" ];
+  system.tags = [
+    "tinypc"
+    "headless"
+  ];
 
   fwupd.enable = false;
 

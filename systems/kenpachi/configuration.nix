@@ -4,7 +4,10 @@
   ...
 }:
 {
-  system.tags = [ "tinypc" ];
+  system.tags = [
+    "tinypc"
+    "headless"
+  ];
   tpm.enable = true;
 
   colmena.deployment.buildOnTarget = false;
