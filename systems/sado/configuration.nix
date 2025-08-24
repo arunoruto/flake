@@ -16,6 +16,11 @@
   desktop-environment.enable = false;
   programs.enable = false;
 
+  boot.kernelParams = [
+    "pcie_aspm=force"
+    "pcie_aspm.policy=powersupersave"
+  ];
+
   services = {
     media = {
       enable = true;
@@ -44,5 +49,8 @@
     };
     traefik.enable = true;
     syncthing.enable = true;
+
+    tlp.enable = true;
+    power-profiles-daemon.enable = false;
   };
 }
