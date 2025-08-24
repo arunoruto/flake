@@ -39,33 +39,36 @@
           };
           openFirewall = lib.mkDefault cfg.openFirewall;
         };
-        tailscale.serve = {
-          enable = true;
-          config =
-            let
-              port = 2283;
-            in
-            {
-              TCP = {
-                "${builtins.toString port}" = {
-                  HTTPS = true;
-                };
-              };
-              Web = {
-                "${config.networking.hostName}.${config.services.tailscale.tailnet}.ts.net:${builtins.toString port}" =
-                  {
-                    Handlers = {
-                      "/" = {
-                        Proxy = "http://127.0.0.1:${builtins.toString config.services.immich.port}";
-                      };
-                    };
-                  };
-              };
-              # AllowFunnel = {
-              #   "mealie.auto-generated.ts.net:443" = true;
-              # };
-            };
-        };
+        # tailscale.serve = {
+        #   enable = true;
+        #   config =
+        #     let
+        #       port = 2283;
+        #     in
+        #     {
+        #       TCP = {
+        #         "${builtins.toString port}" = {
+        #           HTTPS = true;
+        #         };
+        #       };
+        #       Web = {
+        #         "${config.networking.hostName}.${config.services.tailscale.tailnet}.ts.net:${builtins.toString port}" =
+        #           {
+        #             Handlers = {
+        #               "/" = {
+        #                 Proxy = "http://127.0.0.1:${builtins.toString config.services.immich.port}";
+        #               };
+        #             };
+        #           };
+        #       };
+        #       # AllowFunnel = {
+        #       #   "mealie.auto-generated.ts.net:443" = true;
+        #       # };
+        #     };
+        # };
       };
+    users.users.immich.extraGroups = lib.optionals (config.users.groups ? "media") [
+      config.users.groups.media.name
+    ];
   };
 }
