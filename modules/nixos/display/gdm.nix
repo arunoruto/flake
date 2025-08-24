@@ -15,7 +15,7 @@
         displayManager = {
           gdm = {
             enable = true;
-            autoSuspend = !config.hosts.laptop.enable;
+            autoSuspend = !(lib.elem "laptop" config.system.tags);
           };
         };
       };

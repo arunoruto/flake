@@ -5,7 +5,7 @@
     cores = 0;
   };
 
-  hosts.tinypc.enable = true;
+  system.tags = [ "tinypc" ];
 
   fwupd.enable = false;
 

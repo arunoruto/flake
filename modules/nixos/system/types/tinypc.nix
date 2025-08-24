@@ -4,9 +4,7 @@
   ...
 }:
 {
-  options.hosts.tinypc.enable = lib.mkEnableOption "Sensible defaults for tiny/mini PCs";
-
-  config = lib.mkIf config.hosts.tinypc.enable {
+  config = lib.mkIf (lib.elem "tinypc" config.system.tags) {
     display-manager.enable = false;
     desktop-environment.enable = false;
     programs.enable = false;

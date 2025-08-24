@@ -4,7 +4,7 @@
   ...
 }:
 {
-  hosts.tinypc.enable = true;
+  system.tags = [ "tinypc" ];
   tpm.enable = true;
 
   colmena.deployment.buildOnTarget = false;

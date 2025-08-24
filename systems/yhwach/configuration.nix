@@ -1,6 +1,6 @@
 {
+  system.tags = [ "workstation" ];
   hosts = {
-    workstation.enable = true;
     nvidia.enable = true;
   };
   yubikey.signing = "giyu";

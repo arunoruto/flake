@@ -32,13 +32,13 @@
         extraUpFlags = [
           "--accept-routes"
         ]
-        ++ lib.optionals (config.hosts.tinypc.enable) [
+        ++ lib.optionals ((lib.elem "tinypc" config.system.tags)) [
           "--ssh"
         ]
-        ++ lib.optionals (!config.hosts.tinypc.enable) [
+        ++ lib.optionals (!(lib.elem "tinypc" config.system.tags)) [
           "--exit-node-allow-lan-access"
         ];
-        extraSetFlags = lib.optionals (config.hosts.tinypc.enable) [
+        extraSetFlags = lib.optionals ((lib.elem "tinypc" config.system.tags)) [
           "--advertise-exit-node"
         ];
         permitCertUid = if config.services.traefik.enable then "traefik" else null;

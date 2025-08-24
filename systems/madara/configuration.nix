@@ -26,8 +26,8 @@ in
   ai.enable = true;
   printing.enable = true;
   scanning.enable = true;
+  system.tags = [ "workstation" ];
   hosts = {
-    workstation.enable = true;
     nvidia.enable = true;
   };
   hardware = {

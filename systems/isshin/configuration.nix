@@ -8,8 +8,8 @@
   imports = [ "${inputs.nixpkgs-unstable.outPath}/nixos/modules/hardware/fw-fanctrl.nix" ];
   colmena.deployment.allowLocalDeployment = lib.mkDefault true;
 
+  system.tags = [ "laptop" ];
   hosts = {
-    laptop.enable = true;
     amd.enable = true;
   };
   tpm.enable = false;

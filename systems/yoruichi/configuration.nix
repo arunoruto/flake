@@ -1,6 +1,6 @@
 { ... }:
 {
-  hosts.tinypc.enable = true;
+  system.tags = [ "tinypc" ];
   colmena.deployment.buildOnTarget = false;
 
   boot.loader = {

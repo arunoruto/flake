@@ -1,4 +1,9 @@
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 {
   imports = [
     # ./dns.nix
@@ -14,7 +19,7 @@
     # Enable networking
     networkmanager = {
       enable = true;
-      wifi.powersave = config.hosts.laptop.enable;
+      wifi.powersave = (lib.elem "laptop" config.system.tags);
     };
     firewall = {
       # Disable the firewall altogether.

@@ -1,8 +1,8 @@
 { ... }:
 {
   # colmena.deployment.buildOnTarget = true;
+  system.tags = [ "tinypc" ];
   hosts = {
-    tinypc.enable = true;
     intel = {
       enable = true;
       gpu.enable = true;
