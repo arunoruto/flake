@@ -12,14 +12,6 @@
         grep = "rg";
         tss = "tailscale switch $(tailscale switch --list | tail -n +2 | fzf | tr -s ' ' | cut -d ' ' -f1)";
         fish-bench = ''${lib.getExe pkgs.hyperfine} --warmup 3 "fish -i -c exit"'';
-        pyrepl = ''
-          ${lib.getExe pkgs.python3} -i -c "${
-            lib.strings.concatStringsSep ";" [
-              "import numpy as np"
-            ]
-          }"
-        '';
-
       };
       interactiveShellInit = ''
         # Disable greeting

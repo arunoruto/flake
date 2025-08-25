@@ -46,19 +46,34 @@ in
   options.python.enable = lib.mkEnableOption "Setup a python environment";
 
   config = lib.mkIf config.python.enable {
-    environment = {
-      systemPackages = with pkgs; [
-        (python3.withPackages packages)
-        manim
-        manim-slides
-        mkdocs
-        poetry
-        uv
-      ];
+    environment =
+      let
+        my-python = (pkgs.python3.withPackages packages);
+      in
+      {
+        systemPackages =
+          (with pkgs; [
+            manim
+            manim-slides
+            mkdocs
+            poetry
+            uv
+          ])
+          ++ [ my-python ];
 
-      sessionVariables = {
-        PYTHON_KEYRING_BACKEND = "keyring.backends.null.Keyring";
+        sessionVariables = {
+          PYTHON_KEYRING_BACKEND = "keyring.backends.null.Keyring";
+        };
+
+        shellAliases = {
+          pyrepl = ''
+            ${lib.getExe my-python} -i -c "${
+              lib.strings.concatStringsSep ";" [
+                "import numpy as np"
+              ]
+            }"
+          '';
+        };
       };
-    };
   };
 }
