@@ -41,7 +41,7 @@
       inputs.cpu-microcodes.follows = "cpu-microcodes";
     };
     nixos-facter-modules = {
-      url = "github:numtide/nixos-facter-modules";
+      url = "github:numtide/nixos-facter-modules?rev=25122ee37b0c1f22b07c9fe5f970a7487093a4c0";
       # inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
     lanzaboote = {
