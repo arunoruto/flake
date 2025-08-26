@@ -73,7 +73,7 @@ sudo nix run \
   github:numtide/nixos-facter -- -o facter.json
 ```
 
-## Nixvim
+## ~Nixvim~ HELIX FTW!
 
 Nixvim is the nix way to configure neovim.
 More information can be found in the [nvim README](../modules/home-manager/server/shell/nvim/README.md).
