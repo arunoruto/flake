@@ -55,5 +55,6 @@
 
     tlp.enable = true;
     power-profiles-daemon.enable = false;
+    home-assistant.enable = false;
   };
 }

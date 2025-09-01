@@ -15,8 +15,9 @@
 
     ./ai.nix
     ./davmail.nix
-    ./github-runner.nix
     ./flatpak.nix
+    ./github-runner.nix
+    ./home-assistant.nix
     ./ssh.nix
   ];
 
