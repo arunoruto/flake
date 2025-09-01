@@ -81,6 +81,7 @@ in
           nix-du
           nix-index # for developing nixpkgs
           nix-tree
+          nix-update
           nix-output-monitor
           nvd
           unstable.nixpkgs-review
