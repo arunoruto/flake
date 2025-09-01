@@ -8,6 +8,7 @@
 # }:
 pkgs:
 rec {
+  beszel = pkgs.callPackage ./beszel/package.nix { };
   adda = pkgs.callPackage ./adda/package.nix { };
   adda-mpi = pkgs.callPackage ./adda/package.nix { target = "mpi"; };
   adda-ocl = pkgs.callPackage ./adda/package.nix { target = "ocl"; };
