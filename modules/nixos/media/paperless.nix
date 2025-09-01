@@ -2,10 +2,14 @@
   lib,
   pkgs,
   config,
+  # inputs,
   ...
 }:
 {
+  # imports = [ "${inputs.nixpkgs-unstable.outPath}/nixos/modules/services/misc/paperless.nix" ];
+
   options.services.paperless.openFirewall = lib.mkEnableOption "Open firewall for Paperless";
+
   config = lib.mkIf config.services.paperless.enable {
     services =
       let
@@ -17,7 +21,8 @@
             cfg = config.services.media;
           in
           {
-            package = lib.mkDefault pkgs.unstable.paperless-ngx;
+            # package = lib.mkDefault pkgs.unstable.paperless-ngx;
+            package = lib.mkDefault pkgs.paperless-ngx;
             dataDir = lib.mkDefault "${cfg.dataDir}/paperless";
             configureTika = lib.mkDefault true;
             address = if config.services.paperless.openFirewall then "0.0.0.0" else "127.0.0.1";
