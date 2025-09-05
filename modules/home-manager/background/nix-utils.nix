@@ -59,6 +59,42 @@ in
       extraOptions = ''
         trusted-users = root ${user}
       '';
+      registry = {
+        nixpkgs = {
+          from = {
+            id = "nixpkgs";
+            type = "indirect";
+          };
+          to = {
+            owner = "NixOS";
+            repo = "nixpkgs";
+            type = "github";
+            inherit (inputs.nixpkgs) rev;
+          };
+        };
+        unstable = {
+          from = {
+            id = "unstable";
+            type = "indirect";
+          };
+          to = {
+            owner = "NixOS";
+            repo = "nixpkgs";
+            type = "github";
+            inherit (inputs.nixpkgs-unstable) rev;
+          };
+        };
+        my = {
+          from = {
+            id = "my";
+            type = "indirect";
+          };
+          to = {
+            url = "/home/${user}/.config/flake";
+            type = "git";
+          };
+        };
+      };
     };
 
     programs.nh = {
