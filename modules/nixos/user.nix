@@ -6,7 +6,7 @@
   ...
 }:
 let
-  username = config.username;
+  inherit (config) username;
   shell = config.home-manager.users.${username}.shell.main;
 in
 {

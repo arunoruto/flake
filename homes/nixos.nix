@@ -19,7 +19,7 @@ let
   # sys = modules.system;
   # defaults = sys.programs.default;
   # specialArgs = {inherit theme image inputs self inputs' self' defaults;};
-  username = config.username;
+  inherit (config) username;
   specialArgs = {
     inherit inputs;
     # user = username;

@@ -6,7 +6,7 @@
   ...
 }:
 let
-  username = config.username;
+  inherit (config) username;
 in
 {
   imports = [ inputs.stylix.nixosModules.stylix ];
@@ -42,7 +42,7 @@ in
       base16Scheme = lib.mkDefault "${pkgs.base16-schemes}/share/themes/${config.theming.scheme}.yaml";
       # base16Scheme = lib.mkDefault "${pkgs.unstable.base16-schemes}/share/themes/${config.theming.scheme}.yaml";
       image = inputs.wallpapers + "/${config.theming.image}";
-      polarity = config.home-manager.users.${username}.stylix.polarity;
+      inherit (config.home-manager.users.${username}.stylix) polarity;
       cursor = lib.mkIf config.programs.enable config.home-manager.users.${username}.stylix.cursor;
       # cursor =
       #   let

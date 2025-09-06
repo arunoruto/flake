@@ -39,7 +39,7 @@
   # be accessible through 'pkgs.unstable'
   unstable-packages = final: prev: {
     unstable = import inputs.nixpkgs-unstable {
-      system = final.system;
+      inherit (final) system;
       config = {
         allowUnfree = true;
         nvidia.acceptLicense = true;

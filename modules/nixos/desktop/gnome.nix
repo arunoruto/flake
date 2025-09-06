@@ -17,7 +17,7 @@
       };
       gnome = {
         gnome-keyring.enable = true;
-        gnome-remote-desktop.enable = (lib.elem "workstation" config.system.tags);
+        gnome-remote-desktop.enable = lib.elem "workstation" config.system.tags;
         sushi.enable = true;
       };
       # For gestures

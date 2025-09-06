@@ -7,7 +7,7 @@
   ...
 }@args:
 let
-  user = config.user;
+  inherit (config) user;
   nix-repl = pkgs.writeScriptBin "nix-repl" (
     ''
       #!${lib.getExe pkgs.expect}

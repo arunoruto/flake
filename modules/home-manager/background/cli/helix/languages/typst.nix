@@ -26,9 +26,7 @@ in
                 "tinymist"
               ]
               # ++ lib.optionals (ls ? lsp-ai) [ "lsp-ai" ]
-              ++ lib.optionals (ls ? gpt) [ "gpt" ]
-              # ++ lib.optionals (ls ? copilot) [ "copilot" ]
-              ++ [ ];
+              ++ lib.optionals (ls ? gpt) [ "gpt" ];
             formatter.command = "typstyle";
             soft-wrap.enable = true;
           }

@@ -5,7 +5,7 @@
   ...
 }:
 let
-  username = config.username;
+  inherit (config) username;
   user-conf = config.users.users.${username};
   secretspath = builtins.toString inputs.secrets;
 in

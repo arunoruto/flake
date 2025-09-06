@@ -5,7 +5,7 @@
   ...
 }:
 let
-  modifier = config.wayland.windowManager.sway.config.modifier;
+  inherit (config.wayland.windowManager.sway.config) modifier;
   terminal = "wezterm";
   menu = "${pkgs.rofi}/bin/rofi -show drun";
   lockscreen = "${pkgs.swaylock}/bin/swaylock";

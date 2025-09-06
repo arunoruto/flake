@@ -1,6 +1,6 @@
 { config, ... }:
 let
-  user = config.user;
+  inherit (config) user;
 in
 {
   imports = [

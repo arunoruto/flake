@@ -5,7 +5,7 @@
   ...
 }:
 let
-  username = config.username;
+  inherit (config) username;
   homedir = if pkgs.stdenv.isLinux then "/home/${username}" else throw "Only setup for Linux!";
 in
 {

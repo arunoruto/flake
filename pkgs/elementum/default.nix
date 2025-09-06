@@ -44,13 +44,11 @@ buildKodiAddon rec {
   propagatedBuildInputs =
     # [ flake8 ]
     # ++
-    (with python3Packages; [
+    with python3Packages; [
       flake8
       six
       requests
-    ])
-    # ++ (with kodiPackages; [ xbmcswift2 ])
-    ++ [ ];
+    ];
 
   buildPhase = ":";
 

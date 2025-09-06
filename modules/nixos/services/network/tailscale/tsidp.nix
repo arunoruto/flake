@@ -93,8 +93,8 @@
                 "-local-port ${builtins.toString cfg.localPort}"
               ]
             }"
-            + lib.optionalString (cfg.useLocalTailscaled) " -use-local-tailscaled"
-            + lib.optionalString (cfg.verbose) " -verbose";
+            + lib.optionalString cfg.useLocalTailscaled " -use-local-tailscaled"
+            + lib.optionalString cfg.verbose " -verbose";
 
           Restart = "always";
           RestartSec = "5s";

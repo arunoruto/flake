@@ -72,7 +72,7 @@
 
     thefuck = {
       enable = true;
-      enableInstantMode = (args ? nixosConfig);
+      enableInstantMode = args ? nixosConfig;
     };
 
     vivid = {

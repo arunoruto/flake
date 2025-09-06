@@ -39,7 +39,7 @@ let
     { package }:
     buildFHSEnv {
       name = package.meta.mainProgram;
-      version = package.version;
+      inherit (package) version;
       targetPkgs = pkgs: [ pkgs.stdenv.cc.cc.lib ];
       runScript = lib.getExe package;
 

@@ -51,6 +51,8 @@ jobs:
       #   uses: DeterminateSystems/flakehub-cache-action@main
       - name: Check Flake
         run: nix flake check --accept-flake-config
+      # - name: Linting
+      #   run: nix run nixpkgs#statix -- check
       # run: |
       #   NIXPKGS_ALLOW_INSECURE=1
       #   nix flake check

@@ -48,7 +48,7 @@ in
   config = lib.mkIf config.python.enable {
     environment =
       let
-        my-python = (pkgs.python3.withPackages packages);
+        my-python = pkgs.python3.withPackages packages;
       in
       {
         systemPackages =

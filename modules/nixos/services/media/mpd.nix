@@ -4,7 +4,7 @@
   ...
 }:
 let
-  username = config.username;
+  inherit (config) username;
 in
 {
   options = {
@@ -20,7 +20,7 @@ in
         # must specify one or more outputs in order to play audio!
         # (e.g. ALSA, PulseAudio, PipeWire), see next sections
       ''
-      + lib.optionalString (config.services.pipewire.enable) ''
+      + lib.optionalString config.services.pipewire.enable ''
         audio_output {
           type "pipewire"
           name "My PipeWire Output"

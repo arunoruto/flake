@@ -52,7 +52,7 @@
                   selected.connector
                   "preferred"
                   "auto"
-                  (builtins.toString (if selected ? hyprScale then selected.hyprScale else selected.rate))
+                  (builtins.toString (selected.hyprScale or selected.rate))
                 ])
               else
                 ""
@@ -88,9 +88,7 @@
                   <mode>
                     <width>${builtins.toString monitor.detail.width}</width>
                     <height>${builtins.toString monitor.detail.height}</height>
-                    <rate>${
-                      builtins.toString (if selected ? gnomeRate then selected.gnomeRate else selected.rate)
-                    }</rate>
+                    <rate>${builtins.toString (selected.gnomeRate or selected.rate)}</rate>
                   </mode>
                 </monitor>
               </logicalmonitor>

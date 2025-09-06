@@ -112,8 +112,8 @@
             "sabnzbd" = {
               "/var/lib/sabnzbd".Z = {
                 mode = "0755";
-                user = cfg.user;
-                group = cfg.group;
+                inherit (cfg) user;
+                inherit (cfg) group;
               };
               # "/var/lib/sabnzbd/logs".Z = {
               #   mode = "0755";
@@ -138,8 +138,8 @@
                 in
                 {
                   mode = "0755";
-                  user = cfg.user;
-                  group = cfg.group;
+                  inherit (cfg) user;
+                  inherit (cfg) group;
                 };
               "${incompletedPath}".Z = {
                 mode = "0777";

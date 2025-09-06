@@ -66,7 +66,7 @@ with lib;
     };
 
     filetypes = mkOption {
-      type = yaml.type;
+      inherit (yaml) type;
       default = { };
       example = literalExpression ''
         {
@@ -89,7 +89,7 @@ with lib;
     };
 
     themes = mkOption {
-      type = types.attrsOf (yaml.type);
+      type = types.attrsOf yaml.type;
       default = { };
       example = literalExpression ''
         {

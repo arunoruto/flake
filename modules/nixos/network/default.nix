@@ -19,7 +19,7 @@
     # Enable networking
     networkmanager = {
       enable = true;
-      wifi.powersave = (lib.elem "laptop" config.system.tags);
+      wifi.powersave = lib.elem "laptop" config.system.tags;
     };
     firewall = {
       # Disable the firewall altogether.

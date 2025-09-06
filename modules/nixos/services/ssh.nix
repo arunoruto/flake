@@ -4,7 +4,7 @@
   ...
 }:
 let
-  username = config.username;
+  inherit (config) username;
   pubKeys = lib.filesystem.listFilesRecursive (lib.path.append ../../../. "homes/${username}/keys");
 in
 

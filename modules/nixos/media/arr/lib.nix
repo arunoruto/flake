@@ -6,7 +6,7 @@ lib: {
         routers."${serviceName}" =
           let
             host = config.networking.hostName;
-            tailnet = config.services.tailscale.tailnet;
+            inherit (config.services.tailscale) tailnet;
             tailurl = "${host}.${tailnet}.ts.net";
           in
           {

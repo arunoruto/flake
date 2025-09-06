@@ -51,7 +51,7 @@ in
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
 
-      environment = cfg.environment;
+      inherit (cfg) environment;
       path =
         cfg.extraPath
         ++ lib.optionals (builtins.elem "nvidia" config.services.xserver.videoDrivers) [

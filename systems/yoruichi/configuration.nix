@@ -1,5 +1,4 @@
-{ ... }:
-{
+_: {
   system.tags = [
     "tinypc"
     "headless"

@@ -61,7 +61,7 @@
           # url = "kuchiki.sparrow-yo.ts.net";
           inherit url;
           # url = config.services.paperless.settings.PAPERLESS_URL;
-          port = config.services.paperless.port;
+          inherit (config.services.paperless) port;
           path = config.services.paperless.settings.PAPERLESS_FORCE_SCRIPT_NAME;
         };
 

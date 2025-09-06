@@ -6,7 +6,7 @@
 }:
 let
   clean_nh_over_nix = true;
-  username = config.username;
+  inherit (config) username;
 in
 {
   options = {

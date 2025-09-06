@@ -1,5 +1,4 @@
-{ ... }:
-{
+_: {
   # colmena.deployment.buildOnTarget = true;
   system.tags = [
     "tinypc"
