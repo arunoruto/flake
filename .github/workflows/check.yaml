@@ -49,23 +49,23 @@ jobs:
           logger: pretty
       # - name: Cache
       #   uses: DeterminateSystems/flakehub-cache-action@main
+      - name: Flake Statistics
+        run: |
+          echo "# :clock5: Tokei Summary" >> $GITHUB_STEP_SUMMARY
+          nix run nixpkgs#tokei -- -o json . | jq -r '
+            # Header for the markdown table
+            "| Language | Files | Code | Comments | Blanks |",
+            "|---|---|---|---|---|",
+
+            # Process each language
+            (keys_unsorted | .[] | select(. != "Total")) as $lang |
+            (.[$lang] | "| \($lang) | \(.reports | length) | \(.code) | \(.comments) | \(.blanks) |")
+            ' >> $GITHUB_STEP_SUMMARY
+          cat $GITHUB_STEP_SUMMARY
       - name: Check Flake
         run: nix flake check --accept-flake-config
       # - name: Linting
       #   run: nix run nixpkgs#statix -- check
-      # run: |
-      #   NIXPKGS_ALLOW_INSECURE=1
-      #   nix flake check
-      #   --no-build
-      #   --impure
-      # --show-trace
-      # run: NIXPKGS_ALLOW_INSECURE=1 nix flake check --no-build --accept-flake-config --impure
-      # run: NIXPKGS_ALLOW_INSECURE=1 nix flake check --accept-flake-config --impure
-      - name: Flake Statistics
-        run: |
-          echo "# :clock5: Tokei Summary" >> $GITHUB_STEP_SUMMARY
-          nix run nixpkgs#tokei >> $GITHUB_STEP_SUMMARY
-          cat $GITHUB_STEP_SUMMARY
 
   # check-flake-debug:
   #   name: Check Flake (debug mode)
