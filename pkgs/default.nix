@@ -14,9 +14,7 @@ rec {
   adda-ocl = pkgs.callPackage ./adda/package.nix { target = "ocl"; };
   adda-gui = pkgs.callPackage ./adda-gui/package.nix { inherit adda; };
   adda-gui-update-script = adda-gui.mitmCache.updateScript;
-  copilot-language-server = pkgs.callPackage ./copilot-language-server { };
-  copilot-language-server-js = pkgs.callPackage ./copilot-language-server/js.nix { };
-  copilot-language-server-fhs = copilot-language-server.fhs;
+  copilot-language-server = pkgs.callPackage ./copilot-language-server/package.nix { };
   # spirv-reflect = pkgs.callPackage ./spirv-reflect { };
   # dpcpp = pkgs.callPackage ./dpcpp { };
   # dpcpp-bin = pkgs.callPackage ./dpcpp/bin.nix { };
