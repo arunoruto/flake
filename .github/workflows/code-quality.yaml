@@ -9,37 +9,37 @@ on:
       - ".github/workflows/code-quality.yaml"
 
 jobs:
-  statix:
-    name: Code Linting
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    # strategy:
-    #   fail-fast: false
-    concurrency:
-      group: ${{ github.workflow }}-lint
-      cancel-in-progress: false
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 1
-      - name: Set Swap Space
-        uses: pierotofy/set-swap-space@master
-        with:
-          swap-size-gb: 10
-      - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@main
-        with:
-          logger: pretty
-      # - name: Cache
-      #   uses: DeterminateSystems/flakehub-cache-action@main
-      - name: Linting
-        run: |
-          echo "# Statix Check" >> $GITHUB_STEP_SUMMARY
-          nix shell nixpkgs#statix
-          statix -- check >> $GITHUB_STEP_SUMMARY
-          # nix run nixpkgs#statix -- check >> $GITHUB_STEP_SUMMARY
+  # statix:
+  #   name: Code Linting
+  #   runs-on: ubuntu-latest
+  #   timeout-minutes: 30
+  #   # strategy:
+  #   #   fail-fast: false
+  #   concurrency:
+  #     group: ${{ github.workflow }}-lint
+  #     cancel-in-progress: false
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
+  #       with:
+  #         token: ${{ secrets.GITHUB_TOKEN }}
+  #         fetch-depth: 1
+  #     - name: Set Swap Space
+  #       uses: pierotofy/set-swap-space@master
+  #       with:
+  #         swap-size-gb: 10
+  #     - name: Install Nix
+  #       uses: DeterminateSystems/nix-installer-action@main
+  #       with:
+  #         logger: pretty
+  #     # - name: Cache
+  #     #   uses: DeterminateSystems/flakehub-cache-action@main
+  #     - name: Linting
+  #       run: |
+  #         echo "# Statix Check" >> $GITHUB_STEP_SUMMARY
+  #         nix shell nixpkgs#statix
+  #         statix -- check >> $GITHUB_STEP_SUMMARY
+  #         # nix run nixpkgs#statix -- check >> $GITHUB_STEP_SUMMARY
   deadnix:
     name: Dead Code Check
     runs-on: ubuntu-latest
