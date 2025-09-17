@@ -32,12 +32,12 @@
   hardware = {
     fw-fanctrl = {
       enable = true;
-      # package = pkgs.unstable.fw-fanctrl;
-      package = pkgs.unstable.fw-fanctrl.overrideAttrs (
-        final: prev: {
-          patches = (prev.patches or [ ]) ++ [ ./fw-fanctrl.patch ];
-        }
-      );
+      package = pkgs.unstable.fw-fanctrl;
+      # package = pkgs.unstable.fw-fanctrl.overrideAttrs (
+      #   final: prev: {
+      #     patches = (prev.patches or [ ]) ++ [ ./fw-fanctrl.patch ];
+      #   }
+      # );
     };
     # framework.enableKmod = false;
   };
