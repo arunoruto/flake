@@ -7,6 +7,7 @@
   fonts.packages =
     (with pkgs; [
       aileron # helvetica
+      comic-relief
       jetbrains-mono
       dejavu_fonts
       liberation_ttf # Times New Roman, Arial, and Courier New
