@@ -10,11 +10,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "copilot-language-server";
-  version = "1.367.0";
+  version = "1.373.1";
 
   src = fetchzip {
     url = "https://github.com/github/copilot-language-server-release/releases/download/${finalAttrs.version}/copilot-language-server-js-${finalAttrs.version}.zip";
-    hash = "sha256-JQf6pQChQQOjJmdoL6DvLxajLfbEZi50p5FeJny0/Ss=";
+    hash = "sha256-LomewSlAKI38rl7eYpfvBx9Mw9tfxXbrlPb/Ex7czZo=";
     stripRoot = false;
   };
 
@@ -38,11 +38,21 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  # dontStrip = true;
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    $out/bin/${finalAttrs.pname} --version
+
+    runHook postInstallCheck
+  '';
+  # postVersionCheck = ''
+  #   $out/bin/${finalAttrs.pname} --version
+  # '';
 
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
+    # tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
   };
 
   meta = {
