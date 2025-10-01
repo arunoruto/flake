@@ -73,3 +73,4 @@ rec {
   # customKodiPackages = import ./kodi.nix pkgs;
 }
 // (import ./kodi.nix pkgs)
+// (import ./home-assistant.nix pkgs)

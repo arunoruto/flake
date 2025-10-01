@@ -7,6 +7,7 @@
   imports = [
     ./docker
     ./hardware
+    ./home-assistant
     ./input
     ./media
     ./nas

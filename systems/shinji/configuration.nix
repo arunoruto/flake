@@ -22,6 +22,7 @@
 
   services = {
     xserver.desktopManager.kodi.enable = true;
+    home-assistant.enable = true;
     cloudflared.enable = true;
     traefik.enable = true;
     plex = {
