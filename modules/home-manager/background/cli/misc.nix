@@ -89,7 +89,7 @@
     };
   };
 
-  home.packages =
+  home.packages = lib.optionals (!config.hosts.tinypc.enable) (
     (with pkgs; [
       broot
       devenv
@@ -98,5 +98,9 @@
       up
       q
     ])
-    ++ (with pkgs.unstable; [ gemini-cli ]);
+    ++ (with pkgs.unstable; [
+      gemini-cli
+      github-copilot-cli
+    ])
+  );
 }

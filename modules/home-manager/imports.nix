@@ -21,7 +21,9 @@
   config = lib.mkIf (args ? nixosConfig) {
     hosts = {
       laptop.enable = lib.mkDefault (lib.elem "laptop" osConfig.system.tags);
-      tinypc.enable = lib.mkDefault (lib.elem "tinypc" osConfig.system.tags);
+      tinypc.enable = lib.mkDefault (
+        (lib.elem "tinypc" osConfig.system.tags) || (lib.elem "headless" osConfig.system.tags)
+      );
     };
     foreground.enable = lib.mkDefault osConfig.programs.enable;
 
