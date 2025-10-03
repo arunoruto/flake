@@ -22,7 +22,7 @@
       };
       # For gestures
       libinput.enable = true;
-      touchegg.enable = true;
+      # touchegg.enable = true;
     };
 
     programs.dconf.enable = lib.mkDefault true;
