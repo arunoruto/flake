@@ -6,7 +6,9 @@
   ...
 }:
 {
+  disabledModules = [ "hardware/cpu/amd-microcode.nix" ];
   imports = [
+    "${inputs.nixpkgs-unstable}/nixos/modules/hardware/cpu/amd-microcode.nix"
     inputs.ucodenix.nixosModules.default
 
     ./gpu.nix
