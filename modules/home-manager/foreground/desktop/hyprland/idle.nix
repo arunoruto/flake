@@ -32,16 +32,21 @@
       # systemdTarget = "hyprland-session.target";
     };
 
-    systemd.user.services.hypridle =
-      let
-        session = "hyprland-session.target";
-      in
-      {
-        Install.WantedBy = lib.mkForce [ session ];
-        Unit = {
-          After = lib.mkForce [ session ];
-          PartOf = lib.mkForce [ session ];
-        };
-      };
+    systemd.user.services.hypridle = {
+      Unit.ConditionEnvironment = lib.mkForce [
+        "WAYLAND_DISPLAY"
+        "XDG_CURRENT_DESKTOP=Hyprland"
+      ];
+    };
+    # let
+    #   session = "hyprland-session.target";
+    # in
+    # {
+    #   Install.WantedBy = lib.mkForce [ session ];
+    #   Unit = {
+    #     After = lib.mkForce [ session ];
+    #     PartOf = lib.mkForce [ session ];
+    #   };
+    # };
   };
 }

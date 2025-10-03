@@ -42,6 +42,10 @@
           Description = "A very segsy desktop shell.";
           After = [ "${cfg.target}.target" ];
           Requires = [ "${cfg.target}.target" ];
+          ConditionEnvironment = [
+            "WAYLAND_DISPLAY"
+            "XDG_CURRENT_DESKTOP=Hyprland"
+          ];
         };
         Service = {
           Type = "exec";
