@@ -37,6 +37,7 @@
         pip-on-top
         tactile
         tiling-shell
+        toggler
         tophat
         # transparent-top-bar
         transparent-top-bar-adjustable-transparency

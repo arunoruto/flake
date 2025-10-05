@@ -37,6 +37,7 @@
       window-height = config.terminals.height;
       window-width = config.terminals.width;
       keybind = [
+        "global:ctrl+backquote=toggle_quick_terminal"
         "alt+enter=toggle_fullscreen"
         "alt+h=previous_tab"
         "alt+l=next_tab"
