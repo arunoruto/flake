@@ -5,11 +5,8 @@
   ...
 }:
 {
-  options.netbird.enable = lib.mkEnableOption "Enable netbird";
-
-  config = lib.mkIf config.netbird.enable {
+  config = lib.mkIf config.services.netbird.enable {
     services.netbird = {
-      enable = true;
       package = pkgs.unstable.netbird;
       # port = tailscale-port;
       # useRoutingFeatures = "client";

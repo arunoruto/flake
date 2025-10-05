@@ -12,13 +12,13 @@
   ];
 
   local-resolv.enable = lib.mkDefault true;
-  netbird.enable = lib.mkDefault false;
 
   services = {
     tailscale = {
       enable = lib.mkDefault true;
       tailnet = lib.mkDefault "sparrow-yo";
     };
+    netbird.enable = lib.mkDefault false;
   };
   programs = {
     localsend.enable = lib.mkDefault true;
