@@ -117,6 +117,7 @@
       # scheme = "outrun-dark";
       # scheme = "pandora";
       # scheme = "heetch";
+      # scheme = "solarized-dark";
       scheme = "gruvbox-material-dark-hard";
       # scheme = "gruvbox-material-light-hard";
       # scheme = "rose-pine-dawn";

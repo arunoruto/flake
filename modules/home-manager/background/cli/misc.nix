@@ -92,13 +92,13 @@
   home.packages = lib.optionals (!config.hosts.tinypc.enable) (
     (with pkgs; [
       broot
-      devenv
       fx
       gping
       up
       q
     ])
     ++ (with pkgs.unstable; [
+      devenv
       gemini-cli
       github-copilot-cli
     ])

@@ -29,6 +29,7 @@ rec {
   # tdarr-node = pkgs.callPackage ./tdarr/node.nix { };
   # tdarr-server = pkgs.callPackage ./tdarr/server.nix { };
   teaftp = pkgs.callPackage ./teaftp/package.nix { };
+  terminus = pkgs.callPackage ./terminus/package.nix { };
   tftp-now = pkgs.callPackage ./tftp-now/package.nix { };
   unibear = pkgs.callPackage ./unibear/bin.nix { };
   # unibear = pkgs.callPackage ./unibear/package.nix { };
