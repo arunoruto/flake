@@ -8,16 +8,10 @@ let
   kodi-user = "kodi";
 in
 {
-  options = {
-    kodi.enable = lib.mkEnableOption "Use KODi as a desktop environment";
-  };
-
-  config = lib.mkIf config.kodi.enable {
+  config = lib.mkIf config.services.xserver.desktopManager.kodi.enable {
     services = {
       xserver = {
-        enable = lib.mkDefault true;
         desktopManager.kodi = {
-          enable = true;
           package = pkgs.unstable.kodi.withPackages (
             kodiPkgs: with kodiPkgs; [
               jellycon

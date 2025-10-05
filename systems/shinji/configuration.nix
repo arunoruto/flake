@@ -13,7 +13,6 @@
     "headless"
   ];
   hosts.intel.enable = true;
-  kodi.enable = true;
   bosflix = {
     enable = true;
     drivePath = /media/86336459-5d8c-448e-93c3-f3e17c00d3b9;
@@ -22,6 +21,7 @@
   media.external-drives.enable = true;
 
   services = {
+    xserver.desktopManager.kodi.enable = true;
     cloudflared.enable = true;
     traefik.enable = true;
     plex = {

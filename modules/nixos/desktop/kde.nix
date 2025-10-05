@@ -5,13 +5,7 @@
   ...
 }:
 {
-  options.kde.enable = lib.mkEnableOption "Use the KDE desktop environment";
-
-  config = lib.mkIf config.kde.enable {
-    services = {
-      desktopManager.plasma6.enable = true;
-    };
-
+  config = lib.mkIf config.services.desktopManager.plasma6.enable {
     security.pam.services.kwallet = {
       name = "kwallet";
       enableKwallet = true;

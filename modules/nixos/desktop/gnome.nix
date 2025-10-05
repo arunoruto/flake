@@ -7,10 +7,9 @@
 {
   options.gnome.enable = lib.mkEnableOption "Use the GNOME desktop environment";
 
-  config = lib.mkIf config.gnome.enable {
+  config = lib.mkIf config.services.xserver.desktopManager.gnome.enable {
     services = {
       xserver.desktopManager.gnome = {
-        enable = true;
         extraGSettingsOverridePackages = with pkgs; [
           # gnome.mutter
         ];

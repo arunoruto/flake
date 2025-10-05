@@ -20,10 +20,10 @@
 
   config = lib.mkIf config.desktop-environment.enable {
     # DEs
-    # cosmic.enable = lib.mkDefault false;
-    gnome.enable = lib.mkDefault true;
-    # kde.enable = lib.mkDefault false;
-    kodi.enable = lib.mkDefault false;
+    services.desktopManager = {
+      cosmic.enable = lib.mkDefault true;
+      plasma6.enable = lib.mkDefault false;
+    };
 
     # WMs
     programs = {
@@ -35,6 +35,11 @@
     wayland.enable = lib.mkDefault true;
 
     services.xserver = {
+      desktopManager = {
+        gnome.enable = lib.mkDefault true;
+        kodi.enable = lib.mkDefault false;
+      };
+
       enable = true;
       xkb = {
         layout = "de";
