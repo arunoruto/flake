@@ -15,6 +15,11 @@
             enabled = true;
             port = 8080;
           };
+          mqtt = {
+            server = "mqtt://localhost:1883";
+            user = "zigbee2mqtt";
+            password = "mqtt2zigbee";
+          };
           # serial = {
           #   # port = "tcp://10.42.42.69:6638";
           #   # baudrate = 115200;
@@ -32,7 +37,7 @@
               ui_mode = "normal";
               title = "Zigbee2MQTT";
               icon = "mdi:bee";
-              url = "localhost";
+              url = "localhost:8080";
             };
           };
     };

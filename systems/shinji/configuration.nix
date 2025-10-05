@@ -23,6 +23,10 @@
   services = {
     xserver.desktopManager.kodi.enable = true;
     home-assistant.enable = true;
+    zigbee2mqtt.settings.serial = {
+      port = "/dev/serial/by-id/usb-Texas_Instruments_TI_CC2531_USB_CDC___0X00124B0014D9C839-if00";
+      adapter = "zstack";
+    };
     cloudflared.enable = true;
     traefik.enable = true;
     plex = {

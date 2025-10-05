@@ -6,6 +6,7 @@
 }:
 {
   imports = [
+    ./mosquitto.nix
     ./zigbee2mqtt.nix
   ];
   services = {
@@ -34,14 +35,16 @@
         "google_translate"
         "isal"
         "met"
+        "mqtt"
         "radio_browser"
         "shopping_list"
+        "tasmota"
       ];
       customComponents = with pkgs.home-assistant-custom-components; [
         hass-ingress
       ];
     };
     mosquitto.enable = true;
-    zigbee2mqtt.enable = false;
+    zigbee2mqtt.enable = true;
   };
 }

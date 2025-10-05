@@ -26,7 +26,7 @@
       services = {
         prowlarr = {
           enable = true;
-          package = pkgs.unstable.prowlarr;
+          # package = pkgs.unstable.prowlarr;
           # settings = {
           #   server = {
           #     urlbase = "/prowlarr";

@@ -19,7 +19,6 @@
     ./flatpak.nix
     ./github-runner.nix
     ./harmonia.nix
-    ./home-assistant.nix
     ./ssh.nix
   ];
 

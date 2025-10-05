@@ -9,6 +9,7 @@
     ./external-drives.nix
     ./immich.nix
     ./jellyfin.nix
+    ./manga.nix
     ./paperless.nix
     # ./qbittorrent.nix
     ./syncthing.nix
