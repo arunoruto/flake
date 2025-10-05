@@ -127,11 +127,14 @@
       # image = "anime/gruvbox/boonies.png";
       # image = "anime/dan-da-dan/op/okarun1.png";
       # image = "anime/dan-da-dan/op/okarun2.png";
-      image = "anime/dan-da-dan/op/okarun3-gruvbox.png";
+      # image = "anime/dan-da-dan/op/okarun3-gruvbox.png";
       # image = "anime/dan-da-dan/op/okarun4.png";
       # image = "anime/dan-da-dan/op/okarun5.png";
       # image = "anime/dan-da-dan/op/jiji1.png";
       # image = "anime/dan-da-dan/op/turbogranny1.png";
+      # image = "art/solar-system.jpg";
+      # image = "art/gruvb_solarsys.png";
+      image = "art/solar-system-minimal.jpg";
 
       # currently onlu x86 linux is used
       # will maybe change in the future!
