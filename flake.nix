@@ -67,11 +67,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     # DEs
-    # nixos-cosmic = {
-    #   url = "github:lilyinstarlight/nixos-cosmic";
-    #   inputs.nixpkgs.follows = "nixpkgs-unstable";
-    #   # inputs.nixpkgs.follows = "nixpkgs";
-    # };
     # plasma-manager = {
     #   url = "github:nix-community/plasma-manager";
     #   inputs = {
