@@ -41,6 +41,7 @@
       enable = true;
       webuiPort = 8081;
     };
+    suwayomi-server.enable = true;
   };
 
   security.pki.certificateFiles = [
