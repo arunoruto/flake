@@ -15,8 +15,8 @@ in
 
   options.services.beszel.agent = {
     enable = lib.mkEnableOption "beszel agent";
-
     package = lib.mkPackageOption pkgs "beszel" { };
+    openFirewall = lib.mkEnableOption "Open the firewall port (default 45876).";
 
     environment = lib.mkOption {
       type = lib.types.attrs;
@@ -40,7 +40,6 @@ in
         Extra packages to add to beszel path (such as nvidia-smi or rocm-smi).
       '';
     };
-    openFirewall = lib.mkEnableOption "Open the firewall port.";
   };
 
   config = lib.mkIf cfg.enable {
@@ -51,7 +50,7 @@ in
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
 
-      inherit (cfg) environment;
+      environment = cfg.environment;
       path =
         cfg.extraPath
         ++ lib.optionals (builtins.elem "nvidia" config.services.xserver.videoDrivers) [
@@ -59,6 +58,9 @@ in
         ]
         ++ lib.optionals (builtins.elem "amdgpu" config.services.xserver.videoDrivers) [
           (lib.getBin pkgs.rocmPackages.rocm-smi)
+        ]
+        ++ lib.optionals (builtins.elem "intel" config.services.xserver.videoDrivers) [
+          (lib.getBin pkgs.intel-gpu-tools)
         ];
 
       serviceConfig = {
@@ -94,7 +96,12 @@ in
     };
 
     networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [
-      (if (builtins.hasAttr "PORT" cfg.environment) then cfg.environment.PORT else 45876)
+      (
+        if (builtins.hasAttr "PORT" cfg.environment) then
+          (lib.strings.toInt cfg.environment.PORT)
+        else
+          45876
+      )
     ];
   };
 }

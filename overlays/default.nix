@@ -50,6 +50,7 @@ rec {
     unstable = import inputs.nixpkgs-unstable {
       inherit (final) system;
       overlays = [
+        additions
         modifications
         # (final: prev: {
         #   fw-ectool = prev.fw-ectool.overrideAttrs (oldAttrs: {
