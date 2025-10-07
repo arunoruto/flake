@@ -1,6 +1,6 @@
 # This file defines overlays
 { inputs, ... }:
-{
+rec {
   # This one brings our custom packages from the 'pkgs' directory
   additions = final: prev: import ../pkgs final.pkgs;
 
@@ -28,6 +28,15 @@
     # example = prev.example.overrideAttrs (oldAttrs: rec {
     # ...
     # });
+    fw-ectool = prev.fw-ectool.overrideAttrs (oldAttrs: {
+      cmakeFlags = [ "-DCMAKE_POLICY_VERSION_MINIMUM=3.5" ];
+      # cmake = final.pkgs.cmake;
+      # postPatch = ''
+      #   substituteInPlace CMakeLists.txt --replace-fail \
+      #     'cmake_minimum_required(VERSION 3.1)' \
+      #     'cmake_minimum_required(VERSION 4.0)'
+      # '';
+    });
   };
 
   # custom nvim for the future maybe?
@@ -40,6 +49,18 @@
   unstable-packages = final: prev: {
     unstable = import inputs.nixpkgs-unstable {
       inherit (final) system;
+      overlays = [
+        modifications
+        # (final: prev: {
+        #   fw-ectool = prev.fw-ectool.overrideAttrs (oldAttrs: {
+        #     postPatch = ''
+        #       substituteInPlace CMakeLists.txt --replace-fail \
+        #         'cmake_minimum_required(VERSION 3.1)' \
+        #         'cmake_minimum_required(VERSION 4.0)'
+        #     '';
+        #   });
+        # })
+      ];
       config = {
         allowUnfree = true;
         nvidia.acceptLicense = true;
