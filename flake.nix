@@ -142,6 +142,7 @@
         overlays =
           (with self.overlays; [
             additions
+            modifications
             unstable-packages
           ])
           ++ (with inputs; [ nur.overlays.default ]);
@@ -161,6 +162,7 @@
           inputs
           self
           lib
+          pkgs
           system
           scheme
           image
