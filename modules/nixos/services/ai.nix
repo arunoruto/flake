@@ -27,7 +27,7 @@
         host = "0.0.0.0";
         loadModels = [
           "deepseek-r1:14b"
-          "gemma2:9b"
+          "gemma3:12b"
           "mistral:7b"
         ];
         openFirewall = true;
