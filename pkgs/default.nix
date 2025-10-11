@@ -35,7 +35,10 @@ rec {
   # unibear = pkgs.callPackage ./unibear/package.nix { };
   # wigxjpf = pkgs.callPackage ./wigxjpf/package.nix { };
   # taichi = pkgs.python3Packages.callPackage ./taichi { };
-  numba-cuda = pkgs.python3Packages.callPackage ./numba-cuda { };
+  # numba-cuda = pkgs.python3Packages.callPackage ./numba-cuda { };
+  xiaomi-cloud-tokens-extractor =
+    pkgs.python3Packages.callPackage ./xiaomi-cloud-tokens-extractor
+      { };
 
   # Work testing
   # isis = pkgs.callPackage ./isis/package.nix {
