@@ -16,10 +16,12 @@ in
   options.services.beszel.agent = {
     enable = lib.mkEnableOption "beszel agent";
     package = lib.mkPackageOption pkgs "beszel" { };
-    openFirewall = lib.mkEnableOption "Open the firewall port (default 45876).";
+    openFirewall = (lib.mkEnableOption "") // {
+      description = "Whether to open the firewall port (default 45876).";
+    };
 
     environment = lib.mkOption {
-      type = lib.types.attrs;
+      type = lib.types.attrsOf lib.types.str;
       default = { };
       description = ''
         Environment variables for configuring the beszel-agent service.
@@ -44,7 +46,7 @@ in
 
   config = lib.mkIf cfg.enable {
     systemd.services.beszel-agent = {
-      description = "Beszel Agent";
+      description = "Beszel Server Monitoring Agent";
 
       wantedBy = [ "multi-user.target" ];
       wants = [ "network-online.target" ];
@@ -70,14 +72,22 @@ in
 
         EnvironmentFile = cfg.environmentFile;
 
+        # adds ability to monitor docker/podman containers
+        SupplementaryGroups =
+          lib.optionals config.virtualisation.docker.enable [ "docker" ]
+          ++ lib.optionals (
+            config.virtualisation.podman.enable && config.virtualisation.podman.dockerSocket.enable
+          ) [ "podman" ];
+
         DynamicUser = true;
+        User = "beszel-agent";
         LockPersonality = true;
         NoNewPrivileges = true;
         PrivateTmp = true;
         PrivateUsers = true;
         ProtectClock = true;
-        ProtectControlGroups = true;
-        ProtectHome = true;
+        ProtectControlGroups = "strict";
+        ProtectHome = "read-only";
         ProtectHostname = true;
         ProtectKernelLogs = true;
         ProtectKernelModules = true;
