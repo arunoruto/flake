@@ -24,6 +24,7 @@ in
       enable = true;
       # package = if nightly then inputs.helix.packages.${pkgs.system}.default else pkgs.unstable.helix;
       package = pkgs.unstable.helix;
+      defaultEditor = true;
       settings = {
         theme = lib.mkForce "stylix-custom";
         editor = {

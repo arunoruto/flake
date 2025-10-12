@@ -19,6 +19,10 @@
 
         # set -gx GH_AUTH_TOKEN $(${lib.getExe config.programs.gh.package} auth token)
         bind \ck 'fg'
+
+        set -gx EDITOR ${
+          if (config.home.sessionVariables ? EDITOR) then config.home.sessionVariables.EDITOR else "nano"
+        }
       '';
       # binds = {
       #   "ctrl-k".command = "fg %";
