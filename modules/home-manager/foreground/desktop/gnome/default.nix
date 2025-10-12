@@ -29,12 +29,14 @@
       with pkgs.gnomeExtensions;
       [
         appindicator
+        auto-move-windows
         blur-my-shell
         emoji-copy
         framework-fan-control
         # focus
         forge
         pip-on-top
+        smart-auto-move
         tactile
         tiling-shell
         toggler
