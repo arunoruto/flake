@@ -21,7 +21,41 @@ in
     };
 
     environment = lib.mkOption {
-      type = lib.types.attrsOf lib.types.str;
+      type = lib.types.submodule {
+        freeformType = with lib.types; attrsOf anything;
+        options = {
+          EXTRA_FILESYSTEMS = lib.mkOption {
+            type = lib.types.str;
+            default = "";
+            example = ''
+              lib.strings.concatStringsSep "," [
+                "sdb"
+                "sdc1"
+                "mmcblk0"
+                "/mnt/network-share"
+              ];
+            '';
+            description = ''
+              Comma separated list of additional filesystems to monitor extra disks.
+              See <https://beszel.dev/guide/additional-disks>.
+            '';
+          };
+          KEY_FILE = lib.mkOption {
+            type = lib.types.nullOr lib.types.path;
+            default = null;
+            description = ''
+              Public SSH key(s) from a file instead of an environment variable. Provided in the hub.
+            '';
+          };
+          TOKEN_FILE = lib.mkOption {
+            type = lib.types.nullOr lib.types.path;
+            default = null;
+            description = ''
+              WebSocket token from a file instead of an environment variable. Provided in the hub.
+            '';
+          };
+        };
+      };
       default = { };
       description = ''
         Environment variables for configuring the beszel-agent service.
