@@ -1,99 +1,100 @@
 {
-  config,
   lib,
   pkgs,
+  config,
   ...
 }:
 let
-  yaml = pkgs.formats.yaml { };
+  inherit (lib)
+    mkIf
+    mkEnableOption
+    mkPackageOption
+    mkOption
+    types
+    ;
+
+  inherit (lib.hm.shell)
+    mkBashIntegrationOption
+    mkZshIntegrationOption
+    mkFishIntegrationOption
+    ;
+
+  cfg = config.programs.vivid;
+  yamlFormat = pkgs.formats.yaml { };
 in
-with lib;
 {
-  meta.maintainers = with maintainers; [ arunoruto ];
+  meta.maintainers = with lib.hm.maintainers; [ aguirre-matteo ];
 
   options.programs.vivid = {
-    enable = mkEnableOption ''
-      vivid - A themeable LS_COLORS generator with a rich filetype datebase
-      <link xlink:href="https://github.com/sharkdp/vivid" />
-    '';
+    enable = mkEnableOption "vivid";
+    package = mkPackageOption pkgs "vivid" { nullable = true; };
 
-    package = mkPackageOption pkgs "vivid" { };
+    enableBashIntegration = mkBashIntegrationOption { inherit config; };
+    enableZshIntegration = mkZshIntegrationOption { inherit config; };
+    enableFishIntegration = mkFishIntegrationOption { inherit config; };
 
-    enableBashIntegration = mkOption {
-      default = true;
-      type = types.bool;
-      description = ''
-        Whether to enable Bash integration.
-        Adds LS_COLORS to Bash.
-      '';
-    };
-
-    enableFishIntegration = mkOption {
-      default = true;
-      type = types.bool;
-      description = ''
-        Whether to enable Fish integration.
-        Adds LS_COLORS to Fish.
-      '';
-    };
-
-    enableNushellIntegration = mkOption {
-      default = true;
-      type = types.bool;
-      description = ''
-        Whether to enable Nushell integration.
-        Adds LS_COLORS to Nushell.
-      '';
-    };
-
-    enableZshIntegration = mkOption {
-      default = true;
-      type = types.bool;
-      description = ''
-        Whether to enable Zsh integration.
-        Adds LS_COLORS to Zsh.
-      '';
-    };
-
-    theme = mkOption {
+    colorMode = mkOption {
       type = with types; nullOr str;
       default = null;
-      example = "molokai";
+      example = "8-bit";
       description = ''
-        Color theme to enable.
-        Run `vivid themes` for a list of available themes.
+        Color mode for vivid.
       '';
     };
 
     filetypes = mkOption {
-      inherit (yaml) type;
+      inherit (yamlFormat) type;
       default = { };
-      example = literalExpression ''
-        {
-          core = {
-            regular_file = [ "$fi" ];
-            directory = [ "$di" ];
-          };
-          text = {
-            readme = [ "README.md" ];
-            licenses = [ "LICENSE" ];
-          };
-        }
-      '';
+      example = {
+        text = {
+          special = [
+            "CHANGELOG.md"
+            "CODE_OF_CONDUCT.md"
+            "CONTRIBUTING.md"
+          ];
+
+          todo = [
+            "TODO.md"
+            "TODO.txt"
+          ];
+
+          licenses = [
+            "LICENCE"
+            "COPYRIGHT"
+          ];
+        };
+      };
       description = ''
-        Configuration written to
-        <filename>~/.config/vivid/filetypes.yml</filename>.
-        Visit <link xlink:href="https://github.com/sharkdp/vivid/tree/master/config/filetypes.yml" />
-        for a reference file.
+        Filetype database for vivid. You can find an example config at:
+        <https://github.com/sharkdp/vivid/blob/master/config/filetypes.yml>.
+      '';
+    };
+
+    activeTheme = mkOption {
+      type = with types; nullOr str;
+      default = null;
+      example = "molokai";
+      description = ''
+        Active theme for vivid.
       '';
     };
 
     themes = mkOption {
-      type = types.attrsOf yaml.type;
+      type = with types; attrsOf (either path yamlFormat.type);
       default = { };
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
-          mytheme = {
+          ayu = builtins.fetchurl {
+            url = "https://raw.githubusercontent.com/NearlyTRex/Vivid/refs/heads/master/themes/ayu.yml";
+            hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+          };
+
+          mocha = builtins.fetchurl {
+            url = "https://raw.githubusercontent.com/NearlyTRex/Vivid/refs/heads/master/themes/catppuccin-mocha.yml";
+            hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+          };
+
+          my-custom-theme = {
             colors = {
               blue = "0000ff";
             };
@@ -107,50 +108,49 @@ with lib;
         }
       '';
       description = ''
-        Theme files written to
-        <filename>~/.config/vivid/themes/<mytheme>.yml</filename>.
-        Visit <link xlink:href="https://github.com/sharkdp/vivid/tree/master/themes" />
-        for references.
+        An attribute set of vivid themes.
+        Each value can either be a path to a theme file or an attribute set
+        defining the theme directly (which will be converted from Nix to YAML).
       '';
     };
   };
 
   config =
     let
-      cfg = config.programs.vivid;
-      bin = lib.getExe cfg.package;
-      bashLine = theme: ''export LS_COLORS="$(${bin} generate ${theme})"'';
-      fishLine = theme: "set -gx LS_COLORS (${bin} generate ${theme})";
-      nushellLine = theme: "${bin} generate ${theme}";
-      zshLine = bashLine;
-      # lsColors = builtins.readFile (
-      #   pkgs.runCommand "vivid-ls-colors" { } ''
-      #     ${lib.getExe cfg.package} generate ${cfg.theme} > $out
-      #   ''
-      # );
+      vividCommand = "vivid ${
+        lib.optionalString (cfg.colorMode != null) "-m ${cfg.colorMode}"
+      } generate ${lib.optionalString (cfg.activeTheme != null) cfg.activeTheme}";
     in
     mkIf cfg.enable {
-      home = {
-        packages = [ cfg.package ];
-        # sessionVariables.LS_COLORS = "${lsColors}";
-      };
+      home.packages = mkIf (cfg.package != null) [ cfg.package ];
 
-      programs.bash.initExtra = mkIf cfg.enableBashIntegration (bashLine cfg.theme);
-      programs.fish.interactiveShellInit = mkIf cfg.enableFishIntegration (fishLine cfg.theme);
-      programs.nushell.environmentVariables.LS_COLORS = mkIf cfg.enableNushellIntegration (
-        hm.nushell.mkNushellInline (nushellLine cfg.theme)
-      );
-      programs.zsh.initContent = mkIf cfg.enableZshIntegration (zshLine cfg.theme);
+      home.sessionVariables = mkIf (cfg.activeTheme != null) { VIVID_THEME = cfg.activeTheme; };
+
       xdg.configFile = {
-        "vivid/filetypes.yml" = mkIf (builtins.length (builtins.attrNames cfg.filetypes) > 0) {
-          source = yaml.generate "filetypes.yml" cfg.filetypes;
+        "vivid/filetypes.yml" = mkIf (cfg.filetypes != { }) {
+          source = yamlFormat.generate "vivid-filetypes" cfg.filetypes;
         };
       }
-      // mapAttrs' (
+      // (lib.mapAttrs' (
         name: value:
-        nameValuePair "vivid/themes/${name}.yml" {
-          source = yaml.generate "${name}.yml" value;
-        }
-      ) cfg.themes;
+        lib.nameValuePair "vivid/themes/${name}.yml" (
+          if lib.isAttrs value then
+            { source = yamlFormat.generate "${name}.yml" value; }
+          else
+            { source = value; }
+        )
+      ) cfg.themes);
+
+      programs.bash.initExtra = mkIf cfg.enableBashIntegration ''
+        export LS_COLORS="$(${vividCommand})"
+      '';
+
+      programs.zsh.initContent = mkIf cfg.enableZshIntegration ''
+        export LS_COLORS="$(${vividCommand})"
+      '';
+
+      programs.fish.interactiveShellInit = mkIf cfg.enableFishIntegration ''
+        set -gx LS_COLORS "$(${vividCommand})"
+      '';
     };
 }

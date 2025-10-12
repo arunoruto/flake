@@ -17,7 +17,7 @@
 {
   imports = [
     ./vivid-module.nix
-    ./vivid-filetype.nix
+    # ./vivid-filetype.nix
     ./vivid-themes.nix
   ];
 
@@ -78,7 +78,8 @@
     vivid = {
       enable = true;
       package = pkgs.unstable.vivid;
-      theme = "gruvbox-dark";
+      activeTheme = "stylix";
+      # activeTheme = "gruvbox-dark";
     };
 
     zoxide = {
