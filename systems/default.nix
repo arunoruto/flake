@@ -68,19 +68,6 @@ builtins.mapAttrs (
       {
         networking.hostName = lib.mkForce hostname;
         facter.reportPath = lib.mkIf (lib.pathExists ./${hostname}/facter.json) ./${hostname}/facter.json;
-        # nixpkgs = {
-        #   config.allowUnfree = true;
-        #   overlays =
-        #     (with self.overlays; [
-        #       additions
-        #       modifications
-        #       python
-        #       unstable-packages
-        #     ])
-        #     ++ (with inputs; [
-        #       nur.overlays.default
-        #     ]);
-        # };
         nixpkgs.pkgs = pkgs.extend self.overlays.python;
         theming = {
           inherit scheme;

@@ -157,17 +157,25 @@
       nixosModules.default = ./modules/nixos;
       homeModules.default = ./modules/home-manager/home.nix;
 
-      nixosConfigurations = import ./systems {
-        inherit
-          inputs
-          self
-          lib
-          pkgs
-          system
-          scheme
-          image
-          ;
-      };
+      nixosConfigurations =
+        (import ./systems {
+          inherit
+            inputs
+            self
+            lib
+            pkgs
+            system
+            scheme
+            image
+            ;
+        })
+        // {
+          pi = nixpkgs.lib.nixosSystem {
+            system = "aarch64-linux";
+            specialArgs = { inherit inputs; };
+            modules = [ ./systems/pi ];
+          };
+        };
 
       homeConfigurations = import ./homes {
         inherit
