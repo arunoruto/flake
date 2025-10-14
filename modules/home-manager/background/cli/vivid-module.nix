@@ -117,6 +117,9 @@ in
 
   config =
     let
+      # vividCommand = "${lib.getExe cfg.package} ${
+      #   lib.optionalString (cfg.colorMode != null) "-m ${cfg.colorMode}"
+      # } generate ${lib.optionalString (cfg.activeTheme != null) cfg.activeTheme}";
       vividCommand = "vivid ${
         lib.optionalString (cfg.colorMode != null) "-m ${cfg.colorMode}"
       } generate ${lib.optionalString (cfg.activeTheme != null) cfg.activeTheme}";
@@ -124,7 +127,10 @@ in
     mkIf cfg.enable {
       home.packages = mkIf (cfg.package != null) [ cfg.package ];
 
-      home.sessionVariables = mkIf (cfg.activeTheme != null) { VIVID_THEME = cfg.activeTheme; };
+      home.sessionVariables = mkIf (cfg.activeTheme != null) {
+        VIVID_THEME = cfg.activeTheme;
+        # LS_COLORS_CUSTOM = "$(< ${pkgs.runCommand "ls-colors" { } vividCommand})";
+      };
 
       xdg.configFile = {
         "vivid/filetypes.yml" = mkIf (cfg.filetypes != { }) {

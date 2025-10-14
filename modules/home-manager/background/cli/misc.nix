@@ -78,7 +78,8 @@
     vivid = {
       enable = true;
       package = pkgs.unstable.vivid;
-      activeTheme = "stylix";
+      activeTheme = "nord";
+      # activeTheme = "stylix";
       # activeTheme = "gruvbox-dark";
     };
 
