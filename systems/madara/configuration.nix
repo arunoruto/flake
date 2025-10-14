@@ -45,6 +45,10 @@ in
   nfs.enable = true;
 
   services = {
+    harmonia = {
+      enable = true;
+      openFirewall = true;
+    };
     docker.enable = true;
     # beszel-agent = {
     beszel.agent = {
