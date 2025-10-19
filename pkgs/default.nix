@@ -24,6 +24,17 @@ rec {
   # banana-cursor = pkgs.callPackage ./banana-cursor/package.nix {};
   # zluda-rocm5 = pkgs.callPackage ./zluda-rocm5/package.nix { };
   # candy-icons = pkgs.callPackage ./candy-icons/package.nix { };
+  # mesa-amber = pkgs.mesa.overrideAttrs (old: {
+  #   version = "0-unstable-2024-04-23";
+  #   src = pkgs.fetchFromGitLab {
+  #     domain = "gitlab.freedesktop.org";
+  #     owner = "mesa";
+  #     repo = "mesa";
+  #     rev = "027ccc89b2ab83fdb9dbc42c9f5a31c175c7f554";
+  #     hash = "sha256-r4+lWRS8tBDbIOoQhiu0WcSr8upQruzMRFLHRx9WxGM=";
+  #   };
+  #   # patches = old.patches or [ ] ++ [ ./mesa-amber.patch ];
+  # });
   mstm = pkgs.callPackage ./mstm { enableMPI = false; };
   # tdarr = pkgs.callPackage ./tdarr/package.nix { };
   # tdarr-node = pkgs.callPackage ./tdarr/node.nix { };

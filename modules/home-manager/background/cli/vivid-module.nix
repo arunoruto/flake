@@ -7,31 +7,25 @@
 let
   inherit (lib)
     mkIf
+    mkMerge
     mkEnableOption
     mkPackageOption
     mkOption
     types
     ;
 
-  inherit (lib.hm.shell)
-    mkBashIntegrationOption
-    mkZshIntegrationOption
-    mkFishIntegrationOption
-    ;
-
   cfg = config.programs.vivid;
   yamlFormat = pkgs.formats.yaml { };
 in
 {
-  meta.maintainers = with lib.hm.maintainers; [ aguirre-matteo ];
+  meta.maintainers = [
+    lib.hm.maintainers.aguirre-matteo
+    lib.maintainers.arunoruto
+  ];
 
   options.programs.vivid = {
     enable = mkEnableOption "vivid";
     package = mkPackageOption pkgs "vivid" { nullable = true; };
-
-    enableBashIntegration = mkBashIntegrationOption { inherit config; };
-    enableZshIntegration = mkZshIntegrationOption { inherit config; };
-    enableFishIntegration = mkFishIntegrationOption { inherit config; };
 
     colorMode = mkOption {
       type = with types; nullOr str;
@@ -71,8 +65,8 @@ in
     };
 
     activeTheme = mkOption {
-      type = with types; nullOr str;
-      default = null;
+      type = types.str;
+      default = "";
       example = "molokai";
       description = ''
         Active theme for vivid.
@@ -113,24 +107,30 @@ in
         defining the theme directly (which will be converted from Nix to YAML).
       '';
     };
+
   };
 
-  config =
-    let
-      # vividCommand = "${lib.getExe cfg.package} ${
-      #   lib.optionalString (cfg.colorMode != null) "-m ${cfg.colorMode}"
-      # } generate ${lib.optionalString (cfg.activeTheme != null) cfg.activeTheme}";
-      vividCommand = "vivid ${
-        lib.optionalString (cfg.colorMode != null) "-m ${cfg.colorMode}"
-      } generate ${lib.optionalString (cfg.activeTheme != null) cfg.activeTheme}";
-    in
-    mkIf cfg.enable {
-      home.packages = mkIf (cfg.package != null) [ cfg.package ];
-
-      home.sessionVariables = mkIf (cfg.activeTheme != null) {
-        VIVID_THEME = cfg.activeTheme;
-        # LS_COLORS_CUSTOM = "$(< ${pkgs.runCommand "ls-colors" { } vividCommand})";
-      };
+  config = mkMerge [
+    (mkIf (cfg.enable || cfg.themes != { }) {
+      home.sessionVariables.LS_COLORS =
+        let
+          colorMode = lib.optionalString (cfg.colorMode != null) "-m ${cfg.colorMode}";
+          themePath =
+            if builtins.isAttrs cfg.themes.${cfg.activeTheme} then
+              pkgs.writeText "${cfg.activeTheme}.json" (builtins.toJSON cfg.themes.${cfg.activeTheme})
+            else if config.xdg.configFile ? "vivid/themes/${cfg.activeTheme}.yml" then
+              config.xdg.configFile."vivid/themes/${cfg.activeTheme}.yml".source
+            else
+              cfg.activeTheme;
+        in
+        "$(cat ${
+          pkgs.runCommand "ls-colors" {
+            nativeBuildInputs = [ cfg.package ];
+          } "vivid generate ${colorMode} ${themePath} > $out"
+        })";
+    })
+    (mkIf cfg.enable {
+      home.sessionVariables = mkIf (cfg.activeTheme != "") { VIVID_THEME = cfg.activeTheme; };
 
       xdg.configFile = {
         "vivid/filetypes.yml" = mkIf (cfg.filetypes != { }) {
@@ -141,22 +141,11 @@ in
         name: value:
         lib.nameValuePair "vivid/themes/${name}.yml" (
           if lib.isAttrs value then
-            { source = yamlFormat.generate "${name}.yml" value; }
+            { source = pkgs.writeText "${name}.json" (builtins.toJSON value); }
           else
             { source = value; }
         )
       ) cfg.themes);
-
-      programs.bash.initExtra = mkIf cfg.enableBashIntegration ''
-        export LS_COLORS="$(${vividCommand})"
-      '';
-
-      programs.zsh.initContent = mkIf cfg.enableZshIntegration ''
-        export LS_COLORS="$(${vividCommand})"
-      '';
-
-      programs.fish.interactiveShellInit = mkIf cfg.enableFishIntegration ''
-        set -gx LS_COLORS "$(${vividCommand})"
-      '';
-    };
+    })
+  ];
 }

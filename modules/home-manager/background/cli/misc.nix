@@ -101,8 +101,6 @@
     ])
     ++ (with pkgs.unstable; [
       devenv
-      gemini-cli
-      github-copilot-cli
     ])
   );
 }
