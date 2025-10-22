@@ -43,6 +43,7 @@ rec {
   # terminus = pkgs.callPackage ./terminus/package.nix { };
   tftp-now = pkgs.callPackage ./tftp-now/package.nix { };
   unibear = pkgs.callPackage ./unibear/bin.nix { };
+  pixterm = pkgs.callPackage ./pixterm/package.nix { };
   # unibear = pkgs.callPackage ./unibear/package.nix { };
   # wigxjpf = pkgs.callPackage ./wigxjpf/package.nix { };
   # taichi = pkgs.python3Packages.callPackage ./taichi { };
