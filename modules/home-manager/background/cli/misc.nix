@@ -79,6 +79,7 @@
       enable = true;
       package = pkgs.unstable.vivid;
       activeTheme = "nord";
+      # enableSessionVariables = true;
       # activeTheme = "stylix";
       # activeTheme = "gruvbox-dark";
     };
