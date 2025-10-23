@@ -2,6 +2,7 @@
   config,
   pkgs,
   lib,
+  flake,
   ...
 }:
 let
@@ -69,5 +70,7 @@ in
     #     };
     #   };
     # };
+
+    nixpkgs.pkgs = pkgs.extend flake.overlays.kodi;
   };
 }

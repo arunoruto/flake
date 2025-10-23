@@ -6,8 +6,7 @@
 #     };
 #   },
 # }:
-pkgs:
-rec {
+pkgs: rec {
   beszel = pkgs.callPackage ./beszel/package.nix { };
   adda = pkgs.callPackage ./adda/package.nix { };
   adda-mpi = pkgs.callPackage ./adda/package.nix { target = "mpi"; };
@@ -73,5 +72,5 @@ rec {
   # kodiPackages = pkgs.kodiPackages;
   # customKodiPackages = import ./kodi.nix pkgs;
 }
-// (import ./kodi.nix pkgs)
-// (import ./home-assistant.nix pkgs)
+# // (import ./kodi.nix pkgs)
+# // (import ./home-assistant.nix pkgs)
