@@ -47,9 +47,9 @@
             pkgs-extended = pkgs.extend flake.overlays.home-assistant;
           in
           with pkgs-extended.home-assistant-custom-components;
-          [
+          (lib.optionals (config.services.home-assistant.config ? "ingress") [
             hass-ingress
-          ];
+          ]);
       };
       mosquitto.enable = true;
       zigbee2mqtt.enable = true;

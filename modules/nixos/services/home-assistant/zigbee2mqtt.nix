@@ -28,18 +28,13 @@
           # };
         };
       };
-      home-assistant.config =
-        lib.optionalAttrs
-          (lib.elem pkgs.home-assistant-custom-components.hass-ingress config.services.home-assistant.customComponents)
-          {
-            ingress.zigbee2mqtt = {
-              work_mode = "ingress";
-              ui_mode = "normal";
-              title = "Zigbee2MQTT";
-              icon = "mdi:bee";
-              url = "localhost:8080";
-            };
-          };
+      home-assistant.config.ingress.zigbee2mqtt = {
+        work_mode = "ingress";
+        ui_mode = "normal";
+        title = "Zigbee2MQTT";
+        icon = "mdi:bee";
+        url = "localhost:8080";
+      };
     };
   };
 }
