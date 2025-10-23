@@ -27,6 +27,16 @@
       zed-editor = {
         enable = lib.mkDefault false;
         package = pkgs.unstable.zed-editor;
+        userSettings = {
+          auto_update = false;
+          theme = {
+            mode = "system";
+            dark = "Gruvbox Dark";
+            light = "Gruvbox Light";
+          };
+          hour_format = "hour24";
+          vim_mode = false;
+        };
       };
     };
 
