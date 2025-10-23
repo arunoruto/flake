@@ -23,8 +23,8 @@ rec {
 
   # Home Assistant
   home-assistant = final: prev: {
-    home-assistant-component-tests =
-      prev.home-assistant-component-tests // (import ../pkgs/home-assistant.nix final);
+    home-assistant-custom-components =
+      prev.home-assistant-custom-components // (import ../pkgs/home-assistant.nix final);
   };
 
   # This one contains whatever you want to overlay
@@ -43,6 +43,9 @@ rec {
       #     'cmake_minimum_required(VERSION 4.0)'
       # '';
     });
+    # p8-platform = prev.p8-platform.overrideAttrs (oldAttrs: {
+    #   cmakeFlags = [ "-DCMAKE_POLICY_VERSION_MINIMUM=3.5" ];
+    # });
   };
 
   # custom nvim for the future maybe?

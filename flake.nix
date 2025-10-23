@@ -144,6 +144,7 @@
             additions
             modifications
             unstable-packages
+            kodi
           ])
           ++ (with inputs; [ nur.overlays.default ]);
         config = {

@@ -42,13 +42,17 @@
           "shopping_list"
           "tasmota"
         ];
-        customComponents = with pkgs.home-assistant-custom-components; [
-          hass-ingress
-        ];
+        customComponents =
+          let
+            pkgs-extended = pkgs.extend flake.overlays.home-assistant;
+          in
+          with pkgs-extended.home-assistant-custom-components;
+          [
+            hass-ingress
+          ];
       };
       mosquitto.enable = true;
       zigbee2mqtt.enable = true;
     };
-    nixpkgs.pkgs = pkgs.extend flake.overlays.home-assistant;
   };
 }

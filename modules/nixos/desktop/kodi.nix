@@ -19,7 +19,7 @@ in
               netflix
               youtube
 
-              pkgs.elementum
+              pkgs.kodiPackages.elementum
             ]
           );
         };
@@ -41,7 +41,7 @@ in
       allowedUDPPorts = [ 8080 ];
     };
 
-    environment.systemPackages = [ pkgs.elementum ];
+    # environment.systemPackages = [ pkgs.elementum ];
 
     # systemd.services = {
     #   kodi-http-fix-plugin = {
@@ -71,6 +71,6 @@ in
     #   };
     # };
 
-    nixpkgs.pkgs = pkgs.extend flake.overlays.kodi;
+    # nixpkgs.pkgs = pkgs.extend flake.overlays.kodi;
   };
 }
