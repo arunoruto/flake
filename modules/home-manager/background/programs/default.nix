@@ -11,6 +11,7 @@
     ./newsboat.nix
     ./papis.nix
     ./pop.nix
+    ./ty.nix
   ];
 
   programs.mods.enable = !config.hosts.tinypc.enable;
