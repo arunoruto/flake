@@ -6,7 +6,6 @@
 {
   config = lib.mkIf (lib.elem "tinypc" config.system.tags) {
     latex.enable = false;
-    programming.enable = false;
     upgrades.enable = true;
 
     programs.nix-ld.enable = lib.mkForce false;

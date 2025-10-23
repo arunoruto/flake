@@ -9,10 +9,7 @@
     ./python.nix
   ];
 
-  options.programming.enable = lib.mkEnableOption "Setup programming tools";
-
-  config = lib.mkIf config.programming.enable {
-    python.enable = lib.mkDefault true;
+  config = lib.mkIf (lib.elem "development" config.system.tags) {
 
     environment = {
       systemPackages = with pkgs; [

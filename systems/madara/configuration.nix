@@ -26,7 +26,10 @@ in
   ai.enable = true;
   printing.enable = true;
   scanning.enable = true;
-  system.tags = [ "workstation" ];
+  system.tags = [
+    "workstation"
+    "development"
+  ];
   hosts = {
     nvidia.enable = true;
   };

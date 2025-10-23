@@ -15,8 +15,8 @@ let
       python-lsp-server
       ipympl
       # computing
-      jax
-      jaxlib
+      # jax
+      # jaxlib
       (if config.hosts.nvidia.enable then numbaWithCuda else numba)
       # numba-scipy
       numpy
@@ -43,9 +43,7 @@ let
     ]);
 in
 {
-  options.python.enable = lib.mkEnableOption "Setup a python environment";
-
-  config = lib.mkIf config.python.enable {
+  config = lib.mkIf (lib.elem "development" config.system.tags) {
     environment =
       let
         my-python = pkgs.python3.withPackages packages;
@@ -56,9 +54,8 @@ in
             manim
             manim-slides
             mkdocs
-            poetry
-            uv
           ])
+          ++ (with pkgs.unstable; [ uv ])
           ++ [ my-python ];
 
         sessionVariables = {
