@@ -26,6 +26,7 @@
               "F"
               "B"
             ];
+            extend-select = [ "I" ];
             ignore = [ ];
 
             # Allow fix for all enabled rules (when `--fix`) is provided.

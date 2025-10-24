@@ -21,9 +21,9 @@ in
               # "pylsp"
               # "basedpyright"
               "pyright"
-              "ruff"
-              # "ty"
             ]
+            ++ lib.optionals config.programs.ruff.enable [ "ruff" ]
+            ++ lib.optionals config.programs.ty.enable [ "ty" ]
             # ++ lib.optionals (ls ? lsp-ai) [ "lsp-ai" ]
             ++ lib.optionals (ls ? gpt) [ "gpt" ]
             ++ lib.optionals (ls ? sourcery) [ "sourcery" ];
@@ -31,9 +31,16 @@ in
               command = "bash";
               args = [
                 "-c"
-                "isort - | ruff format -"
+                "ruff check --select I --fix - | ruff format -"
               ];
               # command = "ruff";
+              # args = [
+              #   "check"
+              #   "--select"
+              #   "I"
+              #   "--fix"
+              #   "-"
+              # ];
               # args = ["format" "--line-length" "88" "--quiet" "-"];
             };
             roots = [
@@ -42,6 +49,8 @@ in
               "pyproject.toml"
               "pyrightconfig.json"
               "Poetry.lock"
+              "uv.lock"
+              "requirements.txt"
             ];
             debugger = {
               name = "debugpy";
@@ -98,19 +107,14 @@ in
               # python-lsp-server
               # python-lsp-ruff
               # pylsp-mypy
-              # numpy
-              # pydantic
             ]
           ))
           # unstable.basedpyright
           pyright
         ])
-        ++ (with pkgs.unstable; [
-          isort
-          ty
-        ])
         ++ [
           (if config.programs.ruff.enable then config.programs.ruff.package else pkgs.unstable.ruff)
+          (if config.programs.ty.enable then config.programs.ty.package else pkgs.unstable.ty)
         ];
     };
   };
