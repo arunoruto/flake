@@ -32,6 +32,10 @@
     blacklistedKernelModules = [ "hid_sensor_hub" ];
   };
 
+  programs = {
+    niri.enable = true;
+  };
+
   hardware = {
     fw-fanctrl = {
       enable = true;

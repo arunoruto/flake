@@ -12,6 +12,7 @@
     # ./kde.nix
     ./kodi.nix
     ./sway.nix
+    ./niri.nix
 
     ./wayland.nix
   ];

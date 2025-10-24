@@ -12,6 +12,7 @@
     ./gnome
     ./sway
     ./hyprland
+    ./niri
     # ./kde.nix
 
     ./notifications
