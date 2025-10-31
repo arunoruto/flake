@@ -19,6 +19,7 @@
     };
     home.packages = with pkgs.unstable; [
       gemini-cli
+      goose-cli
       github-copilot-cli
     ];
   };
