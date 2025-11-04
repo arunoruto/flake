@@ -37,6 +37,11 @@
     lib.mkIf cfg.enable {
       home.packages = [ cfg.package ];
 
+      xdg.configFile."quickshell/custom" = {
+        source = config.lib.file.mkOutOfStoreSymlink "${config.xdg.configHome}/flake/modules/home-manager/foreground/desktop/bars/quickshell/custom";
+        recursive = true;
+      };
+
       systemd.user.services.quickshell = {
         Unit = {
           Description = "A very segsy desktop shell.";
