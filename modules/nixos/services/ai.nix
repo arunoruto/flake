@@ -24,9 +24,17 @@
 
       ollama = {
         enable = true;
+        package = pkgs.unstable.ollama;
+        # if config.hosts.nvidia.enable then
+        #   pkgs.unstable.ollama-cuda
+        # else if config.hosts.amd.enable then
+        #   pkgs.unstable.ollama-rocm
+        # else
+        #   pkgs.unstable.ollama;
         host = "0.0.0.0";
         loadModels = [
           "deepseek-r1:14b"
+          "gemma3:4b"
           "gemma3:12b"
           "mistral:7b"
         ];
