@@ -1,0 +1,31 @@
+diff --git a/email.go b/email.go
+index 3b4efb2..9512704 100644
+--- a/email.go
++++ b/email.go
+@@ -82,6 +82,11 @@ func sendSMTPEmail(to, cc, bcc []string, from, subject, body string, attachments
+ 		}
+ 	}
+ 
++	// If no authentication is provided, disable it for internal mail relays
++	if server.Username == "" && server.Password == "" {
++		server.Authentication = mail.AuthNone
++	}
++
+ 	switch strings.ToLower(smtpEncryption) {
+ 	case "ssl":
+ 		server.Encryption = mail.EncryptionSSLTLS
+diff --git a/main.go b/main.go
+index a820b78..d744882 100644
+--- a/main.go
++++ b/main.go
+@@ -80,6 +80,9 @@ var rootCmd = &cobra.Command{
+    case smtpUsername != "" && smtpPassword != "":
+			deliveryMethod = SMTP
+			from = smtpUsername
++		case smtpHost != "":
++			// Allow SMTP delivery with just host for internal mail relays (no auth)
++			deliveryMethod = SMTP
+ 		}
+ 
+ 		switch deliveryMethod {
+
