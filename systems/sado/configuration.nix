@@ -29,11 +29,11 @@ _: {
       dataDir = "/mnt/flash/appdata";
       openFirewall = true;
     };
-    tailscale.tsidp = {
-      enable = true;
-      port = 41443;
-      localPort = 41080;
-    };
+    # tailscale.tsidp = {
+    #   enable = true;
+    #   port = 41443;
+    #   localPort = 41080;
+    # };
     immich = {
       enable = true;
       # dataDir = "/mnt/flash/appdata/paperless";
@@ -55,5 +55,9 @@ _: {
     tlp.enable = true;
     power-profiles-daemon.enable = false;
     home-assistant.enable = false;
+    suwayomi-server = {
+      enable = true;
+      openFirewall = true;
+    };
   };
 }
