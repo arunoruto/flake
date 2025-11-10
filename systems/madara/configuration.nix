@@ -48,6 +48,7 @@ in
   nfs.enable = true;
 
   virtualisation.docker.enable = true;
+  # virtualisation.incus.enable = true;
   services = {
     harmonia = {
       enable = true;

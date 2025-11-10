@@ -5,7 +5,6 @@
 }:
 {
   imports = [
-    ./docker
     ./hardware
     ./home-assistant
     ./input
@@ -13,6 +12,7 @@
     ./nas
     ./network
     ./tuning
+    ./virtualization
 
     ./ai.nix
     ./davmail.nix

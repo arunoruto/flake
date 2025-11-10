@@ -52,6 +52,8 @@ in
           "uinput"
           "tss" # tss group has access to TPM devices
         ]
+        ++ lib.optionals config.virtualisation.libvirtd.enable [ "libvirtd" ]
+        ++ lib.optionals config.virtualisation.incus.enable [ "incus-admin" ]
         ++ lib.optionals config.virtualisation.docker.enable [ "docker" ]
         ++ lib.optionals config.virtualisation.podman.enable [ "podman" ];
 
