@@ -10,6 +10,8 @@
   imports = [
     ./chrome.nix
     ./firefox
+
+    inputs.zen-browser.homeModules.twilight-official
   ];
 
   config = lib.mkIf config.foreground.enable {
@@ -43,14 +45,15 @@
       in
       lib.attrsets.recursiveUpdate {
         brave.enable = lib.mkDefault false;
-        firefox.enable = lib.mkDefault true;
+        firefox.enable = lib.mkDefault false;
         google-chrome.enable = lib.mkDefault true;
-        vivaldi.enable = lib.mkDefault true;
+        vivaldi.enable = lib.mkDefault false;
+        zen-browser.enable = lib.mkDefault true;
       } update;
 
     home = {
       packages = [
-        inputs.zen-browser.packages.${pkgs.system}.default
+        # inputs.zen-browser.packages.${pkgs.system}.default
       ]
       ++ lib.optionals config.programs.vivaldi.enable [ pkgs.vivaldi-ffmpeg-codecs ];
       # sessionVariables = {

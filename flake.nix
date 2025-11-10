@@ -77,8 +77,10 @@
 
     # helix.url = "github:helix-editor/helix";
     zen-browser = {
-      url = "github:youwen5/zen-browser-flake";
-      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:0xc000022070/zen-browser-flake";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      # url = "github:youwen5/zen-browser-flake";
+      # inputs.nixpkgs.follows = "nixpkgs";
     };
     # nixvim-flake.url = "github:arunoruto/nvim.nix";
 
