@@ -11,6 +11,8 @@ let
   monitorsConfig = pkgs.writeText "gdm_monitors.xml" (builtins.readFile ./monitors.xml);
 in
 {
+  username = "mar";
+
   boot.binfmt.emulatedSystems = [
     # "x86_64-linux"
     "aarch64-linux"

@@ -139,8 +139,7 @@
       mkLib = nixpkgs: nixpkgs.lib.extend (final: prev: (import ./lib final));
       lib = mkLib nixpkgs;
       system = "x86_64-linux";
-      pkgs = import nixpkgs {
-        inherit system;
+      pkgs-attrs = {
         overlays =
           (with self.overlays; [
             additions
@@ -154,38 +153,47 @@
           # nvidia.acceptLicense = true;
         };
       };
+      pkgs = import nixpkgs ({ inherit system; } // pkgs-attrs);
     in
     {
       inherit lib pkgs;
       nixosModules.default = ./modules/nixos;
       homeModules.default = ./modules/home-manager/home.nix;
 
-      nixosConfigurations =
-        (import ./systems {
-          inherit
-            inputs
-            self
-            lib
-            pkgs
-            system
-            scheme
-            image
-            ;
-        })
-        // {
-          pi = nixpkgs.lib.nixosSystem {
-            system = "aarch64-linux";
-            specialArgs = { inherit inputs; };
-            modules = [ ./systems/pi ];
-          };
-        };
+      nixosConfigurations = import ./systems {
+        inherit
+          inputs
+          self
+          lib
+          pkgs-attrs
+          scheme
+          image
+          ;
+      };
+      # (import ./systems {
+      #   inherit
+      #     inputs
+      #     self
+      #     lib
+      #     pkgs-attrs
+      #     scheme
+      #     image
+      #     ;
+      # })
+      # // {
+      #   pi = nixpkgs.lib.nixosSystem {
+      #     system = "aarch64-linux";
+      #     specialArgs = { inherit inputs; };
+      #     modules = [ ./systems/aarch64-linux/pi ];
+      #   };
+      # };
 
       homeConfigurations = import ./homes {
         inherit
           inputs
           self
           lib
-          pkgs
+          pkgs-attrs
           scheme
           image
           ;

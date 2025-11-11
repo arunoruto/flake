@@ -14,7 +14,7 @@ in
   imports = [
     ./keys.nix
     ./languages
-    ./unibear.nix
+    # ./unibear.nix
   ];
 
   options.helix.enable = lib.mkEnableOption "Enable the Helix editor";

@@ -2,13 +2,14 @@
   inputs,
   self,
   lib,
-  pkgs,
+  pkgs-attrs,
 
   scheme,
   image,
 }:
 let
   unique-users = lib.lists.remove "keys" (lib.systemConfig.listDirs ./.);
+  pkgs = import inputs.nixpkgs ({ system = "x86_64-linux"; } // pkgs-attrs);
 in
 lib.genAttrs unique-users (
   user:
