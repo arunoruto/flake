@@ -71,7 +71,7 @@ pkgs.lib.makeScope pkgs.newScope (
   })
   // {
     python3Packages = pkgs.lib.makeScope pkgs.newScope (
-      self-k:
+      self-p:
       (pkgs.lib.packagesFromDirectoryRecursive {
         inherit (pkgs.python3Packages) callPackage;
         directory = ./python3Packages;
@@ -89,7 +89,7 @@ pkgs.lib.makeScope pkgs.newScope (
   }
   // {
     home-assistant-custom-components = pkgs.lib.makeScope pkgs.newScope (
-      self-k:
+      self-ha:
       (pkgs.lib.packagesFromDirectoryRecursive {
         inherit (pkgs) callPackage;
         directory = ./home-assistant-custom-components;
