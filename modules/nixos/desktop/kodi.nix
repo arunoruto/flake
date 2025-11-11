@@ -19,7 +19,9 @@ in
               netflix
               youtube
 
-              pkgs.kodiPackages.elementum
+              elementum
+
+              # pkgs.kodiPackages.elementum
             ]
           );
         };
