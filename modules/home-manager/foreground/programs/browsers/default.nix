@@ -11,7 +11,7 @@
     ./chrome.nix
     ./firefox
 
-    inputs.zen-browser.homeModules.twilight-official
+    inputs.zen-browser.homeModules.default
   ];
 
   config = lib.mkIf config.foreground.enable {
@@ -48,7 +48,12 @@
         firefox.enable = lib.mkDefault false;
         google-chrome.enable = lib.mkDefault true;
         vivaldi.enable = lib.mkDefault false;
-        zen-browser.enable = lib.mkDefault true;
+        zen-browser = {
+          enable = lib.mkDefault true;
+          # package = inputs.zen-browser.packages."${pkgs.system}".default.override {
+          #   desktopIconName = "zen";
+          # };
+        };
       } update;
 
     home = {
