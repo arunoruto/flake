@@ -242,7 +242,8 @@
         in
         {
           devShells = import ./shells pkgs-system lib;
-          packages = import ./packages pkgs-system;
+          # packages = import ./packages pkgs-system;
+          legacyPackages = import ./packages pkgs-system;
           formatter = pkgs-system.nixfmt-tree;
           checks = {
             pre-commit-check = inputs.pre-commit-hooks.lib.${system}.run {

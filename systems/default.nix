@@ -7,26 +7,6 @@
   scheme,
   image,
 }:
-# let
-#   machines = {
-#     # Personal
-#     isshin.usernames = [ "mirza" ]; # Framework Laptop AMD 7040
-#     zangetsu.usernames = [ "mirza" ]; # Framework Case Intel 11th
-#     yhwach.usernames = [ "mirza" ]; # Tower PC
-#     kuchiki.usernames = [ "mirza" ]; # New NAS Server
-#     sado.usernames = [ "mirza" ]; # NVMe NAS Server
-#     lil-nas-x.usernames = [ "mirza" ]; # New NAS Server
-#     yoruichi.usernames = [ "mirza" ]; # Crappy AMD Mini PC
-#     shinji.usernames = [ "mirza" ]; # M720q Mini PC
-#     kenpachi.usernames = [ "mirza" ]; # S740 Mini PC
-#     # narouter.usernames = [ "mirza" ];# Firewall
-#     aizen.usernames = [ "mirza" ]; # Server
-
-#     # Work
-#     kyuubi.usernames = [ "mar" ]; # Crappy Work PC
-#     madara.usernames = [ "mar" ]; # Nice Work PC
-#   };
-# in
 lib.attrsets.mergeAttrsList (
   lib.lists.forEach (lib.lists.remove "iso" (lib.getDirectories ./.)) (
     arch:
@@ -34,11 +14,9 @@ lib.attrsets.mergeAttrsList (
       hostname:
       lib.nixosSystem (
         let
-          # conf = machines.${hostname};
           pkgs = import inputs.nixpkgs ({ system = arch; } // pkgs-attrs);
         in
         {
-          # inherit system;
           system = arch;
           specialArgs = {
             inherit inputs;
@@ -56,7 +34,6 @@ lib.attrsets.mergeAttrsList (
                 options.username = lib.mkOption {
                   type = lib.types.str;
                   default = "mirza";
-                  # default = lib.lists.elemAt conf.usernames 0;
                 };
               }
             )
