@@ -69,31 +69,31 @@ pkgs.lib.makeScope pkgs.newScope (
     inherit (self) callPackage newScope;
     directory = ./top-level;
   })
-  # // {
-  #   python3Packages = pkgs.lib.makeScope pkgs.newScope (
-  #     self-k:
-  #     (pkgs.lib.packagesFromDirectoryRecursive {
-  #       inherit (pkgs.python3Packages) callPackage;
-  #       directory = ./python3Packages;
-  #     })
-  #   );
-  # }
-  # // {
-  #   kodiPackages = pkgs.lib.makeScope pkgs.newScope (
-  #     self-k:
-  #     (pkgs.lib.packagesFromDirectoryRecursive {
-  #       inherit (pkgs.kodiPackages) callPackage;
-  #       directory = ./kodiPackages;
-  #     })
-  #   );
-  # }
-  # // {
-  #   home-assistant-custom-components = pkgs.lib.makeScope pkgs.newScope (
-  #     self-k:
-  #     (pkgs.lib.packagesFromDirectoryRecursive {
-  #       inherit (pkgs) callPackage;
-  #       directory = ./home-assistant-custom-components;
-  #     })
-  #   );
-  # }
+  // {
+    python3Packages = pkgs.lib.makeScope pkgs.newScope (
+      self-k:
+      (pkgs.lib.packagesFromDirectoryRecursive {
+        inherit (pkgs.python3Packages) callPackage;
+        directory = ./python3Packages;
+      })
+    );
+  }
+  // {
+    kodiPackages = pkgs.lib.makeScope pkgs.newScope (
+      self-k:
+      (pkgs.lib.packagesFromDirectoryRecursive {
+        inherit (pkgs.kodiPackages) callPackage;
+        directory = ./kodiPackages;
+      })
+    );
+  }
+  // {
+    home-assistant-custom-components = pkgs.lib.makeScope pkgs.newScope (
+      self-k:
+      (pkgs.lib.packagesFromDirectoryRecursive {
+        inherit (pkgs) callPackage;
+        directory = ./home-assistant-custom-components;
+      })
+    );
+  }
 )
