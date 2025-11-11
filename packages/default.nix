@@ -39,7 +39,6 @@ pkgs.lib.makeScope pkgs.newScope (
     # tdarr-server = pkgs.callPackage ./tdarr/server.nix { };
     # terminus = pkgs.callPackage ./terminus/package.nix { };
     trmnl = pkgs.callPackage ./trmnl/package.nix { };
-    unibear = pkgs.callPackage ./unibear/bin.nix { };
     # unibear = pkgs.callPackage ./unibear/package.nix { };
     # wigxjpf = pkgs.callPackage ./wigxjpf/package.nix { };
     # taichi = pkgs.python3Packages.callPackage ./taichi { };
@@ -70,31 +69,31 @@ pkgs.lib.makeScope pkgs.newScope (
     inherit (self) callPackage newScope;
     directory = ./top-level;
   })
-  // {
-    python3Packages = pkgs.lib.makeScope pkgs.newScope (
-      self-k:
-      (pkgs.lib.packagesFromDirectoryRecursive {
-        inherit (pkgs.python3Packages) callPackage;
-        directory = ./python3Packages;
-      })
-    );
-  }
-  // {
-    kodiPackages = pkgs.lib.makeScope pkgs.newScope (
-      self-k:
-      (pkgs.lib.packagesFromDirectoryRecursive {
-        inherit (pkgs.kodiPackages) callPackage;
-        directory = ./kodiPackages;
-      })
-    );
-  }
-  // {
-    home-assistant-custom-components = pkgs.lib.makeScope pkgs.newScope (
-      self-k:
-      (pkgs.lib.packagesFromDirectoryRecursive {
-        inherit (pkgs) callPackage;
-        directory = ./home-assistant-custom-components;
-      })
-    );
-  }
+  # // {
+  #   python3Packages = pkgs.lib.makeScope pkgs.newScope (
+  #     self-k:
+  #     (pkgs.lib.packagesFromDirectoryRecursive {
+  #       inherit (pkgs.python3Packages) callPackage;
+  #       directory = ./python3Packages;
+  #     })
+  #   );
+  # }
+  # // {
+  #   kodiPackages = pkgs.lib.makeScope pkgs.newScope (
+  #     self-k:
+  #     (pkgs.lib.packagesFromDirectoryRecursive {
+  #       inherit (pkgs.kodiPackages) callPackage;
+  #       directory = ./kodiPackages;
+  #     })
+  #   );
+  # }
+  # // {
+  #   home-assistant-custom-components = pkgs.lib.makeScope pkgs.newScope (
+  #     self-k:
+  #     (pkgs.lib.packagesFromDirectoryRecursive {
+  #       inherit (pkgs) callPackage;
+  #       directory = ./home-assistant-custom-components;
+  #     })
+  #   );
+  # }
 )

@@ -2,19 +2,41 @@
 { inputs, ... }:
 rec {
   # This one brings our custom packages from the 'pkgs' directory
-  additions = final: prev: import ../pkgs final.pkgs;
+  additions =
+    final: prev:
+    prev.lib.packagesFromDirectoryRecursive {
+      inherit (final) callPackage;
+      inherit (prev) newScope;
+      directory = ../packages/top-level;
+    };
 
   # Python package addition and override
   python = final: prev: {
-    python3 = prev.python3.override {
-      packageOverrides = final: prev: import ../pkgs/python.nix final.pkgs;
-    };
-    pythonPackages = final.python3.pkgs;
+    # python3 = prev.python3.override {
+    #   packageOverrides = final: prev: import ../packages/python.nix final.pkgs;
+    # };
+    # pythonPackages = final.python3.pkgs;
+    pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
+      (
+        python-final: python-prev:
+        python-prev.lib.packagesFromDirectoryRecursive {
+          inherit (python-final) callPackage newScope;
+          directory = ../packages/python3Packages;
+        }
+      )
+    ];
   };
 
   # KODi packages
   kodi = final: prev: {
-    kodiPackages = prev.kodiPackages // (import ../pkgs/kodi.nix final);
+    # kodiPackages = prev.kodiPackages // (import ../packages/kodi.nix final);
+    kodiPackages =
+      prev.kodiPackages
+      // prev.lib.packagesFromDirectoryRecursive {
+        inherit (final.kodiPackages) callPackage;
+        inherit (prev) newScope;
+        directory = ../packages/kodiPackages;
+      };
 
     # kodi = prev.kodi.override {
     #   withPackages = f: prev.kodi.withPackages (oldPkgs: f final.kodiPackages);
@@ -23,8 +45,15 @@ rec {
 
   # Home Assistant
   home-assistant = final: prev: {
+    # home-assistant-custom-components =
+    #   prev.home-assistant-custom-components // (import ../packages/home-assistant.nix final);
     home-assistant-custom-components =
-      prev.home-assistant-custom-components // (import ../pkgs/home-assistant.nix final);
+      prev.home-assistant-custom-components
+      // prev.lib.packagesFromDirectoryRecursive {
+        inherit (final) callPackage;
+        inherit (prev) newScope;
+        directory = ../packages/home-assistant-custom-components;
+      };
   };
 
   # This one contains whatever you want to overlay
@@ -34,14 +63,8 @@ rec {
     # example = prev.example.overrideAttrs (oldAttrs: rec {
     # ...
     # });
-    fw-ectool = prev.fw-ectool.overrideAttrs (oldAttrs: {
+    fw-ectool = prev.fw-ectool.overrideAttrs (_: {
       cmakeFlags = [ "-DCMAKE_POLICY_VERSION_MINIMUM=3.5" ];
-      # cmake = final.pkgs.cmake;
-      # postPatch = ''
-      #   substituteInPlace CMakeLists.txt --replace-fail \
-      #     'cmake_minimum_required(VERSION 3.1)' \
-      #     'cmake_minimum_required(VERSION 4.0)'
-      # '';
     });
     # p8-platform = prev.p8-platform.overrideAttrs (oldAttrs: {
     #   cmakeFlags = [ "-DCMAKE_POLICY_VERSION_MINIMUM=3.5" ];
@@ -61,15 +84,6 @@ rec {
       overlays = [
         additions
         modifications
-        # (final: prev: {
-        #   fw-ectool = prev.fw-ectool.overrideAttrs (oldAttrs: {
-        #     postPatch = ''
-        #       substituteInPlace CMakeLists.txt --replace-fail \
-        #         'cmake_minimum_required(VERSION 3.1)' \
-        #         'cmake_minimum_required(VERSION 4.0)'
-        #     '';
-        #   });
-        # })
       ];
       config = {
         allowUnfree = true;

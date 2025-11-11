@@ -26,7 +26,7 @@
           brightnessctl
           imagemagickBig
         ])
-        ++ (with pkgs.pythonPackages; [
+        ++ (with pkgs.python3Packages; [
           aubio
           pyaudio
           numpy
