@@ -49,6 +49,7 @@ in
   runners.YASF.enable = true;
   nfs.enable = true;
 
+  programs.niri.enable = true;
   virtualisation.docker.enable = true;
   # virtualisation.incus.enable = true;
   services = {

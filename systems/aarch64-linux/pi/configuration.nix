@@ -4,8 +4,12 @@
   ...
 }:
 {
+  system.tags = [
+    "tinypc"
+    "headless"
+  ];
+
   networking = {
-    hostName = "pi";
     networkmanager = {
       enable = true;
       wifi.powersave = false;
@@ -26,10 +30,10 @@
   };
   # console.enable = false;
   environment.systemPackages = with pkgs; [
-    helix
-    btop
-    git
-    tmux
+    # helix
+    # btop
+    # git
+    # tmux
 
     libraspberrypi
     raspberrypi-eeprom

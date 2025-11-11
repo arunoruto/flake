@@ -11,7 +11,7 @@
 
   boot = {
     loader = {
-      systemd-boot.enable = lib.mkDefault true;
+      systemd-boot.enable = lib.mkDefault (pkgs.system == "x86_64-linux");
       grub.enable = lib.mkDefault false;
       efi.canTouchEfiVariables = lib.mkDefault true;
       timeout = lib.mkDefault 0; # Hit F10 for a list of generations

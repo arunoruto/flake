@@ -40,25 +40,28 @@
       };
     };
 
-    home.packages = with pkgs; [
-      vlc
+    home.packages = lib.optionals (pkgs.system == "x86_64-linux") (
+      with pkgs;
+      [
+        vlc
 
-      discord
-      # jabref
-      # libsForQt5.kdenlive
-      libsForQt5.okular
-      # mailspring
-      # masterpdfeditor
-      # mprime
-      # unstable.mqtt-explorer
-      plex-desktop
-      remmina
-      # rustdesk
-      # zoom-us
-      zotero
+        discord
+        # jabref
+        # libsForQt5.kdenlive
+        libsForQt5.okular
+        # mailspring
+        # masterpdfeditor
+        # mprime
+        # unstable.mqtt-explorer
+        plex-desktop
+        remmina
+        # rustdesk
+        # zoom-us
+        zotero
 
-      # ladybird
-      # unstable.spacedrive
-    ];
+        # ladybird
+        # unstable.spacedrive
+      ]
+    );
   };
 }
