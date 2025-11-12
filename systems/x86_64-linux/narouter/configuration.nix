@@ -11,7 +11,7 @@
   services.media.enable = true;
 
   firefox.enable = false;
-  chrome.enable = false;
+  # chrome.enable = false;
   steam.enable = false;
 
   # Set hostname

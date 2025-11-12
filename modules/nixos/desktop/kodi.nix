@@ -19,9 +19,8 @@ in
               netflix
               youtube
 
-              elementum
-
-              # pkgs.kodiPackages.elementum
+              # elementum
+              pkgs.kodiPackages.elementum
             ]
           );
         };

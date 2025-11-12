@@ -29,14 +29,14 @@ rec {
 
   # KODi packages
   kodi = final: prev: {
-    # kodiPackages = prev.kodiPackages // (import ../packages/kodi.nix final);
-    kodiPackages =
-      prev.kodiPackages
-      // prev.lib.packagesFromDirectoryRecursive {
-        inherit (final.kodiPackages) callPackage;
-        inherit (prev) newScope;
-        directory = ../packages/kodiPackages;
-      };
+    kodiPackages = prev.kodiPackages // {
+      elementum = prev.kodiPackages.callPackage ../packages/kodiPackages/elementum/package.nix { };
+    };
+    # // prev.lib.packagesFromDirectoryRecursive {
+    #   inherit (final.kodiPackages) callPackage;
+    #   inherit (prev) newScope;
+    #   directory = ../packages/kodiPackages;
+    # };
 
     # kodi = prev.kodi.override {
     #   withPackages = f: prev.kodi.withPackages (oldPkgs: f final.kodiPackages);
@@ -45,8 +45,6 @@ rec {
 
   # Home Assistant
   home-assistant = final: prev: {
-    # home-assistant-custom-components =
-    #   prev.home-assistant-custom-components // (import ../packages/home-assistant.nix final);
     home-assistant-custom-components =
       prev.home-assistant-custom-components
       // prev.lib.packagesFromDirectoryRecursive {
@@ -71,11 +69,6 @@ rec {
     # });
   };
 
-  # custom nvim for the future maybe?
-  # my-nixvim = final: prev: {
-  #   neovim = inputs.nixvim-flake.packages.${final.system}.default;
-  # };
-
   # When applied, the unstable nixpkgs set (declared in the flake inputs) will
   # be accessible through 'pkgs.unstable'
   unstable-packages = final: prev: {
@@ -84,6 +77,7 @@ rec {
       overlays = [
         additions
         modifications
+        kodi
       ];
       config = {
         allowUnfree = true;

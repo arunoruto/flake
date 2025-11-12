@@ -1,11 +1,11 @@
 {
   lib,
-  kodiPackages,
   buildKodiAddon,
   fetchFromGitHub,
   python3Packages,
   stdenv,
   autoPatchelfHook,
+  nix-update-script,
 }:
 let
   arch =
@@ -59,6 +59,7 @@ buildKodiAddon rec {
 
   passthru = {
     pythonPath = "resources/site-packages";
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
