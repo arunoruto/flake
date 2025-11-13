@@ -242,8 +242,20 @@
         in
         {
           devShells = import ./shells pkgs-system lib;
-          # packages = import ./packages pkgs-system;
           legacyPackages = import ./packages pkgs-system;
+          # packages =
+          #   lib.attrsets.removeAttrs
+          #     (pkgs-system.lib.packagesFromDirectoryRecursive {
+          #       inherit (pkgs-system) callPackage newScope;
+          #       directory = ./packages/top-level;
+          #     })
+          #     [
+          #       "callPackage"
+          #       "newScope"
+          #       "overrideScope"
+          #       "packages"
+          #       "recurseForDerivations"
+          #     ];
           formatter = pkgs-system.nixfmt-tree;
           checks = {
             pre-commit-check = inputs.pre-commit-hooks.lib.${system}.run {

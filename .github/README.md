@@ -140,11 +140,17 @@ similar to vimjoyer's `Ultimate NixOS Guide | Flakes | Home-Manager`
 
 ### High Level Libraries
 
-[flake-utils](https://github.com/numtide/flake-utils)
+- [flake-utils](https://github.com/numtide/flake-utils)
+- [flake-parts](https://flake.parts/)
+- [snowfall](https://snowfall.org/) has many projects, but the most relevant one here is [snowfall lib](https://snowfall.org/guides/lib/quickstart/). This flake repository is trying to use the underlying folder structure of snowfall lib.
 
-[flake-parts](https://flake.parts/)
+### Update Custom Packages
 
-[snowfall](https://snowfall.org/) has many projects, but the most relevant one here is [snowfall lib](https://snowfall.org/guides/lib/quickstart/). This flake repository is trying to use the underlying folder structure of snowfall lib.
+Updating custom packages is done via [nix-update](https://github.com/Mic92/nix-update). For example, this is the command to update a custom instance of `beszel`:
+
+```sh
+nix-update legacyPackages.x86_64-linux.beszel --subpackage webui --flake --override-filename packages/top-level/beszel/package.nixB
+```
 
 ## Clean-up
 
