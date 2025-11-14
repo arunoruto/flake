@@ -6,16 +6,14 @@
 {
   # display-manager.enable = lib.mkForce false;
   # desktop-environment.enable = lib.mkForce false;
-  display-manager.enable = false;
-  desktop-environment.enable = false;
-  services.media.enable = true;
 
   firefox.enable = false;
   # chrome.enable = false;
   steam.enable = false;
 
-  # Set hostname
-  networking.hostName = lib.mkForce "narouter"; # Define your hostname.
+  # firefox.enable = false;
+  # chrome.enable = false;
+  # steam.enable = false;
 
   # boot = {
   #   kernelModules = ["amdgpu"];
