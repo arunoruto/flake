@@ -13,12 +13,12 @@ pkgs.lib.makeScope pkgs.newScope (
     adda-mpi = self.adda.override { target = "mpi"; };
     adda-ocl = self.adda.override { target = "ocl"; };
     # adda-gui-update-script = adda-gui.mitmCache.updateScript;
-    copilot-language-server = pkgs.callPackage ./copilot-language-server/package.nix { };
+    copilot-language-server = self.callPackage ./copilot-language-server/package.nix { };
     # spirv-reflect = pkgs.callPackage ./spirv-reflect { };
     # dpcpp = pkgs.callPackage ./dpcpp { };
     # dpcpp-bin = pkgs.callPackage ./dpcpp/bin.nix { };
-    dpcpp-prop = pkgs.callPackage ./dpcpp/proprietary4.nix { };
-    gemini-cli-custom = pkgs.callPackage ./gemini-cli/package.nix { };
+    dpcpp-prop = self.callPackage ./dpcpp/proprietary4.nix { };
+    gemini-cli-custom = self.callPackage ./gemini-cli/package.nix { };
     # fileflows = pkgs.callPackage ./fileflows/package.nix { };
     # banana-cursor = pkgs.callPackage ./banana-cursor/package.nix {};
     # zluda-rocm5 = pkgs.callPackage ./zluda-rocm5/package.nix { };
@@ -38,7 +38,7 @@ pkgs.lib.makeScope pkgs.newScope (
     # tdarr-node = pkgs.callPackage ./tdarr/node.nix { };
     # tdarr-server = pkgs.callPackage ./tdarr/server.nix { };
     # terminus = pkgs.callPackage ./terminus/package.nix { };
-    trmnl = pkgs.callPackage ./trmnl/package.nix { };
+    trmnl = self.callPackage ./trmnl/package.nix { };
     # unibear = pkgs.callPackage ./unibear/package.nix { };
     # wigxjpf = pkgs.callPackage ./wigxjpf/package.nix { };
     # taichi = pkgs.python3Packages.callPackage ./taichi { };
@@ -73,7 +73,7 @@ pkgs.lib.makeScope pkgs.newScope (
     python3Packages = pkgs.lib.makeScope pkgs.newScope (
       self-p:
       (pkgs.lib.packagesFromDirectoryRecursive {
-        inherit (pkgs.python3Packages) callPackage;
+        inherit (self-p.python3Packages) callPackage;
         directory = ./python3Packages;
       })
     );
@@ -82,7 +82,7 @@ pkgs.lib.makeScope pkgs.newScope (
     kodiPackages = pkgs.lib.makeScope pkgs.newScope (
       self-k:
       (pkgs.lib.packagesFromDirectoryRecursive {
-        inherit (pkgs.kodiPackages) callPackage;
+        inherit (self.kodiPackages) callPackage;
         directory = ./kodiPackages;
       })
     );
@@ -91,7 +91,7 @@ pkgs.lib.makeScope pkgs.newScope (
     home-assistant-custom-components = pkgs.lib.makeScope pkgs.newScope (
       self-ha:
       (pkgs.lib.packagesFromDirectoryRecursive {
-        inherit (pkgs) callPackage;
+        inherit (self-ha) callPackage;
         directory = ./home-assistant-custom-components;
       })
     );

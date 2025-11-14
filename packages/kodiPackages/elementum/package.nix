@@ -23,7 +23,6 @@ let
     }
     ."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 in
-# kodiPackages.buildKodiAddon rec {
 buildKodiAddon rec {
   pname = "elementum";
   namespace = "plugin.video.elementum";
