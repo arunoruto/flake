@@ -7,7 +7,7 @@
   config,
   lib,
   pkgs,
-  flake,
+  self,
   ...
 }:
 let
@@ -68,7 +68,7 @@ in
       // {
         imports = [
           ./${username}
-          flake.homeModules.default
+          self.homeModules.default
         ];
         options.user = lib.mkOption {
           type = lib.types.str;

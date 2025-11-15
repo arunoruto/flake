@@ -7,7 +7,8 @@
 let
   inherit (config) username;
   user-conf = config.users.users.${username};
-  secretspath = builtins.toString inputs.secrets;
+  # secretspath = builtins.toString inputs.secrets;
+  secretspath = "${inputs.self.outPath}/secrets";
 in
 {
   imports = [

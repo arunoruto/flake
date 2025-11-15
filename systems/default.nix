@@ -19,8 +19,7 @@ lib.attrsets.mergeAttrsList (
         {
           system = arch;
           specialArgs = {
-            inherit inputs;
-            flake = self;
+            inherit inputs self;
           };
           modules = [
             self.nixosModules.default

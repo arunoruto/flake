@@ -2,7 +2,7 @@
   config,
   lib,
   pkgs,
-  flake,
+  self,
   ...
 }:
 {
@@ -44,7 +44,7 @@
         ];
         customComponents =
           let
-            pkgs-extended = pkgs.extend flake.overlays.home-assistant;
+            pkgs-extended = pkgs.extend self.overlays.home-assistant;
           in
           with pkgs-extended.home-assistant-custom-components;
           (lib.optionals (config.services.home-assistant.config ? "ingress") [
