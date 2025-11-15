@@ -88,11 +88,11 @@
     # matlab-pr.url = "https://github.com/james-atkins/nixpkgs/tree/pr/matlab";
 
     # Private
-    secrets = {
-      # url = "git+ssh://git@github.com/arunoruto/secrets.nix.git?ref=main&shallow=1";
-      url = "git+https://github.com/arunoruto/secrets.nix.git?ref=main&shallow=1";
-      flake = false;
-    };
+    # secrets = {
+    #   # url = "git+ssh://git@github.com/arunoruto/secrets.nix.git?ref=main&shallow=1";
+    #   url = "git+https://github.com/arunoruto/secrets.nix.git?ref=main&shallow=1";
+    #   flake = false;
+    # };
     wallpapers = {
       url = "git+https://github.com/arunoruto/wallpapers.git?ref=main&shallow=1";
       flake = false;

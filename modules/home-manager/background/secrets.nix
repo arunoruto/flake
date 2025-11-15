@@ -2,10 +2,12 @@
   inputs,
   config,
   pkgs,
+  # self,
   ...
 }:
 let
-  secretspath = builtins.toString inputs.secrets;
+  # secretspath = builtins.toString inputs.secrets;
+  secretspath = "${inputs.self.outPath}/secrets";
 in
 {
   imports = [

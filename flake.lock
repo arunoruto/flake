@@ -765,7 +765,6 @@
         "nixpkgs-update": "nixpkgs-update",
         "nur": "nur",
         "pre-commit-hooks": "pre-commit-hooks",
-        "secrets": "secrets",
         "sops-nix": "sops-nix",
         "stylix": "stylix",
         "ucodenix": "ucodenix",
@@ -808,24 +807,6 @@
         "owner": "oxalica",
         "repo": "rust-overlay",
         "type": "github"
-      }
-    },
-    "secrets": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1760464772,
-        "narHash": "sha256-H4w5WcRHtMY6q2exfDm2B1Y2jAGJ3nWLNbJnRv40CpA=",
-        "ref": "main",
-        "rev": "d6ae8d06f13efebab81d3530cdee05915ae0f94a",
-        "shallow": true,
-        "type": "git",
-        "url": "https://github.com/arunoruto/secrets.nix.git"
-      },
-      "original": {
-        "ref": "main",
-        "shallow": true,
-        "type": "git",
-        "url": "https://github.com/arunoruto/secrets.nix.git"
       }
     },
     "sops-nix": {
