@@ -64,6 +64,15 @@ pkgs.lib.makeScope pkgs.newScope (
     # kodiPackages = pkgs.kodiPackages // (import ./kodi.nix pkgs);
     # kodiPackages = pkgs.kodiPackages;
     # customKodiPackages = import ./kodi.nix pkgs;
+
+    zork2 = self.zork1.override {
+      zork = "zork2";
+      hash = "sha256-JMEkpwsdUiQgWb0VxTLF4BOptK/gqT/8MdCtwa/2aak=";
+    };
+    zork3 = self.zork1.override {
+      zork = "zork3";
+      hash = "sha256-/CqGsDPpCAmC4V3OTWx5vKwln9ap13DLM5I2O+eVwmg=";
+    };
   }
   // (pkgs.lib.packagesFromDirectoryRecursive {
     inherit (self) callPackage newScope;
