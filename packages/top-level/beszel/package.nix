@@ -7,13 +7,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "beszel";
-  version = "0.14.1";
+  version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "henrygd";
     repo = "beszel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IQ39OtYG2VDyHIPFRR0VNK56czGlJly66Bwb/NYIBxY=";
+    hash = "sha256-fPVjJfMaTSPolB6l2t1b2CjSaX3Gc4/0Nruy4OY9RAc=";
   };
 
   webui = buildNpmPackage {
@@ -47,12 +47,12 @@ buildGoModule (finalAttrs: {
 
     sourceRoot = "${finalAttrs.src.name}/internal/site";
 
-    npmDepsHash = "sha256-Wtq/pesnovOyAnFta/wI+j8rml8XWORvOLz/Q82sy8g=";
+    npmDepsHash = "sha256-YVYHNAf0JdTpqUYq5JosuzWLOsZkbX2okNPj5JQTOto=";
   };
 
   # sourceRoot = "${finalAttrs.src.name}";
 
-  vendorHash = "sha256-IfwgL4Ms5Uho1l0yGCyumbr1N/SN+j5HaFl4hACkTsQ=";
+  vendorHash = "sha256-fXiCddu7DE6NLNJkYupQsAK0xMBoL0K5T7Ig0IuIbD4=";
 
   # postPatch = ''substituteInPlace go.mod --replace "go 1.25.1" "go 1.25.0"'';
 
@@ -77,7 +77,10 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/henrygd/beszel";
     changelog = "https://github.com/henrygd/beszel/releases/tag/v${finalAttrs.version}";
     description = "Lightweight server monitoring hub with historical data, docker stats, and alerts";
-    maintainers = with lib.maintainers; [ bot-wxt1221 ];
+    maintainers = with lib.maintainers; [
+      bot-wxt1221
+      arunoruto
+    ];
     license = lib.licenses.mit;
   };
 })
