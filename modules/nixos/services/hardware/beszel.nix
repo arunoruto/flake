@@ -76,6 +76,26 @@ in
         Extra packages to add to beszel path (such as nvidia-smi or rocm-smi).
       '';
     };
+    smartmontools = lib.mkOption {
+      default = true;
+      example = false;
+      description = "Include smartmontools in the Beszel agent path for disk monitoring and add the agent to the disk group.";
+      type = lib.types.bool;
+    };
+    deviceAllow = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
+      example = [
+        "/dev/sda"
+        "/dev/sdb"
+        "/dev/nvme0"
+      ];
+      description = ''
+        List of device paths to allow access to for SMART monitoring.
+        This is only needed if the ambient capabilities are not sufficient.
+        Devices will be granted read-only access.
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -89,6 +109,7 @@ in
       environment = cfg.environment;
       path =
         cfg.extraPath
+        ++ lib.optionals cfg.smartmontools [ pkgs.smartmontools ]
         ++ lib.optionals (builtins.elem "nvidia" config.services.xserver.videoDrivers) [
           (lib.getBin config.hardware.nvidia.package)
         ]
@@ -107,16 +128,34 @@ in
         EnvironmentFile = cfg.environmentFile;
 
         # adds ability to monitor docker/podman containers
-        SupplementaryGroups =
-          lib.optionals config.virtualisation.docker.enable [ "docker" ]
-          ++ lib.optionals (
-            config.virtualisation.podman.enable && config.virtualisation.podman.dockerSocket.enable
-          ) [ "podman" ];
+        SupplementaryGroups = [
+          "messagebus"
+        ]
+        ++ lib.optionals cfg.smartmontools [ "disk" ]
+        ++ lib.optionals config.virtualisation.docker.enable [ "docker" ]
+        ++ lib.optionals (
+          config.virtualisation.podman.enable && config.virtualisation.podman.dockerSocket.enable
+        ) [ "podman" ];
 
         DynamicUser = true;
         User = "beszel-agent";
+        # Capabilities needed for SMART monitoring
+        AmbientCapabilities = lib.mkIf cfg.smartmontools [
+          "CAP_SYS_RAWIO"
+          "CAP_SYS_ADMIN"
+        ];
+        CapabilityBoundingSet = lib.mkIf cfg.smartmontools [
+          "CAP_SYS_RAWIO"
+          "CAP_SYS_ADMIN"
+        ];
+        # Device access for SMART monitoring
+        DeviceAllow = lib.mkIf (cfg.smartmontools && cfg.deviceAllow != [ ]) (
+          map (device: "${device} r") cfg.deviceAllow
+        );
         LockPersonality = true;
+        # NoNewPrivileges = !cfg.smartmontools;
         NoNewPrivileges = true;
+        PrivateDevices = lib.mkForce false;
         PrivateTmp = true;
         PrivateUsers = true;
         ProtectClock = true;
@@ -147,5 +186,10 @@ in
           45876
       )
     ];
+
+    services.udev.extraRules = lib.optionalString cfg.smartmontools ''
+      # Change NVMe devices to disk group ownership for S.M.A.R.T. monitoring
+      KERNEL=="nvme[0-9]*", GROUP="disk", MODE="0660"
+    '';
   };
 }

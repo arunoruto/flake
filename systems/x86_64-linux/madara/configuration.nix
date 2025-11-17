@@ -62,8 +62,8 @@ in
       enable = true;
       package = pkgs.unstable.beszel;
       environment = {
-        # LOG_LEVEL = "debug";
-        LOG_LEVEL = "info";
+        LOG_LEVEL = "debug";
+        # LOG_LEVEL = "info";
         GPU = "true";
         KEY_FILE = config.sops.secrets."tokens/beszel-marvin".path;
         EXTRA_FILESYSTEMS = lib.strings.concatStringsSep "," [
@@ -76,6 +76,11 @@ in
       #   # "sda2"
       # ];
       # extraPath = [ (lib.getBin config.boot.kernelPackages.nvidiaPackages.stable) ];
+      smartmontools = true;
+      # deviceAllow = [
+      #   "/dev/sda"
+      #   "/dev/nvme0"
+      # ];
     };
     xrdp = {
       # enable = true;
