@@ -88,6 +88,13 @@ in
       defaultWindowManager = "${pkgs.gnome-session}/bin/gnome-session";
       openFirewall = true;
     };
+    go2rtc = {
+      enable = true;
+      settings.streams = {
+        obsbot = "ffmpeg:device?video=0&video_size=1280x720#video=h264";
+        logi = "ffmpeg:device?video=/dev/video2&input_format=yuyv422&video_size=1280x720#video=h264#hardware";
+      };
+    };
   };
 
   sops.secrets."tokens/beszel-marvin" = {
