@@ -37,7 +37,6 @@ in
           whitespace = "error";
           preloadindex = true;
         };
-        commit.template = "~/.config/git/template";
         push = {
           autoSetupRemote = true;
           default = "current";
@@ -59,6 +58,12 @@ in
           "https://git.overleaf.com".helper =
             "store --file ${config.home.homeDirectory}/.config/git/overleaf";
         };
+        commit = {
+          template = "~/.config/git/template";
+          gpgsign = true;
+        };
+        user.signingkey = "${config.home.homeDirectory}/.ssh/id_ed25519.pub";
+        gpg.format = "ssh";
       }
       // lib.optionalAttrs (args ? nixosConfig) {
         # commit.gpgsign = osConfig.yubikey.enable;
