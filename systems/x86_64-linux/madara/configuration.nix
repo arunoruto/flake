@@ -92,7 +92,7 @@ in
       enable = true;
       settings.streams = {
         obsbot = "ffmpeg:device?video=0&video_size=1280x720#video=h264";
-        logi = "ffmpeg:device?video=/dev/video2&input_format=yuyv422&video_size=1280x720#video=h264#hardware";
+        logi = "ffmpeg:device?video=/dev/video2&&video_size=1280x720#video=h264";
       };
     };
   };
