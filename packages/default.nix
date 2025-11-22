@@ -82,7 +82,7 @@ pkgs.lib.makeScope pkgs.newScope (
     python3Packages = pkgs.lib.makeScope pkgs.newScope (
       self-p:
       (pkgs.lib.packagesFromDirectoryRecursive {
-        inherit (self-p.python3Packages) callPackage;
+        inherit (pkgs.python3Packages) callPackage;
         directory = ./python3Packages;
       })
     );
