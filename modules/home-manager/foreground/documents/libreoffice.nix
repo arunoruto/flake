@@ -5,9 +5,9 @@
   ...
 }:
 {
-  options.libreoffice.enable = lib.mkEnableOption "Enable the document suite LibreOffice";
+  options.programs.libreoffice.enable = lib.mkEnableOption "Enable the document suite LibreOffice";
 
-  config = lib.mkIf config.libreoffice.enable {
+  config = lib.mkIf config.programs.libreoffice.enable {
     home.packages =
       (with pkgs.unstable; [
         libreoffice-fresh
