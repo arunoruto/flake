@@ -9,7 +9,7 @@
     ./opencode-module.nix
     ./opencode-theme.nix
   ];
-  config = lib.mkIf (!config.hosts.tinypc.enable) {
+  config = lib.mkIf config.hosts.development.enable {
     programs.opencode = {
       enable = true;
       package = pkgs.unstable.opencode;

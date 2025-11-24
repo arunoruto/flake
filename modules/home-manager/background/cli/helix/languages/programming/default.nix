@@ -9,10 +9,10 @@
   ];
 
   helix = {
-    julia.enable = lib.mkDefault (!config.hosts.tinypc.enable);
-    fortran.enable = lib.mkDefault (!config.hosts.tinypc.enable);
-    go.enable = lib.mkDefault (!config.hosts.tinypc.enable);
-    matlab.enable = lib.mkDefault (!config.hosts.tinypc.enable);
-    python.enable = lib.mkDefault (!config.hosts.tinypc.enable);
+    julia.enable = lib.mkDefault config.hosts.development.enable;
+    fortran.enable = lib.mkDefault config.hosts.development.enable;
+    go.enable = lib.mkDefault config.hosts.development.enable;
+    matlab.enable = lib.mkDefault config.hosts.development.enable;
+    python.enable = lib.mkDefault config.hosts.development.enable;
   };
 }

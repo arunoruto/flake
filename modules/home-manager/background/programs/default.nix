@@ -14,7 +14,7 @@
     ./ty.nix
   ];
 
-  programs.mods.enable = !config.hosts.tinypc.enable;
+  programs.mods.enable = config.hosts.development.enable;
   programs.pop.enable = !config.hosts.tinypc.enable;
   home.packages = with pkgs; [
     # bws

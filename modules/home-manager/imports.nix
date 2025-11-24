@@ -15,6 +15,7 @@
     hosts = {
       laptop.enable = lib.mkEnableOption "Sensible defaults for laptops";
       tinypc.enable = lib.mkEnableOption "Sensible defaults for tinypcs";
+      development.enable = lib.mkEnableOption "Enable development tools";
     };
   };
 
@@ -24,6 +25,7 @@
       tinypc.enable = lib.mkDefault (
         (lib.elem "tinypc" osConfig.system.tags) || (lib.elem "headless" osConfig.system.tags)
       );
+      development.enable = lib.mkDefault (lib.elem "development" osConfig.system.tags);
     };
     foreground.enable = lib.mkDefault osConfig.programs.enable;
 

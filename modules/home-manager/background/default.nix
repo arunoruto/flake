@@ -27,7 +27,7 @@
       dysk
       speedtest-cli
     ]
-    ++ lib.optionals (!config.hosts.tinypc.enable) (
+    ++ lib.optionals config.hosts.development.enable (
       with pkgs;
       [
         glow

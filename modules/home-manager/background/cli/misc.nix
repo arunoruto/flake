@@ -92,7 +92,7 @@
     };
   };
 
-  home.packages = lib.optionals (!config.hosts.tinypc.enable) (
+  home.packages = lib.optionals config.hosts.development.enable (
     (with pkgs; [
       broot
       fx

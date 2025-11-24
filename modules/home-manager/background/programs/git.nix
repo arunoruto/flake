@@ -73,7 +73,7 @@ in
     };
 
     jujutsu = {
-      enable = !config.hosts.tinypc.enable;
+      enable = config.hosts.development.enable;
       package = pkgs.unstable.jujutsu;
       settings = {
         inherit user;
