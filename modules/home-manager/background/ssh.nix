@@ -54,6 +54,9 @@ in
       };
     };
 
-    home.file = { } // (publicKeyEntries pathToYubikeys) // (publicKeyEntries pathToUserKeys);
+    home.file =
+      { }
+      # // (publicKeyEntries pathToYubikeys)
+      // (publicKeyEntries pathToUserKeys);
   };
 }

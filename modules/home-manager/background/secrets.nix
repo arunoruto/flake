@@ -29,9 +29,10 @@ in
       "private_keys/mirza@zangetsu" = {
         path = config.home.homeDirectory + "/.ssh/sops_key";
       };
-      "ssh_keys/giyu".path = "${config.home.homeDirectory}/.ssh/id_giyu";
-      "ssh_keys/tengen".path = "${config.home.homeDirectory}/.ssh/id_tengen";
-      "ssh_keys/kanae".path = "${config.home.homeDirectory}/.ssh/id_kanae";
+      "ssh_keys/${config.user}".path = "${config.home.homeDirectory}/.ssh/id_ed25519";
+      # "ssh_keys/giyu".path = "${config.home.homeDirectory}/.ssh/id_giyu";
+      # "ssh_keys/tengen".path = "${config.home.homeDirectory}/.ssh/id_tengen";
+      # "ssh_keys/kanae".path = "${config.home.homeDirectory}/.ssh/id_kanae";
       "tokens/copilot" = { };
       "tokens/cachix" = { };
     };
