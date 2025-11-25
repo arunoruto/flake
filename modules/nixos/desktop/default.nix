@@ -22,6 +22,7 @@
   config = lib.mkIf config.desktop-environment.enable {
     # DEs
     services.desktopManager = {
+      gnome.enable = lib.mkDefault true;
       cosmic.enable = lib.mkDefault true;
       plasma6.enable = lib.mkDefault false;
     };
@@ -37,7 +38,6 @@
 
     services.xserver = {
       desktopManager = {
-        gnome.enable = lib.mkDefault true;
         kodi.enable = lib.mkDefault false;
       };
 
