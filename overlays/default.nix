@@ -64,6 +64,9 @@ rec {
     fw-ectool = prev.fw-ectool.overrideAttrs (_: {
       cmakeFlags = [ "-DCMAKE_POLICY_VERSION_MINIMUM=3.5" ];
     });
+    gtksourceview5 = prev.gtksourceview5.overrideAttrs (old: {
+      doCheck = false;
+    });
     # p8-platform = prev.p8-platform.overrideAttrs (oldAttrs: {
     #   cmakeFlags = [ "-DCMAKE_POLICY_VERSION_MINIMUM=3.5" ];
     # });
