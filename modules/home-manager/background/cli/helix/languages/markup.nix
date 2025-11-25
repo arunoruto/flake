@@ -75,7 +75,7 @@
         };
       };
       extraPackages = with pkgs; [
-        ansible-language-server
+        # ansible-language-server
         yaml-language-server
         nodePackages.prettier
         # nodePackages.prettier-plugin-toml

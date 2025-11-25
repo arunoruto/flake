@@ -6,7 +6,7 @@
 }:
 {
   imports = [
-    ./opencode-module.nix
+    # ./opencode-module.nix
     ./opencode-theme.nix
   ];
   config = lib.mkIf config.hosts.development.enable {

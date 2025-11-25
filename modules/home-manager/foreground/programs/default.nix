@@ -48,7 +48,7 @@
         discord
         # jabref
         # libsForQt5.kdenlive
-        libsForQt5.okular
+        kdePackages.okular
         # mailspring
         # masterpdfeditor
         # mprime

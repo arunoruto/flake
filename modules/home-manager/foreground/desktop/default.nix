@@ -32,7 +32,7 @@
       (with pkgs; [
         # gimp
         inkscape
-        jabref
+        # jabref
         # obs-studio
         #okular
         rnote

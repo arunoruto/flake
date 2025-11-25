@@ -27,7 +27,7 @@ let
       pyvista
       streamlit
       # Misc
-      manim
+      # manim
       psutil
       # Optional
       # opencv4

@@ -5,7 +5,7 @@
   ...
 }:
 {
-  imports = [ "${inputs.nixpkgs-unstable.outPath}/nixos/modules/hardware/fw-fanctrl.nix" ];
+  # imports = [ "${inputs.nixpkgs-unstable.outPath}/nixos/modules/hardware/fw-fanctrl.nix" ];
   colmena.deployment.allowLocalDeployment = lib.mkDefault true;
 
   system.tags = [
@@ -53,4 +53,5 @@
   #   enable = true;
   # };
   # environment.systemPackages = with pkgs; [ impala ];
+  # networking.networkmanager.wifi.backend = "iwd";
 }

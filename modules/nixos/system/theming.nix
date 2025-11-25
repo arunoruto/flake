@@ -56,6 +56,7 @@ in
       #   else {};
       targets = {
         # lightdm.enable = true;
+        qt.enable = false;
       };
     };
   };

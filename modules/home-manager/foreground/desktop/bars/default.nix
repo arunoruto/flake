@@ -9,7 +9,7 @@
   imports = [
     # ./ags
     ./eww
-    ./quickshell
+    # ./quickshell
     ./waybar
   ];
 
@@ -25,10 +25,11 @@
       quickshell = {
         enable = lib.mkDefault true;
         package = lib.mkDefault pkgs.unstable.quickshell;
-        config-name = lib.mkDefault "caelestia";
-        target = lib.mkDefault "hyprland-session";
+        activeConfig = lib.mkDefault "caelestia";
+        # config-name = lib.mkDefault "caelestia";
+        systemd.target = lib.mkDefault "hyprland-session.target";
 
-        caelestia.enable = lib.mkDefault true;
+        # caelestia.enable = lib.mkDefault true;
       };
     };
   };

@@ -16,7 +16,7 @@
 # in
 {
   imports = [
-    ./vivid-module.nix
+    # ./vivid-module.nix
     # ./vivid-filetype.nix
     ./vivid-themes.nix
   ];
@@ -70,10 +70,10 @@
 
     skim.enable = true;
 
-    thefuck = {
-      enable = true;
-      enableInstantMode = args ? nixosConfig;
-    };
+    # thefuck = {
+    #   enable = true;
+    #   enableInstantMode = args ? nixosConfig;
+    # };
 
     vivid = {
       enable = true;

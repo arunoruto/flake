@@ -31,7 +31,8 @@
         enable32Bit = true;
         extraPackages =
           (with pkgs; [
-            amdvlk
+            # amdvlk
+            # radv
           ])
           ++ (with pkgs.rocmPackages; [
             clr.icd
