@@ -8,6 +8,8 @@ let
   cfg = config.services.beszel.agent;
 in
 {
+  disabledModules = [ "services/monitoring/beszel-agent.nix" ];
+
   meta.maintainers = with lib.maintainers; [
     BonusPlay
     arunoruto

@@ -1,7 +1,7 @@
 { lib, ... }:
 {
   imports = [
-    # ./beszel.nix
+    ./beszel.nix
     ./fwupd.nix
     ./keyboard.nix
     ./mouse.nix
