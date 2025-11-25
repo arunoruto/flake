@@ -5,14 +5,9 @@
   ...
 }:
 {
-  options = {
-    local-resolv.enable = lib.mkEnableOption "Enable local resolution";
-  };
-
-  config = lib.mkIf config.local-resolv.enable {
+  config = lib.mkIf config.services.avahi.enable {
     # Resolve .local
     services.avahi = {
-      enable = true;
       ipv6 = false;
       publish = {
         enable = true;

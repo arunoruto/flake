@@ -11,7 +11,6 @@
     ./display
     ./environment
     ./media
-    ./network
     ./programs
     ./security
     ./services
