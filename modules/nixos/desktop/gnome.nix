@@ -5,8 +5,6 @@
   ...
 }:
 {
-  options.gnome.enable = lib.mkEnableOption "Use the GNOME desktop environment";
-
   config = lib.mkIf config.services.desktopManager.gnome.enable {
     services = {
       desktopManager.gnome = {

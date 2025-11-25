@@ -5,18 +5,11 @@
   ...
 }:
 {
-  options = {
-    gdm.enable = lib.mkEnableOption "Use gnome display manager";
-  };
-
-  config = lib.mkIf config.gdm.enable {
+  config = lib.mkIf config.services.displayManager.gdm.enable {
     services = {
-      xserver = {
-        displayManager = {
-          gdm = {
-            enable = true;
-            autoSuspend = !(lib.elem "laptop" config.system.tags);
-          };
+      displayManager = {
+        gdm = {
+          autoSuspend = !(lib.elem "laptop" config.system.tags);
         };
       };
       # displayManager.preStart = "sleep 1";

@@ -19,7 +19,7 @@
             xdg-desktop-portal-wlr
             xdg-desktop-portal-gtk
           ]
-          ++ lib.optionals config.services.xserver.desktopManager.gnome.enable [
+          ++ lib.optionals config.services.desktopManager.gnome.enable [
             pkgs.xdg-desktop-portal-gnome
           ];
         xdgOpenUsePortal = true;

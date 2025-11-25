@@ -16,7 +16,9 @@
   config = lib.mkIf config.display-manager.enable {
     # gdm.enable = lib.mkForce false;
     # lightdm.enable = lib.mkForce false;
-    gdm.enable = lib.mkDefault true;
-    lightdm.enable = lib.mkDefault false;
+    services = {
+      displayManager.gdm.enable = lib.mkDefault true;
+      xserver.displayManager.lightdm.enable = lib.mkDefault false;
+    };
   };
 }

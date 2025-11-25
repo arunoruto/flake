@@ -17,25 +17,27 @@
     ./token.nix
   ];
 
-  nix-utils.enable = true;
-  ssh.enable = true;
+  config = {
+    nix-utils.enable = true;
+    programs.ssh.enable = true;
 
-  home.packages =
-    with pkgs;
-    [
-      dust
-      dysk
-      speedtest-cli
-    ]
-    ++ lib.optionals config.hosts.development.enable (
+    home.packages =
       with pkgs;
       [
-        glow
-        hexyl
-        miller
-        ncdu
-        ouch
-        slides
+        dust
+        dysk
+        speedtest-cli
       ]
-    );
+      ++ lib.optionals config.hosts.development.enable (
+        with pkgs;
+        [
+          glow
+          hexyl
+          miller
+          ncdu
+          ouch
+          slides
+        ]
+      );
+  };
 }

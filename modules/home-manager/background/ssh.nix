@@ -20,17 +20,17 @@ let
     );
 in
 {
-  options.ssh.enable = lib.mkEnableOption "Enable personal SSH settings";
-
-  config = lib.mkIf config.ssh.enable {
+  config = lib.mkIf config.programs.ssh.enable {
     programs.ssh = {
-      enable = true;
+      enableDefaultConfig = false;
       # Required for yubikey-agent
-      addKeysToAgent = "yes";
       extraConfig = ''
         SetEnv TERM=xterm-256color
       '';
       matchBlocks = {
+        "*" = {
+          addKeysToAgent = "yes";
+        };
 
         hublab = {
           host = "gitlab.com github.com";

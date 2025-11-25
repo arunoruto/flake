@@ -12,7 +12,7 @@
 {
   programs = {
     zsh = {
-      dotDir = ".config/zsh";
+      dotDir = "${config.home.homeDirectory}.config/zsh";
       shellAliases = {
         grep = "rg";
         tss = "tailscale switch $(tailscale switch --list | tail -n +2 | fzf | tr -s ' ' | cut -d ' ' -f1)";

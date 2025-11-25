@@ -5,13 +5,8 @@
   ...
 }:
 {
-  options = {
-    lightdm.enable = lib.mkEnableOption "Use light display manager";
-  };
-
-  config = lib.mkIf config.lightdm.enable {
+  config = lib.mkIf config.services.xserver.displayManager.lightdm.enable {
     services.xserver.displayManager.lightdm = {
-      enable = true;
       # background = lib.mkForce /home/mirza/Pictures/wallpapers/art/kanagawa/kanagawa-van-gogh.jpg;
       # background = lib.mkForce config.stylix.image;
       greeters = {

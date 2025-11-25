@@ -21,16 +21,12 @@ in
   programs = {
     git = {
       enable = true;
-      userName = user.name;
-      userEmail = user.email;
       lfs.enable = true;
-      delta = {
-        enable = true;
-        options = {
-          side-by-side = true;
+      settings = {
+        user = {
+          name = user.name;
+          email = user.email;
         };
-      };
-      extraConfig = {
         core = {
           editor = "hx";
           compression = 9;
@@ -69,6 +65,12 @@ in
         # commit.gpgsign = osConfig.yubikey.enable;
         # user.signingkey = "${config.home.homeDirectory}/.ssh/id_${osConfig.yubikey.signing}_sign.pub";
         # gpg.format = "ssh";
+      };
+    };
+    delta = {
+      enable = true;
+      options = {
+        side-by-side = true;
       };
     };
 

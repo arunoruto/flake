@@ -56,6 +56,11 @@
         };
       } update;
 
+    stylix.targets.zen-browser.profileNames = [
+      "default"
+      # "5pju7frs.default"
+    ];
+
     home = {
       packages = [
         # inputs.zen-browser.packages.${pkgs.system}.default
