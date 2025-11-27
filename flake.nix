@@ -139,7 +139,6 @@
       # -> look into flake parts/utils
       mkLib = nixpkgs: nixpkgs.lib.extend (final: prev: (import ./lib final));
       lib = mkLib nixpkgs;
-      system = "x86_64-linux";
       pkgs-attrs = {
         overlays =
           (with self.overlays; [
@@ -154,10 +153,9 @@
           # nvidia.acceptLicense = true;
         };
       };
-      pkgs = import nixpkgs ({ inherit system; } // pkgs-attrs);
     in
     {
-      inherit lib pkgs;
+      inherit lib;
       nixosModules.default = ./modules/nixos;
       homeModules.default = ./modules/home-manager/home.nix;
 
@@ -171,23 +169,6 @@
           image
           ;
       };
-      # (import ./systems {
-      #   inherit
-      #     inputs
-      #     self
-      #     lib
-      #     pkgs-attrs
-      #     scheme
-      #     image
-      #     ;
-      # })
-      # // {
-      #   pi = nixpkgs.lib.nixosSystem {
-      #     system = "aarch64-linux";
-      #     specialArgs = { inherit inputs; };
-      #     modules = [ ./systems/aarch64-linux/pi ];
-      #   };
-      # };
 
       homeConfigurations = import ./homes {
         inherit
@@ -206,11 +187,12 @@
       colmena =
         let
           conf = self.nixosConfigurations;
+          system = "x86_64-linux";
         in
         {
           meta = {
             description = "my personal machines";
-            nixpkgs = pkgs;
+            nixpkgs = import nixpkgs ({ inherit system; } // pkgs-attrs);
             nodeSpecialArgs = builtins.mapAttrs (
               name: value: (value._module.specialArgs // { inherit lib; })
             ) conf;
