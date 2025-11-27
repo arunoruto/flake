@@ -52,7 +52,7 @@
       intel-ocl
       intel-media-driver # LIBVA_DRIVER_NAME=iHD
       intel-vaapi-driver # LIBVA_DRIVER_NAME=i965 (older but works better for Firefox/Chromium)
-      vaapiVdpau
+      libva-vdpau-driver
       libvdpau-va-gl
       # https://nixos.wiki/wiki/Intel_Graphics
       unstable.vpl-gpu-rt
