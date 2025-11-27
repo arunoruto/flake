@@ -19,7 +19,7 @@ let
       }
       send -- ":lf ${config.home.sessionVariables.NH_FLAKE}\r"
       expect -r "Added (\\d+) variables."
-      # send -- {pkgs = import inputs.nixpkgs { system = "${pkgs.system}"; overlays = [ overlays.unstable-packages overlays.additions overlays.python overlays.kodi ]; }}
+      # send -- {pkgs = import inputs.nixpkgs { system = "${pkgs.stdenv.hostPlatform.system}"; overlays = [ overlays.unstable-packages overlays.additions overlays.python overlays.kodi ]; }}
       # send -- "\r"
       send -- "hm = homeConfigurations.${config.home.username}\r"
     ''

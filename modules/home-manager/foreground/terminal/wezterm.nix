@@ -32,7 +32,7 @@
   # // lib.optionalAttrs (args ? nixosConfig) {
   #   package =
   #     if osConfig.hosts.nvidia.enable then
-  #       inputs.wezterm.packages.${pkgs.system}.default
+  #       inputs.wezterm.packages.${pkgs.stdenv.hostPlatform.system}.default
   #     else
   #       pkgs.wezterm;
   # };

@@ -31,7 +31,7 @@
     environment.systemPackages = lib.optionals (!(lib.elem "tinypc" config.system.tags)) (
       with pkgs;
       [
-        inputs.colmena.packages.${pkgs.system}.colmena
+        inputs.colmena.packages.${pkgs.stdenv.hostPlatform.system}.colmena
         deploy-rs
       ]
     );

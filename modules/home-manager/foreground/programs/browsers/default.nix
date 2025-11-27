@@ -46,11 +46,11 @@
       lib.attrsets.recursiveUpdate {
         brave.enable = lib.mkDefault false;
         firefox.enable = lib.mkDefault false;
-        google-chrome.enable = lib.mkDefault (pkgs.system == "x86_64-linux");
+        google-chrome.enable = lib.mkDefault (pkgs.stdenv.hostPlatform.system == "x86_64-linux");
         vivaldi.enable = lib.mkDefault false;
         zen-browser = {
           enable = lib.mkDefault true;
-          # package = inputs.zen-browser.packages."${pkgs.system}".default.override {
+          # package = inputs.zen-browser.packages."${pkgs.stdenv.hostPlatform.system}".default.override {
           #   desktopIconName = "zen";
           # };
         };
@@ -63,7 +63,7 @@
 
     home = {
       packages = [
-        # inputs.zen-browser.packages.${pkgs.system}.default
+        # inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
       ]
       ++ lib.optionals config.programs.vivaldi.enable [ pkgs.vivaldi-ffmpeg-codecs ];
       # sessionVariables = {

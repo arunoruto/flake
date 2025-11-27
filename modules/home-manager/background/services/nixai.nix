@@ -12,7 +12,7 @@
       enable = false;
       mcp = {
         enable = false;
-        package = inputs.nixai.packages."${pkgs.system}".nixai;
+        package = inputs.nixai.packages."${pkgs.stdenv.hostPlatform.system}".nixai;
         aiProvider = "copilot";
         aiModel = "gpt-4";
       };

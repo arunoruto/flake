@@ -76,7 +76,8 @@ rec {
   # be accessible through 'pkgs.unstable'
   unstable-packages = final: prev: {
     unstable = import inputs.nixpkgs-unstable {
-      inherit (final) system;
+      # inherit (final) system;
+      inherit (final.stdenv.hostPlatform) system;
       overlays = [
         additions
         modifications

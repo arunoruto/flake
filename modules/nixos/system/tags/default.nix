@@ -27,6 +27,6 @@
   }
   // lib.optionalAttrs (inputs ? colmena) {
     colmena.deployment.tags = config.system.tags;
-    environment.systemPackages = [ inputs.colmena.packages.${pkgs.system}.colmena ];
+    environment.systemPackages = [ inputs.colmena.packages.${pkgs.stdenv.hostPlatform.system}.colmena ];
   };
 }

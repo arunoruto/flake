@@ -40,7 +40,7 @@
       };
     };
 
-    home.packages = lib.optionals (pkgs.system == "x86_64-linux") (
+    home.packages = lib.optionals (pkgs.stdenv.hostPlatform.system == "x86_64-linux") (
       with pkgs;
       [
         vlc
