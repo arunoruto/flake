@@ -18,15 +18,18 @@
         set fish_greeting
 
         # set -gx GH_AUTH_TOKEN $(${lib.getExe config.programs.gh.package} auth token)
-        bind \ck 'fg'
+        # bind \ck 'fg'
 
         set -gx EDITOR ${
           if (config.home.sessionVariables ? EDITOR) then config.home.sessionVariables.EDITOR else "nano"
         }
       '';
-      # binds = {
-      #   "ctrl-k".command = "fg %";
-      # };
+      binds = {
+        "!".command = "bind_bang";
+        "'$'".command = "bind_dollar";
+        "alt-backspace".command = "backward-kill-word";
+        "ctrl-k".command = "fg";
+      };
 
       functions = {
         bind_bang.body = ''
@@ -88,11 +91,6 @@
             case "*"
                 commandline --insert '$'
           end
-        '';
-
-        fish_user_key_bindings.body = ''
-          bind ! bind_bang
-          bind '$' bind_dollar
         '';
       };
 
