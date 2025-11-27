@@ -7,18 +7,23 @@
 {
   imports = [
     # ./opencode-module.nix
+    ./gemini.nix
+    ./mcp.nix
     ./opencode-theme.nix
   ];
   config = lib.mkIf config.hosts.development.enable {
-    programs.opencode = {
-      enable = true;
-      package = pkgs.unstable.opencode;
-      settings = {
-        theme = "stylix";
+    programs = {
+      gemini-cli.enable = true;
+      mcp.enable = true;
+      opencode = {
+        enable = true;
+        package = pkgs.unstable.opencode;
+        settings = {
+          theme = "stylix";
+        };
       };
     };
     home.packages = with pkgs.unstable; [
-      gemini-cli
       goose-cli
       github-copilot-cli
     ];

@@ -5,7 +5,7 @@
 {
   imports = [
     # ./dprint
-    ./ai.nix
+    ./ai
     ./atuin.nix
     ./astral.nix
     ./fastfetch.nix
