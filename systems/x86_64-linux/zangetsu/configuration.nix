@@ -50,13 +50,13 @@
     extraPackages = with pkgs; [
       intel-compute-runtime
       intel-ocl
-      intel-media-driver # LIBVA_DRIVER_NAME=iHD
+      # intel-media-sdk
+      # intel-media-driver # LIBVA_DRIVER_NAME=iHD
       intel-vaapi-driver # LIBVA_DRIVER_NAME=i965 (older but works better for Firefox/Chromium)
       libva-vdpau-driver
       libvdpau-va-gl
       # https://nixos.wiki/wiki/Intel_Graphics
       unstable.vpl-gpu-rt
-      intel-media-sdk
     ];
   };
   environment.sessionVariables = {
