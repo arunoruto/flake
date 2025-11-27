@@ -62,14 +62,15 @@ in
       enable = true;
       package = pkgs.unstable.beszel;
       environment = {
-        LOG_LEVEL = "debug";
-        # LOG_LEVEL = "info";
+        # LOG_LEVEL = "debug";
+        LOG_LEVEL = "info";
         GPU = "true";
         KEY_FILE = config.sops.secrets."tokens/beszel-marvin".path;
         EXTRA_FILESYSTEMS = lib.strings.concatStringsSep "," [
           "nvme0n1p1"
           # "sda2"
         ];
+        NETWORK = "tcp";
       };
       # extraFilesystems = [
       #   "nvme0n1p1"
@@ -81,6 +82,7 @@ in
       #   "/dev/sda"
       #   "/dev/nvme0"
       # ];
+      openFirewall = true;
     };
     xrdp = {
       # enable = true;
@@ -140,5 +142,9 @@ in
   };
   environment.systemPackages = with pkgs; [
     signal-desktop
+  ];
+  networking.firewall.allowedTCPPorts = lib.optionals config.services.go2rtc.enable [
+    1984
+    8554
   ];
 }
