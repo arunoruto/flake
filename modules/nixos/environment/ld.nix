@@ -14,6 +14,7 @@
     libraries = with pkgs; [
       # blas
       stdenv.cc.cc
+      glib
       glibc
       # libGL
       opensc
