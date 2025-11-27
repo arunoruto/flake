@@ -26,17 +26,19 @@
       netbird.enable = lib.mkDefault false;
     };
     programs.localsend.enable = lib.mkDefault true;
-    environment.systemPackages =
-      lib.optionals (!(lib.elem "tinypc" config.system.tags)) (
-        with pkgs;
-        [
-          bind
-          wireguard-tools
-        ]
-      )
-      ++ lib.optionals config.networking.wireless.iwd.enable [
-        pkgs.impala
-      ];
+    environment.systemPackages = [
+      pkgs.unixtools.netstat
+    ]
+    ++ lib.optionals (!(lib.elem "tinypc" config.system.tags)) (
+      with pkgs;
+      [
+        bind
+        wireguard-tools
+      ]
+    )
+    ++ lib.optionals config.networking.wireless.iwd.enable [
+      pkgs.impala
+    ];
 
     networking = {
       networkmanager = {
