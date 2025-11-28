@@ -24,8 +24,11 @@ in
     targetHost = "madara.king-little.ts.net";
 
   };
-  # nixpkgs.config.cudaSupport = true;
-  ai.enable = true;
+  # nixpkgs.config = {
+  #   cudaSupport = true;
+  #   cudaCapabilities = [ "6.1" ];
+  # };
+
   printing.enable = true;
   scanning.enable = true;
   system.tags = [
@@ -53,6 +56,14 @@ in
   virtualisation.docker.enable = true;
   # virtualisation.incus.enable = true;
   services = {
+    ai.enable = true;
+    ollama = {
+      enable = true;
+      acceleration = "vulkan";
+      environmentVariables = {
+        GGML_VK_VISIBLE_DEVICES = "0";
+      };
+    };
     harmonia = {
       enable = true;
       openFirewall = true;
