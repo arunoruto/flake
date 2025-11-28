@@ -16,5 +16,6 @@
     home.packages = [
       pkgs.unstable.github-mcp-server
     ];
+    home.file.".gemini/settings.json".force = true;
   };
 }
