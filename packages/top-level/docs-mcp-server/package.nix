@@ -3,7 +3,9 @@
   buildNpmPackage,
   fetchFromGitHub,
   makeWrapper,
-  playwright,
+  # playwright,
+
+  skipBrowserDownload ? true,
 }:
 buildNpmPackage (finalAttrs: {
   pname = "docs-mcp-server";
@@ -18,23 +20,28 @@ buildNpmPackage (finalAttrs: {
 
   npmDepsHash = "sha256-uSzsXBpzFthF9klmsTcNpkhVDroT0KuOHduXSxUJaeQ=";
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ playwright ];
+  nativeBuildInputs = lib.optionals skipBrowserDownload [ makeWrapper ];
+  # buildInputs = [ playwright ];
 
-  postInstall =
-    let
-      browsers = (builtins.fromJSON (builtins.readFile "${playwright}/browsers.json")).browsers;
-      chromium-rev = (builtins.head (builtins.filter (x: x.name == "chromium") browsers)).revision;
-    in
-    ''
-      wrapProgram $out/bin/docs-mcp-server \
-        --set PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD 1 \
-        --set PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH "${playwright.browsers}/chromium-${chromium-rev}/chrome-linux/chrome"
-    '';
+  postInstall = lib.optionalString skipBrowserDownload ''
+    wrapProgram $out/bin/docs-mcp-server \
+      --set PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD 1
+  '';
+  # postInstall =
+  #   let
+  #     browsers = (builtins.fromJSON (builtins.readFile "${playwright}/browsers.json")).browsers;
+  #     chromium-rev = (builtins.head (builtins.filter (x: x.name == "chromium") browsers)).revision;
+  #   in
+  #   ''
+  #     wrapProgram $out/bin/docs-mcp-server \
+  #       --set PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD 1 \
+  #       --set PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH "${playwright.browsers}/chromium-${chromium-rev}/chrome-linux/chrome"
+  #   '';
 
   meta = {
     description = "Grounded Docs MCP Server: Enhance Your AI Coding Assistant ";
     homepage = "https://grounded.tools/";
+    mainProgram = "docs-mcp-server";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ arunoruto ];
   };
