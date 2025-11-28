@@ -9,13 +9,8 @@ let
 in
 
 {
-  options = {
-    ssh.enable = lib.mkEnableOption "Enable SSH and configure it";
-  };
-
-  config = lib.mkIf config.ssh.enable {
+  config = lib.mkIf config.services.openssh.enable {
     services.openssh = {
-      enable = true;
       hostKeys = [
         {
           # comment = "hi";

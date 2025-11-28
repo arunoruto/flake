@@ -5,6 +5,7 @@
 }:
 {
   imports = [
+    ./ai
     ./hardware
     ./home-assistant
     ./input
@@ -14,9 +15,7 @@
     ./tuning
     ./virtualization
 
-    ./ai.nix
     ./davmail.nix
-    ./flatpak.nix
     ./github-runner.nix
     ./harmonia.nix
     ./ssh.nix
@@ -24,8 +23,10 @@
 
   nas.enable = lib.mkDefault false;
 
-  ai.enable = lib.mkDefault false;
   davmail.enable = lib.mkDefault false;
-  flatpak.enable = lib.mkDefault config.xdg.portal.enable;
-  ssh.enable = lib.mkDefault true;
+  services = {
+    ai.enable = lib.mkDefault false;
+    flatpak.enable = lib.mkDefault config.xdg.portal.enable;
+    openssh.enable = lib.mkDefault true;
+  };
 }
