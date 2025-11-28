@@ -27,6 +27,13 @@ lib.attrsets.mergeAttrsList (
             # Could be relevant for setting up a kodi or github-runner user
             # username = lib.lists.elemAt conf.usernames 0;
             # username = machines."${hostname}";
+            {
+              nixpkgs = {
+                hostPlatform = arch;
+                config = pkgs-attrs.config;
+                overlays = pkgs-attrs.overlays ++ [ self.overlays.python ];
+              };
+            }
             (
               { lib, ... }:
               {
@@ -39,7 +46,6 @@ lib.attrsets.mergeAttrsList (
             {
               networking.hostName = lib.mkForce hostname;
               facter.reportPath = lib.mkIf (lib.pathExists ./${arch}/${hostname}/facter.json) ./${arch}/${hostname}/facter.json;
-              nixpkgs.pkgs = pkgs.extend self.overlays.python;
               theming = {
                 inherit scheme;
                 inherit image;
