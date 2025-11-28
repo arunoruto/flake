@@ -13,7 +13,7 @@
     ./yubikey
   ];
 
-  rssh.enable = lib.mkDefault (!config.yubikey.enable && config.ssh.enable);
+  rssh.enable = lib.mkDefault (!config.yubikey.enable && config.services.openssh.enable);
   secrets.enable = lib.mkDefault true;
   tpm.enable = lib.mkOptionDefault false;
   yubikey = {
