@@ -11,6 +11,7 @@
     services.docs-mcp-server = {
       package = pkgs.docs-mcp-server;
       environment = {
+        HOST = "0.0.0.0";
         OPENAI_API_KEY = "ollama";
         OPENAI_API_BASE =
           if config.services.ollama.enable then
