@@ -38,6 +38,10 @@
           }
         );
       };
+      # docs-mcp-server = {
+      #   type = "sse";
+      #   url = "http://madara.king-little.ts.net:6280/sse";
+      # };
     };
     # home.packages = [
     #   pkgs.unstable.github-mcp-server

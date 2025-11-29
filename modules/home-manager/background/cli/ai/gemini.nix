@@ -9,6 +9,9 @@
     programs.gemini-cli = {
       package = pkgs.unstable.gemini-cli;
       settings = {
+        general = {
+          previewFeatures = true;
+        };
         selectedAuthType = "oauth-personal";
         mcpServers = config.programs.mcp.servers;
       };
