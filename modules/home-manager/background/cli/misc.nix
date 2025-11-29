@@ -98,6 +98,7 @@
       fx
       gping
       up
+      poppler-utils
       q
     ])
     ++ (with pkgs.unstable; [
