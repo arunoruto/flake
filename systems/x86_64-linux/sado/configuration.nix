@@ -59,5 +59,6 @@ _: {
       enable = true;
       openFirewall = true;
     };
+    pipewire.enable = false;
   };
 }
