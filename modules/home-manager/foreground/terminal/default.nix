@@ -15,7 +15,7 @@ in
 {
   imports = [
     ./alacritty.nix
-    ./ghostty.nix
+    ./ghostty
     ./warp.nix
     ./wezterm.nix
   ];

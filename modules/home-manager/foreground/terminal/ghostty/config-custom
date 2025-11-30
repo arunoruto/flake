@@ -1,0 +1,11 @@
+# custom-shader = ../../../../../../ghostty/shaders/crt-shader-with-chromatic-aberration-glow-scanlines-dot-matrix/crt-shader-with-chromatic-aberration-glow-scanlines-dot-matrix.glsl
+# Old TV:
+# custom-shader = ../../../../../../ghostty/shaders/ghostty-shaders/bettercrt.glsl
+# custom-shader = ../../../../../../ghostty/shaders/ghostty-shaders/glitchy.glsl
+
+# custom-shader = ../../../../../../ghostty/shaders/ghostty-shaders/cursor_blaze.glsl
+# custom-shader = ../../../../../../ghostty/shaders/ghostty-shaders/dither.glsl
+# custom-shader = ../../../../../../ghostty/shaders/ghostty-shaders/in-game-crt.glsl
+# custom-shader = ../../../../../../ghostty/shaders/ghostty-shaders/just-snow.glsl
+# custom-shader = ../../../../../../ghostty/shaders/ghostty-shaders/retro-terminal.glsl
+# custom-shader = ../../../../../../ghostty/shaders/ghostty-shaders/water.glsl
