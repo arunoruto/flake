@@ -27,12 +27,13 @@
           {
             name = "yaml";
             auto-format = true;
+            indent = {
+              tab-width = 2;
+              unit = " ";
+            };
             formatter = {
-              command = "prettier";
-              args = [
-                "--parser"
-                "yaml"
-              ];
+              command = "yamlfmt";
+              args = [ "-" ];
             };
             language-servers = [ "yaml-lsp" ];
           }
@@ -40,7 +41,7 @@
             name = "toml";
             auto-format = true;
             formatter = {
-              command = lib.getExe pkgs.taplo;
+              command = "taplo";
               args = [
                 "fmt"
                 "-"
@@ -50,34 +51,30 @@
           }
           {
             name = "xml";
-            # auto-format = true;
-            # formatter = {
-            #   command = "prettier";
-            #   args = [
-            #     "--parser"
-            #     "yaml"
-            #   ];
-            # };
             language-servers = [ "lemminx" ];
           }
         ];
         language-server = {
           vscode-json-languageserver = {
-            command = lib.getExe pkgs.nodePackages.vscode-json-languageserver;
+            command = "vscode-json-languageserver";
             args = [ "--stdio" ];
           };
           yaml-lsp = {
             command = lib.getExe pkgs.yaml-language-server;
             args = [ "--stdio" ];
           };
-          lemminx.command = lib.getExe pkgs.lemminx;
-          taplo.command = "${lib.getExe pkgs.taplo} lsp stdio";
+          lemminx.command = "lemminx";
+          taplo.command = "taplo lsp stdio";
         };
       };
       extraPackages = with pkgs; [
-        # ansible-language-server
+        ansible-language-server
+        lemminx
+        taplo
         yaml-language-server
+        yamlfmt
         nodePackages.prettier
+        nodePackages.vscode-json-languageserver
         # nodePackages.prettier-plugin-toml
       ];
     };

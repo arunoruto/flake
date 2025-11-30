@@ -27,9 +27,9 @@
       enable = lib.mkDefault config.hosts.development.enable;
       ngram = lib.mkDefault (config.hosts.development.enable && args ? nixosConfig);
     };
-    # markdown.enable = lib.mkDefault (config.hosts.development.enable);
-    markdown.enable = true;
-    markup.enable = lib.mkDefault config.hosts.development.enable;
+    # markdown.enable = lib.mkDefault (!config.hosts.tinypc.enable);
+    markdown.enable = lib.mkDefault true;
+    markup.enable = lib.mkDefault true;
     nix.enable = lib.mkDefault true;
     typst.enable = lib.mkDefault config.hosts.development.enable;
   };
