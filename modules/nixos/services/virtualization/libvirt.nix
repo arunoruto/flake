@@ -18,9 +18,13 @@
       };
     };
 
-    environment.systemPackages = with pkgs; [
-      virt-manager # For virt-install
-      usbutils # For lsusb
-    ];
+    environment.systemPackages =
+      (with pkgs; [
+        usbutils # For lsusb
+        virt-manager # For virt-install
+        libvirt # libvirt client tools
+        bridge-utils # Network bridge utilities
+      ])
+      ++ [ config.virtualisation.libvirtd.qemu.package ]; # QEMU with KVM support
   };
 }

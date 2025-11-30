@@ -17,17 +17,17 @@
     networking = {
       # defaultGateway = "10.0.0.1";
       # bridges.br0.interfaces = [ ];
-      interfaces.br0 = {
-        useDHCP = true;
-        # ipv4.addresses = [
-        #   {
-        #     "address" = "10.0.0.2";
-        #     "prefixLength" = 24;
-        #   }
-        # ];
-      };
+      # interfaces.br0 = {
+      #   useDHCP = true;
+      #   # ipv4.addresses = [
+      #   #   {
+      #   #     "address" = "10.0.0.2";
+      #   #     "prefixLength" = 24;
+      #   #   }
+      #   # ];
+      # };
     };
 
-    environment.systemPackages = with pkgs; [ bridge-utils ];
+    # environment.systemPackages = with pkgs; [ bridge-utils ];
   };
 }
