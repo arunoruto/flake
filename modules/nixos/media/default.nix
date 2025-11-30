@@ -7,6 +7,7 @@
   imports = [
     ./bosflix.nix
     ./external-drives.nix
+    ./komga.nix
     ./immich.nix
     ./jellyfin.nix
     ./manga.nix
