@@ -68,7 +68,6 @@
         };
       };
       extraPackages = with pkgs; [
-        ansible-language-server
         lemminx
         taplo
         yaml-language-server
