@@ -5,12 +5,11 @@
   ...
 }:
 {
-  options.programs.packages.enable = lib.mkEnableOption "Setup amd tools";
+  options.programs.packages.enable = lib.mkEnableOption "Setup packages";
 
   config = lib.mkIf config.programs.packages.enable {
     environment.systemPackages = with pkgs; [
       # vlc
-      unstable.vscode
       # # wezterm
 
       # discord
