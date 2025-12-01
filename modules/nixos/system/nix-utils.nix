@@ -15,14 +15,21 @@ in
 
   config = lib.mkIf config.nix-utils.enable {
     environment = {
-      systemPackages = with pkgs; [
-        nix-tree
-        nix-output-monitor
-        nvd
-
-        # nixpkgs-manual
-      ];
+      systemPackages =
+        with pkgs;
+        (
+          [
+            nix-tree
+            nix-output-monitor
+            nvd
+          ]
+          ++ (lib.optionals (!(lib.elem "headless" config.system.tags)) [ nixpkgs-manual ])
+        );
       sessionVariables.NH_FLAKE = "/home/${username}/.config/flake";
+    };
+
+    services = {
+      angrr.enable = true;
     };
 
     programs.nh = {
