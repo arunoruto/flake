@@ -66,8 +66,10 @@ jobs:
       # - name: Cache
       #   uses: DeterminateSystems/flakehub-cache-action@main
       - name: Dead Code
+        env:
+          NO_COLOR: true
         run: |
           echo "# Deadnix Check" >> $GITHUB_STEP_SUMMARY
           echo "~~~console" >> $GITHUB_STEP_SUMMARY
-          nix run nixpkgs#deadnix | sed 's/\x1b\[[0-9;]*m//g' >> $GITHUB_STEP_SUMMARY
+          nix run nixpkgs#deadnix >> $GITHUB_STEP_SUMMARY
           echo "~~~" >> $GITHUB_STEP_SUMMARY
