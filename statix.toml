@@ -1,3 +1,0 @@
-nix_version = '2.4'
-disabled = []
-ignore = ['.direnv', 'hardware-configuration.nix']

@@ -38,7 +38,7 @@ jobs:
         run: |
           echo "# Statix Check" >> $GITHUB_STEP_SUMMARY
           echo "~~~console" >> $GITHUB_STEP_SUMMARY
-          nix run nixpkgs#statix -- check | sed 's/\x1b\[[0-9;]*m//g' >> $GITHUB_STEP_SUMMARY || true
+          nix run nixpkgs#statix -- check --ignore hardware-configuration.nix | sed 's/\x1b\[[0-9;]*m//g' >> $GITHUB_STEP_SUMMARY || true
           echo "~~~" >> $GITHUB_STEP_SUMMARY
   deadnix:
     name: Dead Code Check
