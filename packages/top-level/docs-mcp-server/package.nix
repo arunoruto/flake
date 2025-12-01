@@ -9,16 +9,16 @@
 }:
 buildNpmPackage (finalAttrs: {
   pname = "docs-mcp-server";
-  version = "1.29.0";
+  version = "1.31.0";
 
   src = fetchFromGitHub {
     owner = "arabold";
     repo = "docs-mcp-server";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eQzKziJCy963uRQKtdjj1Ob8U4iG1Z1folso2K0Xx/I=";
+    hash = "sha256-+u57wCzMWDbeRXQ//XeyHrZPtGJe7nxsTyHitOD5/n8=";
   };
 
-  npmDepsHash = "sha256-uSzsXBpzFthF9klmsTcNpkhVDroT0KuOHduXSxUJaeQ=";
+  npmDepsHash = "sha256-ZIKhgLurWjV1m9blEsXtsz7UeI+qrHANvBOpPiV+piY=";
 
   nativeBuildInputs = lib.optionals skipBrowserDownload [ makeWrapper ];
   # buildInputs = [ playwright ];
