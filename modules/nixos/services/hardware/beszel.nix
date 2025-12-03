@@ -24,7 +24,7 @@ in
 
     environment = lib.mkOption {
       type = lib.types.submodule {
-        freeformType = with lib.types; attrsOf anything;
+        freeformType = with lib.types; attrsOf str;
         options = {
           EXTRA_FILESYSTEMS = lib.mkOption {
             type = lib.types.str;
@@ -54,6 +54,13 @@ in
             default = null;
             description = ''
               WebSocket token from a file instead of an environment variable. Provided in the hub.
+            '';
+          };
+          SKIP_SYSTEMD = lib.mkOption {
+            type = lib.types.bool;
+            default = true;
+            description = ''
+              Skip systemd tracking and its setup in NixOS.
             '';
           };
         };
@@ -108,7 +115,9 @@ in
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
 
-      environment = cfg.environment;
+      environment = lib.mapAttrs (
+        _: v: if builtins.isBool v then (if v then "true" else "false") else toString v
+      ) cfg.environment;
       path =
         cfg.extraPath
         ++ lib.optionals cfg.smartmontools [ pkgs.smartmontools ]
@@ -130,14 +139,13 @@ in
         EnvironmentFile = cfg.environmentFile;
 
         # adds ability to monitor docker/podman containers
-        SupplementaryGroups = [
-          "messagebus"
-        ]
-        ++ lib.optionals cfg.smartmontools [ "disk" ]
-        ++ lib.optionals config.virtualisation.docker.enable [ "docker" ]
-        ++ lib.optionals (
-          config.virtualisation.podman.enable && config.virtualisation.podman.dockerSocket.enable
-        ) [ "podman" ];
+        SupplementaryGroups =
+          lib.optionals (!cfg.environment.SKIP_SYSTEMD) [ "messagebus" ]
+          ++ lib.optionals cfg.smartmontools [ "disk" ]
+          ++ lib.optionals config.virtualisation.docker.enable [ "docker" ]
+          ++ lib.optionals (
+            config.virtualisation.podman.enable && config.virtualisation.podman.dockerSocket.enable
+          ) [ "podman" ];
 
         DynamicUser = true;
         User = "beszel-agent";
