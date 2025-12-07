@@ -51,6 +51,6 @@
         members = [ config.username ];
       };
 
-      media.external-drives.enable = lib.mkDefault true;
+      media.external-drives.enable = lib.mkDefault false;
     };
 }

@@ -17,6 +17,8 @@
         # ==0: mount filesystem to a private directory (/run/media/$USER/VolumeName)
         # See udisks(8)
         ENV{ID_FS_USAGE}=="filesystem|other|crypto", ENV{UDISKS_FILESYSTEM_SHARED}="1"
+
+        SUBSYSTEM=="block", ATTRS{model}=="TOSHIBA DT01ABA300", ENV{ID_ATA_SMART_IS_AVAILABLE}="0", ENV{ID_ATA}="0"
       '';
     };
 
