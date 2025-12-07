@@ -20,6 +20,10 @@
   ];
 
   services = {
+    pocket-id = {
+      enable = true;
+      settings.APP_URL = "https://id.arnaut.me";
+    };
     tailscale.derper = {
       enable = true;
       verifyClients = true;
@@ -55,6 +59,7 @@
               rule = "Host(`whoami.arnaut.me`)";
               entrypoints = "websecure";
               tls.certresolver = "cf";
+              # middlewares = [ "pocket-id" ];
               service = "whoami";
             };
             plex = {

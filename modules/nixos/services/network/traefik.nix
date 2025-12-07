@@ -4,8 +4,12 @@
   pkgs,
   ...
 }:
+let
+  cfg = config.services.traefik;
+  traefik-config-env = "traefik-config.env";
+in
 {
-  config = lib.mkIf config.services.traefik.enable (
+  config = lib.mkIf cfg.enable (
     let
       http-port = 80;
       https-port = 443;
@@ -77,12 +81,6 @@
             providers = {
               providersThrottleDuration = "2s";
             }
-            # // lib.optionalAttrs (!config.virtualisation.docker.enable) {
-            #   file = {
-            #     watch = true;
-            #     # directory = "${config.services.traefik.dataDir}/dynamic";
-            #   };
-            # }
             // lib.optionalAttrs config.virtualisation.docker.enable {
               docker = {
                 watch = true;
@@ -101,14 +99,14 @@
               {
                 myresolver.acme = {
                   inherit email;
-                  storage = "${config.services.traefik.dataDir}/acme.json";
+                  storage = "${cfg.dataDir}/acme.json";
                   httpChallenge.entryPoint = "web";
                   tlsChallenge = { };
                 };
                 ts.tailscale = { };
                 cf.acme = {
                   inherit email;
-                  storage = "${config.services.traefik.dataDir}/acme.json";
+                  storage = "${cfg.dataDir}/acme.json";
                   dnsChallenge = {
                     provider = "cloudflare";
                     propagation.delayBeforeChecks = 90;
@@ -117,28 +115,72 @@
                       "1.0.0.1:53"
                     ];
                   };
-                  # caServer="https://acme-staging-v02.api.letsencrypt.org/directory";
                 };
               };
+            experimental.plugins.traefik-oidc-auth = {
+              modulename = "github.com/sevensolutions/traefik-oidc-auth";
+              version = "v0.17.0";
+            };
           };
-          dynamicConfigOptions.http.routers.traefik-api =
-            lib.optionalAttrs config.services.traefik.staticConfigOptions.api.dashboard
-              {
+          dynamicConfigOptions = lib.mkMerge [
+            (lib.optionalAttrs cfg.staticConfigOptions.api.dashboard {
+              http.routers.traefik-api = {
                 # rule = "Host(`${config.networking.hostName}.${config.services.tailscale.tailnet}.ts.net`) && PathPrefix(`/dashboard`)";
                 rule = "Host(`${config.networking.hostName}.${config.services.tailscale.tailnet}.ts.net`)";
                 tls.certresolver = "ts";
                 entrypoints = [ "websecure" ];
                 service = "api@internal";
               };
+            })
+            # {
+            #   http = {
+            #     routers.paperless = {
+            #       rule = "Host(`services.arnaut.me`) && PathPrefix(`/paperless`)";
+            #       tls.certresolver = "cf";
+            #       entrypoints = [ "websecure" ];
+            #       service = "paperless";
+            #     };
+            #     services.paperless.loadbalancer.servers = [
+            #       { url = "http://sado.sparrow-yo.ts.net:28981/paperless"; }
+            #       # { url = "https://sado.sparrow-yo.ts.net/paperless"; }
+            #     ];
+            #   };
+            # }
+          ];
+          # environmentFiles = [ config.sops.secrets."config/traefik".path ];
+          environmentFiles = [ config.sops.templates."${traefik-config-env}".path ];
         };
-      systemd.services.traefik.environment = {
-        # CF_API_EMAIL_FILE = "/path/to/file";
-        # CF_DNS_API_TOKEN_FILE = "/path/to/file";
-        CF_DNS_API_TOKEN_FILE = config.sops.secrets."tokens/cf_dns_api_token".path;
+      systemd = {
+        tmpfiles.rules = lib.optionals (cfg.staticConfigOptions.providers ? file) [
+          "d '${cfg.staticConfigOptions.providers.file.directory}' 0700 traefik traefik - -"
+        ];
+        services.traefik.environment = {
+          CF_DNS_API_TOKEN_FILE = config.sops.secrets."tokens/cf_dns_api_token".path;
+          CLOUDFLARE_EMAIL = config.sops.secrets."config/cloudflare/email".path;
+          CLOUDFLARE_API_KEY_FILE = config.sops.secrets."config/cloudflare/api_key".path;
+        };
       };
-      sops.secrets."tokens/cf_dns_api_token" = {
-        mode = "0440";
-        inherit (config.services.traefik) group;
+      sops = {
+        secrets = {
+          "tokens/cf_dns_api_token" = {
+            mode = "0440";
+            inherit (cfg) group;
+          };
+          "config/cloudflare/email" = {
+            mode = "0440";
+            inherit (cfg) group;
+          };
+          "config/cloudflare/api_key" = {
+            mode = "0440";
+            inherit (cfg) group;
+          };
+        };
+        templates."${traefik-config-env}".content = ''
+          CF_DNS_API_TOKEN_FILE=${config.sops.placeholder."tokens/cf_dns_api_token"}
+          CLOUDFLARE_EMAIL_FILE=${config.sops.placeholder."config/cloudflare/email"}
+          CLOUDFLARE_API_KEY_FILE=${config.sops.placeholder."config/cloudflare/api_key"}
+        '';
+
       };
       networking.firewall.allowedTCPPorts = [
         http-port
