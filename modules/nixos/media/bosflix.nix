@@ -94,8 +94,6 @@
         # transmission = {
         #   enable = true;
         # };
-
-        sabnzbd.enable = true;
       };
 
       systemd =

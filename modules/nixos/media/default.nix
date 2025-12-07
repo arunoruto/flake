@@ -12,7 +12,8 @@
     ./jellyfin.nix
     ./manga.nix
     ./paperless.nix
-    # ./qbittorrent.nix
+    ./qbittorrent.nix
+    ./sabnzbd.nix
     ./syncthing.nix
 
     ./arr
@@ -37,6 +38,7 @@
     lib.mkIf cfg.enable {
       services =
         # lib.optionalAttrs cfg.services {
+        # TODO: enable individual services one by one for the server/client
         {
           radarr.enable = lib.mkDefault cfg.services;
           sonarr.enable = lib.mkDefault cfg.services;
