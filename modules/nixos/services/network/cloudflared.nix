@@ -8,6 +8,9 @@ let
   secret-file = "config/bosflix";
 in
 {
+  disabledModules = [ "services/networking/cloudflared.nix" ];
+  imports = [ ./cloudflared/new.nix ];
+
   config = lib.mkIf config.services.cloudflared.enable {
     services.cloudflared = {
       package = pkgs.unstable.cloudflared;
