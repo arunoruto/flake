@@ -12,6 +12,7 @@
     ./media
     ./nas
     ./network
+    ./security
     ./tuning
     ./virtualization
 
