@@ -18,12 +18,24 @@ in
         "bosflix" = {
           credentialsFile = config.sops.secrets."${secret-file}".path;
           default = "http_status:404";
-          ingress = {
-            "infra.arnaut.me" = {
+          ingress = [
+            {
+              hostname = "infra.arnaut.me";
               path = "/prowlarr.*";
               service = "http://localhost:9696";
-            };
-          };
+            }
+            {
+              hostname = "infra.arnaut.me";
+              path = "/web.*";
+              service = "http://localhost:32400";
+            }
+          ];
+          # ingress = {
+          #   "infra.arnaut.me" = {
+          #     path = "/prowlarr.*";
+          #     service = "http://localhost:9696";
+          #   };
+          # };
         };
       };
     };
