@@ -4,6 +4,9 @@
   lib,
   ...
 }:
+let
+  target-folder = "/media/downloads";
+in
 {
   colmena.deployment = {
     targetHost = config.networking.hostName;
@@ -15,7 +18,7 @@
   hosts.intel.enable = true;
   bosflix = {
     enable = true;
-    drivePath = /media/86336459-5d8c-448e-93c3-f3e17c00d3b9;
+    drivePath = /media/downloads;
   };
   # tpm.enable = true;
   media.external-drives.enable = true;
@@ -41,10 +44,8 @@
       enable = true;
       domainKeyPath = config.sops.secrets."tokens/ipv64/orahovica".path;
     };
-    qbittorrent = {
-      enable = true;
-      webuiPort = 8081;
-    };
+    qbittorrent.enable = true;
+    sabnzbd.enable = true;
     suwayomi-server.enable = true;
   };
 
@@ -52,4 +53,20 @@
     ./rhtv.pem
   ];
 
+  fileSystems."${target-folder}" = {
+    device = "/dev/disk/by-uuid/86336459-5d8c-448e-93c3-f3e17c00d3b9";
+    fsType = "ext4"; # or ntfs, exfat, etc.
+    options = [
+      "nofail" # Very important: allows PC to boot even if drive is unplugged
+      "x-systemd.automount" # Mounts it when you access the folder
+      "rw"
+    ];
+  };
+  systemd.tmpfiles.rules = [
+    "d ${target-folder} 0775 mirza media -"
+  ];
+  users.groups.media = {
+    gid = 420;
+    members = [ config.username ];
+  };
 }
