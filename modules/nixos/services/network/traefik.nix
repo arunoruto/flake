@@ -147,25 +147,20 @@ in
             #   };
             # }
           ];
-          # environmentFiles = [ config.sops.secrets."config/traefik".path ];
-          environmentFiles = [ config.sops.templates."${traefik-config-env}".path ];
+          # environmentFiles = [ config.sops.templates."${traefik-config-env}".path ];
         };
       systemd = {
-        tmpfiles.rules = lib.optionals (cfg.staticConfigOptions.providers ? file) [
-          "d '${cfg.staticConfigOptions.providers.file.directory}' 0700 traefik traefik - -"
-        ];
+        # tmpfiles.rules = lib.optionals (cfg.staticConfigOptions.providers ? file) [
+        #   "d '${cfg.staticConfigOptions.providers.file.directory}' 0700 traefik traefik - -"
+        # ];
         services.traefik.environment = {
-          CF_DNS_API_TOKEN_FILE = config.sops.secrets."tokens/cf_dns_api_token".path;
+          CF_DNS_API_TOKEN_FILE = config.sops.secrets."config/cloudflare/api_key".path;
           CLOUDFLARE_EMAIL = config.sops.secrets."config/cloudflare/email".path;
           CLOUDFLARE_API_KEY_FILE = config.sops.secrets."config/cloudflare/api_key".path;
         };
       };
       sops = {
         secrets = {
-          "tokens/cf_dns_api_token" = {
-            mode = "0440";
-            inherit (cfg) group;
-          };
           "config/cloudflare/email" = {
             mode = "0440";
             inherit (cfg) group;
@@ -175,12 +170,11 @@ in
             inherit (cfg) group;
           };
         };
-        templates."${traefik-config-env}".content = ''
-          CF_DNS_API_TOKEN_FILE=${config.sops.placeholder."tokens/cf_dns_api_token"}
-          CLOUDFLARE_EMAIL_FILE=${config.sops.placeholder."config/cloudflare/email"}
-          CLOUDFLARE_API_KEY_FILE=${config.sops.placeholder."config/cloudflare/api_key"}
-        '';
-
+        # templates."${traefik-config-env}".content = ''
+        #   CF_DNS_API_TOKEN_FILE=${config.sops.placeholder."config/cloudflare/api_key"}
+        #   CLOUDFLARE_EMAIL_FILE=${config.sops.placeholder."config/cloudflare/email"}
+        #   CLOUDFLARE_API_KEY_FILE=${config.sops.placeholder."config/cloudflare/api_key"}
+        # '';
       };
       networking.firewall.allowedTCPPorts = [
         http-port
