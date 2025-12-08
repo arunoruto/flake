@@ -42,10 +42,10 @@
       #   type = "sse";
       #   url = "http://madara.king-little.ts.net:6280/sse";
       # };
-      gh_grep = {
-        type = "remote";
-        url = "https://mcp.grep.app";
-      };
+      # gh_grep = {
+      #   type = "remote";
+      #   url = "https://mcp.grep.app";
+      # };
     };
     # home.packages = [
     #   pkgs.unstable.github-mcp-server
