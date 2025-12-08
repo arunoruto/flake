@@ -43,12 +43,24 @@ in
             };
             environmentFile = config.sops.templates."${paperless-oidc}".path;
           };
-        traefik.dynamicConfigOptions = lib.networking.traefikConfig {
-          serviceName = "paperless";
-          inherit url;
-          inherit (config.services.paperless) port;
-          path = config.services.paperless.settings.PAPERLESS_FORCE_SCRIPT_NAME;
-        };
+        # traefik.dynamicConfigOptions = lib.networking.traefikConfig {
+        #   serviceName = "paperless";
+        #   inherit url;
+        #   inherit (config.services.paperless) port;
+        #   path = config.services.paperless.settings.PAPERLESS_FORCE_SCRIPT_NAME;
+        # };
+        cloudflared.tunnels."${config.networking.hostName}".ingress = [
+          {
+            hostname = "services.${config.services.cloudflared.defaultDomain}";
+            path = "${config.services.paperless.settings.PAPERLESS_FORCE_SCRIPT_NAME}.*";
+            service = "http://localhost:${builtins.toString config.services.paperless.port}";
+          }
+          {
+            hostname = "${config.networking.hostName}.${config.services.cloudflared.defaultDomain}";
+            path = "${config.services.paperless.settings.PAPERLESS_FORCE_SCRIPT_NAME}.*";
+            service = "http://localhost:${builtins.toString config.services.paperless.port}";
+          }
+        ];
       };
     networking.firewall.allowedTCPPorts = lib.mkIf config.services.paperless.openFirewall [
       config.services.paperless.port
