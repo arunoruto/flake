@@ -72,10 +72,17 @@ _: {
       dataDir = "/mnt/flash/appdata";
       openFirewall = true;
     };
+    cloudflared = {
+      enable = true;
+      defaultDomain = "arnaut.me";
+    };
     tailscale.tsidp = {
       enable = true;
       port = 41443;
       localPort = 41080;
+    };
+    komga = {
+      enable = true;
     };
     immich = {
       enable = true;
