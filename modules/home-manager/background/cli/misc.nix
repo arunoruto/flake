@@ -103,6 +103,8 @@
     ])
     ++ (with pkgs.unstable; [
       devenv
+      browsh
+      firefox
     ])
   );
 }
