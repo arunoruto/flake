@@ -169,6 +169,7 @@ in
       with pkgs.unstable;
       [
         # lazyjj
+        tea
         jjui
       ]
     );
