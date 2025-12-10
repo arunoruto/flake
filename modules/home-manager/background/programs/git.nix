@@ -26,6 +26,7 @@ in
         user = {
           name = user.name;
           email = user.email;
+          signingkey = "${config.home.homeDirectory}/.ssh/id_ed25519.pub";
         };
         core = {
           editor = "hx";
@@ -34,9 +35,9 @@ in
           preloadindex = true;
         };
         push = {
+          default = "simple";
           autoSetupRemote = true;
-          default = "current";
-          # followTags = true;
+          followTags = true;
         };
         pull = {
           default = "current";
@@ -46,20 +47,36 @@ in
           autoStash = true;
           missingCommitsCheck = "warn";
         };
+        merge.conflictstyle = "zdiff3";
+        # fetch.prune = true;
+        help.autocorrect = "prompt";
+        commit = {
+          verbose = true;
+          template = "~/.config/git/template";
+          gpgsign = true;
+        };
         log.abbrevCommit = true;
+        gpg.format = "ssh";
+        alias = {
+          st = "status -s";
+          lol = "log --oneline --graph --decorate --all";
+        };
+        column.ui = "auto";
+        branch.sort = "-committerdate";
+        tag.sort = "version:refname";
         init.defaultBranch = "main";
+        diff = {
+          algorithm = "histogram";
+          colorMoved = "plain";
+          mnemonicPrefix = true;
+          renames = true;
+        };
         credential = {
           "https://gitlab.com".helper = "${lib.getExe glab-pkg} auth git-credential";
           "https://gitlab.bv.e-technik.tu-dortmund.de".helper = "${lib.getExe glab-pkg} auth git-credential";
           "https://git.overleaf.com".helper =
             "store --file ${config.home.homeDirectory}/.config/git/overleaf";
         };
-        commit = {
-          template = "~/.config/git/template";
-          gpgsign = true;
-        };
-        user.signingkey = "${config.home.homeDirectory}/.ssh/id_ed25519.pub";
-        gpg.format = "ssh";
       }
       // lib.optionalAttrs (args ? nixosConfig) {
         # commit.gpgsign = osConfig.yubikey.enable;
