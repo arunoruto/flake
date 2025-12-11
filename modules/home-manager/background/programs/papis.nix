@@ -3,7 +3,7 @@
   programs.papis = {
     enable = !config.hosts.tinypc.enable;
     settings = {
-      editor = "nvim";
+      editor = "hx";
       file-editor = "yazi";
       add-confirm = true;
       add-edit = true;
