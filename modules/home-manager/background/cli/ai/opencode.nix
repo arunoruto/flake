@@ -23,11 +23,16 @@
         #   glob = true;
         #   list = true;
         # };
-        provider.llama = {
+        provider.ollama = {
           npm = "@ai-sdk/openai-compatible";
           name = "Ollama";
-          options.baseURL = "http://madara.king-little.ts.net:11434/v1";
+          # options.baseURL = "http://madara.king-little.ts.net:11434/v1";
+          options.baseURL = lib.mkDefault config.programs.ollama.defaultPath;
           models = {
+            "gemma3:4b" = {
+              name = "Gemma3 Mini";
+              tool_call = false;
+            };
             "gemma3:12b" = {
               name = "Gemma3";
               tool_call = false;
