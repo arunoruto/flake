@@ -153,6 +153,60 @@ in
           };
         };
         customCommands = [
+          {
+            key = "<c-a>";
+            description = "Generate AI Commit Message";
+            loadingText = "Generating commit message...";
+            context = "files";
+            prompts = [
+              {
+                type = "menuFromCommand";
+                key = "Provider";
+                title = "Select Provider:";
+                command = "ai-commit --list-providers";
+              }
+              {
+                type = "menuFromCommand";
+                key = "Model";
+                title = "Select Model (optional):";
+                command = "ai-commit --list-models {{.Form.Provider}}";
+              }
+              {
+                type = "menu";
+                key = "CommitStyle";
+                title = "Select commit message style:";
+                options = [
+                  {
+                    name = "Default";
+                    description = "Standard conventional commit message.";
+                    value = " ";
+                  }
+                  {
+                    name = "Emoji";
+                    description = "Add a GitMoji to the commit title.";
+                    value = "-e";
+                  }
+                  {
+                    name = "Brief";
+                    description = "Generate a short, one-sentence summary.";
+                    value = "-b";
+                  }
+                  {
+                    name = "Brief + Emoji";
+                    description = "Combine both brief and emoji styles.";
+                    value = "-b -e";
+                  }
+                ];
+              }
+            ];
+            command = ''
+              ai-commit --non-interactive -p {{.Form.Provider}} \
+                {{if and .Form.Model (ne .Form.Model "(default)") }} -m {{.Form.Model | quote}}{{end}} \
+                {{.Form.CommitStyle}} \
+                -o .git/LAZYGIT_PENDING_COMMIT
+            '';
+          }
+
         ];
       };
     };
@@ -182,6 +236,7 @@ in
       glab-pkg # Gitlab CLI tool
     ]
     ++ lib.optionals ((!config.hosts.tinypc.enable) && (!config.hosts.headless.enable)) [
+      pkgs.ai-commit
       (pkgs.symlinkJoin {
         name = "gitbutler-tauri-nvidia";
         paths = [ pkgs.unstable.gitbutler ];
