@@ -181,7 +181,18 @@ in
     packages = [
       glab-pkg # Gitlab CLI tool
     ]
-    # ++ lib.optionals (!config.hosts.tinypc.enable) (with pkgs; [ gitbutler ])
+    ++ lib.optionals ((!config.hosts.tinypc.enable) && (!config.hosts.headless.enable)) [
+      (pkgs.symlinkJoin {
+        name = "gitbutler-tauri-nvidia";
+        paths = [ pkgs.unstable.gitbutler ];
+        buildInputs = [ pkgs.makeWrapper ];
+        postBuild = ''
+          wrapProgram $out/bin/gitbutler-tauri \
+            --set WEBKIT_DISABLE_DMABUF_RENDERER 1
+            # --set __NV_DISABLE_EXPLICIT_SYNC 1
+        '';
+      })
+    ]
     ++ lib.optionals config.programs.jujutsu.enable (
       with pkgs.unstable;
       [

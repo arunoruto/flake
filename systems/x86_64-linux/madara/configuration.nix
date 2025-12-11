@@ -4,12 +4,12 @@
   lib,
   ...
 }:
-let
-  # monitorsXmlContent = builtins.readFile /home/mar/.config/monitors.xml;
-  # monitorsConfig = pkgs.writeText "gdm_monitors.xml" monitorsXmlContent;
-  # monitorsConfig = pkgs.writeText "gdm_monitors.xml" (builtins.readFile /home/${username}/.config/monitors.xml);
-  monitorsConfig = pkgs.writeText "gdm_monitors.xml" (builtins.readFile ./monitors.xml);
-in
+# let
+#   # monitorsXmlContent = builtins.readFile /home/mar/.config/monitors.xml;
+#   # monitorsConfig = pkgs.writeText "gdm_monitors.xml" monitorsXmlContent;
+#   # monitorsConfig = pkgs.writeText "gdm_monitors.xml" (builtins.readFile /home/${username}/.config/monitors.xml);
+#   # monitorsConfig = pkgs.writeText "gdm_monitors.xml" (builtins.readFile ./monitors.xml);
+# in
 {
   username = "mar";
 
@@ -25,7 +25,7 @@ in
 
   };
   # nixpkgs.config = {
-  #   cudaSupport = true;
+  #   # cudaSupport = true;
   #   cudaCapabilities = [ "6.1" ];
   # };
 
@@ -59,10 +59,18 @@ in
     ai.enable = true;
     ollama = {
       enable = true;
-      acceleration = "vulkan";
-      environmentVariables = {
-        GGML_VK_VISIBLE_DEVICES = "0";
+      package = pkgs.unstable.ollama.override {
+        acceleration = "cuda";
+        cudaPackages = pkgs.unstable.cudaPackages_12;
+        cudaArches = [ "sm_61" ];
       };
+      acceleration = "cuda";
+
+      # package = pkgs.unstable.ollama-vulkan;
+      # acceleration = "vulkan";
+      # environmentVariables = {
+      #   GGML_VK_VISIBLE_DEVICES = "0";
+      # };
     };
     harmonia = {
       enable = true;
@@ -82,6 +90,7 @@ in
           # "sda2"
         ];
         NETWORK = "tcp";
+        SKIP_SYSTEMD = false;
       };
       # extraFilesystems = [
       #   "nvme0n1p1"
