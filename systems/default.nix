@@ -57,8 +57,8 @@ lib.attrsets.mergeAttrsList (
           ++ (with inputs; [
             nixos-facter-modules.nixosModules.facter
             home-manager.nixosModules.home-manager
+            determinate.nixosModules.default
             # lix-module.nixosModules.default
-            # determinate.nixosModules.default
             # nur.nixosModules.nur
           ]);
         }
