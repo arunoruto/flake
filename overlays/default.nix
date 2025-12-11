@@ -68,6 +68,10 @@ rec {
     #   doCheck = false;
     # });
     # cudaPackages = prev.cudaPackages_11_8;
+    # ollama = prev.ollama.override {
+    #   acceleration = "cuda";
+    #   cudaPackages = final.cudaPackages_12_9;
+    # };
   };
 
   # When applied, the unstable nixpkgs set (declared in the flake inputs) will
