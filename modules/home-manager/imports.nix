@@ -16,6 +16,7 @@
       laptop.enable = lib.mkEnableOption "Sensible defaults for laptops";
       tinypc.enable = lib.mkEnableOption "Sensible defaults for tinypcs";
       development.enable = lib.mkEnableOption "Enable development tools";
+      headless.enable = lib.mkEnableOption "Sensible defaults for headless systems";
     };
   };
 
@@ -26,6 +27,7 @@
         (lib.elem "tinypc" osConfig.system.tags) || (lib.elem "headless" osConfig.system.tags)
       );
       development.enable = lib.mkDefault (lib.elem "development" osConfig.system.tags);
+      headless.enable = lib.mkDefault (lib.elem "headless" osConfig.system.tags);
     };
     foreground.enable = lib.mkDefault osConfig.programs.enable;
 
