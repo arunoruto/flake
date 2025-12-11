@@ -50,6 +50,9 @@
           };
         };
       };
+      agents = {
+        commit = ./commit.md;
+      };
       enableMcpIntegration = true;
     };
   };
