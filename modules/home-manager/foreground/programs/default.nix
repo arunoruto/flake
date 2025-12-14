@@ -46,6 +46,7 @@
         vlc
 
         discord
+        fluffychat
         # jabref
         # libsForQt5.kdenlive
         kdePackages.okular

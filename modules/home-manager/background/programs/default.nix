@@ -7,6 +7,7 @@
 {
   imports = [
     ./git.nix
+    ./iamb.nix
     ./mods.nix
     ./newsboat.nix
     ./papis.nix
@@ -14,8 +15,11 @@
     ./ty.nix
   ];
 
-  programs.mods.enable = config.hosts.development.enable;
-  programs.pop.enable = !config.hosts.tinypc.enable;
+  programs = {
+    iamb.enable = config.hosts.development.enable;
+    mods.enable = config.hosts.development.enable;
+    pop.enable = config.hosts.development.enable;
+  };
   home.packages = with pkgs; [
     # bws
   ];
