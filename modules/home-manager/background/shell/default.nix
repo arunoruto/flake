@@ -31,6 +31,7 @@ in
   };
 
   config = {
+    home.shell.enableShellIntegration = true;
     programs = {
       # starship.enable = lib.mkDefault true;
       starship.enable = true;

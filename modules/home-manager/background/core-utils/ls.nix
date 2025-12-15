@@ -1,19 +1,18 @@
 {
   config,
-  pkgs,
   lib,
   ...
 }:
 {
   config = {
     assertions = [
-      {
-        assertion = (config.programs.lsd.enable && config.programs.eza.enable);
-        message = ''
-          Both lsd and eza are enabled.
-          It is recommended to use only one of these 'ls' replacements to avoid confusion.
-        '';
-      }
+      # {
+      #   assertion = (config.programs.lsd.enable && config.programs.eza.enable);
+      #   message = ''
+      #     Both lsd and eza are enabled.
+      #     It is recommended to use only one of these 'ls' replacements to avoid confusion.
+      #   '';
+      # }
     ];
     warnings = lib.optional (!(config.programs.lsd.enable || config.programs.eza.enable)) ''
       Warning: Neither lsd nor eza is enabled.
@@ -47,10 +46,15 @@
       };
 
       eza = {
-        color = "always";
+        colors = "always";
         git = true;
-        icons = true;
-        extraOptions = [ "--group-directories-first" ];
+        icons = "auto";
+        extraOptions = [
+          "--group-directories-first"
+          # ''--time-style='+%F %T' ''
+          # "--time-style=\"+%F %T\""
+          "--time-style=+%F_%T"
+        ];
       };
     };
   };
