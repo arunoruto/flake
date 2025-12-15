@@ -2,8 +2,9 @@
 {
   config = lib.mkIf config.programs.iamb.enable {
     programs.iamb.settings = {
+      default_profile = "personal";
       profiles = {
-        private = {
+        personal = {
           user_id = "@arunoruto:matrix.org";
         };
         work = {
