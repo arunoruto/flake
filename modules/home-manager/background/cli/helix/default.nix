@@ -17,11 +17,8 @@ in
     # ./unibear.nix
   ];
 
-  options.helix.enable = lib.mkEnableOption "Enable the Helix editor";
-
-  config = lib.mkIf config.helix.enable {
+  config = lib.mkIf config.programs.helix.enable {
     programs.helix = {
-      enable = true;
       # package = if nightly then inputs.helix.packages.${pkgs.stdenv.hostPlatform.system}.default else pkgs.unstable.helix;
       package = pkgs.unstable.helix;
       defaultEditor = true;

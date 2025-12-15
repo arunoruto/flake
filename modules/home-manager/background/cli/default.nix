@@ -22,9 +22,10 @@
   ];
 
   config = {
-    helix.enable = lib.mkDefault true;
 
     programs = {
+      helix.enable = lib.mkDefault true;
+
       atuin.enable = lib.mkDefault true;
       # bat.enable = lib.mkDefault true;
       serpl.enable = lib.mkDefault true;
