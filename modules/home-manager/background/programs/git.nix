@@ -163,13 +163,13 @@ in
                 type = "menuFromCommand";
                 key = "Provider";
                 title = "Select Provider:";
-                command = "ai-commit --list-providers";
+                command = "git-quill --list-providers";
               }
               {
                 type = "menuFromCommand";
                 key = "Model";
                 title = "Select Model (optional):";
-                command = "ai-commit --list-models {{.Form.Provider}}";
+                command = "git-quill --list-models {{.Form.Provider}}";
               }
               {
                 type = "menu";
@@ -199,14 +199,19 @@ in
                 ];
               }
             ];
+            # command = ''
+            #   git-quill -p {{.Form.Provider}} \
+            #     {{if and .Form.Model (ne .Form.Model "(default)") }} -m {{.Form.Model | quote}}{{end}} \
+            #     {{.Form.CommitStyle}} \
+            #     -o .git/LAZYGIT_PENDING_COMMIT
+            # '';
             command = ''
-              ai-commit --non-interactive -p {{.Form.Provider}} \
-                {{if and .Form.Model (ne .Form.Model "(default)") }} -m {{.Form.Model | quote}}{{end}} \
-                {{.Form.CommitStyle}} \
-                -o .git/LAZYGIT_PENDING_COMMIT
+              git-quill commit \
+                -p {{.Form.Provider}} \
+                -m '{{.Form.Model}}' \
+                {{.Form.CommitStyle}} > .git/LAZYGIT_PENDING_COMMIT
             '';
           }
-
         ];
       };
     };
@@ -237,6 +242,7 @@ in
     ]
     ++ lib.optionals ((!config.hosts.tinypc.enable) && (!config.hosts.headless.enable)) [
       pkgs.ai-commit
+      pkgs.git-quill
       (pkgs.symlinkJoin {
         name = "gitbutler-tauri-nvidia";
         paths = [ pkgs.unstable.gitbutler ];
