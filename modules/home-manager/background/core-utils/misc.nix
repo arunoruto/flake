@@ -37,6 +37,33 @@
     jq.enable = true;
     # jqp.enable = true;
 
+    # lsd is an ls replacement
+    lsd = {
+      enable = true;
+      # enableAliases = true;
+      enableBashIntegration = config.programs.bash.enable;
+      enableFishIntegration = config.programs.fish.enable;
+      enableZshIntegration = config.programs.zsh.enable;
+      settings = {
+        ignore-globs = [
+          ".DS_Store"
+        ];
+        blocks = [
+          "permission"
+          "user"
+          "group"
+          "size"
+          "date"
+          "git"
+          "name"
+        ];
+        date = "+%F %T";
+        sorting = {
+          dir-grouping = "first";
+        };
+      };
+    };
+
     ripgrep = {
       enable = true;
     };
