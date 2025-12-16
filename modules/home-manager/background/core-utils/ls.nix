@@ -51,8 +51,6 @@
         icons = "auto";
         extraOptions = [
           "--group-directories-first"
-          # ''--time-style='+%F %T' ''
-          # "--time-style=\"+%F %T\""
           "--time-style=+%F_%T"
         ];
       };

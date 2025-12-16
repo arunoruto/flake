@@ -49,9 +49,12 @@
     # framework.enableKmod = false;
   };
 
-  # networking.wireless.iwd = {
-  #   enable = true;
-  # };
+  networking = {
+    enableIPv6 = false;
+    # wireless.iwd = {
+    #   enable = true;
+    # };
+  };
   # environment.systemPackages = with pkgs; [ impala ];
   # networking.networkmanager.wifi.backend = "iwd";
 }
