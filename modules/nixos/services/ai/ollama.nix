@@ -30,6 +30,9 @@
         "gemma3:4b"
         "gemma3:12b"
         "mistral:7b"
+        "ministral-3:3b"
+        "ministral-3:8b"
+        "ministral-3:14b"
       ];
       openFirewall = true;
       # acceleration =

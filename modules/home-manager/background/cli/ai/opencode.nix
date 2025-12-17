@@ -29,6 +29,18 @@
           # options.baseURL = "http://madara.king-little.ts.net:11434/v1";
           options.baseURL = lib.mkDefault config.programs.ollama.defaultPath;
           models = {
+            "ministral-3:3b" = {
+              name = "Ministral - Mini";
+              tool_call = true;
+            };
+            "ministral-3:8b" = {
+              name = "Ministral - Midi";
+              tool_call = true;
+            };
+            "ministral-3:14b" = {
+              name = "Ministral - Maxi";
+              tool_call = true;
+            };
             "gemma3:4b" = {
               name = "Gemma3 Mini";
               tool_call = false;
