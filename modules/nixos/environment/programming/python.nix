@@ -20,6 +20,7 @@ let
       (if config.hosts.nvidia.enable then numbaWithCuda else numba)
       # numba-scipy
       numpy
+      scipy
       pandas
       # plotting
       matplotlib
