@@ -17,7 +17,7 @@
         gcc
         gcc-unwrapped
         gnumake
-        julia-bin
+        # julia-bin
         #unstable.ruff
         #ruff
 

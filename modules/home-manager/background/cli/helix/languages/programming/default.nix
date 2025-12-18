@@ -9,7 +9,7 @@
   ];
 
   helix = {
-    julia.enable = lib.mkDefault config.hosts.development.enable;
+    # julia.enable = lib.mkDefault config.hosts.development.enable;
     fortran.enable = lib.mkDefault config.hosts.development.enable;
     go.enable = lib.mkDefault config.hosts.development.enable;
     matlab.enable = lib.mkDefault config.hosts.development.enable;
