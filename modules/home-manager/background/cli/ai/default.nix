@@ -6,6 +6,7 @@
 }:
 {
   imports = [
+    ./claude-code.nix
     ./copilot.nix
     ./gemini.nix
     ./mcp.nix
@@ -20,6 +21,7 @@
 
   config = lib.mkIf config.hosts.development.enable {
     programs = {
+      claude-code.enable = true;
       copilot-cli.enable = true;
       gemini-cli.enable = true;
       mcp.enable = true;
