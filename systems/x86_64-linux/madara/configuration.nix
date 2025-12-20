@@ -53,7 +53,10 @@
   nfs.enable = true;
 
   programs.niri.enable = true;
-  virtualisation.docker.enable = true;
+  virtualisation = {
+    distrobox.enable = true;
+    docker.enable = true;
+  };
   # virtualisation.incus.enable = true;
   services = {
     ai.enable = true;

@@ -8,6 +8,7 @@
   imports = [
     ./docker
 
+    ./distrobox.nix
     ./incus.nix
     ./libvirt.nix
   ];
