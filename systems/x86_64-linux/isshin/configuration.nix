@@ -1,7 +1,7 @@
 {
   lib,
   pkgs,
-  inputs,
+  config,
   ...
 }:
 {
@@ -33,7 +33,17 @@
   };
 
   programs = {
+    distrobox.enable = true;
+    matlab = {
+      enable = true;
+      release = "R2025a";
+      licenseFile = config.sops.secrets."config/matlab".path;
+    };
     niri.enable = true;
+  };
+
+  virtualisation = {
+    # docker.enable = true;
   };
 
   hardware = {
@@ -57,4 +67,6 @@
   };
   # environment.systemPackages = with pkgs; [ impala ];
   # networking.networkmanager.wifi.backend = "iwd";
+  #
+  sops.secrets."config/matlab".mode = "0444";
 }
