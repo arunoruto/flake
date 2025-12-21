@@ -6,6 +6,7 @@
 {
   imports = [
     ./browsers
+    ./matlab
     ./steam.nix
     ./packages.nix
   ];
