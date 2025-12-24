@@ -41,6 +41,7 @@ ARG LICENSE_SERVER
 RUN export DEBIAN_FRONTEND=noninteractive \
     && apt-get update \
     && apt-get install --no-install-recommends --yes \
+    build-essential \
     wget \
     ca-certificates \
     && apt-get clean \
