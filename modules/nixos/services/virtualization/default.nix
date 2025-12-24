@@ -11,6 +11,7 @@
     ./distrobox.nix
     ./incus.nix
     ./libvirt.nix
+    ./podman.nix
   ];
 
   # config = lib.mkIf (with config.virtualisation; (incus.enable || libvirt.enable)) {

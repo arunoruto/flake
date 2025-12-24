@@ -63,6 +63,7 @@ in
           dockerCompat = true;
           defaultNetwork.settings.dns_enabled = true;
         };
+        hardware.nvidia-container-toolkit.enable = config.hosts.nvidia.enable;
       })
     ]
   );
