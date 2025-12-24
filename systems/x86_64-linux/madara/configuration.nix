@@ -52,10 +52,16 @@
   runners.YASF.enable = true;
   nfs.enable = true;
 
-  programs.niri.enable = true;
-  virtualisation = {
+  programs = {
     distrobox.enable = true;
-    docker.enable = true;
+    matlab = {
+      enable = true;
+      release = "R2025a";
+    };
+    niri.enable = true;
+  };
+  virtualisation = {
+    # docker.enable = true;
   };
   # virtualisation.incus.enable = true;
   services = {
