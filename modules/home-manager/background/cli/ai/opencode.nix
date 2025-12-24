@@ -61,6 +61,30 @@
             };
           };
         };
+        permission = {
+          edit = "ask";
+          bash = {
+            ls = "allow";
+            pwd = "allow";
+            "git status" = "allow";
+            "git diff*" = "allow";
+            "git log*" = "allow";
+            # "git add*" = "allow";
+          };
+        };
+        agent = {
+          autoaccept = {
+            mode = "primary";
+            tools = {
+              write = true;
+              edit = true;
+              bash = true;
+            };
+            permission = {
+              edit = "allow";
+            };
+          };
+        };
       };
       agents = {
         commit = ./commit.md;
