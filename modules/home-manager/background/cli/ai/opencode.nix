@@ -6,12 +6,44 @@
 }:
 {
   imports = [
-    ./opencode-theme.nix
+    # ./opencode-theme.nix
   ];
 
   config = lib.mkIf config.programs.opencode.enable {
     programs.opencode = {
-      package = pkgs.unstable.opencode;
+      package = pkgs.unstable.opencode.overrideAttrs (old: {
+        nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.makeWrapper ];
+
+        postInstall = (old.postInstall or "") + ''
+          substituteInPlace "$out/lib/opencode/dist/src/index.js" \
+            --replace-fail 'https://desktop.opencode.ai' 'https://app.opencode.ai' \
+            --replace-fail 'host: "desktop.opencode.ai"' 'host: "app.opencode.ai"' \
+            --replace-fail '}).use(cors()).get("/global/event", describeRoute({' '}).use(cors()).get("/global/health", (c2) => c2.json({ healthy: true })).get("/global/event", describeRoute({' \
+            --replace-fail '// src/file/watcher.ts' $'var OPENCODE_LIBC = process.env.OPENCODE_LIBC;\n\n// src/file/watcher.ts' \
+            --replace-fail $'        stream2.writeSSE({\n          data: JSON.stringify({\n            type: "server.connected",\n            properties: {}\n          })\n        });' $'        stream2.writeSSE({\n          data: JSON.stringify({\n            payload: {\n              type: "server.connected",\n              properties: {}\n            }\n          })\n        });' \
+            --replace-fail $'          stream2.writeSSE({\n            data: JSON.stringify({\n              type: "server.heartbeat",\n              properties: {}\n            })\n          });' $'          stream2.writeSSE({\n            data: JSON.stringify({\n              payload: {\n                type: "server.heartbeat",\n                properties: {}\n              }\n            })\n          });' \
+            --replace-fail $'        const unsub = Bus.subscribeAll(async (event) => {\n          await stream2.writeSSE({\n            data: JSON.stringify(event)\n          });\n          if (event.type === Bus.InstanceDisposed.type) {\n            stream2.close();\n          }\n        });' $'        const unsub = Bus.subscribeAll(async (event) => {\n          await stream2.writeSSE({\n            data: JSON.stringify({ payload: event })\n          });\n          if (event.type === Bus.InstanceDisposed.type) {\n            stream2.close();\n          }\n        });'
+
+           # Bun's node_modules layout stores @parcel watcher variants under .bun.
+           # Some code paths require() @parcel/watcher-<platform>-<arch>-<libc> directly.
+           mkdir -p "$out/lib/opencode/node_modules/@parcel"
+           for libc in glibc musl; do
+             for arch in x64 arm64 arm; do
+               dest="$out/lib/opencode/node_modules/@parcel/watcher-linux-''${arch}-''${libc}"
+               if [ ! -e "$dest" ]; then
+                 src="$(echo "$out/lib/opencode/node_modules/.bun/@parcel+watcher-linux-''${arch}-''${libc}@"*/node_modules/@parcel/watcher-linux-''${arch}-''${libc} | head -n1)"
+                 if [ -e "$src" ]; then
+                   ln -s "$src" "$dest"
+                 fi
+               fi
+             done
+           done
+
+
+          wrapProgram "$out/bin/opencode" \
+            --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ pkgs.stdenv.cc.cc ]}"
+        '';
+      });
       settings = {
         theme = "stylix";
         # tools = {
