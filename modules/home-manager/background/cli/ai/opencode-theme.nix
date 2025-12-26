@@ -9,7 +9,7 @@
         {
           theme = {
             accent = {
-              dark = colors.withHashtag.base07;
+              dark = colors.withHashtag.base0F;
               light = colors.withHashtag.base07;
             };
             background = {
@@ -69,7 +69,7 @@
               light = colors.withHashtag.base03;
             };
             diffLineNumber = {
-              dark = colors.withHashtag.base02;
+              dark = colors.withHashtag.base03;
               light = colors.withHashtag.base04;
             };
             diffRemoved = {
@@ -94,26 +94,26 @@
             };
             markdownBlockQuote = {
               dark = colors.withHashtag.base03;
-              light = colors.withHashtag.base03;
+              light = colors.withHashtag.base01;
             };
             markdownCode = {
               dark = colors.withHashtag.base0B;
               light = colors.withHashtag.base0B;
             };
             markdownCodeBlock = {
-              dark = colors.withHashtag.base04;
+              dark = colors.withHashtag.base01;
               light = colors.withHashtag.base00;
             };
             markdownEmph = {
-              dark = colors.withHashtag.base09;
+              dark = colors.withHashtag.base0A;
               light = colors.withHashtag.base09;
             };
             markdownHeading = {
-              dark = colors.withHashtag.base0C;
+              dark = colors.withHashtag.base0E;
               light = colors.withHashtag.base0F;
             };
             markdownHorizontalRule = {
-              dark = colors.withHashtag.base03;
+              dark = colors.withHashtag.base04;
               light = colors.withHashtag.base03;
             };
             markdownImage = {
@@ -121,7 +121,7 @@
               light = colors.withHashtag.base0D;
             };
             markdownImageText = {
-              dark = colors.withHashtag.base07;
+              dark = colors.withHashtag.base0C;
               light = colors.withHashtag.base07;
             };
             markdownLink = {
@@ -129,31 +129,31 @@
               light = colors.withHashtag.base0D;
             };
             markdownLinkText = {
-              dark = colors.withHashtag.base07;
+              dark = colors.withHashtag.base0C;
               light = colors.withHashtag.base07;
             };
             markdownListEnumeration = {
-              dark = colors.withHashtag.base07;
+              dark = colors.withHashtag.base0C;
               light = colors.withHashtag.base07;
             };
             markdownListItem = {
-              dark = colors.withHashtag.base0C;
+              dark = colors.withHashtag.base0D;
               light = colors.withHashtag.base0F;
             };
             markdownStrong = {
-              dark = colors.withHashtag.base0A;
+              dark = colors.withHashtag.base09;
               light = colors.withHashtag.base0A;
             };
             markdownText = {
-              dark = colors.withHashtag.base04;
+              dark = colors.withHashtag.base05;
               light = colors.withHashtag.base00;
             };
             primary = {
-              dark = colors.withHashtag.base0C;
+              dark = colors.withHashtag.base0D;
               light = colors.withHashtag.base0F;
             };
             secondary = {
-              dark = colors.withHashtag.base0D;
+              dark = colors.withHashtag.base0E;
               light = colors.withHashtag.base0D;
             };
             success = {
@@ -161,27 +161,27 @@
               light = colors.withHashtag.base0B;
             };
             syntaxComment = {
-              dark = colors.withHashtag.base03;
+              dark = colors.withHashtag.base04;
               light = colors.withHashtag.base03;
             };
             syntaxFunction = {
-              dark = colors.withHashtag.base0C;
+              dark = colors.withHashtag.base0D;
               light = colors.withHashtag.base0C;
             };
             syntaxKeyword = {
-              dark = colors.withHashtag.base0D;
+              dark = colors.withHashtag.base0E;
               light = colors.withHashtag.base0D;
             };
             syntaxNumber = {
-              dark = colors.withHashtag.base0E;
+              dark = colors.withHashtag.base09;
               light = colors.withHashtag.base0E;
             };
             syntaxOperator = {
-              dark = colors.withHashtag.base0D;
+              dark = colors.withHashtag.base0C;
               light = colors.withHashtag.base0D;
             };
             syntaxPunctuation = {
-              dark = colors.withHashtag.base04;
+              dark = colors.withHashtag.base05;
               light = colors.withHashtag.base00;
             };
             syntaxString = {
@@ -189,7 +189,7 @@
               light = colors.withHashtag.base0B;
             };
             syntaxType = {
-              dark = colors.withHashtag.base07;
+              dark = colors.withHashtag.base0A;
               light = colors.withHashtag.base07;
             };
             syntaxVariable = {
@@ -197,16 +197,16 @@
               light = colors.withHashtag.base07;
             };
             text = {
-              dark = colors.withHashtag.base04;
+              dark = colors.withHashtag.base05;
               light = colors.withHashtag.base00;
             };
             textMuted = {
-              dark = colors.withHashtag.base03;
+              dark = colors.withHashtag.base04;
               light = colors.withHashtag.base01;
             };
             warning = {
-              dark = colors.withHashtag.base09;
-              light = colors.withHashtag.base09;
+              dark = colors.withHashtag.base0A;
+              light = colors.withHashtag.base0A;
             };
           };
         };

@@ -12,6 +12,10 @@
         general = {
           previewFeatures = true;
         };
+        contextFileName = [
+          "GEMINI.md"
+          "AGENTS.md"
+        ];
         selectedAuthType = "oauth-personal";
         mcpServers = config.programs.mcp.servers;
       };

@@ -85,6 +85,7 @@
             };
           };
         };
+        plugin = [ "opencode-gemini-auth@latest" ];
       };
       agents = {
         commit = ./commit.md;
