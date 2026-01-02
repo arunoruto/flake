@@ -72,6 +72,19 @@ rec {
     #   acceleration = "cuda";
     #   cudaPackages = final.cudaPackages_12_9;
     # };
+    paperlib = prev.paperlib.overrideAttrs (old: {
+      nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ final.copyDesktopItems ];
+      desktopItems = [
+        (final.makeDesktopItem {
+          name = "paperlib";
+          desktopName = "PaperLib";
+          exec = "paperlib";
+          icon = ./paperlib.png;
+          categories = [ "Utility" ];
+          terminal = false;
+        })
+      ];
+    });
   };
 
   # When applied, the unstable nixpkgs set (declared in the flake inputs) will

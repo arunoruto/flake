@@ -22,6 +22,7 @@
     # steam.enable = lib.mkDefault false;
 
     programs = {
+      reference-manager.enable = lib.mkDefault true;
       thunderbird.enable = lib.mkDefault true;
       vscode.enable = lib.mkDefault false;
       zathura.enable = lib.mkDefault true;
