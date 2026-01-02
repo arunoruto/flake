@@ -9,6 +9,7 @@
     ./browsers
 
     ./flatpak.nix
+    ./reference-manager.nix
     # ./steam.nix
     ./thunderbird.nix
     ./vscode.nix
@@ -47,7 +48,6 @@
 
         discord
         fluffychat
-        # jabref
         # libsForQt5.kdenlive
         kdePackages.okular
         # mailspring

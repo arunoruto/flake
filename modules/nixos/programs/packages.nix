@@ -14,7 +14,6 @@
 
       # discord
       # gthumb
-      # # jabref
       # # libsForQt5.kdenlive
       # libsForQt5.okular
       # #mailspring
