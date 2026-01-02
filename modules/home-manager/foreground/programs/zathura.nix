@@ -6,9 +6,9 @@
 {
   options.zathura.enable = lib.mkEnableOption "Enable Zathura, a configurable PDF editor";
 
-  config = lib.mkIf config.zathura.enable {
+  config = lib.mkIf config.programs.zathura.enable {
     programs.zathura = {
-      enable = true;
+      # enable = true;
     };
   };
 }

@@ -19,11 +19,11 @@
 
   config = lib.mkIf config.pc.programs.enable {
     # steam.enable = lib.mkDefault false;
-    zathura.enable = lib.mkDefault true;
 
     programs = {
       thunderbird.enable = lib.mkDefault true;
       vscode.enable = lib.mkDefault false;
+      zathura.enable = lib.mkDefault true;
       zed-editor = {
         enable = lib.mkDefault false;
         package = pkgs.unstable.zed-editor;
