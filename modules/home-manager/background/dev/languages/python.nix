@@ -1,11 +1,19 @@
-{ pkgs, lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 let
   cfg = config.programs.dev;
 in
 {
   programs.dev.languages.python = {
     tags = [ "python" ];
-    extensions = [ ".py" ".pyi" ];
+    extensions = [
+      ".py"
+      ".pyi"
+    ];
     roots = [
       "setup.py"
       "setup.cfg"
@@ -17,11 +25,12 @@ in
     ];
 
     autoFormat = true;
-    lspServers =
-      [ "pyright" ]
-      ++ lib.optionals cfg.lsp.servers.ruff.enable [ "ruff" ]
-      ++ lib.optionals cfg.lsp.servers.ty.enable [ "ty" ]
-      ++ lib.optionals cfg.lsp.servers.sourcery.enable [ "sourcery" ];
+    lspServers = [
+      "pyright"
+    ]
+    ++ lib.optionals cfg.lsp.servers.ruff.enable [ "ruff" ]
+    ++ lib.optionals cfg.lsp.servers.ty.enable [ "ty" ]
+    ++ lib.optionals cfg.lsp.servers.sourcery.enable [ "sourcery" ];
 
     formatter = {
       package = pkgs.bash;

@@ -8,7 +8,10 @@
       formatter = {
         package = pkgs.nodePackages.prettier;
         command = lib.getExe pkgs.nodePackages.prettier;
-        args = [ "--parser" "json" ];
+        args = [
+          "--parser"
+          "json"
+        ];
       };
       packages = with pkgs; [
         nodePackages.prettier
@@ -18,7 +21,10 @@
 
     yaml = {
       tags = [ "markup" ];
-      extensions = [ ".yaml" ".yml" ];
+      extensions = [
+        ".yaml"
+        ".yml"
+      ];
       autoFormat = true;
       lspServers = [ "yaml-lsp" ];
       formatter = {
@@ -44,7 +50,10 @@
       formatter = {
         package = pkgs.taplo;
         command = lib.getExe pkgs.taplo;
-        args = [ "fmt" "-" ];
+        args = [
+          "fmt"
+          "-"
+        ];
       };
       packages = with pkgs; [ taplo ];
     };

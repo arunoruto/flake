@@ -1,4 +1,9 @@
-{ pkgs, lib, config, ... }@args:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}@args:
 let
   cfg = config.programs.dev;
 
@@ -90,15 +95,17 @@ in
           flake-location = flakeLocation;
         in
         {
-          nixpkgs.expr = lib.optionalString (flake-location != null) "import (builtins.getFlake ''${flake-location}'').inputs.nixpkgs { }";
+          nixpkgs.expr = lib.optionalString (
+            flake-location != null
+          ) "import (builtins.getFlake ''${flake-location}'').inputs.nixpkgs { }";
           formatting.command = [ "nix fmt" ];
           options = {
-            nixos.expr =
-              lib.optionalString (flake-location != null && hasNixosConfig)
-                "(builtins.getFlake ''${flake-location}'').nixosConfigurations.${hostName}.options";
-            home-manager.expr =
-              lib.optionalString (flake-location != null)
-                "(builtins.getFlake ''${flake-location}'').homeConfigurations.${config.user}.options";
+            nixos.expr = lib.optionalString (
+              flake-location != null && hasNixosConfig
+            ) "(builtins.getFlake ''${flake-location}'').nixosConfigurations.${hostName}.options";
+            home-manager.expr = lib.optionalString (
+              flake-location != null
+            ) "(builtins.getFlake ''${flake-location}'').homeConfigurations.${config.user}.options";
           };
           diagnostics = { };
         };

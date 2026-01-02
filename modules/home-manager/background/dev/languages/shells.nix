@@ -1,4 +1,9 @@
-{ pkgs, lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 let
   cfg = config.programs.dev;
 
@@ -8,7 +13,10 @@ in
   programs.dev.languages = {
     bash = {
       tags = [ "shell" ];
-      extensions = [ ".sh" ".bash" ];
+      extensions = [
+        ".sh"
+        ".bash"
+      ];
       autoFormat = true;
       formatter = {
         package = pkgs.shfmt;
@@ -54,5 +62,8 @@ in
 
   programs.dev.languages.fish.packages = with pkgs; [ fish-lsp ];
   programs.dev.languages.nu.packages = with pkgs; [ nufmt ];
-  programs.dev.languages.bash.packages = with pkgs; [ bash-language-server shfmt ];
+  programs.dev.languages.bash.packages = with pkgs; [
+    bash-language-server
+    shfmt
+  ];
 }

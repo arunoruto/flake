@@ -1,4 +1,9 @@
-{ pkgs, lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 let
   cfg = config.programs.dev;
 in
@@ -6,12 +11,11 @@ in
   programs.dev.languages.go = {
     extensions = [ ".go" ];
     autoFormat = true;
-    lspServers =
-      [
-        "gopls"
-        "golangci-lint-langserver"
-      ]
-      ++ lib.optionals cfg.lsp.servers.codebook.enable [ "codebook" ];
+    lspServers = [
+      "gopls"
+      "golangci-lint-langserver"
+    ]
+    ++ lib.optionals cfg.lsp.servers.codebook.enable [ "codebook" ];
 
     formatter = {
       package = pkgs.go;

@@ -1,4 +1,9 @@
-{ pkgs, lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 let
   cfg = config.programs.dev;
 in
@@ -6,12 +11,11 @@ in
   programs.dev.languages.nix = {
     extensions = [ ".nix" ];
     autoFormat = true;
-    lspServers =
-      [
-        "nixd"
-        "nil"
-      ]
-      ++ lib.optionals cfg.lsp.servers.copilot.enable [ "copilot" ];
+    lspServers = [
+      "nixd"
+      "nil"
+    ]
+    ++ lib.optionals cfg.lsp.servers.copilot.enable [ "copilot" ];
 
     formatter = {
       package = pkgs.unstable.nixfmt;

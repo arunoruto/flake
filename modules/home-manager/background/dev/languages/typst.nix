@@ -1,4 +1,9 @@
-{ pkgs, lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 let
   cfg = config.programs.dev;
 in
@@ -6,9 +11,7 @@ in
   programs.dev.languages.typst = {
     extensions = [ ".typ" ];
     autoFormat = true;
-    lspServers =
-      (lib.optionals cfg.lsp.servers.ltex.enable [ "ltex" ])
-      ++ [ "tinymist" ];
+    lspServers = (lib.optionals cfg.lsp.servers.ltex.enable [ "ltex" ]) ++ [ "tinymist" ];
 
     formatter = {
       package = pkgs.typstyle;

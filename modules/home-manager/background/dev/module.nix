@@ -17,7 +17,12 @@ let
       enable = lib.mkEnableOption "Enable this LSP server";
 
       kind = lib.mkOption {
-        type = types.enum [ "language" "grammar" "tool" "ai" ];
+        type = types.enum [
+          "language"
+          "grammar"
+          "tool"
+          "ai"
+        ];
         default = "language";
         description = "Classification of this LSP (used by adapters).";
       };
@@ -166,22 +171,15 @@ let
     };
   };
 
-
   enabledLanguages = lib.filterAttrs (_: lang: lang.enable) cfg.languages;
 
-    enabledLspServers = lib.filterAttrs (_: lsp: lsp.enable) cfg.lsp.servers;
+  enabledLspServers = lib.filterAttrs (_: lsp: lsp.enable) cfg.lsp.servers;
 
-    enabledOpencodeLspServers = lib.filterAttrs (
-      _: lsp:
-      lsp.enable && lsp.kind == "language" && (lsp.exposeToOpencode or true)
-    ) cfg.lsp.servers;
+  enabledOpencodeLspServers = lib.filterAttrs (
+    _: lsp: lsp.enable && lsp.kind == "language" && (lsp.exposeToOpencode or true)
+  ) cfg.lsp.servers;
 
-
-  languageTags =
-    lib.mapAttrs (
-      name: lang:
-      lib.unique ([ name ] ++ lang.tags)
-    ) cfg.languages;
+  languageTags = lib.mapAttrs (name: lang: lib.unique ([ name ] ++ lang.tags)) cfg.languages;
 
   lspMatchesLanguageTags =
     serverName: serverCfg: langName:
@@ -190,48 +188,49 @@ let
     in
     lib.any (t: lib.elem t langTagSet) serverCfg.tags;
 
-    autoLspForLanguage =
-      langName:
-      builtins.filter (
-        serverName:
-        let
-          serverCfg = cfg.lsp.servers.${serverName};
-        in
-        lspMatchesLanguageTags serverName serverCfg langName
-      ) (builtins.attrNames enabledLspServers);
+  autoLspForLanguage =
+    langName:
+    builtins.filter (
+      serverName:
+      let
+        serverCfg = cfg.lsp.servers.${serverName};
+      in
+      lspMatchesLanguageTags serverName serverCfg langName
+    ) (builtins.attrNames enabledLspServers);
 
-    autoOpencodeLspForLanguage =
-      langName:
-      builtins.filter (
-        serverName:
-        let
-          serverCfg = cfg.lsp.servers.${serverName};
-        in
-        lspMatchesLanguageTags serverName serverCfg langName
-      ) (builtins.attrNames enabledOpencodeLspServers);
-
+  autoOpencodeLspForLanguage =
+    langName:
+    builtins.filter (
+      serverName:
+      let
+        serverCfg = cfg.lsp.servers.${serverName};
+      in
+      lspMatchesLanguageTags serverName serverCfg langName
+    ) (builtins.attrNames enabledOpencodeLspServers);
 
   effectiveLspServersForLanguage =
     langName: lang:
     lib.unique (
       lang.lspServers
       ++ lib.optionals lang.autoAttachLspByTags (
-        builtins.filter (serverName: builtins.hasAttr serverName enabledLspServers) (autoLspForLanguage langName)
+        builtins.filter (serverName: builtins.hasAttr serverName enabledLspServers) (
+          autoLspForLanguage langName
+        )
       )
     );
 
-  referencedLspServers =
-    lib.unique (
-      lib.concatLists (
-        lib.mapAttrsToList (langName: lang: effectiveLspServersForLanguage langName lang) enabledLanguages
-      )
-    );
+  referencedLspServers = lib.unique (
+    lib.concatLists (
+      lib.mapAttrsToList (langName: lang: effectiveLspServersForLanguage langName lang) enabledLanguages
+    )
+  );
 
-  missingLspServers = builtins.filter (name: !(builtins.hasAttr name cfg.lsp.servers)) referencedLspServers;
+  missingLspServers = builtins.filter (
+    name: !(builtins.hasAttr name cfg.lsp.servers)
+  ) referencedLspServers;
 
   disabledReferencedLspServers = builtins.filter (
-    name:
-    (builtins.hasAttr name cfg.lsp.servers) && (!cfg.lsp.servers.${name}.enable)
+    name: (builtins.hasAttr name cfg.lsp.servers) && (!cfg.lsp.servers.${name}.enable)
   ) referencedLspServers;
 
   mkHelixCommand =
@@ -255,70 +254,64 @@ let
         }
       );
 
-  mkHelixFileTypes = lang:
+  mkHelixFileTypes =
+    lang:
     if lang.helix.fileTypes != null then
       lang.helix.fileTypes
     else
       map (ext: lib.removePrefix "." ext) lang.extensions;
 
-    opencodeLspExtensions =
-      lib.foldl'
-        (
-          acc: langEntry:
-          let
-            langName = langEntry.name;
-            lang = langEntry.value;
+  opencodeLspExtensions = lib.foldl' (
+    acc: langEntry:
+    let
+      langName = langEntry.name;
+      lang = langEntry.value;
 
-            effectiveOpencodeLspServersForLanguage =
-              lib.unique (
-                lang.lspServers
-                ++ lib.optionals lang.autoAttachLspByTags (
-                  builtins.filter (serverName: builtins.hasAttr serverName enabledOpencodeLspServers) (autoOpencodeLspForLanguage langName)
-                )
-              );
-          in
-          lib.foldl'
-            (
-              acc2: serverName:
-              if builtins.hasAttr serverName enabledOpencodeLspServers then
-                acc2
-                // {
-                  "${serverName}" = lib.unique ((acc2.${serverName} or [ ]) ++ lang.extensions);
-                }
-              else
-                acc2
-            )
-            acc
-            effectiveOpencodeLspServersForLanguage
+      effectiveOpencodeLspServersForLanguage = lib.unique (
+        lang.lspServers
+        ++ lib.optionals lang.autoAttachLspByTags (
+          builtins.filter (serverName: builtins.hasAttr serverName enabledOpencodeLspServers) (
+            autoOpencodeLspForLanguage langName
+          )
         )
-        { }
-        (lib.mapAttrsToList (name: value: { inherit name value; }) enabledLanguages);
-
+      );
+    in
+    lib.foldl' (
+      acc2: serverName:
+      if builtins.hasAttr serverName enabledOpencodeLspServers then
+        acc2
+        // {
+          "${serverName}" = lib.unique ((acc2.${serverName} or [ ]) ++ lang.extensions);
+        }
+      else
+        acc2
+    ) acc effectiveOpencodeLspServersForLanguage
+  ) { } (lib.mapAttrsToList (name: value: { inherit name value; }) enabledLanguages);
 
 in
 {
   options.programs.dev = {
     enable = lib.mkEnableOption "Unified development toolchain (LSP/formatters)";
 
-     lsp = {
-       servers = lib.mkOption {
-         type = types.attrsOf lspServerSubmodule;
-         default = { };
-         description = "Registry of reusable LSP server definitions.";
-       };
- 
-       ltex.ngram.enable = lib.mkEnableOption "Enable LTeX ngram downloads";
-     };
+    lsp = {
+      servers = lib.mkOption {
+        type = types.attrsOf lspServerSubmodule;
+        default = { };
+        description = "Registry of reusable LSP server definitions.";
+      };
 
-     groups = {
-       markup.enable = lib.mkEnableOption "Enable markup languages (json/yaml/toml/xml)";
-     };
- 
-     languages = lib.mkOption {
-       type = types.attrsOf languageSubmodule;
-       default = { };
-       description = "Language definitions referencing LSP servers + formatter.";
-     };
+      ltex.ngram.enable = lib.mkEnableOption "Enable LTeX ngram downloads";
+    };
+
+    groups = {
+      markup.enable = lib.mkEnableOption "Enable markup languages (json/yaml/toml/xml)";
+    };
+
+    languages = lib.mkOption {
+      type = types.attrsOf languageSubmodule;
+      default = { };
+      description = "Language definitions referencing LSP servers + formatter.";
+    };
 
     adapters = {
       helix.enable = lib.mkEnableOption "Generate Helix languages.toml";
@@ -348,19 +341,20 @@ in
       })
     ];
 
-    home.packages =
-      lib.unique (
-        builtins.filter lib.isDerivation (
-          lib.concatLists (
-            (lib.mapAttrsToList (_: v: lib.optionals (v.package != null) [ v.package ]) enabledLspServers)
-            ++ (lib.mapAttrsToList (
-              _: lang:
-              (lib.optionals (lang.formatter != null && lang.formatter.package != null) [ lang.formatter.package ])
-              ++ lang.packages
-            ) enabledLanguages)
-          )
+    home.packages = lib.unique (
+      builtins.filter lib.isDerivation (
+        lib.concatLists (
+          (lib.mapAttrsToList (_: v: lib.optionals (v.package != null) [ v.package ]) enabledLspServers)
+          ++ (lib.mapAttrsToList (
+            _: lang:
+            (lib.optionals (lang.formatter != null && lang.formatter.package != null) [
+              lang.formatter.package
+            ])
+            ++ lang.packages
+          ) enabledLanguages)
         )
-      );
+      )
+    );
 
     programs.helix = lib.mkIf cfg.adapters.helix.enable {
       languages = {
@@ -390,35 +384,36 @@ in
       };
     };
 
-      programs.opencode = lib.mkIf cfg.adapters.opencode.enable {
-        settings = {
-          lsp = lib.mapAttrs (serverName: exts: {
-            command = [ (toString enabledOpencodeLspServers.${serverName}.command) ] ++ enabledOpencodeLspServers.${serverName}.args;
-            extensions = exts;
-            env = enabledOpencodeLspServers.${serverName}.environment;
-            initialization = enabledOpencodeLspServers.${serverName}.settings;
-          }) opencodeLspExtensions;
+    programs.opencode = lib.mkIf cfg.adapters.opencode.enable {
+      settings = {
+        lsp = lib.mapAttrs (serverName: exts: {
+          command = [
+            (toString enabledOpencodeLspServers.${serverName}.command)
+          ]
+          ++ enabledOpencodeLspServers.${serverName}.args;
+          extensions = exts;
+          env = enabledOpencodeLspServers.${serverName}.environment;
+          initialization = enabledOpencodeLspServers.${serverName}.settings;
+        }) opencodeLspExtensions;
 
-
-        formatter =
-          lib.foldl'
-            lib.recursiveUpdate
-            { }
-            (lib.mapAttrsToList (
-              langName: langCfg:
-              if langCfg.formatter == null then
-                { }
-              else
-                {
-                  "${langName}-fmt" = {
-                    command =
-                      [ (toString langCfg.formatter.command) ]
-                      ++ langCfg.formatter.args
-                      ++ lib.optionals (langCfg.formatter.fileArg != null) [ langCfg.formatter.fileArg ];
-                    extensions = langCfg.extensions;
-                  };
-                }
-            ) enabledLanguages);
+        formatter = lib.foldl' lib.recursiveUpdate { } (
+          lib.mapAttrsToList (
+            langName: langCfg:
+            if langCfg.formatter == null then
+              { }
+            else
+              {
+                "${langName}-fmt" = {
+                  command = [
+                    (toString langCfg.formatter.command)
+                  ]
+                  ++ langCfg.formatter.args
+                  ++ lib.optionals (langCfg.formatter.fileArg != null) [ langCfg.formatter.fileArg ];
+                  extensions = langCfg.extensions;
+                };
+              }
+          ) enabledLanguages
+        );
       };
     };
   };

@@ -40,7 +40,9 @@
           lsp-ai.enable = lib.mkDefault false;
         };
 
-        ltex.ngram.enable = lib.mkDefault (config.hosts.development.enable && (config._module.args ? nixosConfig));
+        ltex.ngram.enable = lib.mkDefault (
+          config.hosts.development.enable && (config._module.args ? nixosConfig)
+        );
       };
     };
   };

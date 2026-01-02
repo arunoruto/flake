@@ -1,10 +1,18 @@
-{ pkgs, lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 let
   cfg = config.programs.dev;
 in
 {
   programs.dev.languages.markdown = {
-    extensions = [ ".md" ".markdown" ];
+    extensions = [
+      ".md"
+      ".markdown"
+    ];
     autoFormat = true;
     lspServers =
       (lib.optionals cfg.lsp.servers.ltex.enable [ "ltex" ])
@@ -19,7 +27,10 @@ in
     formatter = {
       package = pkgs.nodePackages.prettier;
       command = lib.getExe pkgs.nodePackages.prettier;
-      args = [ "--parser" "markdown" ];
+      args = [
+        "--parser"
+        "markdown"
+      ];
     };
 
     helix.languageConfig = {

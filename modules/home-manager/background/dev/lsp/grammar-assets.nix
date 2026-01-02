@@ -1,4 +1,9 @@
-{ pkgs, lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 {
   config = lib.mkIf (config.programs.dev.lsp.ltex.ngram.enable or false) {
     home.file = {

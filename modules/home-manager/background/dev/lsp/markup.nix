@@ -1,4 +1,9 @@
-{ pkgs, lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 let
   cfg = config.programs.dev;
 
@@ -30,7 +35,10 @@ in
       tags = [ "toml" ];
       package = pkgs.taplo;
       command = lib.getExe pkgs.taplo;
-      args = [ "lsp" "stdio" ];
+      args = [
+        "lsp"
+        "stdio"
+      ];
     };
 
     lemminx = {
