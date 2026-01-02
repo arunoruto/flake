@@ -7,28 +7,34 @@
 
   nodejs,
   pnpm,
+  pnpmConfigHook,
+  fetchPnpmDeps,
 }:
+let
+  tag-prefix = "@upstash/context7-mcp@";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "context7";
-  version = "1.0.31";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "upstash";
     repo = "context7";
-    tag = "@upstash/context7-mcp@${finalAttrs.version}";
-    hash = "sha256-Y0ZjTRc53gcIQDO7UbYcvpXdpeXQdiKFzA8EKQ+uxgA=";
+    tag = tag-prefix + finalAttrs.version;
+    hash = "sha256-sz26L/iHZ36B02TX3RRUfMXb++i90gzDLwrTXMYZwg8=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm.configHook
+    pnpm
+    pnpmConfigHook
     makeWrapper
   ];
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    fetcherVersion = 2;
-    hash = "sha256-TbBKl1yB1F0WsmGt5yu/ok40SReDy7hxMg+n8G7rgfc=";
+    fetcherVersion = 3;
+    hash = "sha256-ntbX2rKg+FXChWHLUdRnKr2TeEuWXouzALeHm1FLsHw=";
   };
 
   buildPhase = ''
@@ -66,7 +72,9 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex '${tag-prefix}(.*)'" ];
+  };
 
   meta = {
     description = "MCP Server for up-to-date code documentation for LLMs and AI code editors";
