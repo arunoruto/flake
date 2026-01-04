@@ -81,6 +81,16 @@
       #   GGML_VK_VISIBLE_DEVICES = "0";
       # };
     };
+    cloudflared = {
+      enable = true;
+      defaultDomain = "arnaut.me";
+      tunnels."${config.networking.hostName}".ingress = [
+        {
+          hostname = "opencode.${config.services.cloudflared.defaultDomain}";
+          service = "http://localhost:4096";
+        }
+      ];
+    };
     harmonia = {
       enable = true;
       openFirewall = true;
