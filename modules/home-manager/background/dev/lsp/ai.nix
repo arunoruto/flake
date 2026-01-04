@@ -25,10 +25,14 @@ in
     };
 
     gpt = {
-      enable = lib.mkDefault (cfg.languages.python.enable or false);
+      enable = lib.mkOptionDefault false;
+      autoEnableByTags = true;
       kind = "ai";
       exposeToOpencode = false;
-      tags = [ "python" ];
+      tags = [
+        "python"
+        "nix"
+      ];
       package = pkgs.helix-gpt;
       command = lib.getExe pkgs.helix-gpt;
       args = [

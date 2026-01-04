@@ -27,6 +27,12 @@ let
         description = "Classification of this LSP (used by adapters).";
       };
 
+      autoEnableByTags = lib.mkOption {
+        type = types.bool;
+        default = false;
+        description = "Auto-enable this server if its tags match any enabled language tags (AI-only).";
+      };
+
       exposeToOpencode = lib.mkOption {
         type = types.bool;
         default = true;
@@ -173,12 +179,6 @@ let
 
   enabledLanguages = lib.filterAttrs (_: lang: lang.enable) cfg.languages;
 
-  enabledLspServers = lib.filterAttrs (_: lsp: lsp.enable) cfg.lsp.servers;
-
-  enabledOpencodeLspServers = lib.filterAttrs (
-    _: lsp: lsp.enable && lsp.kind == "language" && (lsp.exposeToOpencode or true)
-  ) cfg.lsp.servers;
-
   languageTags = lib.mapAttrs (name: lang: lib.unique ([ name ] ++ lang.tags)) cfg.languages;
 
   lspMatchesLanguageTags =
@@ -187,6 +187,22 @@ let
       langTagSet = languageTags.${langName} or [ langName ];
     in
     lib.any (t: lib.elem t langTagSet) serverCfg.tags;
+
+  autoEnableServerByTags =
+    serverName: serverCfg:
+    serverCfg.autoEnableByTags
+    && serverCfg.kind == "ai"
+    && lib.any (langName: lspMatchesLanguageTags serverName serverCfg langName) (
+      builtins.attrNames enabledLanguages
+    );
+
+  enabledLspServers = lib.filterAttrs (
+    serverName: lsp: lsp.enable || autoEnableServerByTags serverName lsp
+  ) cfg.lsp.servers;
+
+  enabledOpencodeLspServers = lib.filterAttrs (
+    _: lsp: lsp.enable && lsp.kind == "language" && (lsp.exposeToOpencode or true)
+  ) cfg.lsp.servers;
 
   autoLspForLanguage =
     langName:
@@ -230,7 +246,7 @@ let
   ) referencedLspServers;
 
   disabledReferencedLspServers = builtins.filter (
-    name: (builtins.hasAttr name cfg.lsp.servers) && (!cfg.lsp.servers.${name}.enable)
+    name: (builtins.hasAttr name cfg.lsp.servers) && !(builtins.hasAttr name enabledLspServers)
   ) referencedLspServers;
 
   mkHelixCommand =

@@ -7,7 +7,16 @@ in
     lib.mkIf
       (
         config.programs.dev.enable
-        && config.programs.dev.lsp.servers.gpt.enable
+        && (
+          config.programs.dev.lsp.servers.gpt.enable
+          || (
+            config.programs.dev.lsp.servers.gpt.autoEnableByTags
+            && (
+              (config.programs.dev.languages.python.enable or false)
+              || (config.programs.dev.languages.nix.enable or false)
+            )
+          )
+        )
         && copilotSecretPath != null
       )
       {
