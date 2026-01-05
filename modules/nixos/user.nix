@@ -83,7 +83,7 @@ in
         ];
     };
 
-    systemd.tmpfiles.rules =
+    systemd.tmpfiles.rules = lib.optionals (config.home-manager.users.${username}.home.file ? ".face") (
       let
         account-service = pkgs.writeTextFile {
           name = "accounts-service-config-${username}";
@@ -103,6 +103,7 @@ in
         ''L+ "/var/lib/AccountsService/icons/${username}" - - - - ${
           config.home-manager.users.${username}.home.file.".face".source
         }''
-      ];
+      ]
+    );
   };
 }
