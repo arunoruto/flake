@@ -17,7 +17,9 @@
           "AGENTS.md"
         ];
         selectedAuthType = "oauth-personal";
-        mcpServers = config.programs.mcp.servers;
+        mcpServers = lib.attrsets.mapAttrs (
+          _: v: lib.attrsets.filterAttrs (n: _: n != "type") v
+        ) config.programs.mcp.servers;
       };
     };
     home.packages = [
