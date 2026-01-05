@@ -90,15 +90,15 @@ in
           text = lib.generators.toINI { } {
             User = {
               Session = "gnome";
-              Icon = "/var/lib/AccountsService/icons/mirza";
+              Icon = "/var/lib/AccountsService/icons/${username}";
               SystemAccount = "false";
             };
           };
         };
       in
       [
-        # ''C "/var/lib/AccountsService/users/mirzaa" 0600 root root - ${account-service}''
-        ''L+ "/var/lib/AccountsService/users/${username}" - - - - ${account-service}''
+        ''C "/var/lib/AccountsService/users/${username}" 0600 root root - ${account-service}''
+        # ''L+ "/var/lib/AccountsService/users/${username}" - - - - ${account-service}''
         ''d  "/var/lib/AccountsService/icons" 0755 root root -''
         ''L+ "/var/lib/AccountsService/icons/${username}" - - - - ${
           config.home-manager.users.${username}.home.file.".face".source
