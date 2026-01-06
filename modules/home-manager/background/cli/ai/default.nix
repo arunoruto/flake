@@ -29,7 +29,8 @@
       opencode.enable = true;
     };
     home.packages = with pkgs.unstable; [
-      goose-cli
+      beads
+      # goose-cli
     ];
   };
 }
