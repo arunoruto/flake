@@ -132,7 +132,8 @@
       # image = "anime/dan-da-dan/op/turbogranny1.png";
       # image = "art/solar-system.jpg";
       # image = "art/gruvb_solarsys.png";
-      image = "art/solar-system-minimal.jpg";
+      # image = "art/solar-system-minimal.jpg";
+      image = "sun/the-fall-of-icarus-fall-size-3840.png";
 
       # currently onlu x86 linux is used
       # will maybe change in the future!
