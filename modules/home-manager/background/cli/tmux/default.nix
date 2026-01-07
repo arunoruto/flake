@@ -33,7 +33,7 @@
       {
         plugin = cpu;
         extraConfig = ''
-          set -g status-right ": #{cpu_percentage} | : #{ram_percentage} | %H:%M "
+          set -g status-right " #{cpu_percentage} |  #{ram_percentage} |  %H:%M "
         '';
       }
       yank
