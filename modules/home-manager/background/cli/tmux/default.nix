@@ -33,7 +33,8 @@
       {
         plugin = cpu;
         extraConfig = ''
-          set -g status-right " #{cpu_percentage} |  #{ram_percentage} |  %H:%M "
+          set -g status-left ""
+          set -g status-right "[#S] |  #{cpu_percentage} |  #{ram_percentage} |  %H:%M "
         '';
       }
       yank
@@ -88,6 +89,7 @@
         unbind -T copy-mode-vi MouseDragEnd1Pane
 
         # Status bar
+
         set -g status-style bg=default,fg=black,bright
 
         set -g window-status-format " ${numbers}:#W "
