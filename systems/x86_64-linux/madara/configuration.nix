@@ -89,6 +89,10 @@
           hostname = "opencode.${config.services.cloudflared.defaultDomain}";
           service = "http://localhost:4096";
         }
+        {
+          hostname = "jupyter.${config.services.cloudflared.defaultDomain}";
+          service = "http://localhost:8888";
+        }
       ];
     };
     harmonia = {
