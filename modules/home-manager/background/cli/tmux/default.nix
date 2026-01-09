@@ -103,6 +103,10 @@
 
           unbind -T copy-mode-vi MouseDragEnd1Pane
 
+          # move window to the left & right
+          bind-key -r < swap-window -t -1
+          bind-key -r > swap-window -t +1
+
           # Status bar
 
           set -g status-style bg=default,fg=black,bright
