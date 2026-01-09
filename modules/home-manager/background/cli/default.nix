@@ -11,8 +11,6 @@
     ./fastfetch.nix
     ./helix
     ./tmux
-    # ./bat.nix
-    # ./btop.nix
     ./editorconfig.nix
     ./fzf.nix
     ./misc.nix
@@ -27,7 +25,6 @@
       helix.enable = lib.mkDefault true;
 
       atuin.enable = lib.mkDefault true;
-      # bat.enable = lib.mkDefault true;
       serpl.enable = lib.mkDefault true;
       yazi.enable = lib.mkDefault true;
       zellij.enable = lib.mkDefault true;

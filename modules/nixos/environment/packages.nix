@@ -8,7 +8,6 @@
       ffmpeg
       file
       git
-      htop
       imagemagickBig
       iperf
       killall
@@ -23,9 +22,11 @@
 
       dust
       riffdiff
-      # unstable.ventoy
       vim
       wget
     ])
-    ++ (with pkgs.unstable; [ zenmap ]);
+    ++ (with pkgs.unstable; [
+      # ventoy
+      zenmap
+    ]);
 }
