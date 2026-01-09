@@ -12,10 +12,10 @@ lib.attrsets.mergeAttrsList (
     arch:
     lib.genAttrs (lib.getDirectories ./${arch}) (
       hostname:
-      lib.nixosSystem (
-        let
-          pkgs = import inputs.nixpkgs ({ system = arch; } // pkgs-attrs);
-        in
+      lib.nixosSystem
+        # let
+        #   pkgs = import inputs.nixpkgs ({ system = arch; } // pkgs-attrs);
+        # in
         {
           system = arch;
           specialArgs = {
@@ -62,7 +62,6 @@ lib.attrsets.mergeAttrsList (
             # nur.nixosModules.nur
           ]);
         }
-      )
     )
   )
 )

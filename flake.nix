@@ -13,6 +13,10 @@
       url = "github:nix-community/stylix/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    devix = {
+      url = "path:./devix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     # lix-module = {
     #   url = "https://git.lix.systems/lix-project/nixos-module/archive/2.93.0.tar.gz";
     #   inputs.nixpkgs.follows = "nixpkgs";
