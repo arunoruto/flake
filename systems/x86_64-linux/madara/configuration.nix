@@ -66,6 +66,7 @@
   # virtualisation.incus.enable = true;
   services = {
     ai.enable = true;
+    open-webui.enable = lib.mkForce false;
     ollama = {
       enable = true;
       package = pkgs.unstable.ollama.override {
