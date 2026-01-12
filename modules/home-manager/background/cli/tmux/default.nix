@@ -46,6 +46,7 @@
           extraConfig = ''
             set -g status-left ""
             set -g status-right "[#S] |  #{cpu_percentage} |  #{ram_percentage} |  %H:%M "
+            set -g status-right-length 40
           '';
         }
         yank
