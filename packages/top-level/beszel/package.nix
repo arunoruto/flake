@@ -7,13 +7,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "beszel";
-  version = "0.17.0";
+  version = "0.18.2";
 
   src = fetchFromGitHub {
     owner = "henrygd";
     repo = "beszel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MY/rsWdIiYsqcw6gqDkfA8A/Ied3OSHfJI3KUBxoRKc=";
+    hash = "sha256-7jXhlstGuQc3EP4fm5k9FD22nge0ecXVZAk8mXdyKc0=";
   };
 
   webui = buildNpmPackage {
@@ -47,12 +47,12 @@ buildGoModule (finalAttrs: {
 
     sourceRoot = "${finalAttrs.src.name}/internal/site";
 
-    npmDepsHash = "sha256-1au4kSxyjdwFExIoUBSPf/At0jQsfbzlEXuigygBTRM=";
+    npmDepsHash = "sha256-Ks78fCJeHoLCImkyEHo1fSRJqIOEEvL6Zyydpy5LlTw=";
   };
 
   # sourceRoot = "${finalAttrs.src.name}";
 
-  vendorHash = "sha256-gfQU3jGwTGmMJIy9KTjk/Ncwpk886vMo4CJvm5Y5xpA=";
+  vendorHash = "sha256-OnCX/0DGtkcACuWxGfIreS6SSx9dKq+feWKSymtkABs=";
 
   # postPatch = ''substituteInPlace go.mod --replace "go 1.25.1" "go 1.25.0"'';
 
