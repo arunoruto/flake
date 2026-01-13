@@ -69,7 +69,7 @@ in
           };
           serviceConfig = {
             Type = "oneshot";
-            ExecStart = ''${cfg.package}/bin/ssh-tpm-keygen -A'';
+            ExecStart = "${cfg.package}/bin/ssh-tpm-keygen -A";
             RemainAfterExit = "yes";
           };
         };

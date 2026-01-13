@@ -12,8 +12,8 @@
   clblas,
 
   target ? "seq",
-# target ? "mpi",
-# target ? "ocl",
+  # target ? "mpi",
+  # target ? "ocl",
 }:
 let
   binaryName =

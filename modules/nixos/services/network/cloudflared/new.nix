@@ -409,7 +409,7 @@ in
         };
 
         environment = {
-          TUNNEL_ORIGIN_CERT = lib.mkIf (certFile != null) ''%d/cert.pem'';
+          TUNNEL_ORIGIN_CERT = lib.mkIf (certFile != null) "%d/cert.pem";
           TUNNEL_EDGE_IP_VERSION = tunnel.edgeIPVersion;
         };
       }

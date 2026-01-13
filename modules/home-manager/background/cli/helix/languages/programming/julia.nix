@@ -53,7 +53,7 @@ in
               "--history-file=no"
               "--thread=auto"
               "-e"
-              ''using LanguageServer; runserver();''
+              "using LanguageServer; runserver();"
             ];
             # command = "julia";
             # args = [

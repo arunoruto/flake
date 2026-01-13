@@ -4,5 +4,5 @@ pkgs.mkShell {
     go
   ];
 
-  shellHook = '''';
+  shellHook = "";
 }

@@ -2,10 +2,10 @@
   lib,
   stdenvNoCC,
   fetchurl,
-# nix-update-script,
-# autoPatchelfHook,
+  # nix-update-script,
+  # autoPatchelfHook,
 
-# libgcc,
+  # libgcc,
 }:
 let
   os-arch-options = {

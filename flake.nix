@@ -228,7 +228,13 @@
           devShells = (import ./shells pkgs-system lib) // {
             nix = pkgs-system.mkShell {
               shellHook = self.checks.${system}.pre-commit-check.shellHook;
-              buildInputs = [ ] ++ self.checks.${system}.pre-commit-check.enabledPackages;
+              buildInputs =
+                (with pkgs-system; [
+                  statix
+                  deadnix
+                  nixfmt-tree
+                ])
+                ++ self.checks.${system}.pre-commit-check.enabledPackages;
             };
           };
           legacyPackages = import ./packages pkgs-system;
@@ -251,6 +257,8 @@
               src = ./.;
               hooks = {
                 nixfmt.enable = true;
+                # deadnix.enable = true;
+                # statix.enable = true;
                 # nixfmt-rfc-style.enable = true;
               };
             };

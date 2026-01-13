@@ -9,7 +9,7 @@
     ./ollama.nix
     ./open-webui.nix
   ];
-  options.services.ai.enable = lib.mkEnableOption ''Enable local AI services'';
+  options.services.ai.enable = lib.mkEnableOption "Enable local AI services";
 
   config = lib.mkIf config.services.ai.enable {
     services = {

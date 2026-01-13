@@ -22,7 +22,7 @@ in
     plugins = [
       {
         plugin = tmux-pomodoro-plus;
-        extraConfig = '''';
+        extraConfig = "";
       }
     ];
   };
