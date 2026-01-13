@@ -111,7 +111,8 @@ in
     home = {
       packages =
         (with pkgs; [
-          unstable.nixfmt-rfc-style
+          # unstable.nixfmt-rfc-style
+          unstable.nixfmt
 
           nix-du
           nix-index # for developing nixpkgs

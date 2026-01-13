@@ -1,1 +1,9 @@
+# cachix/git-hooks: This file is auto-generated from the Nix configuration and doesn't need to be committed.
+.pre-commit-config.yaml
+
+# Ignore build outputs from performing a nix-build or `nix build` command
 result
+result-*
+
+# Ignore automatically generated direnv output
+.direnv

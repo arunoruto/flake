@@ -59,7 +59,7 @@
     #   url = "github:nix-community/nix-ld";
     #   inputs.nixpkgs.follows = "nixpkgs";
     # };
-    pre-commit-hooks = {
+    git-hooks = {
       url = "github:cachix/git-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
@@ -225,7 +225,12 @@
           };
         in
         {
-          devShells = import ./shells pkgs-system lib;
+          devShells = (import ./shells pkgs-system lib) // {
+            nix = pkgs-system.mkShell {
+              shellHook = self.checks.${system}.pre-commit-check.shellHook;
+              buildInputs = [ ] ++ self.checks.${system}.pre-commit-check.enabledPackages;
+            };
+          };
           legacyPackages = import ./packages pkgs-system;
           # packages =
           #   lib.attrsets.removeAttrs
@@ -242,10 +247,11 @@
           #     ];
           formatter = pkgs-system.nixfmt-tree;
           checks = {
-            pre-commit-check = inputs.pre-commit-hooks.lib.${system}.run {
+            pre-commit-check = inputs.git-hooks.lib.${system}.run {
               src = ./.;
               hooks = {
-                nixfmt-rfc-style.enable = true;
+                nixfmt.enable = true;
+                # nixfmt-rfc-style.enable = true;
               };
             };
           };
