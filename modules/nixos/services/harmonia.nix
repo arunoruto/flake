@@ -14,12 +14,15 @@ in
       settings = {
         workers = 4;
         max_connection_rate = 2;
-        priority = 30;
+        priority = 50;
         # enable_compression = true;
       };
-      signKeyPaths = [ config.sops.secrets."tokens/harmonia".path ];
+      signKeyPaths = [
+        config.sops.secrets."services/harmonia/${config.networking.hostName}/secret".path
+      ];
+      # signKeyPaths = [ config.sops.secrets."tokens/harmonia".path ];
     };
-    sops.secrets."tokens/harmonia" = {
+    sops.secrets."services/harmonia/${config.networking.hostName}/secret" = {
       owner = "harmonia";
     };
     services.traefik =

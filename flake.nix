@@ -260,6 +260,7 @@
       "https://colmena.cachix.org"
       "https://install.determinate.systems"
       # "https://helix.cachix.org"
+      "http://madara.king-little.ts.net:5000"
     ];
     extra-trusted-public-keys = [
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
@@ -267,6 +268,7 @@
       "colmena.cachix.org-1:7BzpDnjjH8ki2CT3f6GdOk7QAzPOl+1t3LvTLXqYcSg="
       "cache.flakehub.com-3:hJuILl5sVK4iKm86JzgdXW12Y2Hwd5G07qKtHTOcDCM="
       # "helix.cachix.org-1:ejp9KQpR1FBI2onstMQ34yogDm4OgU2ru6lIwPvuCVs="
+      "madara:ZyOQZ0jEn5G9qInb25sEz3LwRmJwBFkhji83xwyLWpk="
     ];
   };
 }
