@@ -240,8 +240,12 @@ in
     packages = [
       glab-pkg # Gitlab CLI tool
     ]
-    ++ lib.optionals ((!config.hosts.tinypc.enable) && (!config.hosts.headless.enable)) [
-      pkgs.ai-commit
+    # ++ lib.optionals ((!config.hosts.tinypc.enable) && (!config.hosts.headless.enable)) [
+    #   pkgs.ai-commit
+    #   pkgs.git-quill
+    # ]
+    ++ lib.optionals (config.hosts.development.enable) [
+      # pkgs.ai-commit
       pkgs.git-quill
       (pkgs.symlinkJoin {
         name = "gitbutler-tauri-nvidia";
