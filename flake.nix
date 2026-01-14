@@ -14,7 +14,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     devix = {
-      url = "path:./devix";
+      url = "git+file:./devix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     # lix-module = {
@@ -242,6 +242,7 @@
             };
           };
           legacyPackages = import ./packages pkgs-system;
+          packages.static-home = self.homeConfigurations."mirza".config.home.path;
           # packages =
           #   lib.attrsets.removeAttrs
           #     (pkgs-system.lib.packagesFromDirectoryRecursive {
