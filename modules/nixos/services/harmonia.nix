@@ -44,7 +44,7 @@ in
               ${name} = {
                 loadbalancer.servers = [
                   {
-                    url = "http://localhost:${builtins.toString 5000}";
+                    url = "http://localhost:${toString 5000}";
                     # url = "http://localhost:${builtins.toString config.services.harmonia.port}";
                   }
                 ];
