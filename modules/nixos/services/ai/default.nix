@@ -5,6 +5,7 @@
 }:
 {
   imports = [
+    ./docling.nix
     ./docs-mcp-server.nix
     ./ollama.nix
     ./open-webui.nix
