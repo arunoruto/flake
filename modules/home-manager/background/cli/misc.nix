@@ -26,7 +26,7 @@
     bash.initExtra = ''eval "$(direnv hook bash)"'';
 
     direnv = {
-      enable = true;
+      enable = lib.mkDefault config.hosts.development.enable;
       nix-direnv.enable = true;
     };
 
