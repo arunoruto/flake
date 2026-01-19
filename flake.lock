@@ -185,18 +185,14 @@
         ]
       },
       "locked": {
-        "lastModified": 1768002163,
-        "narHash": "sha256-QEHovU8L9ii8GqedWn/ztaBnecYhM1a0cep7UNw6ze4=",
-        "ref": "refs/heads/main",
-        "rev": "7cd83696152dcf328b805717862c5e7be9216d64",
-        "revCount": 2,
-        "type": "git",
-        "url": "file:./devix"
+        "path": "./devix",
+        "type": "path"
       },
       "original": {
-        "type": "git",
-        "url": "file:./devix"
-      }
+        "path": "./devix",
+        "type": "path"
+      },
+      "parent": []
     },
     "disko": {
       "inputs": {
