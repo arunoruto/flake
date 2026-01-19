@@ -65,6 +65,10 @@
     #   url = "github:nix-community/nix-ld";
     #   inputs.nixpkgs.follows = "nixpkgs";
     # };
+    direnv-instant = {
+      url = "github:Mic92/direnv-instant";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
     git-hooks = {
       url = "github:cachix/git-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs-unstable";

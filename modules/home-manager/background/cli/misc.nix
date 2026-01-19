@@ -2,8 +2,9 @@
   config,
   pkgs,
   lib,
+  inputs,
   ...
-}@args:
+}:
 # let
 #   aliases = {
 #     ls = "${pkgs.lsd}/bin/lsd";
@@ -16,6 +17,7 @@
 # in
 {
   imports = [
+    inputs.direnv-instant.homeModules.direnv-instant
     # ./vivid-module.nix
     # ./vivid-filetype.nix
     ./vivid-themes.nix
@@ -23,12 +25,23 @@
 
   programs = {
     # Bash
-    bash.initExtra = ''eval "$(direnv hook bash)"'';
+    # bash.initExtra = lib.optionalString config.programs.direnv.enable ''eval "$(direnv hook bash)"'';
 
-    direnv = {
-      enable = lib.mkDefault config.hosts.development.enable;
-      nix-direnv.enable = true;
-    };
+    direnv =
+      let
+        instant = (config.programs ? direnv-instant) && config.programs.direnv-instant.enable;
+      in
+      {
+        enable = config.hosts.development.enable;
+        # enable = lib.mkDefault config.hosts.development.enable;
+        # enableBashIntegration = lib.mkForce (!instant);
+        # enableFishIntegration = lib.mkForce (!instant);
+        # enableNushellIntegration = lib.mkForce (!instant);
+        # enableZshIntegration = lib.mkForce (!instant);
+        nix-direnv.enable = true;
+      };
+
+    direnv-instant.enable = true;
 
     fd = {
       enable = true;
@@ -42,11 +55,6 @@
     };
 
     skim.enable = true;
-
-    # thefuck = {
-    #   enable = true;
-    #   enableInstantMode = args ? nixosConfig;
-    # };
 
     vivid = {
       enable = true;
