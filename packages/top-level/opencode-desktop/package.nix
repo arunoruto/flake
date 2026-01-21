@@ -61,6 +61,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   strictDeps = true;
 
+  tauriBuildFlags = [
+    "--config"
+    "tauri.conf.json"
+    "--config"
+    "tauri.prod.conf.json"
+    "--no-sign"
+  ];
+
   preBuild = ''
     cp -a ${finalAttrs.node_modules}/{node_modules,packages} .
     chmod -R u+w node_modules packages
@@ -69,16 +77,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     mkdir -p packages/desktop/src-tauri/sidecars
     cp ${opencode}/bin/opencode packages/desktop/src-tauri/sidecars/opencode-cli-${stdenv.hostPlatform.rust.rustcTarget}
-
-    # Merge prod config into tauri.conf.json, disable auto-updater
-    if ! jq --slurp '.[0] * .[1] | del(.plugins.updater) | .bundle.createUpdaterArtifacts = false' \
-      packages/desktop/src-tauri/tauri.conf.json \
-      packages/desktop/src-tauri/tauri.prod.conf.json \
-      > packages/desktop/src-tauri/tauri.conf.json.tmp; then
-      echo "Error: failed to merge tauri.conf.json with tauri.prod.conf.json" >&2
-      exit 1
-    fi
-    mv packages/desktop/src-tauri/tauri.conf.json.tmp packages/desktop/src-tauri/tauri.conf.json
   '';
 
   meta = with lib; {
