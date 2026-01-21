@@ -67,7 +67,7 @@ in
         init.defaultBranch = "main";
         diff = {
           algorithm = "histogram";
-          colorMoved = "plain";
+          # colorMoved = "plain";
           mnemonicPrefix = true;
           renames = true;
         };
