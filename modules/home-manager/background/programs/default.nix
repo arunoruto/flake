@@ -6,6 +6,7 @@
 }:
 {
   imports = [
+    ./games
     ./git.nix
     ./iamb.nix
     ./mods.nix
