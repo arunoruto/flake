@@ -5,6 +5,7 @@
 }:
 {
   imports = [
+    ./audio
     ./desktop
     ./documents
     ./programs

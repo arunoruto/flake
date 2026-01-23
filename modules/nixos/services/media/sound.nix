@@ -24,6 +24,6 @@
       jack.enable = true;
     };
 
-    environment.systemPackages = [ pkgs.easyeffects ];
+    # environment.systemPackages = [ pkgs.easyeffects ];
   };
 }
