@@ -1,5 +1,4 @@
 name: Validate Nix Flake
-
 on:
   workflow_dispatch:
   push:
@@ -8,7 +7,6 @@ on:
       - "flake.nix"
       - "flake.lock"
       - ".github/workflows/check.yaml"
-
 jobs:
   check-lock:
     name: Check Lock
@@ -22,7 +20,6 @@ jobs:
           fetch-depth: 1
       - name: Check Nix flake inputs
         uses: DeterminateSystems/flake-checker-action@main
-
   check-flake:
     name: Check Flake
     runs-on: ubuntu-latest
@@ -63,27 +60,27 @@ jobs:
             ' >> $GITHUB_STEP_SUMMARY
           cat $GITHUB_STEP_SUMMARY
       - name: Check Flake
-        run: nix flake check --accept-flake-config
-      # - name: Linting
-      #   run: nix run nixpkgs#statix -- check
+        run: nix flake check --extra-experimental-features pipe-operators --accept-flake-config
+    # - name: Linting
+    #   run: nix run nixpkgs#statix -- check
 
-  # check-flake-debug:
-  #   name: Check Flake (debug mode)
-  #   runs-on: ubuntu-latest
-  #   timeout-minutes: 30
-  #   needs: [check-flake]
-  #   if: ${{ failure() }}
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v4
-  #       with:
-  #         token: ${{ secrets.GITHUB_TOKEN }}
-  #         fetch-depth: 1
-  #     - name: Install Nix
-  #       uses: DeterminateSystems/nix-installer-action@main
-  #       with:
-  #         logger: pretty
-  #     - name: Cache
-  #       uses: DeterminateSystems/flakehub-cache-action@main
-  #     - name: Check Flake
-  #       run: nix flake check --accept-flake-config --debug
+# check-flake-debug:
+#   name: Check Flake (debug mode)
+#   runs-on: ubuntu-latest
+#   timeout-minutes: 30
+#   needs: [check-flake]
+#   if: ${{ failure() }}
+#   steps:
+#     - name: Checkout
+#       uses: actions/checkout@v4
+#       with:
+#         token: ${{ secrets.GITHUB_TOKEN }}
+#         fetch-depth: 1
+#     - name: Install Nix
+#       uses: DeterminateSystems/nix-installer-action@main
+#       with:
+#         logger: pretty
+#     - name: Cache
+#       uses: DeterminateSystems/flakehub-cache-action@main
+#     - name: Check Flake
+#       run: nix flake check --accept-flake-config --debug
