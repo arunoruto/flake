@@ -6,6 +6,7 @@
 {
   imports = [
     ./audio
+    ./colors
     ./desktop
     ./documents
     ./programs
