@@ -7,6 +7,7 @@
 {
   imports = [
     ./browsers
+    ./games
 
     ./flatpak.nix
     ./reference-manager.nix

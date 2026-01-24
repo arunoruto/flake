@@ -10,6 +10,7 @@
     ./desktop
     ./display
     ./environment
+    ./gaming
     ./media
     ./programs
     ./security

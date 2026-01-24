@@ -7,10 +7,12 @@
 {
   # imports = [ "${inputs.nixpkgs-unstable.outPath}/nixos/modules/hardware/fw-fanctrl.nix" ];
   colmena.deployment.allowLocalDeployment = lib.mkDefault true;
+  gaming.chess.enable = lib.mkDefault true;
 
   system.tags = [
     "laptop"
     "development"
+    "gaming"
   ];
   hosts = {
     amd.enable = true;
