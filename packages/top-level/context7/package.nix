@@ -15,13 +15,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "context7";
-  version = "2.0.2";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "upstash";
     repo = "context7";
     tag = tag-prefix + finalAttrs.version;
-    hash = "sha256-sz26L/iHZ36B02TX3RRUfMXb++i90gzDLwrTXMYZwg8=";
+    hash = "sha256-cUF7ImBwrjL6WPDPPPeq9Rxod7dI+066Ym9qdwzAY70=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 3;
-    hash = "sha256-ntbX2rKg+FXChWHLUdRnKr2TeEuWXouzALeHm1FLsHw=";
+    hash = "sha256-2wkM9RLJHRC66+moVBZrzXmygJGzWXh/UsCHTSg5CJo=";
   };
 
   buildPhase = ''
