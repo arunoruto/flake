@@ -14,19 +14,19 @@ let
     webCfg.logLevel
   ]
   ++ lib.optional webCfg.printLogs "--print-logs"
-  ++ lib.optionals (webCfg.settings.hostname != null) [
+  ++ lib.optionals (webCfg.hostname != null) [
     "--hostname"
     webCfg.hostname
   ]
-  ++ lib.optionals (webCfg.settings.port != null) [
+  ++ lib.optionals (webCfg.port != null) [
     "--port"
     (toString webCfg.port)
   ]
-  ++ lib.optional webCfg.settings.mdns "--mdns"
+  ++ lib.optional webCfg.mdns "--mdns"
   ++ lib.concatMap (domain: [
     "--cors"
     domain
-  ]) webCfg.settings.cors;
+  ]) webCfg.cors;
 
 in
 {
@@ -34,60 +34,99 @@ in
     # ./opencode-theme.nix
   ];
 
-  options.programs.opencode.web = {
-    enable = lib.mkEnableOption "opencode web service";
-
-    settings = lib.mkOption {
+  options.programs.opencode = {
+    skills = lib.mkOption {
+      type = lib.types.either (lib.types.attrsOf (lib.types.either lib.types.lines lib.types.path)) lib.types.path;
       default = { };
-      type = lib.types.submodule {
-        freeformType = jsonFormat.type;
-        options = {
-          hostname = lib.mkOption {
-            type = with lib.types; nullOr str;
-            default = null;
-            example = "0.0.0.0";
-            description = "The hostname or IP address to bind the web server to. Defaults to `127.0.0.1`.";
-          };
+      description = ''
+        Custom agent skills for opencode.
 
-          port = lib.mkOption {
-            type = with lib.types; nullOr port;
-            default = null;
-            description = "The port to run the web server on. If not set, a dynamic port will be chosen. It is recommended to set this option for a static port, for example 4096.";
-          };
+        This option can either be:
+        - An attribute set defining skills
+        - A path to a directory containing multiple skill folders
 
-          mdns = lib.mkEnableOption "mDNS service discovery (defaults hostname to 0.0.0.0)";
+        If an attribute set is used, the attribute name becomes the skill directory name,
+        and the value is either:
+        - Inline content as a string (creates `opencode/skill/<name>/SKILL.md`)
+        - A path to a file (creates `opencode/skill/<name>/SKILL.md`)
+        - A path to a directory (creates `opencode/skill/<name>/` with all files)
 
-          cors = lib.mkOption {
-            type = with lib.types; (listOf str);
-            default = [ ];
-            example = [
-              "https://mydashboard.local"
-              "http://localhost:3000"
-            ];
-            description = "Additional domains to allow for CORS.";
-          };
-        };
-      };
-      description = "Web server settings. These map to the 'server' block in the config file.";
+        If a path is used, it is expected to contain one folder per skill name, each
+        containing a {file}`SKILL.md`. The directory is symlinked to
+        {file}`$XDG_CONFIG_HOME/opencode/skill/`.
+
+        See <https://opencode.ai/docs/skills/> for the documentation.
+      '';
+      example = lib.literalExpression ''
+        {
+          git-release = '''
+            ---
+            name: git-release
+            description: Create consistent releases and changelogs
+            ---
+
+            ## What I do
+
+            - Draft release notes from merged PRs
+            - Propose a version bump
+            - Provide a copy-pasteable `gh release create` command
+          ''';
+
+          # A skill can also be a directory containing SKILL.md and other files.
+          data-analysis = ./skills/data-analysis;
+        }
+      '';
     };
 
-    printLogs = lib.mkEnableOption "printing logs to stderr (useful for journalctl)";
+    web = {
+      enable = lib.mkEnableOption "opencode web service";
 
-    logLevel = lib.mkOption {
-      type = lib.types.enum [
-        "DEBUG"
-        "INFO"
-        "WARN"
-        "ERROR"
-      ];
-      default = "INFO";
-      description = "Log verbosity level.";
+      hostname = lib.mkOption {
+        type = with lib.types; nullOr str;
+        default = null;
+        example = "0.0.0.0";
+        description = "The hostname or IP address to bind the web server to. Defaults to `127.0.0.1`.";
+      };
+
+      port = lib.mkOption {
+        type = with lib.types; nullOr port;
+        default = null;
+        description = "The port to run the web server on. If not set, a dynamic port will be chosen. It is recommended to set this option for a static port, for example 4096.";
+      };
+
+      mdns = lib.mkEnableOption "mDNS service discovery (defaults hostname to 0.0.0.0)";
+
+      cors = lib.mkOption {
+        type = with lib.types; (listOf str);
+        default = [ ];
+        example = [
+          "https://mydashboard.local"
+          "http://localhost:3000"
+        ];
+        description = "Additional domains to allow for CORS.";
+      };
+
+      printLogs = lib.mkEnableOption "printing logs to stderr (useful for journalctl)";
+
+      logLevel = lib.mkOption {
+        type = lib.types.enum [
+          "DEBUG"
+          "INFO"
+          "WARN"
+          "ERROR"
+        ];
+        default = "INFO";
+        description = "Log verbosity level.";
+      };
     };
   };
 
   config = lib.mkIf cfg.enable {
     programs.opencode = {
-      web.enable = lib.mkDefault (!config.hosts.laptop.enable);
+      web = {
+        enable = lib.mkDefault (!config.hosts.laptop.enable);
+        port = 4096;
+      };
       package = pkgs.unstable.opencode;
       settings = {
         theme = "stylix";
@@ -159,6 +198,7 @@ in
             };
             permission = {
               edit = "allow";
+              skill."*" = "allow";
             };
           };
         };
@@ -168,6 +208,11 @@ in
         commit = ./agents/COMMIT.md;
         summirizer = ./agents/ACADEMIC-SUMMARIZER.md;
         questioner = ./agents/ACADEMIC-QUESTIONER.md;
+      };
+      skills = {
+        # beads = /. + builtins.unsafeDiscardStringContext (pkgs.unstable.beads.src + "/skills/beads/");
+        beads = pkgs.unstable.beads.src + "/skills/beads/";
+        # beads = "${pkgs.unstable.beads.src}/skills/beads/";
       };
       enableMcpIntegration = true;
     };
@@ -191,5 +236,26 @@ in
       };
     };
 
+    xdg.configFile = {
+      # "opencode/skill" = lib.mkIf (lib.isPath cfg.skills) {
+      #   source = cfg.skills;
+      #   recursive = true;
+      # };
+    }
+    // lib.mapAttrs' (
+      name: content:
+      if
+        (lib.isPath content && lib.pathIsDirectory content)
+        || (builtins.isString content && lib.hasPrefix builtins.storeDir content)
+      then
+        lib.nameValuePair "opencode/skill/${name}" {
+          source = content;
+          recursive = true;
+        }
+      else
+        lib.nameValuePair "opencode/skill/${name}/SKILL.md" (
+          if lib.isPath content then { source = content; } else { text = content; }
+        )
+    ) (if builtins.isAttrs cfg.skills then cfg.skills else { });
   };
 }
