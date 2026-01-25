@@ -210,9 +210,9 @@ in
         questioner = ./agents/ACADEMIC-QUESTIONER.md;
       };
       skills = {
-        # beads = /. + builtins.unsafeDiscardStringContext (pkgs.unstable.beads.src + "/skills/beads/");
-        beads = pkgs.unstable.beads.src + "/skills/beads/";
-        # beads = "${pkgs.unstable.beads.src}/skills/beads/";
+        # beads = pkgs.unstable.beads.src + "/skills/beads";
+        beads = pkgs.unstable.beads.src + "/claude-plugin/skills/beads";
+        commit = ./skills/commit;
       };
       enableMcpIntegration = true;
     };
@@ -237,10 +237,10 @@ in
     };
 
     xdg.configFile = {
-      # "opencode/skill" = lib.mkIf (lib.isPath cfg.skills) {
-      #   source = cfg.skills;
-      #   recursive = true;
-      # };
+      "opencode/skill" = lib.mkIf (lib.isPath cfg.skills) {
+        source = cfg.skills;
+        recursive = true;
+      };
     }
     // lib.mapAttrs' (
       name: content:
