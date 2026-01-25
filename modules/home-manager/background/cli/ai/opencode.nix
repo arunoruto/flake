@@ -5,29 +5,8 @@
   ...
 }:
 let
-  jsonFormat = pkgs.formats.json { };
   cfg = config.programs.opencode;
   webCfg = cfg.web;
-  webArgs = [
-    "web"
-    "--log-level"
-    webCfg.logLevel
-  ]
-  ++ lib.optional webCfg.printLogs "--print-logs"
-  ++ lib.optionals (webCfg.hostname != null) [
-    "--hostname"
-    webCfg.hostname
-  ]
-  ++ lib.optionals (webCfg.port != null) [
-    "--port"
-    (toString webCfg.port)
-  ]
-  ++ lib.optional webCfg.mdns "--mdns"
-  ++ lib.concatMap (domain: [
-    "--cors"
-    domain
-  ]) webCfg.cors;
-
 in
 {
   imports = [
@@ -80,43 +59,29 @@ in
 
     web = {
       enable = lib.mkEnableOption "opencode web service";
-
-      hostname = lib.mkOption {
-        type = with lib.types; nullOr str;
-        default = null;
-        example = "0.0.0.0";
-        description = "The hostname or IP address to bind the web server to. Defaults to `127.0.0.1`.";
-      };
-
-      port = lib.mkOption {
-        type = with lib.types; nullOr port;
-        default = null;
-        description = "The port to run the web server on. If not set, a dynamic port will be chosen. It is recommended to set this option for a static port, for example 4096.";
-      };
-
-      mdns = lib.mkEnableOption "mDNS service discovery (defaults hostname to 0.0.0.0)";
-
-      cors = lib.mkOption {
-        type = with lib.types; (listOf str);
+      extraArgs = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ ];
         example = [
-          "https://mydashboard.local"
+          "--hostname"
+          "0.0.0.0"
+          "--port"
+          "4096"
+          "--mdns"
+          "--cors"
+          "https://example.com"
+          "--cors"
           "http://localhost:3000"
-        ];
-        description = "Additional domains to allow for CORS.";
-      };
-
-      printLogs = lib.mkEnableOption "printing logs to stderr (useful for journalctl)";
-
-      logLevel = lib.mkOption {
-        type = lib.types.enum [
+          "--print-logs"
+          "--log-level"
           "DEBUG"
-          "INFO"
-          "WARN"
-          "ERROR"
         ];
-        default = "INFO";
-        description = "Log verbosity level.";
+        description = ''
+          Extra arguments to pass to the opencode web command.
+
+          These arguments override the "server" options defined in the configuration file.
+          See <https://opencode.ai/docs/web/#config-file> for available options.
+        '';
       };
     };
   };
@@ -124,8 +89,12 @@ in
   config = lib.mkIf cfg.enable {
     programs.opencode = {
       web = {
-        enable = lib.mkDefault (!config.hosts.laptop.enable);
-        port = 4096;
+        # enable = lib.mkDefault (!(config.hosts.laptop.enable || config.hosts.headless.enable));
+        enable = lib.mkDefault (!(config.hosts.headless.enable));
+        extraArgs = [
+          "--port"
+          "4096"
+        ];
       };
       package = pkgs.unstable.opencode;
       settings = {
@@ -225,7 +194,7 @@ in
         };
 
         Service = {
-          ExecStart = "${lib.getExe cfg.package} ${lib.escapeShellArgs webArgs}";
+          ExecStart = "${lib.getExe cfg.package} web ${lib.escapeShellArgs webCfg.extraArgs}";
           Restart = "always";
           RestartSec = 5;
         };
