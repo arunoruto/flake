@@ -1,4 +1,6 @@
 {
+  users.primaryUser = "mirza";
+
   system.tags = [ "workstation" ];
   hosts = {
     nvidia.enable = true;

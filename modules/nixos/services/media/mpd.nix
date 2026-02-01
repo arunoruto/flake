@@ -4,7 +4,7 @@
   ...
 }:
 let
-  inherit (config) username;
+  primaryUserName = config.users.primaryUser;
 in
 {
   options = {
@@ -15,7 +15,7 @@ in
     services.mpd = {
       enable = false;
       #musicDirectory = "/path/to/music";
-      user = username;
+      user = primaryUserName;
       extraConfig = ''
         # must specify one or more outputs in order to play audio!
         # (e.g. ALSA, PulseAudio, PipeWire), see next sections
@@ -34,7 +34,7 @@ in
 
     systemd.services.mpd.environment = {
       # https://gitlab.freedesktop.org/pipewire/pipewire/-/issues/609
-      XDG_RUNTIME_DIR = "/run/user/${toString config.users.users.${username}.uid}"; # User-id must match above user. MPD will look inside this directory for the PipeWire socket.
+      XDG_RUNTIME_DIR = "/run/user/${toString config.users.users.${primaryUserName}.uid}"; # User-id must match above user. MPD will look inside this directory for the PipeWire socket.
     };
   };
 }

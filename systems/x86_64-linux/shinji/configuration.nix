@@ -8,6 +8,8 @@ let
   target-folder = "/media/downloads";
 in
 {
+  users.primaryUser = "mirza";
+
   colmena.deployment = {
     targetHost = config.networking.hostName;
   };

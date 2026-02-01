@@ -10,7 +10,7 @@ let
   monitorsConfig = pkgs.writeText "gdm_monitors.xml" (builtins.readFile ./monitors.xml);
 in
 {
-  username = "mar";
+  users.primaryUser = "mar";
 
   printing.enable = true;
   scanning.enable = true;

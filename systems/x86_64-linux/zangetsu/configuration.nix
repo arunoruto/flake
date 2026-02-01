@@ -4,6 +4,8 @@
   ...
 }:
 {
+  users.primaryUser = "mirza";
+
   # Eanble fingerprint for framework laptop
   fingerprint.enable = false;
 

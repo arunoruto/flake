@@ -5,6 +5,8 @@
   ...
 }:
 {
+  users.primaryUser = "mirza";
+
   hosts = {
     intel = {
       enable = true;

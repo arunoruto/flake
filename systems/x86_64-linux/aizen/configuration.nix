@@ -1,5 +1,7 @@
 { config, ... }:
 {
+  users.primaryUser = "mirza";
+
   nix.settings = {
     max-jobs = 1;
     cores = 0;

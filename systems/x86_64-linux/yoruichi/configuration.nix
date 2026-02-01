@@ -1,4 +1,6 @@
 _: {
+  users.primaryUser = "mirza";
+
   system.tags = [
     "tinypc"
     "headless"

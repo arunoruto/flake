@@ -1,4 +1,6 @@
 _: {
+  users.primaryUser = "mirza";
+
   # colmena.deployment.buildOnTarget = true;
   system.tags = [
     "tinypc"

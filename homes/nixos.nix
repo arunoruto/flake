@@ -11,7 +11,7 @@
   ...
 }:
 let
-  inherit (config) username;
+  primaryUserName = config.users.primaryUser;
   specialArgs = {
     inherit inputs;
     # user = username;
@@ -49,7 +49,7 @@ in
     # directory, or will exit with directory not found errors
     # users.${username} = import ../modules/home-manager/home.nix;
     # users.${username} = (import ./${username}) // (import ../modules/home-manager/home.nix);
-    users.${username} =
+    users.${primaryUserName} =
       # (import ./${username} { inherit config lib; })
       lib.optionalAttrs (builtins.pathExists host-home-config) (
         import host-home-config {
@@ -59,12 +59,12 @@ in
       )
       // {
         imports = [
-          ./${username}
+          ./${primaryUserName}
           self.homeModules.default
         ];
         options.user = lib.mkOption {
           type = lib.types.str;
-          default = username;
+          default = primaryUserName;
         };
       };
 

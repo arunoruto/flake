@@ -50,7 +50,9 @@
 
       users.groups.media = {
         gid = 420;
-        members = [ config.username ];
+        members = [
+          config.users.primaryUser
+        ];
       };
 
       media.external-drives.enable = lib.mkDefault false;

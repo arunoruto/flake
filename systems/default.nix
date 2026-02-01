@@ -39,15 +39,7 @@ lib.attrsets.mergeAttrsList (
                 overlays = pkgs-attrs.overlays ++ [ self.overlays.python ];
               };
             }
-            (
-              { lib, ... }:
-              {
-                options.username = lib.mkOption {
-                  type = lib.types.str;
-                  default = "mirza";
-                };
-              }
-            )
+
             {
               networking.hostName = lib.mkForce hostname;
               facter.reportPath = lib.mkIf (lib.pathExists ./${arch}/${hostname}/facter.json) ./${arch}/${hostname}/facter.json;

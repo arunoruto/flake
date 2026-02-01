@@ -11,7 +11,7 @@
 #   # monitorsConfig = pkgs.writeText "gdm_monitors.xml" (builtins.readFile ./monitors.xml);
 # in
 {
-  username = "mar";
+  users.primaryUser = "mar";
 
   boot.binfmt.emulatedSystems = [
     # "x86_64-linux"

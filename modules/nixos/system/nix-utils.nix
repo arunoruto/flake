@@ -6,7 +6,7 @@
 }:
 let
   clean_nh_over_nix = true;
-  inherit (config) username;
+  primaryUserName = config.users.primaryUser;
 in
 {
   options = {
@@ -25,7 +25,7 @@ in
           ]
           ++ (lib.optionals (!(lib.elem "headless" config.system.tags)) [ nixpkgs-manual ])
         );
-      sessionVariables.NH_FLAKE = "/home/${username}/.config/flake";
+      sessionVariables.NH_FLAKE = "/home/${primaryUserName}/.config/flake";
     };
 
     services = {

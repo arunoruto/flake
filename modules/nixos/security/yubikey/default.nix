@@ -5,8 +5,8 @@
   ...
 }:
 let
-  inherit (config) username;
-  homedir = if pkgs.stdenv.isLinux then "/home/${username}" else throw "Only setup for Linux!";
+  primaryUserName = config.users.primaryUser;
+  homedir = if pkgs.stdenv.isLinux then "/home/${primaryUserName}" else throw "Only setup for Linux!";
 in
 {
   imports = [
