@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, pkgs, ... }:
 let
   inherit (config) user;
 in
@@ -24,7 +24,7 @@ in
   # manage.
   home = {
     username = user;
-    homeDirectory = "/home/${user}";
+    homeDirectory = if pkgs.stdenv.hostPlatform.isDarwin then "/Users/${user}" else "/home/${user}";
   };
 
   # This value determines the Home Manager release that your configuration is

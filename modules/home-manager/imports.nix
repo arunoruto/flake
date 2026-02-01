@@ -1,6 +1,7 @@
 {
   osConfig,
   lib,
+  pkgs,
   ...
 }@args:
 {
@@ -29,7 +30,7 @@
       development.enable = lib.mkDefault (lib.elem "development" osConfig.system.tags);
       headless.enable = lib.mkDefault (lib.elem "headless" osConfig.system.tags);
     };
-    foreground.enable = lib.mkDefault osConfig.programs.enable;
+    foreground.enable = lib.mkDefault (osConfig.programs.enable || pkgs.stdenv.hostPlatform.isDarwin);
 
     # hostname = lib.mkDefault osConfig.networking.hostName;
     keyboard = {

@@ -1,6 +1,7 @@
 {
   lib,
   config,
+  pkgs,
   ...
 }:
 {
@@ -18,20 +19,24 @@
 
   options.foreground.enable = lib.mkEnableOption "PC config";
 
-  config = lib.mkIf config.foreground.enable {
-    avatar.enable = lib.mkDefault true;
-    desktop.enable = lib.mkDefault true;
-    documents.enable = lib.mkDefault true;
-    pc.programs.enable = lib.mkDefault true;
-    terminals = {
-      enable = lib.mkDefault true;
-      main = "ghostty";
-    };
+  config =
+    let
+      default = pkgs.stdenv.hostPlatform.isLinux;
+    in
+    lib.mkIf config.foreground.enable {
+      avatar.enable = lib.mkDefault default;
+      desktop.enable = lib.mkDefault default;
+      documents.enable = lib.mkDefault default;
+      pc.programs.enable = lib.mkDefault default;
+      terminals = {
+        enable = lib.mkDefault true;
+        main = "ghostty";
+      };
 
-    programs = {
-      autorandr.enable = lib.mkDefault true;
-      eww.enable = lib.mkDefault true;
-      waybar.enable = lib.mkDefault true;
+      programs = {
+        autorandr.enable = lib.mkDefault default;
+        eww.enable = lib.mkDefault default;
+        waybar.enable = lib.mkDefault default;
+      };
     };
-  };
 }

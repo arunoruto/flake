@@ -5,9 +5,9 @@
   ...
 }:
 {
-  options.nix-serve.enable = lib.mkEnableOption "Configure nix-serve for standalone home-manager";
+  options.programs.nix-serve.enable = lib.mkEnableOption "Configure nix-serve for standalone home-manager";
 
-  config = lib.mkIf config.nix-serve.enable {
+  config = lib.mkIf config.programs.nix-serve.enable {
     home.packages = with pkgs; [
       nix-serve
     ];

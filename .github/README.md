@@ -22,6 +22,12 @@ When first time trying to install the flake, you need to run:
 sudo nixos-rebuild switch --flake ./#<device-name> --accept-flake-config
 ```
 
+### Darwin
+
+```sh
+sudo nix run nix-darwin/nix-darwin-<version>#darwin-rebuild -- switch
+```
+
 ### Home Manager
 
 Like NixOS, home-manager can be also updated from the flake file like follows:

@@ -17,18 +17,25 @@
     #  ./waybar
   ];
 
-  # config = lib.mkIf config.wayland.windowManager.hyprland.enable {
-  config = {
+  config =
+  let
+    cfg = config.wayland.windowManager.hyprland;
+  in
+  lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
+  # config =
+  # let
+  #   cfg = config.wayland.windowManager.hyprland;
+  # in
+  # {
     hypr = {
-      binds.enable = true;
-      idle.enable = true;
-      lock.enable = true;
-      # panel.enable = true;
-      paper.enable = true;
-      plugins.enable = true;
+      binds.enable = cfg.enable;
+      idle.enable = cfg.enable;
+      lock.enable = cfg.enable;
+      # panel.enable = cfg.enable;
+      paper.enable = cfg.enable;
+      plugins.enable = cfg.enable;
     };
     wayland.windowManager.hyprland = {
-      # enable = true;
       # package = pkgs.unstable.hyprland;
       settings = {
         # monitor = ",preferred,auto,1.175";
@@ -141,7 +148,7 @@
       '';
     };
 
-    programs.wofi.enable = true;
+    programs.wofi.enable = pkgs.stdenv.hostPlatform.isLinux;
 
     xdg.portal.extraPortals = with pkgs; [ xdg-desktop-portal-hyprland ];
 

@@ -10,6 +10,11 @@
       url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-darwin = {
+      url = "github:nix-darwin/nix-darwin/nix-darwin-25.11";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nix-homebrew.url = "github:zhaofengli/nix-homebrew";
     stylix = {
       url = "github:nix-community/stylix/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -171,6 +176,17 @@
       homeModules.default = ./modules/home-manager/home.nix;
 
       nixosConfigurations = import ./systems {
+        inherit
+          inputs
+          self
+          lib
+          pkgs-attrs
+          scheme
+          image
+          ;
+      };
+
+      darwinConfigurations = import ./systems/darwin.nix {
         inherit
           inputs
           self

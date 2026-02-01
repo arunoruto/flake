@@ -1,9 +1,9 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 {
   imports = [
     ./nix-serve.nix
     ./nixai.nix
   ];
 
-  nix-serve.enable = lib.mkDefault (!config.hosts.tinypc.enable);
+  programs.nix-serve.enable = lib.mkDefault (!config.hosts.tinypc.enable && pkgs.stdenv.hostPlatform.isLinux);
 }

@@ -11,14 +11,6 @@
   ...
 }:
 let
-  # inherit (self) inputs;
-  # inherit (lib.modules) mkIf;
-  # inherit (lib.attrsets) genAttrs;
-  # inherit (config) modules;
-  # env = modules.usrEnv;
-  # sys = modules.system;
-  # defaults = sys.programs.default;
-  # specialArgs = {inherit theme image inputs self inputs' self' defaults;};
   inherit (config) username;
   specialArgs = {
     inherit inputs;

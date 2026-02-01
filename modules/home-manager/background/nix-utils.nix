@@ -44,16 +44,8 @@ in
         extra-experimental-features = [
           "nix-command"
           "flakes"
-          # "pipe-operators"
+          "pipe-operators"
         ];
-        # extra-substituters = [
-        #   "https://helix.cachix.org"
-        #   "https://wezterm.cachix.org"
-        # ];
-        # extra-trusted-public-keys = [
-        #   "helix.cachix.org-1:ejp9KQpR1FBI2onstMQ34yogDm4OgU2ru6lIwPvuCVs="
-        #   "wezterm.cachix.org-1:kAbhjYUC9qvblTE+s7S+kl5XM1zVa4skO+E/1IDWdH0="
-        # ];
       };
       extraOptions = ''
         trusted-users = root ${user}
@@ -121,12 +113,15 @@ in
           nix-output-monitor
           nvd
           unstable.nixpkgs-review
-          inputs.nixpkgs-update.packages.x86_64-linux.nixpkgs-update
         ])
         ++ [
           nix-repl # my nix repl wrapper
+        ]
+        ++ lib.optionals pkgs.stdenv.hostPlatform.isLinux [
+          inputs.nixpkgs-update.packages.x86_64-linux.nixpkgs-update
         ];
-      sessionVariables.NH_FLAKE = "/home/${user}/.config/flake";
+      sessionVariables.NH_FLAKE = "${config.home.homeDirectory}/.config/flake";
+      # sessionVariables.NH_FLAKE = "/home/${user}/.config/flake";
       # sessionVariables.FLAKE = "/home/${config.home.username}/.config/flake";
     };
   };
