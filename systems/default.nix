@@ -7,8 +7,13 @@
   scheme,
   image,
 }:
+let
+  # Filter out Darwin architectures and iso
+  isLinuxArch = arch: !(lib.hasInfix "darwin" arch);
+  linuxArchs = lib.filter isLinuxArch (lib.lists.remove "iso" (lib.getDirectories ./.));
+in
 lib.attrsets.mergeAttrsList (
-  lib.lists.forEach (lib.lists.remove "iso" (lib.getDirectories ./.)) (
+  lib.lists.forEach linuxArchs (
     arch:
     lib.genAttrs (lib.getDirectories ./${arch}) (
       hostname:

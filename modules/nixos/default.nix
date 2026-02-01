@@ -17,7 +17,7 @@
     ./services
     ./system
 
-    ./user.nix
+    ./users
 
     # ./pr.nix
   ];
