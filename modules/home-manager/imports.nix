@@ -5,7 +5,6 @@
   ...
 }@args:
 let
-  isDarwin = pkgs.stdenv.hostPlatform.isDarwin;
   # Check if we're on NixOS (osConfig.system.tags exists)
   isNixOS = args ? osConfig && osConfig ? system && osConfig.system ? tags;
 in
@@ -51,7 +50,7 @@ in
     # Darwin and NixOS common configuration
     (lib.mkIf (args ? osConfig) {
       foreground.enable = lib.mkDefault (
-        if isDarwin then
+        if pkgs.stdenv.hostPlatform.isDarwin then
           true # Always enable on Darwin
         else
           osConfig.programs.enable # Use NixOS custom option
