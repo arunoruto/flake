@@ -13,11 +13,10 @@
       banana-cursor
       catppuccin-cursors
     ];
-    home.pointerCursor = {
-      enable = true;
-    };
 
-    # NOTE: stylix.cursor is configured at system level (nixosModules.stylix)
-    # which auto-configures home-manager cursor settings
+    # NOTE: Cursor configuration is handled by stylix at the system level
+    # (nixosModules.stylix or darwinModules.stylix) which automatically
+    # configures home.pointerCursor with name, package, and size.
+    # We only provide additional cursor packages here.
   };
 }
