@@ -28,15 +28,16 @@
 
   # Ollama AI service
   # Uncomment to enable local LLM inference
-  # services.ollama = {
-  #   enable = true;
-  #   host = "127.0.0.1";
-  #   port = 11434;
-  #   # models = "/path/to/ollama/models";  # Optional: custom models directory
-  #   # environmentVariables = {
-  #   #   OLLAMA_LLM_LIBRARY = "cpu";  # Force CPU mode
-  #   # };
-  # };
+  services.ollama = {
+    enable = true;
+    package = pkgs.unstable.ollama;
+    host = "127.0.0.1";
+    port = 11434;
+    # models = "/path/to/ollama/models";  # Optional: custom models directory
+    # environmentVariables = {
+    #   OLLAMA_LLM_LIBRARY = "cpu";  # Force CPU mode
+    # };
+  };
 
   # Primary user configuration (shared between NixOS and Darwin)
   users.primaryUser = "mirza";
