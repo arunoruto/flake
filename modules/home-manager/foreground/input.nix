@@ -1,4 +1,9 @@
-{ lib, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 {
   options.keyboard = {
     layout = lib.mkOption {
@@ -14,5 +19,8 @@
       example = "us";
       description = "Set keyboard variant: localectl list-x11-keymap-variants de";
     };
+
+    # Note: EurKey is now installed system-wide via darwin module
+    # See modules/darwin/keyboard/eurkey.nix
   };
 }

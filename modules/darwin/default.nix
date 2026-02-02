@@ -9,6 +9,7 @@
     ./system
     ./security
     ./homebrew
+    ./keyboard
     ./users
     ../../homes/nixos.nix
   ];
