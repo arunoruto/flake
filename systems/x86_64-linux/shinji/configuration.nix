@@ -69,6 +69,6 @@ in
   ];
   users.groups.media = {
     gid = 420;
-    members = [ config.username ];
+    members = [ config.users.primaryUser ];
   };
 }
