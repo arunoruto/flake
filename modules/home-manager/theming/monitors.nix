@@ -35,9 +35,7 @@
       cfg = config.stylix.monitors;
     in
     lib.mkIf
-      (
-        cfg != null && args ? nixosConfig && osConfig ? facter && osConfig.facter.report.hardware ? monitor
-      )
+      (cfg != null && args ? osConfig && osConfig ? facter && osConfig.facter.report.hardware ? monitor)
       {
 
         wayland.windowManager.hyprland = {

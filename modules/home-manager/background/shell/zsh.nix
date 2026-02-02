@@ -33,8 +33,7 @@
       };
       autosuggestion.enable = true;
       enableCompletion = true;
-      completionInit =
-        "autoload -U compinit && compinit" + lib.optionalString (!(args ? nixosConfig)) " -u";
+      completionInit = "autoload -U compinit && compinit" + lib.optionalString (!(args ? osConfig)) " -u";
       historySubstringSearch = {
         enable = true;
         searchDownKey = [ "^[OB" ];

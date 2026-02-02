@@ -17,8 +17,8 @@
       -- config.front_end = "WebGpu"
       -- config.enable_wayland = true
       config.front_end = "${
-        # if ((args ? nixosConfig) && (!osConfig.hosts.nvidia.enable)) then "OpenGL" else "WebGpu"
-        if ((args ? nixosConfig) && (osConfig.networking.hostName == "madara")) then "OpenGL" else "WebGpu"
+        # if ((args ? osConfig) && (!osConfig.hosts.nvidia.enable)) then "OpenGL" else "WebGpu"
+        if ((args ? osConfig) && (osConfig.networking.hostName == "madara")) then "OpenGL" else "WebGpu"
       }"
       config.hide_tab_bar_if_only_one_tab = true
       -- config.window_decorations = 'TITLE | RESIZE'
@@ -29,7 +29,7 @@
       return config
     '';
   };
-  # // lib.optionalAttrs (args ? nixosConfig) {
+  # // lib.optionalAttrs (args ? osConfig) {
   #   package =
   #     if osConfig.hosts.nvidia.enable then
   #       inputs.wezterm.packages.${pkgs.stdenv.hostPlatform.system}.default

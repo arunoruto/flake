@@ -22,7 +22,7 @@ let
       send -- "hm = homeConfigurations.${config.home.username}\r"
       send -- "pkgs = hm.pkgs\r"
     ''
-    + lib.optionalString (args ? nixosConfig) ''
+    + lib.optionalString (args ? osConfig) ''
       send -- "os = nixosConfigurations.${osConfig.networking.hostName}\r"
     ''
     + ''

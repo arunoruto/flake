@@ -7,7 +7,7 @@
   ...
 }@args:
 let
-  nightly = !config.hosts.tinypc.enable && (args ? nixosConfig);
+  nightly = !config.hosts.tinypc.enable && (args ? osConfig);
 in
 # toml = pkgs.formats.toml { };
 {

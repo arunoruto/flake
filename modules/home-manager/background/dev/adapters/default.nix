@@ -41,7 +41,7 @@
         };
 
         ltex.ngram.enable = lib.mkDefault (
-          config.hosts.development.enable && (config._module.args ? nixosConfig)
+          config.hosts.development.enable && (config._module.args ? osConfig)
         );
       };
     };

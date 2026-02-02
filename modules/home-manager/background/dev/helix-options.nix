@@ -30,7 +30,7 @@
       latex.enable = lib.mkDefault config.hosts.development.enable;
       ltex = {
         enable = lib.mkDefault config.hosts.development.enable;
-        ngram = lib.mkDefault (config.hosts.development.enable && (args ? nixosConfig));
+        ngram = lib.mkDefault (config.hosts.development.enable && (args ? osConfig));
       };
       markdown.enable = lib.mkDefault true;
       markup.enable = lib.mkDefault true;

@@ -41,7 +41,7 @@ in
                 formatting.command = [ "nix fmt" ];
                 options = {
                   nixos.expr =
-                    lib.optionalString (args ? nixosConfig)
+                    lib.optionalString (args ? osConfig)
                       "(builtins.getFlake ''${flake-location}'').nixosConfigurations.${osConfig.networking.hostName}.options";
                   home-manager.expr = "(builtins.getFlake ''${flake-location}'').homeConfigurations.${config.user}.options";
                 };

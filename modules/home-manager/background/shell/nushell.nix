@@ -113,11 +113,13 @@
       # + lib.optionalString config.skim.enable ''
       #   plugin add ${lib.getExe pkgs.unstable.nushellPlugins.skim}
       # ''
-      + (
-        let
-          path = osConfig.services.ssh-tpm-agent.userProxyPath;
-        in
-        lib.optionalString ((args ? nixosConfig) && (path != "")) ''
+      + (lib.optionalString
+        (
+          pkgs.stdenv.hostPlatform.isLinux
+          && (args ? osConfig)
+          && (osConfig.services.ssh-tpm-agent.userProxyPath != "")
+        )
+        ''
           $env.SSH_AUTH_SOCK = ($env.XDG_RUNTIME_DIR + '/ssh-tpm-agent.sock')
         ''
       );

@@ -78,7 +78,7 @@ in
             "store --file ${config.home.homeDirectory}/.config/git/overleaf";
         };
       }
-      // lib.optionalAttrs (args ? nixosConfig) {
+      // lib.optionalAttrs (args ? osConfig) {
         # commit.gpgsign = osConfig.yubikey.enable;
         # user.signingkey = "${config.home.homeDirectory}/.ssh/id_${osConfig.yubikey.signing}_sign.pub";
         # gpg.format = "ssh";

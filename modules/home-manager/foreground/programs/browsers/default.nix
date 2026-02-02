@@ -20,7 +20,7 @@
         commandLineArgs = [
           "--enable-features=TouchpadOverscrollHistoryNavigation,UseOzonePlatform"
         ]
-        ++ lib.optionals (args ? nixosConfig && !osConfig.hosts.nvidia.enable) [
+        ++ lib.optionals (args ? osConfig && !osConfig.hosts.nvidia.enable) [
           "--ozone-platform=wayland"
         ];
         extensions = [

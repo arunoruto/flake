@@ -14,7 +14,7 @@
         framework = builtins.fromJSON (builtins.readFile ./fw13-easy-effects.json);
       };
       preset =
-        if (args ? nixosConfig) then
+        if (args ? osConfig) then
           (if osConfig.networking.hostName == "isshin" then "framework" else "")
         else
           "";
