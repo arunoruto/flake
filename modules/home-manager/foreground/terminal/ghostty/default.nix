@@ -33,7 +33,6 @@ in
     enableZshIntegration = lib.mkDefault config.programs.zsh.enable;
 
     settings = {
-      background-blur = 20;
       window-height = config.terminals.height;
       window-width = config.terminals.width;
       keybind = [
@@ -44,6 +43,9 @@ in
       ];
       config-file = "${custom-config}";
       # custom-shader = "${shaders}/bloom.glsl";
+
+      background-blur = 20;
+      macos-option-as-alt = "left";
     };
   };
 
