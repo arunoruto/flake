@@ -12,10 +12,21 @@ let
   #   hash = "sha256-5c3WBG3Litw/ayLI6mlCoGw+EIHrj3vkgc4j8+4K0OY=";
   # };
   custom-config = "config-custom";
+  isDarwin = pkgs.stdenv.isDarwin;
+
+  # On Darwin, ghostty from nixpkgs doesn't work, so we use a fake package
+  # Users should install Ghostty manually via the official installer
+  ghosttyPackage =
+    if isDarwin then
+      pkgs.runCommand "ghostty-placeholder" {
+        meta.mainProgram = "ghostty";
+      } "mkdir -p $out/bin && touch $out/bin/ghostty"
+    else
+      pkgs.unstable.ghostty;
 in
 {
   programs.ghostty = {
-    package = pkgs.unstable.ghostty;
+    package = ghosttyPackage;
 
     enableBashIntegration = lib.mkDefault true;
     enableFishIntegration = lib.mkDefault config.programs.fish.enable;
@@ -34,6 +45,12 @@ in
       config-file = "${custom-config}";
       # custom-shader = "${shaders}/bloom.glsl";
     };
+  };
+
+  # On Darwin, the bat syntax file doesn't exist in our placeholder package
+  # So we disable it to prevent activation errors
+  xdg.configFile."bat/syntaxes/ghostty.sublime-syntax" = lib.mkIf isDarwin {
+    enable = false;
   };
 
   xdg.configFile = {

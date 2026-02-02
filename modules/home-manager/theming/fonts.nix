@@ -18,21 +18,11 @@ in
   options.theming.fonts.enable = lib.mkEnableOption "Setup fonts on system";
 
   config = lib.mkIf config.theming.fonts.enable {
-    stylix.fonts = {
-      serif = cantarell;
-      sansSerif = cantarell;
-      # monospace = {
-      #   name = "CaskaydiaCove Nerd Font Mono";
-      #   package = pkgs.nerd-fonts.caskaydia-cove;
-      # };
-      # monospace = {
-      #   name = "JetBrains Mono";
-      #   package = pkgs.nerd-fonts.jetbrains-mono;
-      # };
-      monospace = {
-        name = "FiraCode Nerd Font Mono";
-        package = pkgs.nerd-fonts.fira-code;
-      };
-    };
+    # NOTE: stylix.fonts is configured at system level (nixosModules.stylix or darwinModules.stylix)
+    # which auto-configures home-manager font settings
+    home.packages = [
+      cantarell.package
+      pkgs.nerd-fonts.fira-code
+    ];
   };
 }

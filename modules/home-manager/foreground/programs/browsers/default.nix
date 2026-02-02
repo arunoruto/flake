@@ -49,17 +49,12 @@
         google-chrome.enable = lib.mkDefault (pkgs.stdenv.hostPlatform.system == "x86_64-linux");
         vivaldi.enable = lib.mkDefault false;
         zen-browser = {
-          enable = lib.mkDefault true;
+          enable = lib.mkDefault pkgs.stdenv.hostPlatform.isLinux; # Only enable on Linux
           # package = inputs.zen-browser.packages."${pkgs.stdenv.hostPlatform.system}".default.override {
           #   desktopIconName = "zen";
           # };
         };
       } update;
-
-    stylix.targets.zen-browser.profileNames = [
-      "default"
-      # "5pju7frs.default"
-    ];
 
     home = {
       packages = [

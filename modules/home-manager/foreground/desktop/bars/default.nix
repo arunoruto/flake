@@ -5,6 +5,9 @@
   ...
   # }@args:
 }:
+let
+  isLinux = pkgs.stdenv.isLinux;
+in
 {
   imports = [
     # ./ags
@@ -23,7 +26,7 @@
 
     programs = {
       quickshell = {
-        enable = lib.mkDefault true;
+        enable = lib.mkDefault isLinux; # Quickshell only works on Linux
         package = lib.mkDefault pkgs.unstable.quickshell;
         activeConfig = lib.mkDefault "caelestia";
         # config-name = lib.mkDefault "caelestia";

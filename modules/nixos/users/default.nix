@@ -90,6 +90,9 @@ in
         ];
     };
 
+    # Configure home-manager for primary user by default
+    homes.users = lib.mkDefault [ primaryUserName ];
+
     # Accounts service configuration (if .face file exists)
     systemd.tmpfiles.rules =
       lib.optionals (config.home-manager.users.${primaryUserName}.home.file ? ".face")

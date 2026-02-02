@@ -8,14 +8,6 @@
   options.theming.cursors.enable = lib.mkEnableOption "Setup cursors for system";
 
   config = lib.mkIf config.theming.cursors.enable {
-    stylix.cursor = {
-      # name = "catppuccin-macchiato-dark-cursors";
-      # package = pkgs.catppuccin-cursors.macchiatoDark;
-      name = "Banana";
-      package = pkgs.banana-cursor;
-      size = 24;
-    };
-
     home.packages = with pkgs; [
       apple-cursor
       banana-cursor
@@ -23,18 +15,9 @@
     ];
     home.pointerCursor = {
       enable = true;
-      # name = "Banana";
-      # package = pkgs.banana-cursor;
-      # size = 24;
-      # x11.enable = true;
-      # gtk.enable = true;
     };
 
-    # home.file = {
-    #   ".local/share/icons/candy-icons" = {
-    #     # recursive = true;
-    #     source = "${candy-icons}";
-    #   };
-    # };
+    # NOTE: stylix.cursor is configured at system level (nixosModules.stylix)
+    # which auto-configures home-manager cursor settings
   };
 }

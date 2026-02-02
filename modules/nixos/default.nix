@@ -2,7 +2,6 @@
   inputs,
   lib,
   config,
-  username,
   ...
 }:
 {
@@ -29,6 +28,5 @@
 
   nix = {
     nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
-    # extraOptions = config.home-manager.users.${username}.nix.extraOptions;
   };
 }

@@ -2,11 +2,11 @@
   config,
   pkgs,
   lib,
-  inputs,
   self,
   ...
 }:
 {
+  # Platform and nixpkgs configuration
   nixpkgs = {
     hostPlatform = "aarch64-darwin";
     overlays = [
@@ -15,102 +15,42 @@
     config.allowUnfree = true;
   };
 
+  # System packages
   environment.systemPackages = with pkgs; [
     helix
     nh
   ];
 
+  # Networking
   services.tailscale.enable = true;
   networking.hostName = "tensa";
 
-  system = {
-    primaryUser = "mirza";
-    defaults = {
-      dock = {
-        autohide = true;
-      };
+  # Primary user configuration (shared between NixOS and Darwin)
+  users.primaryUser = "mirza";
+
+  # Stylix theming configuration
+  stylix = {
+    image = ../../../modules/home-manager/theming/wallpaper.png;
+    base16Scheme = "${pkgs.base16-schemes}/share/themes/gruvbox-dark-hard.yaml";
+    polarity = "dark";
+  };
+
+  # Darwin-specific modules configuration
+  darwin = {
+    homebrew = {
+      enable = true;
+      user = "mirza";
+      casks = [ "zoom" ];
     };
-    keyboard = {
-      enableKeyMapping = true;
-      nonUS.remapTilde = true;
-      remapCapsLockToEscape = true;
-      swapLeftCtrlAndFn = true;
-      userKeyMapping = [
-        (lib.mkIf config.system.keyboard.remapCapsLockToEscape {
-          HIDKeyboardModifierMappingSrc = 30064771113;
-          HIDKeyboardModifierMappingDst = 30064771129;
-        })
-      ];
-    };
-  };
 
-  security.pam.services.sudo_local = {
-    enable = true;
-    touchIdAuth = true;
-  };
+    security.touchid.enable = true;
 
-  users.users.mirza = {
-    name = "mirza";
-    home = "/Users/mirza";
-  };
-
-  home-manager = {
-    verbose = true;
-    useGlobalPkgs = true;
-    useUserPackages = true;
-    backupFileExtension = "hm.old";
-    extraSpecialArgs = { inherit inputs; };
-    users.mirza = {
-      imports = [
-        ../../homes/mirza
-        self.homeModules.default
-        inputs.stylix.homeModules.stylix
-      ];
-      options.user = lib.mkOption {
-        type = lib.types.str;
-        default = "mirza";
-      };
-      config = {
-        home = {
-          username = "mirza";
-          homeDirectory = lib.mkForce "/Users/mirza";
-        };
-        stylix.targets.hyprland.enable = false;
-        stylix.targets.hyprpaper.enable = false;
-        stylix.targets.waybar.enable = false;
-        programs.opencode.enable = true;
-      };
+    system = {
+      defaults.enable = true;
+      nix.enable = true;
     };
   };
 
-  nix-homebrew = {
-    enable = true;
-    enableRosetta = true;
-    user = "mirza";
-    autoMigrate = true;
-  };
-
-  homebrew = {
-    enable = true;
-    casks = [ "zoom" ];
-  };
-
+  # State version
   system.stateVersion = 6;
-
-  nix = {
-    enable = false;
-    settings = {
-      warn-dirty = false;
-      accept-flake-config = true;
-      trusted-users = [
-        "root"
-        "@wheel"
-      ];
-      extra-experimental-features = [
-        "nix-command"
-        "flakes"
-        "pipe-operators"
-      ];
-    };
-  };
 }

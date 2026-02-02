@@ -42,8 +42,8 @@ in
       base16Scheme = lib.mkDefault "${pkgs.base16-schemes}/share/themes/${config.theming.scheme}.yaml";
       # base16Scheme = lib.mkDefault "${pkgs.unstable.base16-schemes}/share/themes/${config.theming.scheme}.yaml";
       image = inputs.wallpapers + "/${config.theming.image}";
-      inherit (config.home-manager.users.${primaryUserName}.stylix) polarity;
-      cursor = lib.mkIf config.programs.enable config.home-manager.users.${primaryUserName}.stylix.cursor;
+      polarity = lib.mkDefault "dark";
+      # cursor is configured by stylix automatically based on the theme
       # cursor =
       #   let
       #     cfg = config.home-manager.users.${username}.stylix.cursor;

@@ -10,7 +10,7 @@
     ./icons.nix
     ./monitors.nix
     ./pc.nix
-    ./stylix.nix
+    ./stylix.nix # Asserts stylix is configured at system level
   ];
 
   options.theming.enable = lib.mkEnableOption "Setup local theming";

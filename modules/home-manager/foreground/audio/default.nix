@@ -11,8 +11,7 @@
       enable = pkgs.stdenv.hostPlatform.isLinux;
       package = pkgs.unstable.easyeffects;
       extraPresets = {
-        # framework = builtins.fromJSON builtins.readFile ./fw13-easy-effects.json;
-        framework = ./fw13-easy-effects.json |> builtins.readFile |> builtins.fromJSON;
+        framework = builtins.fromJSON (builtins.readFile ./fw13-easy-effects.json);
       };
       preset =
         if (args ? nixosConfig) then

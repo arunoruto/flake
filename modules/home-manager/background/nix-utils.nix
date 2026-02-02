@@ -38,7 +38,7 @@ in
   config = lib.mkIf config.nix-utils.enable {
     nix = {
       # package = lib.mkForce pkgs.unstable.nix;
-      package = lib.mkForce pkgs.nix;
+      # package = lib.mkForce pkgs.nix;
       settings = {
         warn-dirty = false;
         extra-experimental-features = [

@@ -173,6 +173,7 @@
     {
       inherit lib;
       nixosModules.default = ./modules/nixos;
+      darwinModules.default = ./modules/darwin;
       homeModules.default = ./modules/home-manager/home.nix;
 
       nixosConfigurations = import ./systems {

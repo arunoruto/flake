@@ -5,24 +5,10 @@
   ...
 }:
 {
-  # If desktop is enabled, also enable theming using stylix
+  # NOTE: stylix is configured at system level (nixosModules.stylix or darwinModules.stylix)
+  # which auto-configures home-manager settings
+  # All stylix configuration has been moved to system level
   config = lib.mkIf config.desktop.enable {
-    stylix = {
-      opacity = {
-        terminal = 0.95;
-      };
-      targets = {
-        firefox = {
-          enable = false;
-          # profileNames = ["mirza"];
-        };
-        # hyprland.enable = true;
-        # hyprpaper.enable = true;
-        # helix.enable = false;
-        # kde.enable = false;
-        # mako.enable = false;
-        # nixvim.enable = false;
-      };
-    };
+    # Additional desktop-specific theming can be added here
   };
 }
