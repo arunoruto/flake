@@ -2,12 +2,14 @@
   inputs,
   config,
   pkgs,
+  lib,
   # self,
   ...
 }:
 let
   # secretspath = builtins.toString inputs.secrets;
   secretspath = "${inputs.self.outPath}/secrets";
+  isDarwin = pkgs.stdenv.isDarwin;
 in
 {
   imports = [
@@ -35,6 +37,17 @@ in
       # "ssh_keys/kanae".path = "${config.home.homeDirectory}/.ssh/id_kanae";
       "tokens/copilot" = { };
       "tokens/cachix" = { };
+    };
+  };
+
+  # Fix launchd PATH issue on Darwin
+  # The sops-nix service needs getconf in PATH to determine DARWIN_USER_TEMP_DIR
+  launchd.agents.sops-nix = lib.mkIf isDarwin {
+    enable = true;
+    config = {
+      EnvironmentVariables = {
+        PATH = lib.mkForce "/usr/bin:/bin:/usr/sbin:/sbin";
+      };
     };
   };
 
