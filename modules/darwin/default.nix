@@ -8,6 +8,7 @@
   imports = [
     ./system
     ./security
+    ./services
     ./homebrew
     ./keyboard
     ./users
