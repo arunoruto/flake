@@ -2,12 +2,12 @@
   config,
   lib,
   pkgs,
-  osConfig,
+  osConfig ? null,
   ...
 }@args:
 let
   isLinux = pkgs.stdenv.hostPlatform.isLinux;
-  hasNiri = isLinux && (args ? osConfig) && osConfig.programs.niri.enable;
+  hasNiri = isLinux && (osConfig != null) && osConfig.programs.niri.enable;
 in
 {
   config = lib.mkIf hasNiri {

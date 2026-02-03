@@ -1,12 +1,12 @@
 {
-  osConfig,
+  osConfig ? null,
   lib,
   pkgs,
   ...
 }@args:
 let
   # Check if we're on NixOS (osConfig.system.tags exists)
-  isNixOS = args ? osConfig && osConfig ? system && osConfig.system ? tags;
+  isNixOS = osConfig != null && osConfig ? system && osConfig.system ? tags;
 in
 {
   imports = [
@@ -48,13 +48,25 @@ in
     })
 
     # Darwin and NixOS common configuration
-    (lib.mkIf (args ? osConfig) {
+    (lib.mkIf (osConfig != null) {
       foreground.enable = lib.mkDefault (
         if pkgs.stdenv.hostPlatform.isDarwin then
           true # Always enable on Darwin
         else
           osConfig.programs.enable # Use NixOS custom option
       );
+    })
+
+    # Standalone home-manager configuration (no osConfig available)
+    (lib.mkIf (osConfig == null) {
+      hosts = {
+        laptop.enable = lib.mkDefault false;
+        tinypc.enable = lib.mkDefault false;
+        development.enable = lib.mkDefault false;
+        headless.enable = lib.mkDefault false;
+      };
+      foreground.enable = lib.mkDefault true;
+      theming.enable = lib.mkDefault true;
     })
   ];
 }

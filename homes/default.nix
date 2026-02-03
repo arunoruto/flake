@@ -15,7 +15,7 @@ lib.genAttrs unique-users (
   user:
   inputs.home-manager.lib.homeManagerConfiguration {
     inherit pkgs;
-    extraSpecialArgs = { inherit inputs; };
+    extraSpecialArgs = { inherit inputs pkgs; };
     modules = [
       # inputs.nur.hmModules.nur
       # ./modules/home-manager/home.nix

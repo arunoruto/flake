@@ -6,7 +6,6 @@ in
   imports = [
     # ./hosts
     ./environment.nix
-    ./imports.nix
   ];
 
   environment.enable = true;

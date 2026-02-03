@@ -174,7 +174,7 @@
       inherit lib;
       nixosModules.default = ./modules/nixos;
       darwinModules.default = ./modules/darwin;
-      homeModules.default = ./modules/home-manager/home.nix;
+      homeModules.default = ./modules/home-manager/default.nix;
 
       nixosConfigurations = import ./systems {
         inherit
