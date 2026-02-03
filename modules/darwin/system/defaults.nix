@@ -1,17 +1,10 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }:
 {
-  options.darwin.system = {
-    defaults.enable = lib.mkEnableOption "Enable macOS system defaults configuration" // {
-      default = true;
-    };
-  };
-
-  config = lib.mkIf config.darwin.system.defaults.enable {
+  config = {
     system.defaults = {
       dock = {
         autohide = lib.mkDefault true;
@@ -35,6 +28,12 @@
       enableKeyMapping = lib.mkDefault true;
       remapCapsLockToEscape = lib.mkDefault true;
       swapLeftCtrlAndFn = lib.mkDefault true;
+      userKeyMapping = [
+        (lib.mkIf config.system.keyboard.remapCapsLockToEscape {
+          HIDKeyboardModifierMappingSrc = 30064771113;
+          HIDKeyboardModifierMappingDst = 30064771129;
+        })
+      ];
     };
   };
 }

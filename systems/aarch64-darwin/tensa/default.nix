@@ -20,24 +20,24 @@
   environment.systemPackages = with pkgs; [
     helix
     nh
+    git-quill
   ];
 
   # Networking
-  services.tailscale.enable = true;
-  networking.hostName = "tensa";
+  # services.tailscale.enable = true;
+  # networking.hostName = "tensa";
 
   # Ollama AI service
-  # Uncomment to enable local LLM inference
-  services.ollama = {
-    enable = true;
-    package = pkgs.unstable.ollama;
-    host = "127.0.0.1";
-    port = 11434;
-    # models = "/path/to/ollama/models";  # Optional: custom models directory
-    # environmentVariables = {
-    #   OLLAMA_LLM_LIBRARY = "cpu";  # Force CPU mode
-    # };
-  };
+  # services.ollama = {
+  #   enable = true;
+  #   package = pkgs.unstable.ollama;
+  #   host = "127.0.0.1";
+  #   port = 11434;
+  #   # models = "/path/to/ollama/models";  # Optional: custom models directory
+  #   # environmentVariables = {
+  #   #   OLLAMA_LLM_LIBRARY = "cpu";  # Force CPU mode
+  #   # };
+  # };
 
   # Primary user configuration (shared between NixOS and Darwin)
   users.primaryUser = "mirza";
@@ -50,20 +50,18 @@
   };
 
   # Darwin-specific modules configuration
-  darwin = {
-    homebrew = {
-      enable = true;
-      user = "mirza";
-      casks = [ "zoom" ];
-    };
-
-    security.touchid.enable = true;
-
-    system = {
-      defaults.enable = true;
-      nix.enable = true;
-    };
+  homebrew = {
+    enable = true;
+    user = "mirza";
+    casks = [ "zoom" ];
   };
+
+  # security.touchid.enable = true;
+
+  # system = {
+  #   defaults.enable = true;
+  #   nix.enable = true;
+  # };
 
   # State version
   system.stateVersion = 6;

@@ -27,15 +27,11 @@ lib.attrsets.mergeAttrsList (
           stylix.darwinModules.stylix
           home-manager.darwinModules.home-manager
           {
+            networking.hostName = hostname;
             home-manager.sharedModules = [
               stylix.homeModules.stylix
               (
-                {
-                  config,
-                  osConfig,
-                  lib,
-                  ...
-                }:
+                { osConfig, ... }:
                 {
                   # Inherit stylix config from system (Darwin) level
                   stylix.enable = true;

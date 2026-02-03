@@ -8,36 +8,19 @@
 {
   imports = [ inputs.nix-homebrew.darwinModules.nix-homebrew ];
 
-  options.darwin.homebrew = {
-    enable = lib.mkEnableOption "Enable Homebrew integration via nix-homebrew";
-
-    user = lib.mkOption {
-      type = lib.types.str;
-      description = "User account that owns Homebrew";
-    };
-
-    casks = lib.mkOption {
-      type = lib.types.listOf lib.types.str;
-      default = [ ];
-      description = "List of Homebrew casks to install";
-    };
-
-    enableRosetta = lib.mkEnableOption "Enable Rosetta 2 for Homebrew" // {
-      default = true;
-    };
-  };
-
-  config = lib.mkIf config.darwin.homebrew.enable {
+  config = {
     nix-homebrew = {
-      enable = true;
-      inherit (config.darwin.homebrew) enableRosetta;
-      user = config.darwin.homebrew.user;
+      enable = lib.mkDefault config.homebrew.enable;
+      enableRosetta = lib.mkDefault true;
+      user = lib.mkDefault config.homebrew.user;
       autoMigrate = true;
     };
 
     homebrew = {
-      enable = true;
-      casks = config.darwin.homebrew.casks;
+      # enable = true;
+      # casks = config.darwin.homebrew.casks;
+      masApps = lib.optionalAttrs config.services.tailscale.enable { Tailscale = 1475387142; };
+      user = lib.mkDefault config.users.primaryUser;
     };
   };
 }

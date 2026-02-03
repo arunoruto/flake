@@ -5,13 +5,7 @@
   ...
 }:
 {
-  options.darwin.system.nix = {
-    enable = lib.mkEnableOption "Enable Nix daemon configuration" // {
-      default = true;
-    };
-  };
-
-  config = lib.mkIf config.darwin.system.nix.enable {
+  config = {
     nix = {
       enable = lib.mkDefault false;
       settings = {
