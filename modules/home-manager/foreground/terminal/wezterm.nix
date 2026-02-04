@@ -1,6 +1,6 @@
 {
   config,
-  osConfig,
+  osConfig ? null,
   # lib,
   # pkgs,
   # inputs,
@@ -17,8 +17,8 @@
       -- config.front_end = "WebGpu"
       -- config.enable_wayland = true
       config.front_end = "${
-        # if ((args ? osConfig) && (!osConfig.hosts.nvidia.enable)) then "OpenGL" else "WebGpu"
-        if ((args ? osConfig) && (osConfig.networking.hostName == "madara")) then "OpenGL" else "WebGpu"
+        # if ((osConfig != null) && (!osConfig.hosts.nvidia.enable)) then "OpenGL" else "WebGpu"
+        if ((osConfig != null) && (osConfig.networking.hostName == "madara")) then "OpenGL" else "WebGpu"
       }"
       config.hide_tab_bar_if_only_one_tab = true
       -- config.window_decorations = 'TITLE | RESIZE'

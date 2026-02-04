@@ -2,7 +2,7 @@
   config,
   lib,
   pkgs,
-  osConfig,
+  osConfig ? null,
   ...
 }@args:
 {
@@ -25,7 +25,7 @@
             graph_symbol = "braille";
           };
         }
-        // lib.optionalAttrs (pkgs.stdenv.hostPlatform.isLinux && (args ? osConfig)) {
+        // lib.optionalAttrs (pkgs.stdenv.hostPlatform.isLinux && (osConfig != null)) {
           package =
             if osConfig.facter.detected.graphics.amd.enable then
               pkgs.btop-rocm

@@ -3,14 +3,13 @@
   pkgs,
   config,
   inputs,
-  osConfig,
+  osConfig ? null,
   ...
 }@args:
 {
   imports = [
     ./chrome.nix
     ./firefox
-
     inputs.zen-browser.homeModules.default
   ];
 
@@ -20,7 +19,7 @@
         commandLineArgs = [
           "--enable-features=TouchpadOverscrollHistoryNavigation,UseOzonePlatform"
         ]
-        ++ lib.optionals (args ? osConfig && !osConfig.hosts.nvidia.enable) [
+        ++ lib.optionals (osConfig != null && !osConfig.hosts.nvidia.enable) [
           "--ozone-platform=wayland"
         ];
         extensions = [

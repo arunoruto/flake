@@ -3,7 +3,7 @@
   config,
   pkgs,
   lib,
-  osConfig,
+  osConfig ? null,
   ...
 }@args:
 {
@@ -35,7 +35,7 @@
       cfg = config.stylix.monitors;
     in
     lib.mkIf
-      (cfg != null && args ? osConfig && osConfig ? facter && osConfig.facter.report.hardware ? monitor)
+      (cfg != null && osConfig != null && osConfig ? facter && osConfig.facter.report.hardware ? monitor)
       {
 
         wayland.windowManager.hyprland = {

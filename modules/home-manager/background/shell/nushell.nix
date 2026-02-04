@@ -2,7 +2,7 @@
   config,
   lib,
   pkgs,
-  osConfig,
+  osConfig ? null,
   ...
 }@args:
 {
@@ -116,7 +116,7 @@
       + (lib.optionalString
         (
           pkgs.stdenv.hostPlatform.isLinux
-          && (args ? osConfig)
+          && (osConfig != null)
           && (osConfig.services.ssh-tpm-agent.userProxyPath != "")
         )
         ''

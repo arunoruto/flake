@@ -12,7 +12,7 @@ let
   latexEnabled = cfg.languages.latex.enable or false;
   nixEnabled = cfg.languages.nix.enable or false;
 
-  hasNixosConfig = args ? osConfig;
+  hasNixosConfig = (args.osConfig or null) != null;
   hostName = if hasNixosConfig then args.osConfig.networking.hostName else "";
   flakeLocation = config.home.sessionVariables.NH_FLAKE or null;
 in
