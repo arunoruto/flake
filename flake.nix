@@ -265,7 +265,7 @@
             };
           };
           legacyPackages = import ./packages pkgs-system;
-          packages.static-home = self.homeConfigurations."mirza".config.home.path;
+          # packages.static-home = self.homeConfigurations."mirza".config.home.path;
           # packages =
           #   lib.attrsets.removeAttrs
           #     (pkgs-system.lib.packagesFromDirectoryRecursive {
