@@ -17,7 +17,7 @@ in
 
   options.services.beszel.agent = {
     enable = lib.mkEnableOption "beszel agent";
-    package = lib.mkPackageOption pkgs "custom.beszel" { };
+    package = lib.mkPackageOption pkgs "beszel" { };
     openFirewall = (lib.mkEnableOption "") // {
       description = "Whether to open the firewall port (default 45876).";
     };
