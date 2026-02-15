@@ -54,6 +54,13 @@ rec {
       };
   };
 
+  # Custom packages in versioned namespace
+  # These packages are available under pkgs.custom.*
+  # Use this for packages where you want control over using custom vs upstream versions
+  custom-packages = final: prev: {
+    custom = (import ../packages prev).custom;
+  };
+
   # This one contains whatever you want to overlay
   # You can change versions, add patches, set compilation flags, anything really.
   # https://nixos.wiki/wiki/Overlays

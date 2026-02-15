@@ -105,4 +105,13 @@ pkgs.lib.makeScope pkgs.newScope (
       })
     );
   }
+  // {
+    custom = pkgs.lib.makeScope pkgs.newScope (
+      self-custom:
+      (pkgs.lib.packagesFromDirectoryRecursive {
+        inherit (self-custom) callPackage newScope;
+        directory = ./custom;
+      })
+    );
+  }
 )

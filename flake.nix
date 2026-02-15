@@ -161,7 +161,10 @@
             additions
             modifications
             unstable-packages
+            python
             kodi
+            home-assistant
+            custom-packages
           ])
           ++ (with inputs; [ nur.overlays.default ]);
         config = {

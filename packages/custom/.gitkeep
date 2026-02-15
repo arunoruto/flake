@@ -1,0 +1,2 @@
+# This directory contains custom packages that are exposed under pkgs.custom.*
+# Use this for packages where you want control over using custom vs upstream versions.
