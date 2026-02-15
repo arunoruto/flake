@@ -55,7 +55,7 @@
     # };
     beszel.agent = {
       enable = true;
-      package = pkgs.unstable.beszel;
+      package = pkgs.custom.beszel;
       environment = {
         LOG_LEVEL = "info";
         GPU = "true";

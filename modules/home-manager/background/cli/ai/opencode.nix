@@ -96,7 +96,7 @@ in
           "4096"
         ];
       };
-      package = pkgs.unstable.opencode;
+      package = pkgs.custom.opencode;
       settings = {
         theme = "stylix";
         # tools = {
