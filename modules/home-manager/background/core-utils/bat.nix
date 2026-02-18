@@ -9,9 +9,11 @@ let
     cat = "bat -pp";
     less = "bat --paging=always --wrap=never";
   };
+  cfg = config.programs.bat;
+  batExe = lib.getExe cfg.package;
 in
 {
-  config = lib.mkIf config.programs.bat.enable {
+  config = lib.mkIf cfg.enable {
     programs = {
       bat = {
         # config = {
@@ -26,6 +28,11 @@ in
           batgrep
           batwatch
         ];
+      };
+
+      fish.shellAbbrs."--help" = {
+        position = "anywhere";
+        expansion = "--help | ${batExe} -plhelp";
       };
     }
     // {
@@ -42,5 +49,7 @@ in
         inherit shellAliases;
       };
     };
+
+    home.sessionVariables.MANPAGER = "${batExe} -plman";
   };
 }

@@ -16,7 +16,8 @@
       eza.enable = lib.mkDefault true;
       lsd.enable = lib.mkDefault false;
 
-      below.enable = lib.mkDefault pkgs.stdenv.hostPlatform.isLinux;
+      # below.enable = lib.mkDefault pkgs.stdenv.hostPlatform.isLinux;
+      below.enable = lib.mkDefault false;
       btop.enable = lib.mkDefault true;
       htop.enable = lib.mkDefault true;
     };
