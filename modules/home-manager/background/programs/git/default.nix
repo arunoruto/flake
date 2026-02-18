@@ -4,10 +4,10 @@
   config,
   pkgs,
   lib,
+  osConfig ? null,
   ...
-}@args:
+}:
 let
-  glab-pkg = pkgs.unstable.glab;
   shellAliases = {
     gns = "git -c commit.gpgsign=false";
     gnscm = "git -c commit.gpgsign=false commit -m";
@@ -18,6 +18,11 @@ let
   };
 in
 {
+  imports = [
+    ./glab.nix
+    ./tea.nix
+  ];
+
   programs = {
     git = {
       enable = true;
@@ -72,18 +77,17 @@ in
           renames = true;
         };
         credential = {
-          "https://gitlab.com".helper = "${lib.getExe glab-pkg} auth git-credential";
-          "https://gitlab.bv.e-technik.tu-dortmund.de".helper = "${lib.getExe glab-pkg} auth git-credential";
           "https://git.overleaf.com".helper =
             "store --file ${config.home.homeDirectory}/.config/git/overleaf";
         };
       }
-      // lib.optionalAttrs (args ? osConfig) {
+      // lib.optionalAttrs (osConfig != null) {
         # commit.gpgsign = osConfig.yubikey.enable;
         # user.signingkey = "${config.home.homeDirectory}/.ssh/id_${osConfig.yubikey.signing}_sign.pub";
         # gpg.format = "ssh";
       };
     };
+
     delta = {
       enable = true;
       options = {
@@ -108,7 +112,7 @@ in
 
     gh = {
       enable = true;
-      # package = pkgs.unstable.gh;
+      package = pkgs.unstable.gh;
       gitCredentialHelper.enable = true;
       settings = {
         git_protocol = "ssh";
@@ -124,13 +128,32 @@ in
       ];
     };
 
-    # gh-dash = {
-    #   enable = true;
-    #   # settings = { };
-    # };
+    gitlab = {
+      enable = config.hosts.development.enable;
+      package = pkgs.unstable.glab;
+      gitCredentialHelper = {
+        enable = true;
+        hosts = [
+          "https://gitlab.com"
+          "https://gitlab.bv.e-technik.tu-dortmund.de"
+        ];
+      };
+    };
+
+    tea = {
+      enable = config.hosts.development.enable;
+      package = pkgs.unstable.tea;
+      gitCredentialHelper = {
+        enable = true;
+        hosts = [
+          "https://gitea.com"
+          "https://git.bv.e-technik.tu-dortmund.de"
+        ];
+      };
+    };
 
     lazygit = {
-      enable = true;
+      enable = config.programs.git.enable;
       settings = {
         gui = {
           # theme = {
@@ -153,7 +176,7 @@ in
           };
         };
         customCommands = [
-          {
+          (lib.optionalAttrs (pkgs ? "git-quill") {
             key = "<c-a>";
             description = "Generate AI Commit Message";
             loadingText = "Generating commit message...";
@@ -211,7 +234,7 @@ in
                 -m '{{.Form.Model}}' \
                 {{.Form.CommitStyle}} > .git/LAZYGIT_PENDING_COMMIT
             '';
-          }
+          })
         ];
       };
     };
@@ -238,7 +261,7 @@ in
 
   home = {
     packages = [
-      glab-pkg # Gitlab CLI tool
+      # glab-pkg # Gitlab CLI tool
     ]
     # ++ lib.optionals ((!config.hosts.tinypc.enable) && (!config.hosts.headless.enable)) [
     #   pkgs.ai-commit
@@ -262,7 +285,6 @@ in
       with pkgs.unstable;
       [
         # lazyjj
-        tea
         jjui
       ]
     );

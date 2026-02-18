@@ -7,7 +7,7 @@
 {
   imports = [
     ./games
-    ./git.nix
+    ./git
     ./iamb.nix
     ./mods.nix
     ./newsboat.nix
