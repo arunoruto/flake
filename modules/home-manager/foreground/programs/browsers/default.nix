@@ -49,6 +49,7 @@
         vivaldi.enable = lib.mkDefault false;
         zen-browser = {
           enable = lib.mkDefault pkgs.stdenv.hostPlatform.isLinux; # Only enable on Linux
+          # suppressXdgMigrationWarning = true;
           # package = inputs.zen-browser.packages."${pkgs.stdenv.hostPlatform.system}".default.override {
           #   desktopIconName = "zen";
           # };
