@@ -37,6 +37,10 @@
             }
           );
         };
+        devenv = {
+          type = "remote";
+          url = "https://mcp.devenv.sh";
+        };
         # docs-mcp-server = {
         #   type = "sse";
         #   url = "http://madara.king-little.ts.net:6280/sse";

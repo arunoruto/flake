@@ -148,7 +148,12 @@ in
           };
         };
         permission = {
+          todowrite = "allow";
+          todoread = "allow";
           edit = "ask";
+          write = {
+            ".opencode/plans/**" = "allow";
+          };
           bash = {
             ls = "allow";
             pwd = "allow";
@@ -156,12 +161,15 @@ in
             "git diff*" = "allow";
             "git log*" = "allow";
             # "git add*" = "allow";
+            "mkdir -p .opencode/plans" = "allow";
           };
         };
         agent = {
           autoaccept = {
             mode = "primary";
             tools = {
+              todowrite = true;
+              todoread = true;
               write = true;
               edit = true;
               bash = true;
@@ -184,6 +192,7 @@ in
         beads = pkgs.unstable.beads.src + "/claude-plugin/skills/beads";
         commit = ./skills/commit;
       };
+      rules = ./AGENTS.md;
       enableMcpIntegration = true;
     };
 
