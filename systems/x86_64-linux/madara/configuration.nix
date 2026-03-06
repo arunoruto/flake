@@ -70,18 +70,22 @@
     open-webui.enable = lib.mkForce false;
     ollama = {
       enable = true;
-      package = pkgs.unstable.ollama.override {
-        acceleration = "cuda";
-        cudaPackages = pkgs.unstable.cudaPackages_12;
-        cudaArches = [ "sm_61" ];
-      };
-      acceleration = "cuda";
-
-      # package = pkgs.unstable.ollama-vulkan;
-      # acceleration = "vulkan";
-      # environmentVariables = {
-      #   GGML_VK_VISIBLE_DEVICES = "0";
+      # package = pkgs.unstable.ollama.override {
+      #   acceleration = "cuda";
+      #   cudaPackages = pkgs.unstable.cudaPackages_12;
+      #   cudaArches = [ "sm_61" ];
       # };
+      # acceleration = "cuda";
+
+      package = pkgs.unstable.ollama-vulkan;
+      acceleration = "vulkan";
+      environmentVariables = {
+        # GGML_VK_VISIBLE_DEVICES = "0";
+      }
+      // lib.optionalAttrs config.hardware.graphics.enable {
+        LD_LIBRARY_PATH = "/run/opengl-driver/lib";
+        # VK_DRIVER_FILES = "/run/opengl-driver/share/vulkan/icd.d/nvidia_icd.x86_64.json";
+      };
     };
     cloudflared = {
       enable = true;

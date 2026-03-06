@@ -5,7 +5,8 @@
   ...
 }:
 {
-  config = lib.mkIf config.services.ollama.enable {
+  # config = lib.mkIf config.services.ollama.enable {
+  config = {
     services.ollama = {
       # package = pkgs.ollama;
       # package = pkgs.unstable.ollama;
@@ -29,7 +30,6 @@
         "embeddinggemma:300m"
         "gemma3:4b"
         "gemma3:12b"
-        "mistral:7b"
         "ministral-3:3b"
         "ministral-3:8b"
         "ministral-3:14b"
@@ -44,6 +44,12 @@
       #     null;
       environmentVariables = {
         OLLAMA_ORIGINS = "moz-extension://*";
+      };
+    };
+    systemd.services.ollama = {
+      serviceConfig = {
+        # This is the magic bullet for the "JIT session error"
+        MemoryDenyWriteExecute = lib.mkForce false;
       };
     };
   };
