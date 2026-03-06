@@ -11,7 +11,7 @@
 
   config = lib.mkIf (!config.hosts.headless.enable) {
     home.packages = with pkgs.unstable; [
-      # en-croissant
+      en-croissant
     ];
     # programs = {
     #   chess-tui = {
