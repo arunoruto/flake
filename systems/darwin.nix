@@ -18,18 +18,11 @@ lib.attrsets.mergeAttrsList (
           inherit inputs self;
         };
         modules = [
-          # Import the default Darwin modules
           self.darwinModules.default
-          # Include the host-specific configuration
-          ./${arch}/${hostname}
-        ]
-        ++ (with inputs; [
-          stylix.darwinModules.stylix
-          home-manager.darwinModules.home-manager
           {
             networking.hostName = hostname;
             home-manager.sharedModules = [
-              stylix.homeModules.stylix
+              inputs.stylix.homeModules.stylix
               (
                 { osConfig, ... }:
                 {
@@ -40,9 +33,18 @@ lib.attrsets.mergeAttrsList (
                   stylix.polarity = osConfig.stylix.polarity;
                 }
               )
+              inputs.mac-app-util.homeManagerModules.default
+
             ];
           }
+          ./${arch}/${hostname}
+        ]
+        ++ (with inputs; [
+          stylix.darwinModules.stylix
+          home-manager.darwinModules.home-manager
           sops-nix.darwinModules.sops
+          determinate.darwinModules.default
+          mac-app-util.darwinModules.default
         ]);
       }
     )
