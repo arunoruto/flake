@@ -3,6 +3,7 @@
   pkgs,
   lib,
   self,
+  inputs,
   ...
 }:
 {
@@ -17,11 +18,20 @@
   };
 
   # System packages
-  environment.systemPackages = with pkgs; [
-    helix
-    nh
-    git-quill
-  ];
+  environment.systemPackages =
+    (with pkgs; [
+      direnv
+      helix
+      nh
+      git-quill
+      # rnote
+    ])
+    ++ (with pkgs.unstable; [
+      # devenv
+    ])
+    ++ [
+      inputs.devenv.packages.aarch64-darwin.devenv
+    ];
 
   # Networking
   # services.tailscale.enable = true;
@@ -53,7 +63,15 @@
   homebrew = {
     enable = true;
     user = "mirza";
-    casks = [ "zoom" ];
+    casks = [
+      "caffeine"
+      "notchnook"
+      "telegram"
+      "rnote"
+      "visual-studio-code"
+      "zed"
+      "zoom"
+    ];
   };
 
   # security.touchid.enable = true;
@@ -62,6 +80,27 @@
   #   defaults.enable = true;
   #   nix.enable = true;
   # };
+
+  # system.activationScripts.applications.text =
+  #   let
+  #     env = pkgs.buildEnv {
+  #       name = "system-applications";
+  #       paths = config.environment.systemPackages;
+  #       pathsToLink = [ "/Applications" ];
+  #     };
+  #   in
+  #   pkgs.lib.mkForce ''
+  #     # Set up applications.
+  #     echo "setting up /Applications..." >&2
+  #     rm -rf /Applications/Nix\ Apps
+  #     mkdir -p /Applications/Nix\ Apps
+  #     find ${env}/Applications -maxdepth 1 -type l -exec readlink '{}' + |
+  #     while read -r src; do
+  #       app_name=$(basename "$src")
+  #       echo "copying $src" >&2
+  #       ${pkgs.mkalias}/bin/mkalias "$src" "/Applications/Nix Apps/$app_name"
+  #     done
+  #   '';
 
   # State version
   system.stateVersion = 6;
