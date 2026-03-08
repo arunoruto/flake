@@ -8,7 +8,8 @@
 {
   programs = {
     nushell = {
-      package = pkgs.unstable.nushell;
+      # package = pkgs.unstable.nushell;
+      package = pkgs.nushell;
       shellAliases = {
         grep = "rg";
         nu-bench = ''${lib.getExe pkgs.hyperfine} --warmup 3 "nu -i -c exit"'';
