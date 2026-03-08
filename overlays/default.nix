@@ -4,11 +4,14 @@ rec {
   # This one brings our custom packages from the 'pkgs' directory
   additions =
     final: prev:
-    prev.lib.packagesFromDirectoryRecursive {
-      inherit (final) callPackage;
-      inherit (prev) newScope;
-      directory = ../packages/top-level;
-    };
+    if prev ? lib then
+      prev.lib.packagesFromDirectoryRecursive {
+        inherit (final) callPackage;
+        inherit (prev) newScope;
+        directory = ../packages/top-level;
+      }
+    else
+      { };
 
   # Python package addition and override
   python = final: prev: {
@@ -16,13 +19,16 @@ rec {
     #   packageOverrides = final: prev: import ../packages/python.nix final.pkgs;
     # };
     # pythonPackages = final.python3.pkgs;
-    pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
+    pythonPackagesExtensions = (prev.pythonPackagesExtensions or [ ]) ++ [
       (
         python-final: python-prev:
-        python-prev.lib.packagesFromDirectoryRecursive {
-          inherit (python-final) callPackage newScope;
-          directory = ../packages/python3Packages;
-        }
+        if python-prev ? lib then
+          python-prev.lib.packagesFromDirectoryRecursive {
+            inherit (python-final) callPackage newScope;
+            directory = ../packages/python3Packages;
+          }
+        else
+          { }
       )
     ];
   };
@@ -46,12 +52,17 @@ rec {
   # Home Assistant
   home-assistant = final: prev: {
     home-assistant-custom-components =
-      prev.home-assistant-custom-components
-      // prev.lib.packagesFromDirectoryRecursive {
-        inherit (final) callPackage;
-        inherit (prev) newScope;
-        directory = ../packages/home-assistant-custom-components;
-      };
+      (prev.home-assistant-custom-components or { })
+      // (
+        if prev ? lib then
+          prev.lib.packagesFromDirectoryRecursive {
+            inherit (final) callPackage;
+            inherit (prev) newScope;
+            directory = ../packages/home-assistant-custom-components;
+          }
+        else
+          { }
+      );
   };
 
   # Custom packages in versioned namespace
