@@ -2,10 +2,10 @@
   config,
   lib,
   pkgs,
-  osConfig ? null,
   inputs,
+  osConfig ? null,
   ...
-}@args:
+}:
 let
   inherit (config) user;
   nix-repl = pkgs.writeScriptBin "nix-repl" (
@@ -22,8 +22,11 @@ let
       send -- "hm = homeConfigurations.${config.home.username}\r"
       send -- "pkgs = hm.pkgs\r"
     ''
-    + lib.optionalString (osConfig != null) ''
+    + lib.optionalString (osConfig != null && pkgs.stdenv.hostPlatform.isLinux) ''
       send -- "os = nixosConfigurations.${osConfig.networking.hostName}\r"
+    ''
+    + lib.optionalString (osConfig != null && pkgs.stdenv.hostPlatform.isDarwin) ''
+      send -- "os = darwinConfigurations.${osConfig.networking.hostName}\r"
     ''
     + ''
       interact
