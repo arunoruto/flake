@@ -7,8 +7,13 @@
   scheme,
   image,
 }:
+let
+  # Filter to only Darwin architectures
+  isDarwinArch = arch: lib.hasInfix "darwin" arch;
+  darwinArchs = lib.filter isDarwinArch (lib.getDirectories ./.);
+in
 lib.attrsets.mergeAttrsList (
-  lib.lists.forEach (lib.getDirectories ./.) (
+  lib.lists.forEach darwinArchs (
     arch:
     lib.genAttrs (lib.getDirectories ./${arch}) (
       hostname:
