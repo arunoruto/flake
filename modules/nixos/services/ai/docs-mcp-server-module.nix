@@ -74,21 +74,18 @@ in
       wantedBy = [ "multi-user.target" ];
 
       environment =
-        let
-          browsers = (builtins.fromJSON (builtins.readFile "${pkgs.playwright}/browsers.json")).browsers;
-          chromium-rev = (builtins.head (builtins.filter (x: x.name == "chromium") browsers)).revision;
-        in
-        lib.mapAttrs (_: v: if builtins.isBool v then (if v then "true" else "false") else toString v) (
-          lib.attrsets.recursiveUpdate {
-            HOME = cfg.environment.DOCS_MCP_STORE_PATH;
-            DOCS_MCP_PROTOCOL = "http";
+        lib.mapAttrs (_: v: if builtins.isBool v then (if v then "true" else "false") else toString v)
+          (
+            lib.attrsets.recursiveUpdate {
+              HOME = cfg.environment.DOCS_MCP_STORE_PATH;
+              DOCS_MCP_PROTOCOL = "http";
 
-            # Chromium path is already wrapped in package.nix, but good to be explicit
-            PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD = "1";
-            # PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH = lib.getExe pkgs.chromium;
-            PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH = "${pkgs.playwright.browsers}/chromium-${chromium-rev}/chrome-linux/chrome";
-          } cfg.environment
-        );
+              # Chromium path is already wrapped in package.nix, but good to be explicit
+              PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD = "1";
+              # Use system chromium instead of trying to read playwright's browsers.json at eval time
+              PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH = lib.getExe pkgs.chromium;
+            } cfg.environment
+          );
 
       serviceConfig = {
         Type = "simple";
