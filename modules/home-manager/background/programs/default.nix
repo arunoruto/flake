@@ -8,6 +8,7 @@
   imports = [
     ./games
     ./git
+    ./awscli.nix
     ./iamb.nix
     ./mods.nix
     ./newsboat.nix
@@ -17,6 +18,7 @@
   ];
 
   programs = {
+    awscli.enable = config.hosts.development.enable;
     iamb.enable = config.hosts.development.enable;
     mods.enable = config.hosts.development.enable;
     pop.enable = config.hosts.development.enable;

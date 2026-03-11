@@ -27,29 +27,27 @@
     # Bash
     # bash.initExtra = lib.optionalString config.programs.direnv.enable ''eval "$(direnv hook bash)"'';
 
-    direnv =
-      let
-        instant = (config.programs ? direnv-instant) && config.programs.direnv-instant.enable;
-      in
-      {
-        enable = config.hosts.development.enable;
-        # enable = lib.mkDefault config.hosts.development.enable;
-        # enableBashIntegration = lib.mkForce (!instant);
-        # enableFishIntegration = lib.mkForce (!instant);
-        # enableNushellIntegration = lib.mkForce (!instant);
-        # enableZshIntegration = lib.mkForce (!instant);
-        nix-direnv.enable = true;
-      };
+    direnv = {
+      enable = config.hosts.development.enable;
+      # enable = lib.mkDefault config.hosts.development.enable;
+      # enableBashIntegration = lib.mkForce (!instant);
+      # enableFishIntegration = lib.mkForce (!instant);
+      # enableNushellIntegration = lib.mkForce (!instant);
+      # enableZshIntegration = lib.mkForce (!instant);
+      nix-direnv.enable = true;
+    };
 
     direnv-instant.enable = false;
     # direnv-instant.enable = pkgs.stdenv.hostPlatform.isLinux;
 
-    fd = {
-      enable = true;
-    };
+    fd.enable = true;
 
     jq.enable = true;
     # jqp.enable = true;
+
+    pay-respects = {
+      enable = true;
+    };
 
     ripgrep = {
       enable = true;

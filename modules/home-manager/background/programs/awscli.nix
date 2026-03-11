@@ -10,6 +10,10 @@
     programs.awscli = {
       settings = {
         default = { };
+        work = {
+          region = "garage";
+          endpoint_url = "https://s3.bv.e-technik.tu-dortmund.de";
+        };
       };
     };
   };

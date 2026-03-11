@@ -35,13 +35,15 @@
         # obs-studio
         #okular
         rnote
-        telegram-desktop
         # via
         # vial
         #qbittorrent
 
         exercism
       ])
-      ++ (with pkgs.unstable; [ gimp3 ]);
+      ++ (with pkgs.unstable; [
+        gimp3
+        telegram-desktop
+      ]);
   };
 }

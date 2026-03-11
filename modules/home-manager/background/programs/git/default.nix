@@ -112,7 +112,7 @@ in
 
     gh = {
       enable = true;
-      package = pkgs.unstable.gh;
+      package = if config.hosts.development.enable then pkgs.unstable.gh else pkgs.gh;
       gitCredentialHelper.enable = true;
       settings = {
         git_protocol = "ssh";

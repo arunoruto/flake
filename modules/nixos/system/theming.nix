@@ -43,17 +43,8 @@ in
       # base16Scheme = lib.mkDefault "${pkgs.unstable.base16-schemes}/share/themes/${config.theming.scheme}.yaml";
       image = inputs.wallpapers + "/${config.theming.image}";
       polarity = lib.mkDefault "dark";
-      # cursor is configured by stylix automatically based on the theme
-      # cursor =
-      #   let
-      #     cfg = config.home-manager.users.${username}.stylix.cursor;
-      #   in
-      #   lib.optionalAttrs (config.programs.enable && cfg != null) cfg;
-      # if (config.programs.enable) then config.home-manager.users.${username}.stylix.cursor else { };
-      # fonts =
-      #   if (config.gui.enable)
-      #   then config.home-manager.users.${username}.stylix.fonts
-      #   else {};
+      # Disable system-level cursor - let home-manager control the cursor
+      cursor = lib.mkForce null;
       targets = {
         # lightdm.enable = true;
         qt.enable = false;

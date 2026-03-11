@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
-nix-update legacyPackages.x86_64-linux.beszel \
+PACKAGE="beszel"
+
+nix-update legacyPackages.x86_64-linux.custom.$PACKAGE \
         --subpackage webui \
         --flake \
-        --override-filename "$NH_FLAKE/packages/top-level/beszel/package.nix"
+        --version-regex "v(.*)" \
+        --override-filename "$NH_FLAKE/packages/custom/$PACKAGE/package.nix"
