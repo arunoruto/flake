@@ -11,17 +11,17 @@
   fetchPnpmDeps,
 }:
 let
-  tag-prefix = "@upstash/context7-mcp@";
+  tag-prefix = "@upstash/context7-mcp";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "context7";
-  version = "2.1.0";
+  version = "2.1.4";
 
   src = fetchFromGitHub {
     owner = "upstash";
     repo = "context7";
-    tag = tag-prefix + finalAttrs.version;
-    hash = "sha256-cUF7ImBwrjL6WPDPPPeq9Rxod7dI+066Ym9qdwzAY70=";
+    tag = "${tag-prefix}@${finalAttrs.version}";
+    hash = "sha256-bQXmKY4I5k5uaQ2FVEOPkym5X3mR87nALf3+jqJjJjE=";
   };
 
   nativeBuildInputs = [
@@ -34,13 +34,17 @@ stdenv.mkDerivation (finalAttrs: {
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 3;
-    hash = "sha256-2wkM9RLJHRC66+moVBZrzXmygJGzWXh/UsCHTSg5CJo=";
+    hash = "sha256-EjEdbPKXJbxaDBuAg/j+BSjI/W3HdsqbtDky0TPUB88=";
   };
 
   buildPhase = ''
     runHook preBuild
 
-    pnpm run build
+    # pnpm run build
+    pnpm --filter ${tag-prefix} build
+
+    # Prune devDependencies
+    CI=true pnpm prune --prod --no-optional
 
     runHook postBuild
   '';
@@ -73,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version-regex '${tag-prefix}(.*)'" ];
+    extraArgs = [ "--version-regex '${tag-prefix}@(.*)'" ];
   };
 
   meta = {
@@ -82,5 +86,9 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ arunoruto ];
     mainProgram = "context7-mcp";
+    platforms = [
+      "x86_64-linux"
+      "aarch64-darwin"
+    ];
   };
 })
