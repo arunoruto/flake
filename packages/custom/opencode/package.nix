@@ -3,23 +3,26 @@
   stdenvNoCC,
   bun,
   fetchFromGitHub,
-  fzf,
   makeBinaryWrapper,
   models-dev,
+  nodejs,
   nix-update-script,
   ripgrep,
+  sysctl,
   installShellFiles,
   versionCheckHook,
   writableTmpDirAsHomeHook,
 }:
+
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "opencode";
-  version = "1.1.53";
+  version = "1.3.7";
+
   src = fetchFromGitHub {
     owner = "anomalyco";
     repo = "opencode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VddWpvtoDJlbbesJL6VlP99/NJqkHbN8Rdv1XccNRZM=";
+    hash = "sha256-DL/3AFyYevK4SD3pC+goTHLrlD29dRoyL0QAlxZDLcU=";
   };
 
   node_modules = stdenvNoCC.mkDerivation {
@@ -44,6 +47,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       bun install \
         --cpu="*" \
         --frozen-lockfile \
+        --filter ./packages/app \
+        --filter ./packages/desktop \
+        --filter ./packages/opencode \
         --ignore-scripts \
         --no-progress \
         --os="*"
@@ -66,29 +72,22 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # NOTE: Required else we get errors that our fixed-output derivation references store paths
     dontFixup = true;
 
-    outputHash = "sha256-5i/uMQkt5VhrRJrl4WrTT1wfPjexRUpbOaeW6dRqaQ8=";
+    outputHash = "sha256-//yE+ngjobja2Y5yIcvW0oEVSu85nqNAvjWu5OyISGU=";
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };
 
   nativeBuildInputs = [
     bun
+    nodejs
     installShellFiles
     makeBinaryWrapper
     models-dev
     writableTmpDirAsHomeHook
   ];
 
-  patches = [
-    # NOTE: Relax Bun version check to be a warning instead of an error
-    # ./relax-bun-version-check.patch
-    # NOTE: Remove special and windows build targes
-    ./remove-special-and-windows-build-targets.patch
-  ];
-
   postPatch = ''
-    # Relax the Bun version check: Change 'throw new Error' to 'console.warn'
-    # We match the specific error message string to avoid breaking other errors.
+    # NOTE: Relax Bun version check to be a warning instead of an error
     substituteInPlace packages/script/src/index.ts \
       --replace-fail 'throw new Error(`This script requires bun@''${expectedBunVersionRange}' \
                      'console.warn(`Warning: This script requires bun@''${expectedBunVersionRange}'
@@ -98,6 +97,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook preConfigure
 
     cp -R ${finalAttrs.node_modules}/. .
+    patchShebangs node_modules
+    patchShebangs packages/*/node_modules
 
     runHook postConfigure
   '';
@@ -105,16 +106,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   env.MODELS_DEV_API_JSON = "${models-dev}/dist/_api.json";
   env.OPENCODE_VERSION = finalAttrs.version;
   env.OPENCODE_CHANNEL = "stable";
-
-  preBuild = ''
-    chmod -R u+w ./packages/opencode/node_modules
-    pushd ./packages/opencode/node_modules/@opentui/
-      for pkg in ../../../../node_modules/.bun/@opentui+core-*; do
-        linkName=$(basename "$pkg" | sed 's/@.*+\(.*\)@.*/\1/')
-        ln -sf "$pkg/node_modules/@opentui/$linkName" "$linkName"
-      done
-    popd
-  '';
 
   buildPhase = ''
     runHook preBuild
@@ -130,6 +121,18 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook preInstall
 
     install -Dm755 dist/opencode-*/bin/opencode $out/bin/opencode
+    wrapProgram $out/bin/opencode \
+     --prefix PATH : ${
+       lib.makeBinPath (
+         [
+           ripgrep
+         ]
+         ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [
+           sysctl
+         ]
+       )
+     }
+
     install -Dm644 schema.json $out/share/opencode/schema.json
 
     runHook postInstall
@@ -137,17 +140,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   postInstall = lib.optionalString (stdenvNoCC.buildPlatform.canExecute stdenvNoCC.hostPlatform) ''
     installShellCompletion --cmd opencode \
-      --bash <($out/bin/opencode completion)
-  '';
-
-  postFixup = ''
-    wrapProgram $out/bin/opencode \
-     --prefix PATH : ${
-       lib.makeBinPath [
-         fzf
-         ripgrep
-       ]
-     }
+      --bash <($out/bin/opencode completion) \
+      --zsh <(SHELL=/bin/zsh $out/bin/opencode completion)
   '';
 
   nativeInstallCheckInputs = [
@@ -172,7 +166,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "AI coding agent built for the terminal";
     homepage = "https://github.com/anomalyco/opencode";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ delafthi ];
+    maintainers = with lib.maintainers; [
+      delafthi
+      DuskyElf
+      graham33
+      superherointj
+    ];
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
     platforms = [
       "aarch64-linux"
@@ -181,5 +180,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       "x86_64-darwin"
     ];
     mainProgram = "opencode";
+    badPlatforms = [
+      # Broken as 2026-04-23, errors as:
+      # CPU lacks AVX support, strange crashes may occur. Reinstall Bun
+      "x86_64-darwin"
+    ];
   };
 })
