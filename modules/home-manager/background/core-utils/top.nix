@@ -4,7 +4,7 @@
   pkgs,
   osConfig ? null,
   ...
-}@args:
+}:
 {
   options.programs.below = {
     enable = lib.mkEnableOption "Enable below, a modern alternative to top/htop/btop.";
