@@ -86,6 +86,26 @@ in
         # user.signingkey = "${config.home.homeDirectory}/.ssh/id_${osConfig.yubikey.signing}_sign.pub";
         # gpg.format = "ssh";
       };
+
+      includes = [
+        {
+          condition = "gitdir:~/**/nixpkgs/";
+          contents = {
+            feature = {
+              manyFiles = true;
+            };
+            core = {
+              fsmonitor = true;
+              untrackedCache = true;
+              commitGraph = true;
+            };
+            fetch = {
+              writeCommitGraph = true;
+              prune = true;
+            };
+          };
+        }
+      ];
     };
 
     delta = {

@@ -162,6 +162,7 @@ in
             "git log*" = "allow";
             # "git add*" = "allow";
             "mkdir -p .opencode/plans" = "allow";
+            ssh = "deny";
           };
         };
         agent = {
