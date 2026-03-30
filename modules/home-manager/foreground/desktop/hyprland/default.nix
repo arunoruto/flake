@@ -17,23 +17,23 @@
     #  ./waybar
   ];
 
+  # config =
+  #   let
+  #     cfg = config.wayland.windowManager.hyprland;
+  #   in
+  #   lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
   config =
     let
       cfg = config.wayland.windowManager.hyprland;
     in
-    lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
-      # config =
-      # let
-      #   cfg = config.wayland.windowManager.hyprland;
-      # in
-      # {
+    lib.mkIf cfg.enable {
       hypr = {
-        binds.enable = cfg.enable;
-        idle.enable = cfg.enable;
-        lock.enable = cfg.enable;
-        # panel.enable = cfg.enable;
-        paper.enable = cfg.enable;
-        plugins.enable = cfg.enable;
+        binds.enable = true;
+        idle.enable = true;
+        lock.enable = true;
+        # panel.enable = true;
+        paper.enable = true;
+        plugins.enable = true;
       };
       wayland.windowManager.hyprland = {
         # package = pkgs.unstable.hyprland;
