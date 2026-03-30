@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+# nix-update legacyPackages.$PLATFORM.$PACKAGE \
+#         --flake \
+#         --version-regex "$PACKAGE@(.*)" \
+#         --override-filename "$NH_FLAKE/packages/top-level/$PACKAGE/package.nix"
+
 PACKAGE="ctx7"
 
 # Detect platform
@@ -21,7 +26,13 @@ Linux-aarch64 | Linux-arm64)
         ;;
 esac
 
-nix-update legacyPackages.$PLATFORM.$PACKAGE \
+PREFIX="legacyPackages.$PLATFORM.$PACKAGE"
+echo $PREFIX
+
+RAW_JSON=$(nix eval "$NH_FLAKE#$PREFIX.passthru.updateScript" --json)
+readarray -t UPDATE_ARGS < <(echo "$RAW_JSON" | nix run nixpkgs#jq -- -r '.[1:][]')
+
+nix-update $PREFIX \
         --flake \
-        --version-regex "$PACKAGE@(.*)" \
+        "${UPDATE_ARGS[@]}" \
         --override-filename "$NH_FLAKE/packages/top-level/$PACKAGE/package.nix"

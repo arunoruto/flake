@@ -30,7 +30,7 @@
           command = lib.getExe (
             pkgs.writeShellApplication {
               name = "context7.sh";
-              runtimeInputs = with pkgs; [ context7 ];
+              runtimeInputs = with pkgs; [ context7-mcp ];
               text = ''
                 context7-mcp --api-key "$(cat ${config.sops.secrets."tokens/context7".path})"
               '';

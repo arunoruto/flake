@@ -13,13 +13,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ctx7";
-  version = "0.3.6";
+  version = "0.3.9";
 
   src = fetchFromGitHub {
     owner = "upstash";
     repo = "context7";
     tag = "${finalAttrs.pname}@${finalAttrs.version}";
-    hash = "sha256-dPNBcZte7S6sh72cx5XK/Zxbsfq+AhTszdtKPhEGDBM=";
+    hash = "sha256-nrJCYezH9VDd1Ptpg5xATx0ByweTw8dkKT2y3rnFHd8=";
   };
 
   nativeBuildInputs = [
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 3;
-    hash = "sha256-EjEdbPKXJbxaDBuAg/j+BSjI/W3HdsqbtDky0TPUB88=";
+    hash = "sha256-8RRHfCTZVC91T1Qx+ACCo2oG4ZwMNy5WYakCjmBhe3Q=";
   };
 
   buildPhase = ''
@@ -64,7 +64,10 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version-regex '${finalAttrs.pname}@(.*)'" ];
+    extraArgs = [
+      "--version-regex"
+      "${finalAttrs.pname}@(.*)"
+    ];
   };
 
   meta = {
@@ -73,6 +76,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ arunoruto ];
     mainProgram = "ctx7";
-    platforms = with lib.platforms; linux ++ darwin;
+    platforms = lib.platforms.unix;
   };
 })
