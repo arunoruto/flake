@@ -20,48 +20,77 @@ in
       let
         url = "${config.networking.hostName}.${config.services.tailscale.tailnet}.ts.net";
       in
-      {
-        paperless =
+      lib.mkMerge [
+        {
+          paperless =
+            let
+              cfg = config.services.media;
+            in
+            {
+              package = lib.mkDefault pkgs.unstable.paperless-ngx;
+              # package = lib.mkDefault pkgs.paperless-ngx;
+              dataDir = lib.mkDefault "${cfg.dataDir}/paperless";
+              configureTika = lib.mkDefault true;
+              address = if config.services.paperless.openFirewall then "0.0.0.0" else "127.0.0.1";
+              openFirewall = lib.mkDefault cfg.openFirewall;
+              settings = {
+                PAPERLESS_URL = "https://${url}";
+                PAPERLESS_FORCE_SCRIPT_NAME = lib.mkDefault "/paperless";
+                PAPERLESS_APPS = lib.mkDefault "allauth.socialaccount.providers.openid_connect";
+                PAPERLESS_CSRF_TRUSTED_ORIGINS = lib.strings.concatStringsSep "," [
+                  "https://services.arnaut.me"
+                  "https://${url}"
+                  "https://${config.networking.hostName}.${config.services.cloudflared.defaultDomain}"
+                  "https://${config.services.cloudflared.defaultDomain}"
+                ];
+              };
+              environmentFile = config.sops.templates."${paperless-oidc}".path;
+            };
+        }
+        (
           let
-            cfg = config.services.media;
+            path = lib.strings.substring 1 (-1) config.services.paperless.settings.PAPERLESS_FORCE_SCRIPT_NAME;
+            hostname-domain = "${config.networking.hostName}.${config.services.cloudflared.defaultDomain}";
           in
           {
-            package = lib.mkDefault pkgs.unstable.paperless-ngx;
-            # package = lib.mkDefault pkgs.paperless-ngx;
-            dataDir = lib.mkDefault "${cfg.dataDir}/paperless";
-            configureTika = lib.mkDefault true;
-            address = if config.services.paperless.openFirewall then "0.0.0.0" else "127.0.0.1";
-            openFirewall = lib.mkDefault cfg.openFirewall;
-            settings = {
-              PAPERLESS_URL = "https://${url}";
-              PAPERLESS_FORCE_SCRIPT_NAME = lib.mkDefault "/paperless";
-              PAPERLESS_APPS = lib.mkDefault "allauth.socialaccount.providers.openid_connect";
-              PAPERLESS_CSRF_TRUSTED_ORIGINS = lib.strings.concatStringsSep "," [
-                "https://services.arnaut.me"
-                "https://${url}"
-              ];
-            };
-            environmentFile = config.sops.templates."${paperless-oidc}".path;
-          };
-        # traefik.dynamicConfigOptions = lib.networking.traefikConfig {
-        #   serviceName = "paperless";
-        #   inherit url;
-        #   inherit (config.services.paperless) port;
-        #   path = config.services.paperless.settings.PAPERLESS_FORCE_SCRIPT_NAME;
-        # };
-        cloudflared.tunnels."${config.networking.hostName}".ingress = [
-          {
-            hostname = "services.${config.services.cloudflared.defaultDomain}";
-            path = "${config.services.paperless.settings.PAPERLESS_FORCE_SCRIPT_NAME}.*";
-            service = "http://localhost:${builtins.toString config.services.paperless.port}";
+            # traefik.dynamicConfigOptions = lib.networking.traefikConfig {
+            #   serviceName = "paperless";
+            #   inherit url;
+            #   inherit (config.services.paperless) port;
+            #   path = config.services.paperless.settings.PAPERLESS_FORCE_SCRIPT_NAME;
+            # };
+            # traefik.dynamicConfigOptions = {
+            #   http = {
+            #     routers.paperless = {
+            #       rule = "PathPrefix(`/${path}`)";
+            #       # rule = "Host(`${config.services.cloudflared.defaultDomain}`)";
+            #       # tls.certresolver = "cf";
+            #       entrypoints = [ "websecure" ];
+            #       middlewares = [ "${path}-redirect" ];
+            #       service = "noop@internal";
+            #     };
+            #     middlewares."${path}-redirect".redirectregex = {
+            #       regex = "^(http|https)://(.+?)/(.+)";
+            #       replacement = "\${1}://${hostname-domain}/\${3}";
+            #       permanent = true;
+            #     };
+            #   };
+            # };
+            cloudflared.tunnels."${config.networking.hostName}".ingress = [
+              {
+                hostname = "services.${config.services.cloudflared.defaultDomain}";
+                path = "/${path}.*";
+                service = "http://localhost:${builtins.toString config.services.paperless.port}";
+              }
+              {
+                hostname = "${config.networking.hostName}.${config.services.cloudflared.defaultDomain}";
+                path = "/${path}.*";
+                service = "http://localhost:${builtins.toString config.services.paperless.port}";
+              }
+            ];
           }
-          {
-            hostname = "${config.networking.hostName}.${config.services.cloudflared.defaultDomain}";
-            path = "${config.services.paperless.settings.PAPERLESS_FORCE_SCRIPT_NAME}.*";
-            service = "http://localhost:${builtins.toString config.services.paperless.port}";
-          }
-        ];
-      };
+        )
+      ];
     networking.firewall.allowedTCPPorts = lib.mkIf config.services.paperless.openFirewall [
       config.services.paperless.port
     ];
