@@ -21,10 +21,7 @@
     # ./pr.nix
   ];
 
-  desktop-environment.enable = lib.mkDefault true;
-  display-manager.enable = lib.mkDefault true;
   services.media.enable = lib.mkDefault false;
-  programs.enable = lib.mkDefault true;
 
   nix = {
     nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];

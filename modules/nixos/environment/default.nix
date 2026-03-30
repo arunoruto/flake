@@ -16,7 +16,6 @@
   ];
 
   cachix.enable = lib.mkDefault false;
-  latex.enable = lib.mkDefault false;
   programs.typst.enable = config.latex.enable;
 
   environment.enableAllTerminfo = true;

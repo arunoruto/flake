@@ -20,11 +20,6 @@
   networking.hostId = "7923f829";
   nas.enable = true;
 
-  # display-manager.enable = lib.mkForce false;
-  # desktop-environment.enable = lib.mkForce false;
-  display-manager.enable = false;
-  desktop-environment.enable = false;
-
   # firefox.enable = false;
   # chrome.enable = false;
   # steam.enable = false;

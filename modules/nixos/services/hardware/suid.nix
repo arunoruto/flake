@@ -4,6 +4,18 @@
   lib,
   ...
 }:
+let
+  gnomeEnabled = lib.attrByPath [ "services" "desktopManager" "gnome" "enable" ] false config;
+  plasmaEnabled = lib.attrByPath [ "services" "desktopManager" "plasma6" "enable" ] false config;
+
+  pinentryPackage =
+    if plasmaEnabled then
+      pkgs.pinentry-qt
+    else if gnomeEnabled then
+      pkgs.pinentry-gnome3
+    else
+      pkgs.pinentry-curses;
+in
 {
   options = {
     suid.enable = lib.mkEnableOption ''
@@ -19,7 +31,7 @@
     programs.mtr.enable = true;
     programs.gnupg.agent = {
       enable = true;
-      pinentryPackage = lib.mkForce pkgs.pinentry-gnome3;
+      pinentryPackage = lib.mkForce pinentryPackage;
       enableSSHSupport = true;
     };
   };

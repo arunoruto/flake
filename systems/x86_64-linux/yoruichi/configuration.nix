@@ -1,10 +1,6 @@
 _: {
   users.primaryUser = "mirza";
 
-  system.tags = [
-    "tinypc"
-    "headless"
-  ];
   colmena.deployment.buildOnTarget = false;
 
   boot.loader = {

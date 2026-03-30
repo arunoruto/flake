@@ -7,11 +7,6 @@
     cores = 0;
   };
 
-  system.tags = [
-    "tinypc"
-    "headless"
-  ];
-
   fwupd.enable = false;
 
   swapDevices = [

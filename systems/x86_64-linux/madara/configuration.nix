@@ -33,6 +33,7 @@
   printing.enable = true;
   scanning.enable = true;
   system.tags = [
+    "desktop"
     "workstation"
     "development"
   ];

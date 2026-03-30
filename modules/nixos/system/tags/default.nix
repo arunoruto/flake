@@ -7,9 +7,8 @@
 }:
 {
   imports = [
-    ./headless.nix
+    ./desktop.nix
     ./laptop.nix
-    ./tinypc.nix
     ./workstation.nix
   ];
 

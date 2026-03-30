@@ -263,7 +263,7 @@ in
     packages = [
       # glab-pkg # Gitlab CLI tool
     ]
-    # ++ lib.optionals ((!config.hosts.tinypc.enable) && (!config.hosts.headless.enable)) [
+    # ++ lib.optionals (config.hosts.desktop.enable) [
     #   pkgs.ai-commit
     #   pkgs.git-quill
     # ]

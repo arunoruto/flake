@@ -7,6 +7,7 @@
   imports = [
     ./keyboard
     ./nix.nix
+    ./tags
   ];
 
   system.defaults = {

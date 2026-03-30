@@ -18,10 +18,9 @@ in
 
   options = {
     hosts = {
+      desktop.enable = lib.mkEnableOption "Desktop/GUI features";
       laptop.enable = lib.mkEnableOption "Sensible defaults for laptops";
-      tinypc.enable = lib.mkEnableOption "Sensible defaults for tinypcs";
       development.enable = lib.mkEnableOption "Enable development tools";
-      headless.enable = lib.mkEnableOption "Sensible defaults for headless systems";
     };
   };
 
@@ -29,12 +28,9 @@ in
     # NixOS-specific configuration (tags-based)
     (lib.mkIf isNixOS {
       hosts = {
+        desktop.enable = lib.mkDefault (lib.elem "desktop" osConfig.system.tags);
         laptop.enable = lib.mkDefault (lib.elem "laptop" osConfig.system.tags);
-        tinypc.enable = lib.mkDefault (
-          (lib.elem "tinypc" osConfig.system.tags) || (lib.elem "headless" osConfig.system.tags)
-        );
         development.enable = lib.mkDefault (lib.elem "development" osConfig.system.tags);
-        headless.enable = lib.mkDefault (lib.elem "headless" osConfig.system.tags);
       };
       # hostname = lib.mkDefault osConfig.networking.hostName;
       keyboard = {
@@ -42,7 +38,7 @@ in
         variant = lib.mkDefault osConfig.services.xserver.xkb.variant;
       };
       theming = {
-        enable = lib.mkDefault osConfig.programs.enable;
+        enable = lib.mkDefault (lib.elem "desktop" osConfig.system.tags);
         # image and scheme are handled by stylix
       };
     })
@@ -51,7 +47,7 @@ in
     (lib.mkIf (osConfig != null) {
       foreground.enable = lib.mkDefault (
         if pkgs.stdenv.hostPlatform.isDarwin then
-          true # Always enable on Darwin
+          (lib.elem "desktop" osConfig.system.tags)
         else
           osConfig.programs.enable # Use NixOS custom option
       );
@@ -60,10 +56,9 @@ in
     # Standalone home-manager configuration (no osConfig available)
     (lib.mkIf (osConfig == null) {
       hosts = {
+        desktop.enable = lib.mkDefault false;
         laptop.enable = lib.mkDefault false;
-        tinypc.enable = lib.mkDefault false;
         development.enable = lib.mkDefault false;
-        headless.enable = lib.mkDefault false;
       };
       foreground.enable = lib.mkDefault true;
       theming.enable = lib.mkDefault true;

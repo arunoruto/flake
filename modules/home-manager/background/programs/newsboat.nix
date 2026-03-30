@@ -7,7 +7,7 @@
 #in
 {
   programs.newsboat = {
-    enable = !config.hosts.tinypc.enable;
+    enable = config.hosts.desktop.enable;
     extraConfig = ''
       # include ~/.newsboat/dark
     '';

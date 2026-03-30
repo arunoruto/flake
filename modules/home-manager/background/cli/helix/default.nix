@@ -7,7 +7,7 @@
   ...
 }@args:
 let
-  nightly = !config.hosts.tinypc.enable && (args ? osConfig);
+  nightly = config.hosts.desktop.enable && (args ? osConfig);
 in
 # toml = pkgs.formats.toml { };
 {
@@ -21,6 +21,7 @@ in
     programs.helix = {
       # package = if nightly then inputs.helix.packages.${pkgs.stdenv.hostPlatform.system}.default else pkgs.unstable.helix;
       package = pkgs.unstable.helix;
+      # package = pkgs.unstable.steelix;
       defaultEditor = true;
       settings = {
         theme = lib.mkForce "stylix-custom";

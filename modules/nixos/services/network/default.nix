@@ -25,11 +25,11 @@
       };
       netbird.enable = lib.mkDefault false;
     };
-    programs.localsend.enable = lib.mkDefault true;
+    programs.localsend.enable = lib.mkDefault (lib.elem "desktop" config.system.tags);
     environment.systemPackages = [
       pkgs.unixtools.netstat
     ]
-    ++ lib.optionals (!(lib.elem "tinypc" config.system.tags)) (
+    ++ lib.optionals (lib.elem "desktop" config.system.tags) (
       with pkgs;
       [
         bind

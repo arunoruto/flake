@@ -9,7 +9,7 @@
   #   ./chess-tui.nix
   # ];
 
-  config = lib.mkIf (!config.hosts.headless.enable) {
+  config = lib.mkIf (config.hosts.desktop.enable) {
     home.packages = with pkgs.unstable; [
       en-croissant
     ];

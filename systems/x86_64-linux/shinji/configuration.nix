@@ -13,10 +13,6 @@ in
   colmena.deployment = {
     targetHost = config.networking.hostName;
   };
-  system.tags = [
-    "tinypc"
-    "headless"
-  ];
   hosts.intel.enable = true;
   bosflix = {
     enable = true;

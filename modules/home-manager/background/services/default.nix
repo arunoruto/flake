@@ -11,6 +11,6 @@
   ];
 
   programs.nix-serve.enable = lib.mkDefault (
-    !config.hosts.tinypc.enable && pkgs.stdenv.hostPlatform.isLinux
+    config.hosts.desktop.enable && pkgs.stdenv.hostPlatform.isLinux
   );
 }

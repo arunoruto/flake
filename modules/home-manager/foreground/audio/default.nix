@@ -6,7 +6,7 @@
   ...
 }@args:
 {
-  config = lib.mkIf (!config.hosts.headless.enable) {
+  config = lib.mkIf (config.hosts.desktop.enable) {
     services.easyeffects = {
       enable = pkgs.stdenv.hostPlatform.isLinux;
       package = pkgs.unstable.easyeffects;

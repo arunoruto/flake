@@ -28,7 +28,7 @@
   };
 
   config = {
-    environment.systemPackages = lib.optionals (!(lib.elem "tinypc" config.system.tags)) (
+    environment.systemPackages = lib.optionals (lib.elem "desktop" config.system.tags) (
       with pkgs;
       [
         inputs.colmena.packages.${pkgs.stdenv.hostPlatform.system}.colmena

@@ -9,7 +9,7 @@
   # ];
 
   programs.nix-ld = {
-    enable = true;
+    enable = pkgs.stdenv.hostPlatform.isx86_64;
     package = pkgs.unstable.nix-ld;
     libraries = with pkgs; [
       # blas

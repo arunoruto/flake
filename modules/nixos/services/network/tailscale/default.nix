@@ -33,16 +33,16 @@
           "--accept-routes"
         ]
         ++ (
-          if (lib.elem "headless" config.system.tags) then
-            [
-              "--ssh"
-            ]
-          else
+          if (lib.elem "desktop" config.system.tags) then
             [
               "--exit-node-allow-lan-access"
             ]
+          else
+            [
+              "--ssh"
+            ]
         );
-        extraSetFlags = lib.optionals (lib.elem "headless" config.system.tags) [
+        extraSetFlags = lib.optionals (!(lib.elem "desktop" config.system.tags)) [
           "--advertise-exit-node"
         ];
         permitCertUid = if config.services.traefik.enable then "traefik" else null;

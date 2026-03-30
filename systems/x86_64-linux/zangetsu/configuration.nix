@@ -6,6 +6,11 @@
 {
   users.primaryUser = "mirza";
 
+  system.tags = [
+    "desktop"
+    "laptop"
+  ];
+
   # Eanble fingerprint for framework laptop
   fingerprint.enable = false;
 

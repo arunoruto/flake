@@ -47,7 +47,7 @@ in
         (
           if config.shell.main == sh then
             (lib.mkDefault true)
-          else if config.hosts.tinypc.enable then
+          else if (!config.hosts.desktop.enable) then
             (lib.mkForce false)
           else
             (lib.mkDefault false)

@@ -7,6 +7,11 @@
   ...
 }:
 {
+  system.tags = [
+    "desktop"
+    "laptop"
+  ];
+
   # Platform and nixpkgs configuration
   nixpkgs = {
     hostPlatform = "aarch64-darwin";
@@ -27,10 +32,10 @@
       # rnote
     ])
     ++ (with pkgs.unstable; [
-      # devenv
+      devenv
     ])
     ++ [
-      inputs.devenv.packages.aarch64-darwin.devenv
+      # inputs.devenv.packages.aarch64-darwin.devenv
     ];
 
   # Networking
@@ -65,7 +70,6 @@
     user = "mirza";
     casks = [
       "caffeine"
-      "notchnook"
       "telegram"
       "rnote"
       "visual-studio-code"

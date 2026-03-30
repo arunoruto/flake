@@ -27,7 +27,7 @@
       enable = lib.mkDefault config.hosts.development.enable;
       ngram = lib.mkDefault (config.hosts.development.enable && args ? osConfig);
     };
-    # markdown.enable = lib.mkDefault (!config.hosts.tinypc.enable);
+    # markdown.enable = lib.mkDefault (config.hosts.desktop.enable);
     markdown.enable = lib.mkDefault true;
     markup.enable = lib.mkDefault true;
     nix.enable = lib.mkDefault true;

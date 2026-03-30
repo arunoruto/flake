@@ -89,8 +89,8 @@ in
   config = lib.mkIf cfg.enable {
     programs.opencode = {
       web = {
-        # enable = lib.mkDefault (!(config.hosts.laptop.enable || config.hosts.headless.enable));
-        enable = lib.mkDefault (!(config.hosts.headless.enable));
+        # Disable on laptops, enable on desktop workstations
+        enable = lib.mkDefault (config.hosts.desktop.enable && !config.hosts.laptop.enable);
         extraArgs = [
           "--port"
           "4096"

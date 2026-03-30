@@ -2,10 +2,6 @@ _: {
   users.primaryUser = "mirza";
 
   # colmena.deployment.buildOnTarget = true;
-  system.tags = [
-    "tinypc"
-    "headless"
-  ];
   hosts = {
     intel = {
       enable = true;

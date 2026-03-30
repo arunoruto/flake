@@ -24,10 +24,10 @@
   security = {
     polkit.enable = true;
     sudo.package =
-      if (lib.elem "tinypc" config.system.tags) then
-        pkgs.sudo
+      if (lib.elem "desktop" config.system.tags) then
+        pkgs.sudo.override { withInsults = true; }
       else
-        pkgs.sudo.override { withInsults = true; };
+        pkgs.sudo;
   };
 
   environment.systemPackages = with pkgs; [

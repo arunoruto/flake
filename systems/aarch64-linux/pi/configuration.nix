@@ -6,11 +6,6 @@
 {
   users.primaryUser = "mirza";
 
-  system.tags = [
-    "tinypc"
-    "headless"
-  ];
-
   networking = {
     networkmanager = {
       enable = true;
