@@ -15,6 +15,10 @@
           HIDKeyboardModifierMappingSrc = 30064771113;
           HIDKeyboardModifierMappingDst = 30064771129;
         })
+        (lib.mkIf config.system.keyboard.nonUS.remapTilde {
+          HIDKeyboardModifierMappingSrc = 30064771125;
+          HIDKeyboardModifierMappingDst = 30064771172;
+        })
       ];
     };
   };
