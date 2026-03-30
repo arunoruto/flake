@@ -19,7 +19,10 @@
     homebrew = {
       # enable = true;
       # casks = config.darwin.homebrew.casks;
-      masApps = lib.optionalAttrs config.services.tailscale.enable { Tailscale = 1475387142; };
+      masApps = lib.optionalAttrs config.services.tailscale.enable {
+        Tailscale = 1475387142;
+        FluffyChat = 1551469600;
+      };
       user = lib.mkDefault config.users.primaryUser;
     };
   };
