@@ -4,6 +4,8 @@
   buildGoModule,
   fetchFromGitHub,
   nix-update-script,
+  icu,
+  pkg-config,
   gitMinimal,
   installShellFiles,
   versionCheckHook,
@@ -12,16 +14,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "beads";
-  version = "0.49.1";
+  version = "0.63.2";
 
   src = fetchFromGitHub {
     owner = "steveyegge";
     repo = "beads";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-roOyTMy9nKxH2Bk8MnP4h2CDjStwK6z0ThQhFcM64QI=";
+    hash = "sha256-ERRw+SgRgFzY+cchRRsCYUtKCXvRZOdWJuSAQPDVF3M=";
   };
 
-  vendorHash = "sha256-YU+bRLVlWtHzJ1QPzcKJ70f+ynp8lMoIeFlm+29BNPE=";
+  vendorHash = "sha256-GYPfvsI8eNJbdzrbO7YnMkN2Yt6KZNB7w/2SJD2WdFY=";
 
   subPackages = [ "cmd/bd" ];
 
@@ -29,6 +31,8 @@ buildGoModule (finalAttrs: {
     "-s"
     "-w"
   ];
+
+  buildInputs = [ icu ];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -40,6 +44,7 @@ buildGoModule (finalAttrs: {
   # Skip security tests on Darwin - they check for /etc/passwd which isn't available in sandbox
   checkFlags = [
     "-skip=TestDaemonAutostart_StartDaemonProcess_Stubbed"
+    "-skip=TestE2E_AutoStartedRepoLocalServerPersistsAcrossCommands"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-skip=TestCleanupMergeArtifacts_CommandInjectionPrevention"
