@@ -5,7 +5,6 @@
   fetchFromGitHub,
   nix-update-script,
   icu,
-  pkg-config,
   gitMinimal,
   installShellFiles,
   versionCheckHook,
@@ -41,13 +40,8 @@ buildGoModule (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
 
-  # Skip security tests on Darwin - they check for /etc/passwd which isn't available in sandbox
   checkFlags = [
-    "-skip=TestDaemonAutostart_StartDaemonProcess_Stubbed"
     "-skip=TestE2E_AutoStartedRepoLocalServerPersistsAcrossCommands"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "-skip=TestCleanupMergeArtifacts_CommandInjectionPrevention"
   ];
 
   preCheck = ''
@@ -74,7 +68,10 @@ buildGoModule (finalAttrs: {
     description = "Lightweight memory system for AI coding agents with graph-based issue tracking";
     homepage = "https://github.com/steveyegge/beads";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kedry ];
+    maintainers = with lib.maintainers; [
+      kedry
+      arunoruto
+    ];
     mainProgram = "bd";
   };
 })
