@@ -21,6 +21,10 @@ Linux-aarch64 | Linux-arm64)
         ;;
 esac
 
+RAW_JSON=$(nix eval "$NH_FLAKE#legacyPackages.$PLATFORM.$PACKAGE.passthru.updateScript" --json)
+readarray -t UPDATE_ARGS < <(echo "$RAW_JSON" | nix run nixpkgs#jq -- -r '.[1:][]')
+
 nix-update legacyPackages.$PLATFORM.$PACKAGE \
-        --use-update-script --flake \
-        --override-filename "$NH_FLAKE/packages/custom/$PACKAGE/package.nix"
+        --flake \
+        "${UPDATE_ARGS[@]}" \
+        --override-filename "$NH_FLAKE/packages/top-level/$PACKAGE/package.nix"
