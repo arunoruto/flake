@@ -9,9 +9,11 @@
   # display-manager.enable = lib.mkForce false;
   # desktop-environment.enable = lib.mkForce false;
 
-  firefox.enable = false;
-  # chrome.enable = false;
-  steam.enable = false;
+  programs = {
+    firefox.enable = false;
+    # chrome.enable = false;
+    steam.enable = false;
+  };
 
   # firefox.enable = false;
   # chrome.enable = false;

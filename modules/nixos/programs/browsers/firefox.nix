@@ -9,9 +9,7 @@ let
   version = "floorp";
 in
 {
-  options.firefox.enable = lib.mkEnableOption "Configure firefox systemwide";
-
-  config = lib.mkIf config.firefox.enable {
+  config = lib.mkIf config.programs.firefox.enable {
     # environment.systemPackages = with pkgs; [
     #   (wrapFirefox (firefox-unwrapped.override {
     #     pipewireSupport = true;
@@ -19,7 +17,6 @@ in
     # ];
 
     programs.firefox = {
-      enable = true;
       package =
         if (version == "firefox-unwrapped") then
           pkgs.wrapFirefox (pkgs.${version}.override {
