@@ -81,13 +81,16 @@ in
     # Environment configuration
     environment = {
       shells = [ config.users.users.${primaryUserName}.shell ];
-      pathsToLink =
-        lib.optionals config.home-manager.users.${primaryUserName}.programs.zsh.enable [
-          "/share/zsh"
-        ]
-        ++ lib.optionals config.home-manager.users.${primaryUserName}.programs.fish.enable [
-          "/share/fish"
-        ];
+      pathsToLink = [
+        "/share/xdg-desktop-portal"
+        "/share/applications"
+      ]
+      ++ lib.optionals config.home-manager.users.${primaryUserName}.programs.zsh.enable [
+        "/share/zsh"
+      ]
+      ++ lib.optionals config.home-manager.users.${primaryUserName}.programs.fish.enable [
+        "/share/fish"
+      ];
     };
 
     # Configure home-manager for primary user by default
