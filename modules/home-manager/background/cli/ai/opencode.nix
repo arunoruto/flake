@@ -176,7 +176,7 @@ in
               bash = true;
             };
             permission = {
-              edit = "allow";
+              edit = "deny";
               skill."*" = "allow";
             };
           };
@@ -187,11 +187,13 @@ in
         commit = ./agents/COMMIT.md;
         summirizer = ./agents/ACADEMIC-SUMMARIZER.md;
         questioner = ./agents/ACADEMIC-QUESTIONER.md;
+        caveman = ./agents/CAVEMAN.md;
       };
       skills = {
         # beads = pkgs.unstable.beads.src + "/skills/beads";
         beads = pkgs.unstable.beads.src + "/claude-plugin/skills/beads";
         commit = ./skills/commit;
+        devenv = ./skills/devenv;
       };
       rules = ./AGENTS.md;
       enableMcpIntegration = true;
@@ -205,7 +207,7 @@ in
         };
 
         Service = {
-          ExecStart = "${lib.getExe cfg.package} web ${lib.escapeShellArgs webCfg.extraArgs}";
+          ExecStart = "${lib.getExe cfg.package} serve ${lib.escapeShellArgs webCfg.extraArgs}";
           Restart = "always";
           RestartSec = 5;
         };
