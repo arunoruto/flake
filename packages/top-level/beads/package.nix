@@ -73,5 +73,6 @@ buildGoModule (finalAttrs: {
       arunoruto
     ];
     mainProgram = "bd";
+    platforms = lib.platforms.unix;
   };
 })
