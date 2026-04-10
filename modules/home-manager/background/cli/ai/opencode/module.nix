@@ -7,12 +7,9 @@
 let
   cfg = config.programs.opencode;
   webCfg = cfg.web;
+  jsonFormat = pkgs.formats.json { };
 in
 {
-  imports = [
-    # ./opencode-theme.nix
-  ];
-
   options.programs.opencode = {
     skills = lib.mkOption {
       type = lib.types.either (lib.types.attrsOf (lib.types.either lib.types.lines lib.types.path)) lib.types.path;
@@ -84,121 +81,64 @@ in
         '';
       };
     };
+
+    omo = {
+      enable = lib.mkEnableOption "Oh My OpenAgent (OMO) configuration" // {
+        default = builtins.elem "oh-my-openagent" cfg.settings.plugin;
+      };
+
+      settings = lib.mkOption {
+        type = lib.types.submodule {
+          # This allows ANY valid JSON structure to be passed, merging it with the explicit options below
+          freeformType = jsonFormat.type;
+
+          options = {
+            agents = lib.mkOption {
+              type = lib.types.attrsOf jsonFormat.type;
+              default = { };
+              description = "Specific model configurations for OMO agents.";
+              example = lib.literalExpression ''
+                {
+                  sisyphus.model = "opencode-go/kimi-k2.5";
+                }
+              '';
+            };
+
+            categories = lib.mkOption {
+              type = lib.types.attrsOf jsonFormat.type;
+              default = { };
+              description = "Category routing configurations for ultrawork delegation.";
+              example = lib.literalExpression ''
+                {
+                  ultrabrain.model = "opencode-go/glm-5.1";
+                }
+              '';
+            };
+
+            fallback_models = lib.mkOption {
+              type = lib.types.listOf jsonFormat.type;
+              default = [ ];
+              description = "Fallback models to use when API rate limits or errors occur.";
+            };
+
+            sisyphus_agent = lib.mkOption {
+              type = jsonFormat.type;
+              default = { };
+              description = "Configuration for the Sisyphus orchestration system (planner, replace default plan).";
+            };
+          };
+        };
+        default = { };
+        description = ''
+          Configuration options for oh-my-openagent. 
+          This is a freeform JSON attribute set. Any attributes defined here will be 
+          serialized to oh-my-openagent.jsonc.
+        '';
+      };
+    };
   };
 
   config = lib.mkIf cfg.enable {
-    programs.opencode = {
-      web = {
-        # Disable on laptops, enable on desktop workstations
-        enable = lib.mkDefault (config.hosts.desktop.enable && !config.hosts.laptop.enable);
-        extraArgs = [
-          "--port"
-          "4096"
-        ];
-      };
-      package = pkgs.unstable.opencode;
-      # package = pkgs.custom.opencode;
-      settings = {
-        theme = "stylix";
-        # tools = {
-        #   bash = true;
-        #   edit = true;
-        #   write = true;
-        #   read = true;
-        #   grep = true;
-        #   glob = true;
-        #   list = true;
-        # };
-        provider.ollama = {
-          npm = "@ai-sdk/openai-compatible";
-          name = "Ollama";
-          # options.baseURL = "http://madara.king-little.ts.net:11434/v1";
-          options.baseURL = lib.mkDefault config.programs.ollama.defaultPath;
-          models = {
-            "ministral-3:3b" = {
-              name = "Ministral - Mini";
-              tool_call = true;
-            };
-            "ministral-3:8b" = {
-              name = "Ministral - Midi";
-              tool_call = true;
-            };
-            "ministral-3:14b" = {
-              name = "Ministral - Maxi";
-              tool_call = true;
-            };
-            "gemma3:4b" = {
-              name = "Gemma3 Mini";
-              tool_call = false;
-            };
-            "gemma3:12b" = {
-              name = "Gemma3";
-              tool_call = false;
-            };
-            "deepseek-r1:14b" = {
-              name = "DeepSeek-R1";
-              # tools = true;
-              reasoning = true;
-            };
-            "qwen3:14b" = {
-              name = "Qwen3";
-              tools = true;
-              reasoning = true;
-            };
-          };
-        };
-        permission = {
-          todowrite = "allow";
-          todoread = "allow";
-          edit = "ask";
-          write = {
-            ".opencode/plans/**" = "allow";
-          };
-          bash = {
-            ls = "allow";
-            pwd = "allow";
-            "git status" = "allow";
-            "git diff*" = "allow";
-            "git log*" = "allow";
-            # "git add*" = "allow";
-            "mkdir -p .opencode/plans" = "allow";
-            ssh = "deny";
-          };
-        };
-        agent = {
-          autoaccept = {
-            mode = "primary";
-            tools = {
-              todowrite = true;
-              todoread = true;
-              write = true;
-              edit = true;
-              bash = true;
-            };
-            permission = {
-              edit = "deny";
-              skill."*" = "allow";
-            };
-          };
-        };
-        plugin = [ "opencode-gemini-auth@latest" ];
-      };
-      agents = {
-        commit = ./agents/COMMIT.md;
-        summirizer = ./agents/ACADEMIC-SUMMARIZER.md;
-        questioner = ./agents/ACADEMIC-QUESTIONER.md;
-        caveman = ./agents/CAVEMAN.md;
-      };
-      skills = {
-        # beads = pkgs.unstable.beads.src + "/skills/beads";
-        beads = pkgs.unstable.beads.src + "/claude-plugin/skills/beads";
-        commit = ./skills/commit;
-        devenv = ./skills/devenv;
-      };
-      rules = ./AGENTS.md;
-      enableMcpIntegration = true;
-    };
-
     systemd.user.services = lib.mkIf (webCfg.enable && pkgs.stdenv.isLinux) {
       opencode-web = {
         Unit = {
@@ -223,6 +163,14 @@ in
         source = cfg.skills;
         recursive = true;
       };
+    }
+    // lib.optionalAttrs cfg.omo.enable {
+      "opencode/oh-my-openagent.jsonc".source =
+        jsonFormat.generate "oh-my-openagent.jsonc" {
+          "$schema" =
+            "https://raw.githubusercontent.com/code-yeongyu/oh-my-openagent/dev/assets/oh-my-opencode.schema.json";
+        }
+        // cfg.omo.settings;
     }
     // lib.mapAttrs' (
       name: content:

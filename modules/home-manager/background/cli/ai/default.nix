@@ -10,7 +10,7 @@
     ./copilot.nix
     ./gemini.nix
     ./mcp.nix
-    ./opencode.nix
+    ./opencode
   ];
 
   options.programs.ollama.defaultPath = lib.mkOption {
