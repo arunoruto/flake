@@ -114,6 +114,10 @@
 
           set -g window-status-format " ${numbers}:#W "
           set -g window-status-current-format " ${numbers}:#W "
+
+          # Fix shift+enter for opencode
+          set -g extended-keys on
+          bind S-Enter send-keys "^[[13;2u"
         '';
       # + (
       #   let
