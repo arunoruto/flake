@@ -2,11 +2,12 @@
   lib,
   stdenv,
   fetchurl,
+  versionCheckHook,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "apfel";
+  pname = "apfel-llm";
   version = "0.9.6";
 
   src = fetchurl {
@@ -28,6 +29,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
 
