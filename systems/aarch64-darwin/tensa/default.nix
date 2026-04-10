@@ -25,13 +25,13 @@
   # System packages
   environment.systemPackages =
     (with pkgs; [
-      direnv
       helix
       nh
       git-quill
       # rnote
     ])
     ++ (with pkgs.unstable; [
+      direnv
       devenv
     ])
     ++ [
@@ -68,6 +68,12 @@
   homebrew = {
     enable = true;
     user = "mirza";
+    # taps = [
+    #   "Arthur-Ficial/tap"
+    # ];
+    # brews = [
+    #   "apfel"
+    # ];
     casks = [
       "caffeine"
       "telegram"
