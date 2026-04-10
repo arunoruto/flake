@@ -4,7 +4,6 @@
   fetchFromGitHub,
   versionCheckHook,
   nix-update-script,
-  # callPackage,
 
   bun,
   nodejs_24,
@@ -23,9 +22,6 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-DNxVT8J6FlzgFfU0OpCXctIDylaiF4CAaKMMVz0ShWo=";
   };
 
-  # node-modules = callPackage ./node-modules.nix {
-  #   inherit (finalAttrs) pname version src;
-  # };
   node-modules = stdenv.mkDerivation {
     pname = "${finalAttrs.pname}-node-modules";
     inherit (finalAttrs) version src;
