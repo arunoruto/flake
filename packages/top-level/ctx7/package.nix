@@ -13,13 +13,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ctx7";
-  version = "0.3.9";
+  version = "0.3.11";
 
   src = fetchFromGitHub {
     owner = "upstash";
     repo = "context7";
     tag = "${finalAttrs.pname}@${finalAttrs.version}";
-    hash = "sha256-nrJCYezH9VDd1Ptpg5xATx0ByweTw8dkKT2y3rnFHd8=";
+    hash = "sha256-zhJDYjGop6qtpeLcuH/iOXJ1sIuAtl2yIV9NEvFuPDo=";
   };
 
   nativeBuildInputs = [

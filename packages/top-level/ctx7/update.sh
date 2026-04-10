@@ -1,10 +1,5 @@
 #!/usr/bin/env bash
 
-# nix-update legacyPackages.$PLATFORM.$PACKAGE \
-#         --flake \
-#         --version-regex "$PACKAGE@(.*)" \
-#         --override-filename "$NH_FLAKE/packages/top-level/$PACKAGE/package.nix"
-
 PACKAGE="ctx7"
 
 # Detect platform
@@ -35,4 +30,5 @@ readarray -t UPDATE_ARGS < <(echo "$RAW_JSON" | nix run nixpkgs#jq -- -r '.[1:][
 nix-update $PREFIX \
         --flake \
         "${UPDATE_ARGS[@]}" \
-        --override-filename "$NH_FLAKE/packages/top-level/$PACKAGE/package.nix"
+        --override-filename "$NH_FLAKE/packages/top-level/$PACKAGE/package.nix" \
+        "$@"
