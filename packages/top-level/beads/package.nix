@@ -16,7 +16,7 @@ buildGoModule (finalAttrs: {
   version = "1.0.0";
 
   src = fetchFromGitHub {
-    owner = "steveyegge";
+    owner = "gastownhall";
     repo = "beads";
     tag = "v${finalAttrs.version}";
     hash = "sha256-D2jShGpkOWKx9aRmRvV5bmV8t0/Y2eAE8q0m54QrRN0=";
@@ -66,7 +66,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Lightweight memory system for AI coding agents with graph-based issue tracking";
-    homepage = "https://github.com/steveyegge/beads";
+    homepage = "https://github.com/gastownhall/beads";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       kedry
