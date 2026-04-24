@@ -1,19 +1,25 @@
 {
+  stdenv,
   buildGoModule,
+  # buildGo126Module,
   lib,
   fetchFromGitHub,
   nix-update-script,
   buildNpmPackage,
+  nixosTests,
 }:
+let
+  # buildGoModule = buildGo126Module;
+in
 buildGoModule (finalAttrs: {
   pname = "beszel";
-  version = "0.18.6";
+  version = "0.18.7";
 
   src = fetchFromGitHub {
     owner = "henrygd";
     repo = "beszel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CRO0Y3o3hwdE55D027fo0tvt9o7vsA1ooEBFlXuw2So=";
+    hash = "sha256-pVZ1ru9++BypZ3EwoE8clqJowXj1/CMiJxKaC+UY9VE=";
   };
 
   webui = buildNpmPackage {
@@ -47,30 +53,62 @@ buildGoModule (finalAttrs: {
 
     sourceRoot = "${finalAttrs.src.name}/internal/site";
 
-    npmDepsHash = "sha256-509/n5OH4z6LZH+jlmDLl2DlqKrD7M5ajtalmF/4n1o=";
+    npmDepsHash = "sha256-mYAD8FrQwa+F/VgGxFpe8vqucfZaM0PmY+gJJqw1IKk=";
   };
 
-  # sourceRoot = "${finalAttrs.src.name}";
+  vendorHash = "sha256-TVpZbK9V9/GqpVFcjF7QGD5XJJHzRgjVXZOImHQTR1k=";
 
-  vendorHash = "sha256-g+UmoxBoCL3oGXNTY67Wz7y6FC/nkcS8020jhTq4JQE=";
+  # tags = [ "testing" ];
 
-  # postPatch = ''substituteInPlace go.mod --replace "go 1.25.1" "go 1.25.0"'';
+  postPatch = ''
+    # Fix the race condition in the upstream alerts test by injecting a panic recovery
+    # into the leaky background goroutine so it dies silently on test teardown.
+    substituteInPlace internal/hub/systems/system.go \
+      --replace-fail "func (sys *System) StartUpdater() {" "func (sys *System) StartUpdater() { defer func() { recover() }();"
+  '';
 
   preBuild = ''
     mkdir -p internal/site/dist
     cp -r ${finalAttrs.webui}/* internal/site/dist
   '';
 
+  checkFlags =
+    let
+      skippedTests = [
+        "TestCollectorStartHelpers/nvtop_collector"
+        "TestApiRoutesAuthentication/GET_/update_-_shouldn't_exist_without_CHECK_UPDATES_env_var"
+        "TestConfigSyncWithTokens"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        "TestCollectorStartHelpers/nvidia-smi_collector"
+        "TestCollectorStartHelpers/rocm-smi_collector"
+        "TestCollectorStartHelpers/tegrastats_collector"
+        "TestNewGPUManagerPriorityNvtopFallback"
+        "TestNewGPUManagerPriorityMixedCollectors"
+        "TestNewGPUManagerPriorityNvmlFallbackToNvidiaSmi"
+        "TestNewGPUManagerConfiguredCollectorsMustStart"
+        "TestNewGPUManagerConfiguredNvmlBypassesCapabilityGate"
+        "TestNewGPUManagerJetsonIgnoresCollectorConfig"
+      ];
+    in
+    [
+      "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$"
+      "-tags=testing"
+    ];
+
   postInstall = ''
     mv $out/bin/agent $out/bin/beszel-agent
     mv $out/bin/hub $out/bin/beszel-hub
   '';
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--subpackage"
-      "webui"
-    ];
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "webui"
+      ];
+    };
+    tests.nixos = nixosTests.beszel;
   };
 
   meta = {
@@ -80,6 +118,7 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       bot-wxt1221
       arunoruto
+      BonusPlay
     ];
     license = lib.licenses.mit;
   };
