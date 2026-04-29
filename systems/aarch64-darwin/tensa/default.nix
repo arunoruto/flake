@@ -25,13 +25,15 @@
   # System packages
   environment.systemPackages =
     (with pkgs; [
+      direnv
       helix
+      iproute2mac
       nh
       git-quill
       # rnote
     ])
     ++ (with pkgs.unstable; [
-      direnv
+      # direnv
       devenv
     ])
     ++ [
@@ -71,9 +73,9 @@
     # taps = [
     #   "Arthur-Ficial/tap"
     # ];
-    # brews = [
-    #   "apfel"
-    # ];
+    brews = [
+      # "apfel"
+    ];
     casks = [
       "caffeine"
       "telegram"
