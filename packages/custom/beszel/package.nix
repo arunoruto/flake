@@ -86,9 +86,9 @@ buildGoModule (finalAttrs: {
         "TestNewGPUManagerPriorityNvtopFallback"
         "TestNewGPUManagerPriorityMixedCollectors"
         "TestNewGPUManagerPriorityNvmlFallbackToNvidiaSmi"
-        "TestNewGPUManagerConfiguredCollectorsMustStart"
-        "TestNewGPUManagerConfiguredNvmlBypassesCapabilityGate"
-        "TestNewGPUManagerJetsonIgnoresCollectorConfig"
+        # "TestNewGPUManagerConfiguredCollectorsMustStart"
+        # "TestNewGPUManagerConfiguredNvmlBypassesCapabilityGate"
+        # "TestNewGPUManagerJetsonIgnoresCollectorConfig"
       ];
     in
     [
@@ -100,6 +100,8 @@ buildGoModule (finalAttrs: {
     mv $out/bin/agent $out/bin/beszel-agent
     mv $out/bin/hub $out/bin/beszel-hub
   '';
+
+  # __darwinAllowLocalNetworking = true;
 
   passthru = {
     updateScript = nix-update-script {
