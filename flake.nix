@@ -25,10 +25,10 @@
       url = "./devix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # devenv = {
-    #   url = "github:cachix/devenv";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
+    devenv = {
+      url = "github:cachix/devenv";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     # lix-module = {
     #   url = "https://git.lix.systems/lix-project/nixos-module/archive/2.93.0.tar.gz";
     #   inputs.nixpkgs.follows = "nixpkgs";
@@ -183,6 +183,12 @@
       nixosModules.default = import ./modules/nixos;
       darwinModules.default = import ./modules/darwin;
       homeModules.default = import ./modules/home-manager/default.nix;
+      devenvModules = {
+        default = import ./modules/devenv;
+        core = ./modules/devenv/languages/core.nix;
+        helix = import ./modules/devenv/editors/helix.nix;
+        python = ./modules/devenv/profiles/python.nix;
+      };
 
       nixosConfigurations = import ./systems {
         inherit
@@ -260,7 +266,7 @@
           };
         in
         {
-          devShells = (import ./shells pkgs-system lib) // {
+          devShells = (import ./shells { pkgs = pkgs-system; inherit lib self inputs; }) // {
             nix = pkgs-system.mkShell {
               shellHook = self.checks.${system}.pre-commit-check.shellHook;
               buildInputs =
@@ -310,7 +316,7 @@
       "https://colmena.cachix.org"
       "https://install.determinate.systems"
       # "https://helix.cachix.org"
-      "http://madara.king-little.ts.net:5000"
+      # "http://madara.king-little.ts.net:5000"
     ];
     extra-trusted-public-keys = [
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
@@ -318,7 +324,7 @@
       "colmena.cachix.org-1:7BzpDnjjH8ki2CT3f6GdOk7QAzPOl+1t3LvTLXqYcSg="
       "cache.flakehub.com-3:hJuILl5sVK4iKm86JzgdXW12Y2Hwd5G07qKtHTOcDCM="
       # "helix.cachix.org-1:ejp9KQpR1FBI2onstMQ34yogDm4OgU2ru6lIwPvuCVs="
-      "madara:ZyOQZ0jEn5G9qInb25sEz3LwRmJwBFkhji83xwyLWpk="
+      # "madara:ZyOQZ0jEn5G9qInb25sEz3LwRmJwBFkhji83xwyLWpk="
     ];
   };
 }
