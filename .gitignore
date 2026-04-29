@@ -7,3 +7,10 @@ result-*
 
 # Ignore automatically generated direnv output
 .direnv
+
+# Devenv
+.devenv*
+devenv.local.nix
+devenv.local.yaml
+
+.helix*
