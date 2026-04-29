@@ -122,6 +122,9 @@ in
         ++ lib.optionals pkgs.stdenv.hostPlatform.isLinux [
           inputs.nixpkgs-update.packages.x86_64-linux.nixpkgs-update
         ];
+      # ++ [
+      #   inputs.nixpkgs-update.packages."${pkgs.stdenv.hostPlatform.system}".nixpkgs-update
+      # ];
       sessionVariables.NH_FLAKE = "${config.home.homeDirectory}/.config/flake";
       # sessionVariables.NH_FLAKE = "/home/${user}/.config/flake";
       # sessionVariables.FLAKE = "/home/${config.home.username}/.config/flake";

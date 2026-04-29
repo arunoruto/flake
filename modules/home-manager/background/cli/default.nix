@@ -27,7 +27,7 @@
       atuin.enable = lib.mkDefault true;
       serpl.enable = lib.mkDefault true;
       yazi.enable = lib.mkDefault true;
-      zellij.enable = lib.mkDefault true;
+      zellij.enable = lib.mkDefault false;
     };
   };
 }

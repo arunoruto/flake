@@ -127,7 +127,7 @@
       };
       plugin = [
         "opencode-gemini-auth@latest"
-        "oh-my-openagent"
+        # "oh-my-openagent"
       ];
     };
     agents = {
@@ -141,6 +141,14 @@
       beads = pkgs.unstable.beads.src + "/claude-plugin/skills/beads";
       commit = ../skills/commit;
       devenv = ../skills/devenv;
+      caveman =
+        (pkgs.fetchFromGitHub {
+          owner = "JuliusBrussee";
+          repo = "caveman";
+          tag = "v1.3.5";
+          hash = "sha256-EAlKoqJuTMib+gcLscMtpS8Zzq/D/LmIRoG3g/XKThc=";
+        })
+        + "plugins/caveman/skills/caveman";
     };
     rules = ../AGENTS.md;
   };
