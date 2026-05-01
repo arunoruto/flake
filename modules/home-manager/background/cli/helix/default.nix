@@ -20,8 +20,8 @@ in
   config = lib.mkIf config.programs.helix.enable {
     programs.helix = {
       # package = if nightly then inputs.helix.packages.${pkgs.stdenv.hostPlatform.system}.default else pkgs.unstable.helix;
-      package = pkgs.unstable.helix;
-      # package = pkgs.unstable.steelix;
+      # package = pkgs.unstable.helix;
+      package = pkgs.unstable.steelix;
       defaultEditor = true;
       settings = {
         theme = lib.mkForce "stylix-custom";
@@ -49,6 +49,7 @@ in
           file-picker = {
             hidden = false;
           };
+          insecure = if config.programs.helix.package.pname == "steelix" then true else false;
         }
         // lib.optionalAttrs nightly {
           end-of-line-diagnostics = "warning";
