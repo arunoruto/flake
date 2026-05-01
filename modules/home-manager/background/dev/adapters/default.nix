@@ -6,7 +6,7 @@
 
       adapters = {
         helix.enable = true;
-        opencode.enable = lib.mkDefault true;
+        # opencode.enable = lib.mkDefault true;
       };
 
       groups.markup.enable = lib.mkDefault true;
@@ -40,9 +40,9 @@
           lsp-ai.enable = lib.mkDefault false;
         };
 
-        ltex.ngram.enable = lib.mkDefault (
-          config.hosts.development.enable && (config._module.args ? osConfig)
-        );
+        # ltex.ngram.enable = lib.mkDefault (
+        #   config.hosts.development.enable && (config._module.args ? osConfig)
+        # );
       };
     };
   };
