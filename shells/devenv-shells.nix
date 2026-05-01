@@ -7,13 +7,16 @@
     self.devenvModules.core
     self.devenvModules.helix
     self.devenvModules.python
-    ({ ... }: {
-      development.languages.python.enable = true;
-      programs.helix.enable = true;
-      devenv.root = "/Users/mirza/.config/flake";
-    })
+    (
+      { ... }:
+      {
+        development.languages.python.enable = true;
+        programs.helix.enable = true;
+        # devenv.root = "/Users/mirza/.config/flake";
+      }
+    )
   ];
-  
+
   # Add more devenv shells here as needed:
   # go = [
   #   self.devenvModules.core
