@@ -2,7 +2,7 @@
 {
   config = {
     programs.opencode.themes = {
-      stylix =
+      stylix-custom =
         let
           colors = config.lib.stylix.colors;
         in
@@ -170,7 +170,9 @@
             };
             syntaxKeyword = {
               dark = colors.withHashtag.base0E;
+
               light = colors.withHashtag.base0D;
+
             };
             syntaxNumber = {
               dark = colors.withHashtag.base09;

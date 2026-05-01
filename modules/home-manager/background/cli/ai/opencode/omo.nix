@@ -11,13 +11,13 @@
       runtime_fallback = {
         enabled = true;
         retry_on_errors = [
-          400
           429
           503
           529
-        ]; # Explicitly catch rate limits
-        max_fallback_attempts = 3;
-        cooldown_seconds = 60; # Let Go cool down before retrying
+        ];
+        max_fallback_attempts = 2;
+        cooldown_seconds = 90;
+        timeout_seconds = 0;
         notify_on_fallback = true;
       };
 
@@ -25,21 +25,34 @@
 
       fallback_models = [
         "github-copilot/gpt-5.3-codex"
-        "github-copilot/gpt-5-mini" # 0x fallback safety net
+        "github-copilot/gpt-5-mini"
       ];
 
+      background_task = {
+        defaultConcurrency = 4;
+        providerConcurrency = {
+          "opencode-go" = 1;
+          "github-copilot" = 8;
+        };
+        modelConcurrency = {
+          "opencode-go/kimi-k2.5" = 1;
+          "github-copilot/gpt-5.3-codex" = 4;
+          "github-copilot/gpt-5-mini" = 12;
+        };
+      };
+
       experimental = {
-        disable_omo_env = true; # Massively improves Context Caching!
+        disable_omo_env = true;
 
         dynamic_context_pruning = {
           enabled = true;
           notification = "minimal";
           turn_protection = {
             enabled = true;
-            turns = 3; # Keep the last 3 turns intact
+            turns = 3;
           };
           strategies = {
-            deduplication.enabled = true; # Stop paying for duplicate tool reads
+            deduplication.enabled = true;
             supersede_writes = {
               enabled = true;
               aggressive = true;
@@ -53,10 +66,13 @@
       };
 
       agents = {
-        # Core workers: Using OpenCode Go for massive context
         sisyphus = {
-          model = "opencode-go/kimi-k2.5";
-          variant = "max";
+          model = "github-copilot/gpt-5.3-codex";
+          variant = "high";
+          fallback_models = [
+            "opencode-go/kimi-k2.5"
+            "github-copilot/gpt-5-mini"
+          ];
         };
 
         hephaestus = {
@@ -69,19 +85,17 @@
           variant = "high";
         };
 
-        # 0x Utility Agents: Unlimited free background processing
         explore.model = "github-copilot/raptor-mini";
         multimodal-looker.model = "github-copilot/gpt-5-mini";
 
-        # Planners
         prometheus = {
-          model = "opencode-go/glm-5.1";
-          variant = "max";
+          model = "github-copilot/gpt-5.3-codex";
+          variant = "medium";
         };
 
         metis = {
-          model = "opencode-go/glm-5.1";
-          variant = "max";
+          model = "github-copilot/gpt-5-mini";
+          variant = "medium";
         };
 
         momus = {
@@ -89,8 +103,8 @@
           variant = "xhigh";
         };
 
-        atlas.model = "opencode-go/kimi-k2.5";
-        sisyphus-junior.model = "opencode-go/kimi-k2.5";
+        atlas.model = "github-copilot/gpt-5-mini";
+        sisyphus-junior.model = "github-copilot/gpt-5-mini";
       };
 
       categories = {
@@ -100,13 +114,21 @@
         };
 
         ultrabrain = {
-          model = "opencode-go/glm-5.1";
+          model = "github-copilot/gpt-5.3-codex";
           variant = "high";
+          fallback_models = [
+            "opencode-go/kimi-k2.5"
+            "github-copilot/gpt-5-mini"
+          ];
         };
 
         deep = {
           model = "github-copilot/gpt-5.3-codex";
           variant = "medium";
+          fallback_models = [
+            "opencode-go/kimi-k2.5"
+            "github-copilot/gpt-5-mini"
+          ];
         };
 
         artistry = {
@@ -114,13 +136,18 @@
           variant = "high";
         };
 
-        # 0x Categories: Rapid-fire tasks cost nothing
         quick.model = "github-copilot/gpt-5-mini";
 
         unspecified-low.model = "github-copilot/gpt-5-mini";
-        unspecified-high.model = "opencode-go/kimi-k2.5";
+        unspecified-high = {
+          model = "github-copilot/gpt-5.3-codex";
+          variant = "medium";
+          fallback_models = [
+            "opencode-go/kimi-k2.5"
+            "github-copilot/gpt-5-mini"
+          ];
+        };
 
-        # 0.33x Category: Ultra-cheap documentation generation
         writing.model = "github-copilot/claude-haiku-4.5";
       };
     };

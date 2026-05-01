@@ -165,12 +165,13 @@ in
       };
     }
     // lib.optionalAttrs cfg.omo.enable {
-      "opencode/oh-my-openagent.jsonc".source =
-        jsonFormat.generate "oh-my-openagent.jsonc" {
+      "opencode/oh-my-openagent.jsonc".source = jsonFormat.generate "oh-my-openagent.jsonc" (
+        {
           "$schema" =
             "https://raw.githubusercontent.com/code-yeongyu/oh-my-openagent/dev/assets/oh-my-opencode.schema.json";
         }
-        // cfg.omo.settings;
+        // cfg.omo.settings
+      );
     }
     // lib.mapAttrs' (
       name: content:
