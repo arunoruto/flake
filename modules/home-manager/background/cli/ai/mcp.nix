@@ -9,6 +9,7 @@
     programs.mcp.servers = lib.mkMerge [
       (lib.mkIf config.programs.gh.enable {
         github = {
+          disabled = true;
           type = "stdio";
           command = lib.getExe (
             pkgs.writeShellApplication {
@@ -26,6 +27,7 @@
       })
       {
         context7 = {
+          disabled = true;
           type = "stdio";
           command = lib.getExe (
             pkgs.writeShellApplication {
@@ -38,6 +40,7 @@
           );
         };
         devenv = {
+          disabled = true;
           type = "remote";
           url = "https://mcp.devenv.sh";
         };

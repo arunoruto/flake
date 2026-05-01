@@ -11,6 +11,7 @@
     ./gemini.nix
     ./mcp.nix
     ./opencode
+    ./pi
   ];
 
   options.programs.ollama.defaultPath = lib.mkOption {
@@ -27,6 +28,7 @@
       mcp.enable = true;
       ollama.defaultPath = "http://madara.king-little.ts.net:11434/v1";
       opencode.enable = true;
+      pi.enable = false;
     };
     home.packages = with pkgs.unstable; [
       beads
