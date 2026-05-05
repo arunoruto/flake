@@ -12,9 +12,19 @@ _: {
   systemd.services.zfs-mount.enable = false;
   networking = {
     hostId = "b9b3aa87";
-    # bridges.br0 = {
-    #   interfaces = [ "enp1s0" ];
-    # };
+    bridges.br0 = {
+      interfaces = [
+        "enp1s0"
+        "enp2s0"
+      ];
+      rstp = true;
+    };
+    interfaces = {
+      enp1s0.useDHCP = false;
+      enp2s0.useDHCP = false;
+      br0.useDHCP = true;
+    };
+    firewall.trustedInterfaces = [ "br0" ];
   };
   virtualisation.incus = {
     enable = true;
@@ -22,10 +32,16 @@ _: {
       {
         name = "default";
         devices = {
-          enp1s0 = {
-            name = "enp1s0";
-            network = "incusbr0";
+          # enp1s0 = {
+          #   name = "enp1s0";
+          #   network = "incusbr0";
+          #   type = "nic";
+          # };
+          eth0 = {
+            name = "eth0";
             type = "nic";
+            nictype = "bridged";
+            parent = "br0";
           };
           root = {
             path = "/";
@@ -44,9 +60,21 @@ _: {
             type = "usb";
             required = false;
           };
-          bt = {
+          slzb-ultima3 = {
+            vendorid = "303a";
+            productid = "4002";
+            type = "usb";
+            required = false;
+          };
+          bt-internal = {
             vendorid = "8087";
             productid = "0026";
+            type = "usb";
+            required = false;
+          };
+          bt-external = {
+            vendorid = "0b05";
+            productid = "190e";
             type = "usb";
             required = false;
           };

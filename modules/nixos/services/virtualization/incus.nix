@@ -18,7 +18,7 @@
               type = "bridge";
               config = {
                 # "ipv4.address" = "10.0.100.1/24";
-                "ipv4.address" = "10.42.42.1/24";
+                "ipv4.address" = "10.42.69.1/24";
                 "ipv4.dhcp" = "true";
                 "ipv4.nat" = "true";
               };
