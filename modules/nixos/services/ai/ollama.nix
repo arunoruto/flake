@@ -55,7 +55,7 @@
           MemoryDenyWriteExecute = lib.mkForce false;
         };
       };
-      ollama-custom-models = {
+      ollama-custom-models = lib.mkIf config.services.ollama.enable {
         description = "Build custom Ollama models with constrained context";
         wantedBy = [ "multi-user.target" ];
         after = [ "ollama.service" ];
