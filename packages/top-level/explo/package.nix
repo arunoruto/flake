@@ -21,6 +21,8 @@ buildGoModule (finalAttrs: {
 
   postInstall = ''
     mv $out/bin/main $out/bin/explo
+    mkdir -p $out/share/explo
+    cp src/downloader/youtube_music/search_ytmusic.py $out/share/explo/
   '';
 
   # nativeInstallCheckInputs = [ versionCheckHook ];

@@ -5,12 +5,10 @@
   ...
 }:
 
-  let
+let
   cfg = config.services.explo;
 
-  envToString = v:
-    if builtins.isBool v then (if v then "true" else "false")
-    else toString v;
+  envToString = v: if builtins.isBool v then (if v then "true" else "false") else toString v;
 in
 {
   options.services.explo = {
@@ -22,10 +20,22 @@ in
       type = lib.types.submodule {
         freeformType = with lib.types; attrsOf str;
         options = {
+          DISCOVERY_SERVICE = lib.mkOption {
+            type = lib.types.enum [ "listenbrainz" ];
+            default = "listenbrainz";
+            description = "Service which recommends songs.";
+          };
           LISTENBRAINZ_USER = lib.mkOption {
             type = lib.types.str;
-            default = "";
             description = "Your ListenBrainz username.";
+          };
+          LISTENBRAINZ_DISCOVERY = lib.mkOption {
+            type = lib.types.enum [
+              "playlist"
+              "api"
+            ];
+            default = "playlist";
+            description = "ListenBrainz discovery method.";
           };
           EXPLO_SYSTEM = lib.mkOption {
             type = lib.types.enum [
@@ -71,19 +81,6 @@ in
             type = lib.types.str;
             default = "opus";
             description = "Custom file extension for tracks.";
-          };
-          DISCOVERY_SERVICE = lib.mkOption {
-            type = lib.types.str;
-            default = "listenbrainz";
-            description = "Service which recommends songs.";
-          };
-          LISTENBRAINZ_DISCOVERY = lib.mkOption {
-            type = lib.types.enum [
-              "playlist"
-              "api"
-            ];
-            default = "playlist";
-            description = "ListenBrainz discovery method.";
           };
           LOG_LEVEL = lib.mkOption {
             type = lib.types.enum [
@@ -186,6 +183,18 @@ in
       '';
     };
 
+    user = lib.mkOption {
+      type = lib.types.str;
+      default = "explo";
+      description = "User the explo service runs as.";
+    };
+
+    group = lib.mkOption {
+      type = lib.types.str;
+      default = "explo";
+      description = "Group the explo service runs as.";
+    };
+
     schedules = lib.mkOption {
       type = lib.types.attrsOf (
         lib.types.submodule {
@@ -221,12 +230,19 @@ in
 
           serviceConfig = {
             Type = "oneshot";
+            User = cfg.user;
+            Group = cfg.group;
             ExecStartPre = [
               "${pkgs.coreutils}/bin/touch %S/explo/.env"
+              "${pkgs.coreutils}/bin/ln -sf ${cfg.package}/share/explo/search_ytmusic.py %S/explo/search_ytmusic.py"
+              "${pkgs.coreutils}/bin/ln -sf ${cfg.package}/share/explo/search_ytmusic.py ${cfg.environment.DOWNLOAD_DIR}/search_ytmusic.py"
             ];
             ExecStart = "${lib.getExe cfg.package} --config %S/explo/.env ${schedule.flags}";
             EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
             WorkingDirectory = cfg.environment.DOWNLOAD_DIR;
+            ReadWritePaths = [
+              cfg.environment.DOWNLOAD_DIR
+            ];
 
             DynamicUser = true;
             StateDirectory = "explo";
@@ -252,5 +268,16 @@ in
         };
       }) cfg.schedules
     );
+
+    users.users.explo = lib.mkIf (cfg.user == "explo") {
+      isSystemUser = true;
+      group = cfg.group;
+      home = "/var/lib/explo";
+      createHome = false;
+    };
+
+    users.groups = lib.mkIf (cfg.group == "explo") {
+      explo = { };
+    };
   };
 }
