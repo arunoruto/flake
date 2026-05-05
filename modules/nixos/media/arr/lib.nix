@@ -52,6 +52,7 @@ lib: {
           (builtins.elem serviceName [
             "radarr"
             "sonarr"
+            "lidarr"
           ])
           {
             services."${serviceName}" = {
@@ -61,12 +62,19 @@ lib: {
             users.users."${serviceName}".extraGroups = lib.optionals (config.users.groups ? "media") [
               config.users.groups.media.name
             ];
-
-            sops.secrets."tokens/arr/${serviceName}" = {
-              mode = "0666";
-              inherit (config.services.recyclarr) group;
-            };
           }
+        //
+          lib.optionalAttrs
+            (builtins.elem serviceName [
+              "radarr"
+              "sonarr"
+            ])
+            {
+              sops.secrets."tokens/arr/${serviceName}" = {
+                mode = "0666";
+                inherit (config.services.recyclarr) group;
+              };
+            }
       );
 
 }

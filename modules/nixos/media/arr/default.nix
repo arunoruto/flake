@@ -8,6 +8,7 @@
   imports = [
     ./sonarr.nix
     ./radarr.nix
+    ./lidarr.nix
     ./recyclar.nix
     ./prowlarr.nix
   ];
