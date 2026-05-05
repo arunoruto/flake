@@ -38,9 +38,12 @@
         };
       };
 
-    # users.users.syncthing.extraGroups = lib.optionals (config.users.groups ? "media") [
-    #   config.users.groups.media.name
-    # ];
-    users.users.syncthing.extraGroups = lib.optionals config.services.paperless.enable [ "paperless" ];
+    users.users.syncthing.extraGroups =
+      (lib.optionals (config.users.groups ? "media") [
+        config.users.groups.media.name
+      ])
+      ++ (lib.optionals config.services.paperless.enable [ "paperless" ]);
+
+    systemd.services.syncthing.serviceConfig.UMask = "002";
   };
 }

@@ -15,6 +15,7 @@
     ./qbittorrent.nix
     ./sabnzbd.nix
     ./syncthing.nix
+    ./syncthing-folders.nix
 
     ./arr
     ./plex

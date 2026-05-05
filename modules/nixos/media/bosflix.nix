@@ -47,15 +47,15 @@
 
           settings = {
             devices = {
-              lil-nas-x = {
-                addresses = [
-                  "dynamic"
-                  "tcp://lil-nas-x"
-                  "tcp://lil-nas-x:22000"
-                  "quic://lil-nas-x:22000"
-                ];
-                id = "ARZDFKU-CFAXQEM-ZTBEVH6-DGU7E55-JNLRTVM-VKG7JW5-D6B25X3-IRPISQH";
-              };
+              # lil-nas-x = {
+              #   addresses = [
+              #     "dynamic"
+              #     "tcp://lil-nas-x"
+              #     "tcp://lil-nas-x:22000"
+              #     "quic://lil-nas-x:22000"
+              #   ];
+              #   id = "ARZDFKU-CFAXQEM-ZTBEVH6-DGU7E55-JNLRTVM-VKG7JW5-D6B25X3-IRPISQH";
+              # };
               kuchiki = {
                 addresses = [
                   "dynamic"
@@ -65,14 +65,6 @@
                 ];
                 id = "C4TO46K-P5LXFD6-NULLWDR-A5MYGJ2-EQDBNOC-CZHYJNJ-33DJHWA-SPQ6RQ7";
               };
-            };
-            folders."downloads shinji" = {
-              enable = true;
-              path = completedPath;
-              devices = [
-                "lil-nas-x"
-                "kuchiki"
-              ];
             };
           };
         };
@@ -125,19 +117,34 @@
               # };
             };
             "drive" = {
-              "${completedPath}".Z = {
-                mode = "0777";
+              "${completedPath}".d = {
+                mode = "2775";
                 user = "root";
-                group = "root";
+                group = "media";
               };
-              "${completedPath}/.stfolder".Z =
+              "${completedPath}/mirza-music".d = {
+                mode = "2775";
+                user = "root";
+                group = "media";
+              };
+              "${completedPath}/mirza-shows".d = {
+                mode = "2775";
+                user = "root";
+                group = "media";
+              };
+              "${completedPath}/mirza-movies".d = {
+                mode = "2775";
+                user = "root";
+                group = "media";
+              };
+              "${completedPath}/.stfolder".d =
                 let
-                  cfg = config.services.syncthing;
+                  syncthingCfg = config.services.syncthing;
                 in
                 {
                   mode = "0755";
-                  inherit (cfg) user;
-                  inherit (cfg) group;
+                  inherit (syncthingCfg) user;
+                  inherit (syncthingCfg) group;
                 };
               "${incompletedPath}".Z = {
                 mode = "0777";
