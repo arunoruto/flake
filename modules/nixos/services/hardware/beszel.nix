@@ -165,7 +165,7 @@ in
         LockPersonality = true;
         # NoNewPrivileges = !cfg.smartmontools;
         NoNewPrivileges = true;
-        PrivateDevices = lib.mkForce false;
+        PrivateDevices = false;
         PrivateTmp = true;
         PrivateUsers = true;
         ProtectClock = true;
