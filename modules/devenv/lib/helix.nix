@@ -3,7 +3,8 @@
 
 let
   # Extract all packages from enabled LSPs and formatters across all languages
-  extractPackages = languages:
+  extractPackages =
+    languages:
     lib.flatten (
       lib.mapAttrsToList (
         langName: langOpts:
@@ -17,7 +18,8 @@ let
     );
 
   # Build formatter configuration (handles single or multiple formatters)
-  buildFormatterConfig = formatters:
+  buildFormatterConfig =
+    formatters:
     let
       activeFormatters = lib.attrValues (lib.filterAttrs (n: v: v.enable) formatters);
     in
@@ -33,14 +35,13 @@ let
         command = "bash";
         args = [
           "-c"
-          (lib.concatMapStringsSep " | " (
-            f: "${f.command} ${lib.escapeShellArgs f.args}"
-          ) activeFormatters)
+          (lib.concatMapStringsSep " | " (f: "${f.command} ${lib.escapeShellArgs f.args}") activeFormatters)
         ];
       };
 
   # Transform a single language to Helix format
-  transformLanguage = name: langOpts:
+  transformLanguage =
+    name: langOpts:
     let
       activeLsps = lib.filterAttrs (n: v: v.enable) langOpts.lsps;
       formatterConfig = buildFormatterConfig langOpts.formatters;
@@ -57,11 +58,11 @@ let
     };
 
   # Transform all languages to Helix language array
-  toHelixLanguages = languages:
-    lib.mapAttrsToList transformLanguage languages;
+  toHelixLanguages = languages: lib.mapAttrsToList transformLanguage languages;
 
   # Generate language-server configuration blocks
-  toHelixLspConfigs = languages:
+  toHelixLspConfigs =
+    languages:
     lib.foldl' lib.recursiveUpdate { } (
       lib.mapAttrsToList (
         langName: langOpts:
@@ -80,5 +81,10 @@ let
     );
 in
 {
-  inherit extractPackages toHelixLanguages toHelixLspConfigs buildFormatterConfig;
+  inherit
+    extractPackages
+    toHelixLanguages
+    toHelixLspConfigs
+    buildFormatterConfig
+    ;
 }

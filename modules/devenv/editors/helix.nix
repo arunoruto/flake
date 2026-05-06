@@ -7,10 +7,10 @@
 let
   tomlFormat = pkgs.formats.toml { };
   helixLib = import ../lib/helix.nix { inherit lib; };
-  
+
   # Filter enabled languages
   activeLanguages = lib.filterAttrs (n: v: v.enable) config.development.languages;
-  
+
   # Use pure functions to transform data
   extractedPackages = helixLib.extractPackages activeLanguages;
   translatedLanguages = helixLib.toHelixLanguages activeLanguages;

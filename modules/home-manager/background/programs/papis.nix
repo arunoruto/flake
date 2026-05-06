@@ -1,7 +1,7 @@
 { config, ... }:
 {
   programs.papis = {
-    enable = config.hosts.desktop.enable;
+    # enable = config.hosts.desktop.enable;
     settings = {
       editor = "hx";
       file-editor = "yazi";
