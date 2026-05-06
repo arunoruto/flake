@@ -1,5 +1,10 @@
 # Python development shell using devenv
-{ pkgs, inputs, self, ... }:
+{
+  pkgs,
+  inputs,
+  self,
+  ...
+}:
 
 let
   devenvConfigs = import ./devenv-shells.nix { inherit self; };
