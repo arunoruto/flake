@@ -266,18 +266,23 @@
           };
         in
         {
-          devShells = (import ./shells { pkgs = pkgs-system; inherit lib self inputs; }) // {
-            nix = pkgs-system.mkShell {
-              shellHook = self.checks.${system}.pre-commit-check.shellHook;
-              buildInputs =
-                (with pkgs-system; [
-                  statix
-                  deadnix
-                  nixfmt-tree
-                ])
-                ++ self.checks.${system}.pre-commit-check.enabledPackages;
+          devShells =
+            (import ./shells {
+              pkgs = pkgs-system;
+              inherit lib self inputs;
+            })
+            // {
+              nix = pkgs-system.mkShell {
+                shellHook = self.checks.${system}.pre-commit-check.shellHook;
+                buildInputs =
+                  (with pkgs-system; [
+                    statix
+                    deadnix
+                    nixfmt-tree
+                  ])
+                  ++ self.checks.${system}.pre-commit-check.enabledPackages;
+              };
             };
-          };
           legacyPackages = import ./packages pkgs-system;
           # packages.static-home = self.homeConfigurations."mirza".config.home.path;
           # packages =
