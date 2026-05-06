@@ -120,6 +120,8 @@ in
             }
           );
 
+      path = with pkgs; [ ffmpeg ];
+
       serviceConfig = {
         Type = "simple";
         User = cfg.user;
