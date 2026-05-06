@@ -1,6 +1,11 @@
 # Shell definitions using callPackage pattern
 # Each shell only declares the arguments it actually needs
-{ pkgs, lib, self, inputs }:
+{
+  pkgs,
+  lib,
+  self,
+  inputs,
+}:
 
 let
   # Create a scope with common arguments available
@@ -10,7 +15,7 @@ in
   # Vanilla shells - simple and lightweight
   go = callPackage ./go.nix { };
   website = callPackage ./website.nix { };
-  
+
   # Devenv shells - managed separately for clarity
-  python = callPackage ./python.nix { };
+  # python = callPackage ./python.nix { };
 }
