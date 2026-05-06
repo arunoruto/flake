@@ -2,6 +2,7 @@
 {
   imports = [
     ./explo
+    ./soulsync
     ./sound.nix
   ];
 
