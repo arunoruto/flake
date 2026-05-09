@@ -54,4 +54,4 @@ nix --experimental-features 'nix-command flakes' --accept-flake-config run nixpk
 
 ## Directory layout
 
-Your host config lives in `systems/<arch>/<host>/`. Home Manager profiles are in `homes/<arch>/<username>/`. Add new ones following the existing patterns.
+Your host config lives in `systems/<arch>/<host>/`. Home Manager profiles are in `homes/<username>/`. Add new ones following the existing patterns.
