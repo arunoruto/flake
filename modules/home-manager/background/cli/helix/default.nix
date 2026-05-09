@@ -49,7 +49,9 @@ in
           file-picker = {
             hidden = false;
           };
-          insecure = if config.programs.helix.package.pname == "steelix" then true else false;
+        }
+        // lib.optionalAttrs (config.programs.helix.package.pname == "steelix") {
+          insecure = true;
         }
         // lib.optionalAttrs nightly {
           end-of-line-diagnostics = "warning";
