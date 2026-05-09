@@ -1,0 +1,39 @@
+name: Deploy Docs to GitHub Pages
+
+on:
+  push:
+    paths:
+      - "docs/**"
+      - "book.toml"
+      - "packages/docs/**"
+      - ".github/workflows/deploy-docs.yaml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@main
+        with:
+          logger: pretty
+      - run: nix build .#docs --accept-flake-config
+      - uses: actions/configure-pages@v4
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: result
+      - id: deployment
+        uses: actions/deploy-pages@v4

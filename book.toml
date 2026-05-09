@@ -1,0 +1,13 @@
+[book]
+title = "flake docs"
+authors = ["Mirza"]
+language = "en"
+src = "docs"
+
+[build]
+create-missing = false
+
+[output.html]
+
+[output.html.search]
+enable = true

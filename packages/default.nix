@@ -18,6 +18,7 @@ pkgs.lib.makeScope pkgs.newScope (
     # dpcpp = pkgs.callPackage ./dpcpp { };
     # dpcpp-bin = pkgs.callPackage ./dpcpp/bin.nix { };
     dpcpp-prop = self.callPackage ./dpcpp/proprietary4.nix { };
+    docs = self.callPackage ./docs/package.nix { };
     gemini-cli-custom = self.callPackage ./gemini-cli/package.nix { };
     # fileflows = pkgs.callPackage ./fileflows/package.nix { };
     # banana-cursor = pkgs.callPackage ./banana-cursor/package.nix {};
