@@ -171,8 +171,8 @@ in
         # ];
         services.traefik.environment = {
           CF_DNS_API_TOKEN_FILE = config.sops.secrets."config/cloudflare/api_key".path;
-          CLOUDFLARE_EMAIL = config.sops.secrets."config/cloudflare/email".path;
-          CLOUDFLARE_API_KEY_FILE = config.sops.secrets."config/cloudflare/api_key".path;
+          # CLOUDFLARE_EMAIL = config.sops.secrets."config/cloudflare/email".path;
+          # CLOUDFLARE_API_KEY_FILE = config.sops.secrets."config/cloudflare/api_key".path;
         };
       };
       sops = {
