@@ -2,16 +2,17 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
 }:
 buildGoModule (finalAttrs: {
   pname = "git-quill";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "arunoruto";
     repo = finalAttrs.pname;
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9clA+DqNMXHXbcsn2Me7et0U1YhUra1jQBRWBQP73Lw=";
+    hash = "sha256-Tf/jUmlMYtETv/rcrLFBUKH0H0pezVBRP6rqi0LIfDk=";
   };
 
   vendorHash = "sha256-gAi4a3ZrmImd3m9TX0Te0PhVlwRiRqVV8+vdsyzdflg=";
@@ -22,6 +23,8 @@ buildGoModule (finalAttrs: {
   ];
 
   doCheck = false;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/arunoruto/git-quill";
