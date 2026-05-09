@@ -5,6 +5,7 @@
   ...
 }:
 {
+  imports = [ ./folders.nix ];
   config = lib.mkIf config.services.syncthing.enable {
     services.syncthing =
       let
@@ -15,6 +16,7 @@
         guiAddress = lib.mkDefault "0.0.0.0:8384";
         dataDir = lib.mkDefault "${cfg.dataDir}/syncthing";
         settings = {
+          gui.insecureAdminAccess = true;
           devices = {
             seireitei = {
               addresses = [
@@ -42,7 +44,10 @@
       (lib.optionals (config.users.groups ? "media") [
         config.users.groups.media.name
       ])
-      ++ (lib.optionals config.services.paperless.enable [ "paperless" ]);
+      ++ (lib.optionals config.services.paperless.enable [ "paperless" ])
+      ++ (lib.optionals config.services.lidarr.enable [ "lidarr" ])
+      ++ (lib.optionals config.services.sabnzbd.enable [ "sabnzbd" ])
+      ++ (lib.optionals config.services.qbittorrent.enable [ "qbittorrent" ]);
 
     systemd.services.syncthing.serviceConfig.UMask = "002";
   };

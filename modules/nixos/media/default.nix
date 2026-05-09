@@ -14,8 +14,7 @@
     ./paperless.nix
     ./qbittorrent.nix
     ./sabnzbd.nix
-    ./syncthing.nix
-    ./syncthing-folders.nix
+    ./syncthing
 
     ./arr
     ./plex

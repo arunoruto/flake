@@ -9,6 +9,7 @@ let
 in
 {
   config = lib.mkIf config.services.syncthing.enable {
+    # https://docs.syncthing.net/users/config.html
     services.syncthing.settings = lib.mkMerge [
       # SOURCE: shinji (bosflix) — shares out to sado and kuchiki
       (lib.mkIf config.bosflix.enable (
@@ -25,20 +26,28 @@ in
             ];
             id = sadoDeviceId;
           };
-          folders."mirza-music" = {
-            enable = true;
-            path = "${drivePath}/complete/mirza-music";
-            devices = [ "sado" ];
-          };
-          folders."mirza-shows" = {
-            enable = true;
-            path = "${drivePath}/complete/mirza-shows";
-            devices = [ "kuchiki" ];
-          };
-          folders."mirza-movies" = {
-            enable = true;
-            path = "${drivePath}/complete/mirza-movies";
-            devices = [ "kuchiki" ];
+          folders = {
+            "mirza-music" = {
+              enable = true;
+              path = "${drivePath}/complete/mirza-music";
+              devices = [ "sado" ];
+              ignorePerms = true;
+              order = "oldestFirst";
+            };
+            "mirza-shows" = {
+              enable = true;
+              path = "${drivePath}/complete/mirza-shows";
+              devices = [ "kuchiki" ];
+              ignorePerms = true;
+              order = "oldestFirst";
+            };
+            "mirza-movies" = {
+              enable = true;
+              path = "${drivePath}/complete/mirza-movies";
+              devices = [ "kuchiki" ];
+              ignorePerms = true;
+              order = "oldestFirst";
+            };
           };
         }
       ))
