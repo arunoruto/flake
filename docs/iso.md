@@ -16,22 +16,10 @@ sudo dd if=result/iso/*.iso of=/dev/sdX bs=4M status=progress conv=fsync
 
 ## Adding a new ISO target
 
-Register it in `flake.nix` under `nixosConfigurations` with a single line:
+Append the hostname to the `isoHosts` list in `flake.nix`:
 
 ```nix
-nixosConfigurations =
-  let
-    mkIso = hostname: lib.nixosSystem {
-      system = "x86_64-linux";
-      specialArgs = { inherit inputs self hostname; };
-      modules = [ ./systems/iso/installer.nix ];
-    };
-  in
-  import ./systems { ... } // {
-    "iso-shinji"   = mkIso "shinji";
-    "iso-kenpachi" = mkIso "kenpachi";
-    "iso-zangetsu" = mkIso "zangetsu";
-  };
+isoHosts = [ "shinji" "kenpachi" "zangetsu" ];
 ```
 
 The generic `installer.nix` module:
