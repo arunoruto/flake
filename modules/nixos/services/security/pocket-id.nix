@@ -11,6 +11,7 @@ let
       config.services.pocket-id.settings.PORT
     else
       1411;
+  pocket-id-env = "pocket-id.env";
 in
 {
   disabledModules = [ "services/security/pocket-id.nix" ];
@@ -22,6 +23,7 @@ in
         settings = {
           TRUST_PROXY = config.services.traefik.enable;
         };
+        environmentFile = config.sops.templates."${pocket-id-env}".path;
       };
       traefik.dynamicConfigOptions.http = {
         routers = {
@@ -51,6 +53,14 @@ in
           ];
         };
       };
+    };
+    sops = {
+      secrets = {
+        "services/pocket-id/encryption-key" = { };
+      };
+      templates."${pocket-id-env}".content = ''
+        ENCRYPTION_KEY=${config.sops.placeholder."services/pocket-id/encryption-key"}
+      '';
     };
   };
 }
