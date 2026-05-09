@@ -177,6 +177,7 @@
           # nvidia.acceptLicense = true;
         };
       };
+      isoHosts = [ "shinji" ];
     in
     {
       inherit lib;
@@ -199,7 +200,6 @@
               specialArgs = { inherit inputs self hostname; };
               modules = [ ./systems/iso/installer.nix ];
             };
-          isoHosts = [ "shinji" ];
         in
         import ./systems {
           inherit
@@ -301,6 +301,12 @@
               };
             };
           legacyPackages = import ./packages pkgs-system;
+          packages = builtins.listToAttrs (
+            map (h: {
+              name = "iso-${h}";
+              value = self.nixosConfigurations."iso-${h}".config.system.build.isoChecksums;
+            }) isoHosts
+          );
           # packages.static-home = self.homeConfigurations."mirza".config.home.path;
           # packages =
           #   lib.attrsets.removeAttrs
