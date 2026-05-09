@@ -13,7 +13,7 @@
   ];
 
   programs.opencode = {
-    enableMcpIntegration = false;
+    enableMcpIntegration = true;
     web = {
       # Disable on laptops, enable on desktop workstations
       enable = lib.mkDefault (config.hosts.desktop.enable && !config.hosts.laptop.enable);

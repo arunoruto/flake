@@ -20,19 +20,27 @@
     description = "The default URL for the Ollama CLI to connect to.";
   };
 
-  config = lib.mkIf config.hosts.development.enable {
-    programs = {
-      claude-code.enable = false;
-      copilot-cli.enable = true;
-      gemini-cli.enable = true;
-      mcp.enable = true;
-      ollama.defaultPath = "http://madara.king-little.ts.net:11434/v1";
-      opencode.enable = true;
-      pi.enable = false;
-    };
-    home.packages = with pkgs.unstable; [
-      beads
-      # goose-cli
-    ];
-  };
+  config = lib.mkMerge [
+    (lib.mkIf config.hosts.development.enable {
+      programs = {
+        claude-code.enable = false;
+        copilot-cli.enable = true;
+        gemini-cli.enable = true;
+        mcp.enable = true;
+        ollama.defaultPath = "http://madara.king-little.ts.net:11434/v1";
+        opencode.enable = true;
+        pi.enable = false;
+      };
+      home.packages = with pkgs.unstable; [
+        beads
+        # goose-cli
+      ];
+    })
+    {
+      programs = {
+        mcp.enable = true;
+        opencode.enable = true;
+      };
+    }
+  ];
 }
