@@ -123,7 +123,7 @@ in
             };
           };
           dynamicConfigOptions = lib.mkMerge [
-            (lib.optionalAttrs cfg.staticConfigOptions.api.dashboard {
+            (lib.mkIf cfg.staticConfigOptions.api.dashboard {
               http.routers.traefik-api = {
                 # rule = "Host(`${config.networking.hostName}.${config.services.tailscale.tailnet}.ts.net`) && PathPrefix(`/dashboard`)";
                 rule = "Host(`${config.networking.hostName}.${config.services.tailscale.tailnet}.ts.net`)";
@@ -132,7 +132,7 @@ in
                 service = "api@internal";
               };
             })
-            {
+            (lib.mkIf (config.services.cloudflared.enable) {
               http = {
                 routers.www = {
                   rule = "Host(`${config.services.cloudflared.defaultDomain}`)";
@@ -147,7 +147,7 @@ in
                   permanent = true;
                 };
               };
-            }
+            })
             # {
             #   http = {
             #     routers.paperless = {
