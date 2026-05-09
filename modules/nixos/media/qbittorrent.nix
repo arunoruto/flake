@@ -19,9 +19,10 @@
       #   "Preferences\StartPausedEnabled" = false;
     };
 
+    systemd.services.qbittorrent.serviceConfig.UMask = "0002";
+
     users.users.qbittorrent.extraGroups = lib.optionals (config.users.groups ? "media") [
       config.users.groups.media.name
     ];
-
   };
 }
