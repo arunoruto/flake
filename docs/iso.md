@@ -7,11 +7,15 @@ ISOs are generated from a single generic module (`systems/iso/installer.nix`) pa
 ## Quick start
 
 ```bash
-# Build an ISO for any registered host
-nix build .#nixosConfigurations.iso-<hostname>.config.system.build.isoImage
+# Build ISO + .sha256 checksum sidecar (Ventoy-ready)
+nix build .#iso-<hostname>
 
-# Write to USB
+# Copy to USB (ISO + sidecar file)
+cp -r result/iso/* /mnt/ventoy/
+
+# Or write directly with dd
 sudo dd if=result/iso/*.iso of=/dev/sdX bs=4M status=progress conv=fsync
+```
 ```
 
 ## Adding a new ISO target
