@@ -15,6 +15,7 @@
   ];
 
   boot.initrd.availableKernelModules = [
+    "nvme"
     "xhci_pci"
     "ahci"
     "usb_storage"
@@ -24,19 +25,20 @@
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
-  fileSystems."/" = {
-    device = "/dev/disk/by-uuid/bc4fefb2-b094-4d61-9e51-def2ee5a9ca8";
-    fsType = "ext4";
-  };
+  # Disko manages these — keep UUIDs here for reference until migration is confirmed
+  # fileSystems."/" = {
+  #   device = "/dev/disk/by-uuid/bc4fefb2-b094-4d61-9e51-def2ee5a9ca8";
+  #   fsType = "ext4";
+  # };
 
-  fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/7D88-5384";
-    fsType = "vfat";
-    options = [
-      "fmask=0022"
-      "dmask=0022"
-    ];
-  };
+  # fileSystems."/boot" = {
+  #   device = "/dev/disk/by-uuid/7D88-5384";
+  #   fsType = "vfat";
+  #   options = [
+  #     "fmask=0022"
+  #     "dmask=0022"
+  #   ];
+  # };
 
   # fileSystems."/mnt/hdd" = {
   #   device = "/dev/disk/by-uuid/86336459-5d8c-448e-93c3-f3e17c00d3b9";

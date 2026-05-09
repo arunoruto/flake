@@ -190,16 +190,24 @@
         python = ./modules/devenv/profiles/python.nix;
       };
 
-      nixosConfigurations = import ./systems {
-        inherit
-          inputs
-          self
-          lib
-          pkgs-attrs
-          scheme
-          image
-          ;
-      };
+      nixosConfigurations =
+        import ./systems {
+          inherit
+            inputs
+            self
+            lib
+            pkgs-attrs
+            scheme
+            image
+            ;
+        }
+        // {
+          "iso-shinji" = lib.nixosSystem {
+            system = "x86_64-linux";
+            specialArgs = { inherit inputs self; };
+            modules = [ ./systems/iso/shinji.nix ];
+          };
+        };
 
       darwinConfigurations = import ./systems/darwin.nix {
         inherit
