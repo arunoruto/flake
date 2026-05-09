@@ -56,11 +56,17 @@ The system will automatically partition the disk (via disko), install NixOS, and
 ## Example: shinji ISO
 
 ```bash
+# Build ISO only
 nix build .#nixosConfigurations.iso-shinji.config.system.build.isoImage
+
+# Build ISO + checksums (recommended)
+nix build .#nixosConfigurations.iso-shinji.config.system.build.isoChecksums
+
+# Write to USB
 sudo dd if=result/iso/*.iso of=/dev/sdX bs=4M status=progress conv=fsync
 ```
 
-Boot the USB, then follow the printed instructions (or append `autoinstall` to the kernel cmdline). The shinji host uses a btrfs NVMe layout defined in `systems/x86_64-linux/shinji/disk.nix`.
+For Ventoy, copy `result/iso/*` directly — the `.sha256` file will be auto-detected.
 
 ## Prerequisites for a host to be ISO-installable
 
@@ -78,6 +84,37 @@ The target host must:
 - Populate MOTD instructions and autoinstall commands dynamically
 - The flake source (`self`) is embedded as a raw copy on the ISO at `/nixos-flake`
 - At boot, `postBootCommands` copies it to `/etc/nixos/flake` where `nixos-install --flake` can find it
+
+## Verification
+
+Build the ISO with an accompanying `.sha256` checksum file for verification:
+
+```bash
+nix build .#nixosConfigurations.iso-<hostname>.config.system.build.isoChecksums
+```
+
+Output:
+
+```
+result/
+├── iso/
+│   ├── nixos-<hostname>-...iso
+│   └── nixos-<hostname>-...iso.sha256
+└── SHA256SUMS
+```
+
+The `.sha256` file uses `sha256sum` format (`hash  filename`). Copy `result/iso/*` to your USB stick.
+
+### Ventoy
+
+[Ventoy](https://ventoy.net) auto-detects `.sha256` files placed next to the ISO. Select the ISO in the Ventoy boot menu, press `m`, choose SHA256 — it calculates and compares against the file, confirming the copy was not corrupted.
+
+### Manual verification
+
+```bash
+cd result/
+sha256sum -c SHA256SUMS
+```
 
 ## Size considerations
 
