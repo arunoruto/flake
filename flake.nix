@@ -199,6 +199,7 @@
               specialArgs = { inherit inputs self hostname; };
               modules = [ ./systems/iso/installer.nix ];
             };
+          isoHosts = [ "shinji" ];
         in
         import ./systems {
           inherit
@@ -210,9 +211,12 @@
             image
             ;
         }
-        // {
-          "iso-shinji" = mkIso "shinji";
-        };
+        // builtins.listToAttrs (
+          map (h: {
+            name = "iso-${h}";
+            value = mkIso h;
+          }) isoHosts
+        );
 
       darwinConfigurations = import ./systems/darwin.nix {
         inherit
