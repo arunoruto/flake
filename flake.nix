@@ -191,6 +191,15 @@
       };
 
       nixosConfigurations =
+        let
+          mkIso =
+            hostname:
+            lib.nixosSystem {
+              system = "x86_64-linux";
+              specialArgs = { inherit inputs self hostname; };
+              modules = [ ./systems/iso/installer.nix ];
+            };
+        in
         import ./systems {
           inherit
             inputs
@@ -202,11 +211,7 @@
             ;
         }
         // {
-          "iso-shinji" = lib.nixosSystem {
-            system = "x86_64-linux";
-            specialArgs = { inherit inputs self; };
-            modules = [ ./systems/iso/shinji.nix ];
-          };
+          "iso-shinji" = mkIso "shinji";
         };
 
       darwinConfigurations = import ./systems/darwin.nix {

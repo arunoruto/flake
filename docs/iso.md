@@ -2,15 +2,44 @@
 
 This flake supports building bootable ISOs that embed the flake source, so `nixos-install --flake` works against `/etc/nixos/flake` without network access to the flake repo.
 
+ISOs are generated from a single generic module (`systems/iso/installer.nix`) parameterized by hostname.
+
 ## Quick start
 
 ```bash
-# Build an ISO (replace <name> with the ISO target)
-nix build .#nixosConfigurations.iso-<name>.config.system.build.isoImage
+# Build an ISO for any registered host
+nix build .#nixosConfigurations.iso-<hostname>.config.system.build.isoImage
 
 # Write to USB
 sudo dd if=result/iso/*.iso of=/dev/sdX bs=4M status=progress conv=fsync
 ```
+
+## Adding a new ISO target
+
+Register it in `flake.nix` under `nixosConfigurations` with a single line:
+
+```nix
+nixosConfigurations =
+  let
+    mkIso = hostname: lib.nixosSystem {
+      system = "x86_64-linux";
+      specialArgs = { inherit inputs self hostname; };
+      modules = [ ./systems/iso/installer.nix ];
+    };
+  in
+  import ./systems { ... } // {
+    "iso-shinji"   = mkIso "shinji";
+    "iso-kenpachi" = mkIso "kenpachi";
+    "iso-zangetsu" = mkIso "zangetsu";
+  };
+```
+
+The generic `installer.nix` module:
+- Sets `isoImage.edition` = hostname (distinguishable filenames like `nixos-shinji-25.11-x86_64-linux.iso`)
+- Embeds the flake source at `/nixos-flake` → copied to `/etc/nixos/flake` at boot
+- Includes `disko` in the live Nix store
+- Prints MOTD instructions referencing the hostname
+- Provides an `autoinstall` systemd oneshot (triggers when `autoinstall` is in `/proc/cmdline`)
 
 ## Install workflow
 
@@ -36,121 +65,14 @@ Add `autoinstall` to the kernel command line at boot:
 
 The system will automatically partition the disk (via disko), install NixOS, and reboot.
 
-## Adding a new ISO target
-
-### 1. Create the ISO module
-
-Place it at `systems/iso/<name>.nix`:
-
-```nix
-{ config, lib, pkgs, modulesPath, self, inputs, ... }:
-let
-  disko-pkg = inputs.disko.packages.${pkgs.stdenv.hostPlatform.system}.disko;
-in
-{
-  imports = [
-    (modulesPath + "/installer/cd-dvd/installation-cd-minimal.nix")
-  ];
-
-  # Embed flake source on the ISO
-  isoImage.contents = [
-    {
-      source = self;
-      target = "/nixos-flake";
-    }
-  ];
-
-  # Include disko in the live Nix store (no network needed to partition)
-  isoImage.storeContents = [
-    config.system.build.toplevel
-    disko-pkg
-  ];
-
-  environment.systemPackages = [
-    disko-pkg
-    pkgs.git
-    pkgs.helix
-  ];
-
-  # Copy flake to /etc/nixos at boot for nixos-install usage
-  boot.postBootCommands = lib.mkAfter ''
-    if [ ! -e /etc/nixos/flake ]; then
-      cp -r /iso/nixos-flake /etc/nixos/flake
-      chmod -R u+w /etc/nixos/flake
-    fi
-    if ! grep -q 'autoinstall' /proc/cmdline; then
-      cat << 'HEREDOC' >> /etc/motd
-
-=== <name> Installer ===
-1. Partition:  sudo disko --mode disko /etc/nixos/flake#<hostname>
-2. Install:    sudo nixos-install --flake /etc/nixos/flake#<hostname> --root /mnt
-3. Reboot:     sudo reboot
-
-Autoinstall:  reboot and add 'autoinstall' to kernel cmdline
-===================
-HEREDOC
-    fi
-  '';
-
-  # Autoinstall service — only triggers when 'autoinstall' is in kernel cmdline
-  systemd.services.autoinstall = {
-    description = "Autoinstall NixOS from embedded flake";
-    wantedBy = [ "multi-user.target" ];
-    after = [ "network.target" ];
-    serviceConfig.Type = "oneshot";
-    path = [
-      disko-pkg
-      pkgs.nixos-install-tools
-      pkgs.coreutils
-      pkgs.util-linux
-    ];
-    script = ''
-      if grep -q 'autoinstall' /proc/cmdline; then
-        echo "==> Autoinstall triggered: partitioning disk..."
-        disko --mode disko /etc/nixos/flake#<hostname>
-        echo "==> Installing NixOS..."
-        nixos-install --flake /etc/nixos/flake#<hostname> --root /mnt --no-root-passwd
-        echo "==> Done! Rebooting in 5s..."
-        sleep 5
-        reboot -f
-      fi
-    '';
-  };
-}
-```
-
-### 2. Register in `flake.nix`
-
-```nix
-nixosConfigurations = import ./systems { ... } // {
-  "iso-<name>" = lib.nixosSystem {
-    system = "x86_64-linux";
-    specialArgs = { inherit inputs self; };
-    modules = [ ./systems/iso/<name>.nix ];
-  };
-};
-```
-
-### 3. Build
-
-```bash
-nix build .#nixosConfigurations.iso-<name>.config.system.build.isoImage
-```
-
 ## Example: shinji ISO
-
-The shinji host uses a btrfs NVMe layout with two subvolumes (`@root` for `/`, `@nix` for `/nix`):
 
 ```bash
 nix build .#nixosConfigurations.iso-shinji.config.system.build.isoImage
 sudo dd if=result/iso/*.iso of=/dev/sdX bs=4M status=progress conv=fsync
 ```
 
-Boot the USB, then follow the printed instructions (or append `autoinstall` to the kernel cmdline).
-
-Source files:
-- `systems/iso/shinji.nix` — ISO module
-- `systems/x86_64-linux/shinji/disk.nix` — btrfs disko layout
+Boot the USB, then follow the printed instructions (or append `autoinstall` to the kernel cmdline). The shinji host uses a btrfs NVMe layout defined in `systems/x86_64-linux/shinji/disk.nix`.
 
 ## Prerequisites for a host to be ISO-installable
 
@@ -160,10 +82,19 @@ The target host must:
 - Have `fileSystems` in `hardware-configuration.nix` **commented out** — disko generates them declaratively
 - Include the block device kernel module in `boot.initrd.availableKernelModules` (e.g. `"nvme"`, `"ahci"`, `"sd_mod"`)
 
+## How it works
+
+`systems/iso/installer.nix` receives `hostname` via `specialArgs` and uses it to:
+
+- Set the ISO edition/volume label
+- Populate MOTD instructions and autoinstall commands dynamically
+- The flake source (`self`) is embedded as a raw copy on the ISO at `/nixos-flake`
+- At boot, `postBootCommands` copies it to `/etc/nixos/flake` where `nixos-install --flake` can find it
+
 ## Size considerations
 
 - The ISO includes the flake source closure, the live Nix store (squashfs), and disko
-- Typical size: 1-2 GB depending on extra `storeContents`
+- Typical size: ~1.4 GB depending on extra `storeContents`
 - Use `isoImage.squashfsCompression = "zstd -Xcompression-level 19"` (default) for best compression
 - Add `isoImage.compressImage = true` for an extra `.zst` layer (slower build, smaller file)
 

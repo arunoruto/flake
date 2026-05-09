@@ -5,6 +5,7 @@
   modulesPath,
   self,
   inputs,
+  hostname,
   ...
 }:
 let
@@ -15,7 +16,7 @@ in
     (modulesPath + "/installer/cd-dvd/installation-cd-minimal.nix")
   ];
 
-  isoImage.edition = "shinji";
+  isoImage.edition = hostname;
 
   isoImage.contents = [
     {
@@ -43,9 +44,9 @@ in
         if ! grep -q 'autoinstall' /proc/cmdline; then
           cat << 'HEREDOC' >> /etc/motd
 
-    === Shinji Installer ===
-    1. Partition:  sudo disko --mode disko /etc/nixos/flake#shinji
-    2. Install:    sudo nixos-install --flake /etc/nixos/flake#shinji --root /mnt
+    === ${hostname} Installer ===
+    1. Partition:  sudo disko --mode disko /etc/nixos/flake#${hostname}
+    2. Install:    sudo nixos-install --flake /etc/nixos/flake#${hostname} --root /mnt
     3. Reboot:     sudo reboot
 
     Autoinstall:  reboot and add 'autoinstall' to kernel cmdline
@@ -55,7 +56,7 @@ in
   '';
 
   systemd.services.autoinstall = {
-    description = "Autoinstall NixOS shinji from embedded flake";
+    description = "Autoinstall NixOS ${hostname} from embedded flake";
     wantedBy = [ "multi-user.target" ];
     after = [ "network.target" ];
     serviceConfig.Type = "oneshot";
@@ -67,10 +68,10 @@ in
     ];
     script = ''
       if grep -q 'autoinstall' /proc/cmdline; then
-        echo "==> Autoinstall triggered: partitioning /dev/nvme0n1..."
-        disko --mode disko /etc/nixos/flake#shinji
+        echo "==> Autoinstall triggered: partitioning disk..."
+        disko --mode disko /etc/nixos/flake#${hostname}
         echo "==> Installing NixOS..."
-        nixos-install --flake /etc/nixos/flake#shinji --root /mnt --no-root-passwd
+        nixos-install --flake /etc/nixos/flake#${hostname} --root /mnt --no-root-passwd
         echo "==> Done! Rebooting in 5s..."
         sleep 5
         reboot -f
