@@ -1,0 +1,85 @@
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  # pkg-config,
+  # openssl,
+  # protobuf,
+  # postgresql,
+  # webkitgtk_4_1,
+  # makeWrapper,
+  pnpm,
+  pnpmConfigHook,
+  fetchPnpmDeps,
+}:
+
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "retrom-service";
+  version = "0.7.55"; # Adjust as needed
+  src = fetchFromGitHub {
+    owner = "JMBeresford";
+    repo = "retrom";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-SYxzBncXM9Q2I8CAqTqKtwaof8O6sXjmBeAv8QPY8Rg=";
+  };
+
+  # 1. Build the Web Client (React/Vite)
+  webui = stdenv.mkDerivation {
+    pname = "retrom-web";
+    inherit (finalAttrs) version src;
+
+    nativeBuildInputs = [
+      # nodejs
+      pnpm
+      pnpmConfigHook
+      # makeWrapper
+    ];
+
+    pnpmDeps = fetchPnpmDeps {
+      inherit (finalAttrs) pname version src;
+      fetcherVersion = 3;
+      hash = "sha256-SEfCBq76zMJ1toImkAf2PJXAV5I/j456R4+ugQhX8Oc=";
+    };
+  };
+
+  # Docker uses /packages/service
+  # buildAndTestSubdir = "packages/service";
+
+  cargoHash = lib.fakeHash;
+
+  # From Docker: features embedded_db
+  # buildFeatures = [ "embedded_db" ];
+
+  nativeBuildInputs = [
+    # pkg-config
+    # protobuf # Required for gRPC/Protobuf in Docker
+    # makeWrapper
+  ];
+
+  # buildInputs = [
+  #   openssl
+  #   postgresql
+  #   webkitgtk_4_1
+  # ];
+  #
+
+  # Environment variables for the build
+  # PROTOC = "${protobuf}/bin/protoc";
+
+  # postInstall = ''
+  #   # Match the Docker RUNTIME environment
+  #   wrapProgram $out/bin/retrom-service \
+  #     --set RETROM_WEB_DIR "${finalAttrs.webui}" \
+  #     --set RETROM_CONFIG_DIR "/var/lib/retrom/config" \
+  #     --set RETROM_DATA_DIR "/var/lib/retrom/data" \
+  #     --set PORT "5101"
+  # '';
+
+  meta = with lib; {
+    description = "Retrom service and web interface";
+    homepage = "https://github.com/JMBeresford/retrom";
+    license = licenses.mit;
+    maintainers = [ ];
+  };
+})

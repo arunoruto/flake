@@ -15,6 +15,8 @@ in
     (modulesPath + "/installer/cd-dvd/installation-cd-minimal.nix")
   ];
 
+  isoImage.edition = "shinji";
+
   isoImage.contents = [
     {
       source = self;

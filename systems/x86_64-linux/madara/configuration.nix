@@ -97,6 +97,15 @@
           hostname = "opencode.${config.services.cloudflared.defaultDomain}";
           service = "http://localhost:4096";
         }
+        (
+          let
+            cfg = config.home-manager.users.mar.programs;
+          in
+          lib.optionalAttrs (cfg ? "pi") {
+            hostname = "pi.${config.services.cloudflared.defaultDomain}";
+            service = "http://localhost:${toString cfg.pi.tau.port}";
+          }
+        )
         {
           hostname = "jupyter.${config.services.cloudflared.defaultDomain}";
           service = "http://localhost:8888";
@@ -107,14 +116,13 @@
       enable = true;
       openFirewall = true;
     };
-    # beszel-agent = {
     beszel.agent = {
       enable = true;
       package = pkgs.unstable.beszel;
+      # package = pkgs.custom.beszel;
       environment = {
         # LOG_LEVEL = "debug";
         LOG_LEVEL = "info";
-        GPU = "true";
         KEY_FILE = config.sops.secrets."tokens/beszel-marvin".path;
         EXTRA_FILESYSTEMS = lib.strings.concatStringsSep "," [
           "nvme0n1p1"
@@ -189,6 +197,9 @@
       suspend.enable = false;
       hibernate.enable = false;
       hybrid-sleep.enable = false;
+    };
+    services.beszel-agent.serviceConfig = {
+      PrivateDevices = lib.mkForce false;
     };
   };
   environment.systemPackages = with pkgs; [
