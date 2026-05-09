@@ -50,8 +50,9 @@
         git = true;
         icons = "auto";
         extraOptions = [
+          "--group"
           "--group-directories-first"
-          "--time-style=+%F_%T"
+          "--time-style=+%F %T"
         ];
       };
     };
