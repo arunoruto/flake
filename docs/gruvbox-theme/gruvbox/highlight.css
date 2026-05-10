@@ -1,0 +1,99 @@
+/* Gruvbox Dark syntax highlighting for highlight.js */
+
+.gruvbox pre .hljs {
+    display: block;
+    overflow-x: auto;
+    background: var(--gruvbox-bg0-hard);
+    color: var(--gruvbox-fg1);
+}
+
+/* Comments */
+.gruvbox .hljs-comment,
+.gruvbox .hljs-quote {
+    color: var(--gruvbox-gray);
+    font-style: italic;
+}
+
+/* Keywords */
+.gruvbox .hljs-keyword,
+.gruvbox .hljs-selector-tag {
+    color: var(--gruvbox-red);
+}
+
+/* Strings */
+.gruvbox .hljs-string,
+.gruvbox .hljs-symbol,
+.gruvbox .hljs-bullet {
+    color: var(--gruvbox-green);
+}
+
+/* Numbers, literals, types */
+.gruvbox .hljs-number,
+.gruvbox .hljs-literal,
+.gruvbox .hljs-type,
+.gruvbox .hljs-params {
+    color: var(--gruvbox-purple);
+}
+
+/* Built-ins */
+.gruvbox .hljs-built_in,
+.gruvbox .hljs-builtin-name {
+    color: var(--gruvbox-orange);
+}
+
+/* Functions, titles, sections */
+.gruvbox .hljs-title,
+.gruvbox .hljs-section {
+    color: var(--gruvbox-yellow);
+}
+
+/* Attributes, variables */
+.gruvbox .hljs-variable,
+.gruvbox .hljs-template-variable,
+.gruvbox .hljs-attribute,
+.gruvbox .hljs-attr {
+    color: var(--gruvbox-blue);
+}
+
+/* Tags, names */
+.gruvbox .hljs-tag,
+.gruvbox .hljs-name {
+    color: var(--gruvbox-red);
+}
+
+/* Regex, links */
+.gruvbox .hljs-regexp,
+.gruvbox .hljs-link {
+    color: var(--gruvbox-green);
+}
+
+/* Selectors */
+.gruvbox .hljs-selector-id,
+.gruvbox .hljs-selector-class {
+    color: var(--gruvbox-aqua);
+}
+
+/* Meta/preprocessor */
+.gruvbox .hljs-meta {
+    color: var(--gruvbox-yellow-dim);
+}
+
+/* Emphasis */
+.gruvbox .hljs-emphasis {
+    font-style: italic;
+}
+
+.gruvbox .hljs-strong {
+    font-weight: bold;
+}
+
+/* Diff */
+.gruvbox .hljs-addition {
+    color: var(--gruvbox-green);
+    background-color: rgba(184, 187, 38, 0.1);
+}
+
+.gruvbox .hljs-deletion {
+    color: var(--gruvbox-red);
+    background-color: rgba(251, 73, 52, 0.1);
+}

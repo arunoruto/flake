@@ -1,0 +1,167 @@
+/* Gruvbox Dark color scheme for mdBook */
+
+/*---------------------------------------------------------------------------
+ * Gruvbox Palette Definition
+ * These are the official colors from https://github.com/morhetz/gruvbox
+ *---------------------------------------------------------------------------*/
+:root {
+    /* Backgrounds (dark mode) */
+    --gruvbox-bg0-hard: #1d2021;
+    --gruvbox-bg0:      #282828;
+    --gruvbox-bg0-soft: #32302f;
+    --gruvbox-bg1:      #3c3836;
+    --gruvbox-bg2:      #504945;
+    --gruvbox-bg3:      #665c54;
+    --gruvbox-bg4:      #7c6f64;
+
+    /* Foregrounds (light text for dark mode) */
+    --gruvbox-fg0:      #fbf1c7;
+    --gruvbox-fg1:      #ebdbb2;
+    --gruvbox-fg2:      #d5c4a1;
+    --gruvbox-fg3:      #bdae93;
+    --gruvbox-fg4:      #a89984;
+
+    /* Gray (neutral) */
+    --gruvbox-gray:     #928374;
+
+    /* Bright colors (for dark backgrounds) */
+    --gruvbox-red:      #fb4934;
+    --gruvbox-green:    #b8bb26;
+    --gruvbox-yellow:   #fabd2f;
+    --gruvbox-blue:     #83a598;
+    --gruvbox-purple:   #d3869b;
+    --gruvbox-aqua:     #8ec07c;
+    --gruvbox-orange:   #fe8019;
+
+    /* Neutral colors (dimmer variants) */
+    --gruvbox-red-dim:    #cc241d;
+    --gruvbox-green-dim:  #98971a;
+    --gruvbox-yellow-dim: #d79921;
+    --gruvbox-blue-dim:   #458588;
+    --gruvbox-purple-dim: #b16286;
+    --gruvbox-aqua-dim:   #689d6a;
+    --gruvbox-orange-dim: #d65d0e;
+
+    /* Layout (mdBook defaults) */
+    --sidebar-target-width: 300px;
+    --sidebar-width: min(var(--sidebar-target-width), 80vw);
+    --sidebar-resize-indicator-width: 8px;
+    --sidebar-resize-indicator-space: 2px;
+    --page-padding: 15px;
+    --content-max-width: 750px;
+    --menu-bar-height: 50px;
+    --mono-font: "Source Code Pro", Consolas, "Ubuntu Mono", Menlo, "DejaVu Sans Mono", monospace, monospace;
+    --code-font-size: 0.875em;
+    --searchbar-margin-block-start: 5px;
+}
+
+/*---------------------------------------------------------------------------
+ * mdBook Variable Overrides
+ * Gruvbox dark theme values (scoped to .gruvbox class)
+ *---------------------------------------------------------------------------*/
+.gruvbox {
+    color-scheme: dark;
+
+    /* Page colors */
+    --bg: var(--gruvbox-bg0);
+    --fg: var(--gruvbox-fg1);
+
+    /* Sidebar */
+    --sidebar-bg: var(--gruvbox-bg0-hard);
+    --sidebar-fg: var(--gruvbox-fg1);
+    --sidebar-non-existant: var(--gruvbox-fg4);
+    --sidebar-active: var(--gruvbox-yellow);
+    --sidebar-spacer: var(--gruvbox-bg2);
+    --sidebar-header-border-color: var(--gruvbox-bg3);
+
+    /* Scrollbar */
+    --scrollbar: var(--gruvbox-fg4);
+
+    /* Icons */
+    --icons: var(--gruvbox-fg4);
+    --icons-hover: var(--gruvbox-orange);
+
+    /* Links */
+    --links: var(--gruvbox-orange);
+    --inline-code-color: var(--gruvbox-aqua);
+
+    /* Theme popup */
+    --theme-popup-bg: var(--gruvbox-bg1);
+    --theme-popup-border: var(--gruvbox-bg3);
+    --theme-hover: var(--gruvbox-bg2);
+
+    /* Quote/blockquote */
+    --quote-bg: var(--gruvbox-bg1);
+    --quote-border: var(--gruvbox-bg3);
+    --warning-border: var(--gruvbox-orange);
+
+    /* Tables */
+    --table-border-color: var(--gruvbox-bg3);
+    --table-header-bg: var(--gruvbox-bg1);
+    --table-alternate-bg: var(--gruvbox-bg0-soft);
+
+    /* Searchbar */
+    --searchbar-border-color: var(--gruvbox-bg3);
+    --searchbar-bg: var(--gruvbox-bg1);
+    --searchbar-fg: var(--gruvbox-fg1);
+    --searchbar-shadow-color: var(--gruvbox-bg0-hard);
+
+    /* Search results */
+    --searchresults-header-fg: var(--gruvbox-fg4);
+    --searchresults-border-color: var(--gruvbox-bg3);
+    --searchresults-li-bg: var(--gruvbox-bg1);
+    --search-mark-bg: var(--gruvbox-yellow-dim);
+
+    /* Copy button */
+    --copy-button-filter: invert(0.8);
+    --copy-button-filter-hover: invert(1);
+
+    /* Misc */
+    --color-scheme: dark;
+    --footnote-highlight: var(--gruvbox-blue);
+    --overlay-bg: rgba(29, 32, 33, 0.5);
+
+    /* Blockquote admonition colors */
+    --blockquote-note-color: var(--gruvbox-blue);
+    --blockquote-tip-color: var(--gruvbox-green);
+    --blockquote-important-color: var(--gruvbox-purple);
+    --blockquote-warning-color: var(--gruvbox-yellow);
+    --blockquote-caution-color: var(--gruvbox-red);
+}
+
+/*---------------------------------------------------------------------------
+ * Direct Element Overrides
+ * For elements that don't respect CSS variables
+ *---------------------------------------------------------------------------*/
+
+/* Inline code */
+.gruvbox :not(pre) > code {
+    color: var(--inline-code-color);
+    background-color: var(--gruvbox-bg1);
+    padding: 2px 4px;
+    border-radius: 3px;
+}
+
+/* Link hover */
+.gruvbox .content a:hover {
+    color: var(--gruvbox-yellow);
+}
+
+/* Scrollbars (WebKit browsers) */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--gruvbox-bg0-hard);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--gruvbox-bg2);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--gruvbox-bg3);
+}

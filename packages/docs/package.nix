@@ -9,17 +9,14 @@ stdenvNoCC.mkDerivation {
 
   src = lib.fileset.toSource {
     root = ./../..;
-    fileset = lib.fileset.unions [
-      (lib.fileset.maybeMissing ./../../docs)
-      (lib.fileset.maybeMissing ./../../book.toml)
-    ];
+    fileset = (lib.fileset.maybeMissing ./../../docs);
   };
 
   nativeBuildInputs = [ mdbook ];
 
   buildPhase = ''
     runHook preBuild
-    mdbook build --dest-dir $out
+    cd docs && mdbook build --dest-dir $out
     runHook postBuild
   '';
 

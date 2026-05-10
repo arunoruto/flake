@@ -1,0 +1,21 @@
+[book]
+title = "flake docs"
+authors = ["Mirza"]
+language = "en"
+src = "."
+
+[build]
+create-missing = false
+
+[output.html]
+git-repository-url = "https://github.com/arunoruto/flake"
+# git-repository-icon = "fa-github"
+additional-css = [
+  "gruvbox-theme/gruvbox/css/variables.css",
+  "gruvbox-theme/gruvbox/highlight.css",
+]
+default-theme = "gruvbox"
+preferred-dark-theme = "gruvbox"
+
+[output.html.search]
+enable = true
