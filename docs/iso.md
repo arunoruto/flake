@@ -42,7 +42,7 @@ The generic `installer.nix` module:
 3. Follow the on-screen instructions:
 
 ```bash
-sudo disko --mode disko /etc/nixos/flake#<hostname>
+sudo disko --mode disko --flake /etc/nixos/flake#<hostname>
 sudo nixos-install --flake /etc/nixos/flake#<hostname> --root /mnt
 sudo reboot
 ```

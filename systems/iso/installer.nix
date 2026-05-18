@@ -45,7 +45,7 @@ in
           cat << 'HEREDOC' >> /etc/motd
 
     === ${hostname} Installer ===
-    1. Partition:  sudo disko --mode disko /etc/nixos/flake#${hostname}
+    1. Partition:  sudo disko --mode disko --flake /etc/nixos/flake#${hostname}
     2. Install:    sudo nixos-install --flake /etc/nixos/flake#${hostname} --root /mnt
     3. Reboot:     sudo reboot
 
@@ -69,7 +69,7 @@ in
     script = ''
       if grep -q 'autoinstall' /proc/cmdline; then
         echo "==> Autoinstall triggered: partitioning disk..."
-        disko --mode disko /etc/nixos/flake#${hostname}
+        disko --mode disko --flake /etc/nixos/flake#${hostname}
         echo "==> Installing NixOS..."
         nixos-install --flake /etc/nixos/flake#${hostname} --root /mnt --no-root-passwd
         echo "==> Done! Rebooting in 5s..."
