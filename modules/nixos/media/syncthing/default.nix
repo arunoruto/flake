@@ -34,7 +34,7 @@
                 "tcp://shinji:22000"
                 "quic://shinji:22000"
               ];
-              id = "5TUMXMK-Z3FPRVY-RD2ASP3-J3MQK47-UKBPM3B-4XMVABX-UGLBFOM-NKG3HQ5";
+              id = "WA46FP7-Y3MA2X7-DP47SFH-4LGN2DM-VMWWHEP-2NF5TUO-RNOZEGM-V544MQT";
             };
           };
         };
