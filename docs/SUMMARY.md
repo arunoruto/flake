@@ -3,6 +3,7 @@
 - [Introduction](./intro.md)
 - [Getting Started](./getting-started.md)
 - [Building ISOs](./iso.md)
+- [Secrets (sops-nix)](./sops.md)
 - [Storage](./storage/index.md)
   - [Btrfs](./storage/btrfs.md)
   - [ZFS](./storage/zfs.md)
