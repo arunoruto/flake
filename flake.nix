@@ -177,7 +177,10 @@
           # nvidia.acceptLicense = true;
         };
       };
-      isoHosts = [ "shinji" ];
+      isoHosts = [
+        "shinji"
+        "kenpachi"
+      ];
     in
     {
       inherit lib;
