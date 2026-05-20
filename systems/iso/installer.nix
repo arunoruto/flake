@@ -18,6 +18,11 @@ in
 
   isoImage.edition = hostname;
 
+  nix.settings = {
+    experimental-features = "flakes nix-command";
+    accept-flake-config = true;
+  };
+
   isoImage.contents = [
     {
       source = self;
@@ -37,13 +42,14 @@ in
   ];
 
   boot.postBootCommands = lib.mkAfter ''
-        if [ ! -e /etc/nixos/flake ]; then
-          cp -r /iso/nixos-flake /etc/nixos/flake
-          chmod -R u+w /etc/nixos/flake
-        fi
-        if ! grep -q 'autoinstall' /proc/cmdline; then
-          cat << 'HEREDOC' >> /etc/motd
+    if [ ! -e /etc/nixos/flake ]; then
+      cp -r /iso/nixos-flake /etc/nixos/flake
+      chmod -R u+w /etc/nixos/flake
+      sed -i '/self\.submodules = true;/d' /etc/nixos/flake/flake.nix
+    fi
+  '';
 
+  users.motd = ''
     === ${hostname} Installer ===
     1. Partition:  sudo disko --mode disko --flake /etc/nixos/flake#${hostname}
     2. Install:    sudo nixos-install --flake /etc/nixos/flake#${hostname} --root /mnt
@@ -51,8 +57,6 @@ in
 
     Autoinstall:  reboot and add 'autoinstall' to kernel cmdline
     ===================
-    HEREDOC
-        fi
   '';
 
   systemd.services.autoinstall = {
