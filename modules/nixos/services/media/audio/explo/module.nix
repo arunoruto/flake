@@ -199,13 +199,14 @@ in
       type = lib.types.attrsOf (
         lib.types.submodule {
           options = {
+            enable = lib.mkEnableOption "this Explo schedule";
             OnCalendar = lib.mkOption {
               type = lib.types.str;
               description = "systemd calendar event (e.g. 'Tue 00:15:00').";
             };
             flags = lib.mkOption {
-              type = lib.types.str;
-              default = "";
+              type = lib.types.listOf lib.types.str;
+              default = [ ];
               description = "CLI flags passed to explo for this schedule.";
             };
           };
@@ -213,6 +214,34 @@ in
       );
       default = { };
       description = "Named schedules for running explo. Each creates a systemd service+timer pair.";
+    };
+
+    webui = {
+      enable = lib.mkEnableOption "Explo web configuration UI" // { default = true; };
+
+      address = lib.mkOption {
+        type = lib.types.str;
+        default = ":7288";
+        description = "Listen address for the web UI (host:port).";
+      };
+
+      username = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+        description = "Username for web UI authentication (UI_USERNAME).";
+      };
+
+      passwordFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
+        default = null;
+        description = "Path to file containing web UI password (UI_PASSWORD). Loaded via systemd LoadCredential.";
+      };
+
+      cacheMb = lib.mkOption {
+        type = lib.types.int;
+        default = 500;
+        description = "Maximum cover art cache size in MB.";
+      };
     };
   };
 
@@ -237,7 +266,14 @@ in
               "${pkgs.coreutils}/bin/ln -sf ${cfg.package}/share/explo/search_ytmusic.py %S/explo/search_ytmusic.py"
               "${pkgs.coreutils}/bin/ln -sf ${cfg.package}/share/explo/search_ytmusic.py ${cfg.environment.DOWNLOAD_DIR}/search_ytmusic.py"
             ];
-            ExecStart = "${lib.getExe cfg.package} --config %S/explo/.env ${schedule.flags}";
+            ExecStart = lib.escapeShellArgs (
+              [
+                "${lib.getExe cfg.package}"
+                "--config"
+                "%S/explo/.env"
+              ]
+              ++ schedule.flags
+            );
             EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
             WorkingDirectory = cfg.environment.DOWNLOAD_DIR;
             ReadWritePaths = [
@@ -253,7 +289,51 @@ in
             NoNewPrivileges = true;
           };
         };
-      }) cfg.schedules
+      }) (lib.filterAttrs (_: s: s.enable) cfg.schedules)
+      ++ lib.optional cfg.webui.enable {
+        "explo-webui" = {
+          description = "Explo web configuration UI";
+          after = [ "network.target" ];
+          wants = [ "network.target" ];
+
+          path = cfg.extraPackages;
+
+          environment = lib.mapAttrs (_: envToString) cfg.environment // {
+            WEB_UI = "true";
+            WEB_ADDR = cfg.webui.address;
+            WEB_ENV_PATH = "%S/explo/.env";
+            WEB_DATA_PATH = "%S/explo-webui";
+            WEB_CACHE_MB = toString cfg.webui.cacheMb;
+          } // lib.optionalAttrs (cfg.webui.username != null) {
+            UI_USERNAME = cfg.webui.username;
+          };
+
+          serviceConfig = {
+            Type = "simple";
+            User = cfg.user;
+            Group = cfg.group;
+            ExecStart = "${lib.getExe cfg.package}";
+            ExecStartPre = [
+              "${pkgs.coreutils}/bin/touch %S/explo/.env"
+            ];
+            LoadCredential = lib.mkIf (cfg.webui.passwordFile != null) "UI_PASSWORD:${cfg.webui.passwordFile}";
+            ImportCredential = lib.mkIf (cfg.webui.passwordFile != null) "UI_PASSWORD";
+            EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
+            WorkingDirectory = "%S/explo-webui";
+
+            DynamicUser = true;
+            StateDirectory = [
+              "explo"
+              "explo-webui"
+            ];
+
+            ProtectSystem = "full";
+            ProtectHome = true;
+            PrivateTmp = true;
+            NoNewPrivileges = true;
+          };
+        };
+      }
     );
 
     systemd.timers = lib.mkMerge (
@@ -266,7 +346,7 @@ in
             Persistent = true;
           };
         };
-      }) cfg.schedules
+      }) (lib.filterAttrs (_: s: s.enable) cfg.schedules)
     );
 
     users.users.explo = lib.mkIf (cfg.user == "explo") {
