@@ -9,6 +9,10 @@ let
   cfg = config.services.explo;
 
   envToString = v: if builtins.isBool v then (if v then "true" else "false") else toString v;
+
+  configDir = "/var/lib/explo";
+  envPath = "${configDir}/.env";
+  webuiDataDir = "${configDir}/webui";
 in
 {
   options.services.explo = {
@@ -242,10 +246,26 @@ in
         default = 500;
         description = "Maximum cover art cache size in MB.";
       };
+
+      syncSchedule = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+        description = ''
+          systemd calendar interval for syncing *_SCHEDULE entries from the .env file.
+          When set, creates a timer that reads schedules written by the web UI and
+          executes matching playlist runs. Matches Docker's cron behavior.
+          Set to e.g. "*:00/15" for every 15 minutes.
+        '';
+      };
     };
   };
 
   config = lib.mkIf cfg.enable {
+    systemd.tmpfiles.rules = [
+      "d ${configDir} 0700 ${cfg.user} ${cfg.group} -"
+      "d ${webuiDataDir} 0700 ${cfg.user} ${cfg.group} -"
+    ];
+
     systemd.services = lib.mkMerge (
       lib.mapAttrsToList (name: schedule: {
         "explo-${name}" = {
@@ -262,15 +282,15 @@ in
             User = cfg.user;
             Group = cfg.group;
             ExecStartPre = [
-              "${pkgs.coreutils}/bin/touch %S/explo/.env"
-              "${pkgs.coreutils}/bin/ln -sf ${cfg.package}/share/explo/search_ytmusic.py %S/explo/search_ytmusic.py"
+              "${pkgs.coreutils}/bin/touch ${envPath}"
+              "${pkgs.coreutils}/bin/ln -sf ${cfg.package}/share/explo/search_ytmusic.py ${configDir}/search_ytmusic.py"
               "${pkgs.coreutils}/bin/ln -sf ${cfg.package}/share/explo/search_ytmusic.py ${cfg.environment.DOWNLOAD_DIR}/search_ytmusic.py"
             ];
             ExecStart = lib.escapeShellArgs (
               [
                 "${lib.getExe cfg.package}"
                 "--config"
-                "%S/explo/.env"
+                envPath
               ]
               ++ schedule.flags
             );
@@ -278,10 +298,8 @@ in
             WorkingDirectory = cfg.environment.DOWNLOAD_DIR;
             ReadWritePaths = [
               cfg.environment.DOWNLOAD_DIR
+              configDir
             ];
-
-            DynamicUser = true;
-            StateDirectory = "explo";
 
             ProtectSystem = "full";
             ProtectHome = true;
@@ -301,8 +319,8 @@ in
           environment = lib.mapAttrs (_: envToString) cfg.environment // {
             WEB_UI = "true";
             WEB_ADDR = cfg.webui.address;
-            WEB_ENV_PATH = "%S/explo/.env";
-            WEB_DATA_PATH = "%S/explo-webui";
+            WEB_ENV_PATH = envPath;
+            WEB_DATA_PATH = webuiDataDir;
             WEB_CACHE_MB = toString cfg.webui.cacheMb;
           } // lib.optionalAttrs (cfg.webui.username != null) {
             UI_USERNAME = cfg.webui.username;
@@ -314,19 +332,124 @@ in
             Group = cfg.group;
             ExecStart = "${lib.getExe cfg.package}";
             ExecStartPre = [
-              "${pkgs.coreutils}/bin/touch %S/explo/.env"
+              "${pkgs.coreutils}/bin/touch ${envPath}"
             ];
             LoadCredential = lib.mkIf (cfg.webui.passwordFile != null) "UI_PASSWORD:${cfg.webui.passwordFile}";
             ImportCredential = lib.mkIf (cfg.webui.passwordFile != null) "UI_PASSWORD";
             EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
-            WorkingDirectory = "%S/explo-webui";
-
-            DynamicUser = true;
-            StateDirectory = [
-              "explo"
-              "explo-webui"
+            WorkingDirectory = webuiDataDir;
+            ReadWritePaths = [
+              configDir
+              webuiDataDir
             ];
 
+            ProtectSystem = "full";
+            ProtectHome = true;
+            PrivateTmp = true;
+            NoNewPrivileges = true;
+          };
+        };
+      }
+      ++ lib.optional (cfg.webui.syncSchedule != null) {
+        "explo-cron" = {
+          description = "Explo cron-style scheduler from web UI .env";
+          after = [ "network-online.target" ];
+          wants = [ "network-online.target" ];
+
+          path = cfg.extraPackages;
+
+          environment = {
+            WEB_ENV_PATH = envPath;
+            EXPLO_BIN = lib.getExe cfg.package;
+          };
+
+          script = ''
+            ${lib.getExe pkgs.python3} -c '
+import os, json, sys, subprocess
+from datetime import datetime, timedelta
+
+now = datetime.now()
+env_path = os.environ["WEB_ENV_PATH"]
+explo_bin = os.environ["EXPLO_BIN"]
+state_file = os.path.join(os.environ.get("RUNTIME_DIRECTORY", "/tmp"), "explo-cron-state.json")
+lookback_max = timedelta(hours=24)
+
+last_check = now - lookback_max
+try:
+    with open(state_file) as f:
+        last_check = datetime.fromisoformat(json.load(f)["last_check"])
+except Exception:
+    pass
+
+env_vars = {}
+try:
+    with open(env_path) as f:
+        for line in f:
+            line = line.strip()
+            if not line or line.startswith("#"):
+                continue
+            if "=" not in line:
+                continue
+            k, v = line.split("=", 1)
+            env_vars[k.strip()] = v.strip()
+except FileNotFoundError:
+    sys.exit(0)
+
+def cron_dow(dt):
+    return dt.isoweekday() % 7
+
+def cron_match(expr, dt):
+    parts = expr.split()
+    if len(parts) != 5:
+        return False
+    patterns = [
+        (parts[0], str(dt.minute)),
+        (parts[1], str(dt.hour)),
+        (parts[2], str(dt.day)),
+        (parts[3], str(dt.month)),
+        (parts[4], str(cron_dow(dt))),
+    ]
+    for pattern, value in patterns:
+        if pattern == "*":
+            continue
+        if pattern != value:
+            return False
+    return True
+
+current = last_check.replace(second=0, microsecond=0) + timedelta(minutes=1)
+run_count = 0
+while current <= now:
+    for key, val in env_vars.items():
+        if not key.endswith("_SCHEDULE") or not val:
+            continue
+        job = key[:-9]
+        flags = env_vars.get(f"{job}_FLAGS", "")
+        if cron_match(val, current):
+            cmd = [explo_bin, "--config", env_path]
+            if flags:
+                cmd.extend(flags.split())
+            print(f"[explo-cron] {current:%Y-%m-%d %H:%M} — running {job}", file=sys.stderr)
+            subprocess.run(cmd)
+            run_count += 1
+    current += timedelta(minutes=1)
+
+if run_count:
+    print(f"[explo-cron] executed {run_count} job(s)", file=sys.stderr)
+
+os.makedirs(os.path.dirname(state_file), exist_ok=True)
+with open(state_file, "w") as f:
+    json.dump({"last_check": now.isoformat()}, f)
+'
+          '';
+
+          serviceConfig = {
+            Type = "oneshot";
+            User = cfg.user;
+            Group = cfg.group;
+            EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
+            ReadWritePaths = [ configDir ];
+
+            RuntimeDirectory = "explo-cron";
             ProtectSystem = "full";
             ProtectHome = true;
             PrivateTmp = true;
@@ -347,13 +470,23 @@ in
           };
         };
       }) (lib.filterAttrs (_: s: s.enable) cfg.schedules)
+      ++ lib.optional (cfg.webui.syncSchedule != null) {
+        "explo-cron" = {
+          description = "Timer for Explo web UI .env cron scheduler";
+          wantedBy = [ "timers.target" ];
+          timerConfig = {
+            OnCalendar = cfg.webui.syncSchedule;
+            Persistent = true;
+          };
+        };
+      }
     );
 
     users.users.explo = lib.mkIf (cfg.user == "explo") {
       isSystemUser = true;
       group = cfg.group;
-      home = "/var/lib/explo";
-      createHome = false;
+      home = configDir;
+      createHome = true;
     };
 
     users.groups = lib.mkIf (cfg.group == "explo") {
