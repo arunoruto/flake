@@ -82,28 +82,37 @@ pkgs.lib.makeScope pkgs.newScope (
   // {
     python3Packages = pkgs.lib.makeScope pkgs.newScope (
       self-p:
-      (pkgs.lib.packagesFromDirectoryRecursive {
-        inherit (pkgs.python3Packages) callPackage;
-        directory = ./python3Packages;
-      })
+      let
+        customPackages = pkgs.lib.packagesFromDirectoryRecursive {
+          inherit (self-p) callPackage newScope;
+          directory = ./python3Packages;
+        };
+      in
+      pkgs.python3Packages // customPackages
     );
   }
   // {
     kodiPackages = pkgs.lib.makeScope pkgs.newScope (
       self-k:
-      (pkgs.lib.packagesFromDirectoryRecursive {
-        inherit (self.kodiPackages) callPackage;
-        directory = ./kodiPackages;
-      })
+      let
+        customKodiPackages = pkgs.lib.packagesFromDirectoryRecursive {
+          inherit (self-k) callPackage newScope;
+          directory = ./kodiPackages;
+        };
+      in
+      pkgs.kodiPackages // customKodiPackages
     );
   }
   // {
     home-assistant-custom-components = pkgs.lib.makeScope pkgs.newScope (
       self-ha:
-      (pkgs.lib.packagesFromDirectoryRecursive {
-        inherit (self-ha) callPackage;
-        directory = ./home-assistant-custom-components;
-      })
+      let
+        customHaPackages = pkgs.lib.packagesFromDirectoryRecursive {
+          inherit (self-ha) callPackage newScope;
+          directory = ./home-assistant-custom-components;
+        };
+      in
+      (pkgs.home-assistant-custom-components or { }) // customHaPackages
     );
   }
   // {
