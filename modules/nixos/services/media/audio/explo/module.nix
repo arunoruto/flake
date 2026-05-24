@@ -282,7 +282,6 @@ in
             User = cfg.user;
             Group = cfg.group;
             ExecStartPre = [
-              "+${pkgs.bash}/bin/bash -c 'for d in ${configDir} ${webuiDataDir}; do [ -L \"$d\" ] && rm \"$d\"; done'"
               "+${pkgs.coreutils}/bin/mkdir -p ${configDir}"
               "+${pkgs.coreutils}/bin/chown ${cfg.user}:${cfg.group} ${configDir}"
               "${pkgs.coreutils}/bin/touch ${envPath}"
@@ -336,7 +335,6 @@ in
             Group = cfg.group;
             ExecStart = "${lib.getExe cfg.package}";
             ExecStartPre = [
-              "+${pkgs.bash}/bin/bash -c 'for d in ${configDir} ${webuiDataDir}; do [ -L \"$d\" ] && rm \"$d\"; done'"
               "+${pkgs.coreutils}/bin/mkdir -p ${configDir} ${webuiDataDir}"
               "+${pkgs.coreutils}/bin/chown ${cfg.user}:${cfg.group} ${configDir} ${webuiDataDir}"
               "${pkgs.coreutils}/bin/touch ${envPath}"
