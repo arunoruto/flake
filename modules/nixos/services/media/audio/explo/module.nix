@@ -282,9 +282,12 @@ in
             User = cfg.user;
             Group = cfg.group;
             ExecStartPre = [
+              "+${pkgs.coreutils}/bin/mkdir -p ${configDir}"
+              "+${pkgs.coreutils}/bin/chown ${cfg.user}:${cfg.group} ${configDir}"
               "${pkgs.coreutils}/bin/touch ${envPath}"
+              "+${pkgs.coreutils}/bin/chown ${cfg.user}:${cfg.group} ${envPath}"
               "${pkgs.coreutils}/bin/ln -sf ${cfg.package}/share/explo/search_ytmusic.py ${configDir}/search_ytmusic.py"
-              "${pkgs.coreutils}/bin/ln -sf ${cfg.package}/share/explo/search_ytmusic.py ${cfg.environment.DOWNLOAD_DIR}/search_ytmusic.py"
+              "!${pkgs.coreutils}/bin/ln -sf ${cfg.package}/share/explo/search_ytmusic.py ${cfg.environment.DOWNLOAD_DIR}/search_ytmusic.py"
             ];
             ExecStart = lib.escapeShellArgs (
               [
@@ -332,7 +335,10 @@ in
             Group = cfg.group;
             ExecStart = "${lib.getExe cfg.package}";
             ExecStartPre = [
+              "+${pkgs.coreutils}/bin/mkdir -p ${configDir}"
+              "+${pkgs.coreutils}/bin/chown ${cfg.user}:${cfg.group} ${configDir}"
               "${pkgs.coreutils}/bin/touch ${envPath}"
+              "+${pkgs.coreutils}/bin/chown ${cfg.user}:${cfg.group} ${envPath}"
             ];
             LoadCredential = lib.mkIf (cfg.webui.passwordFile != null) "UI_PASSWORD:${cfg.webui.passwordFile}";
             ImportCredential = lib.mkIf (cfg.webui.passwordFile != null) "UI_PASSWORD";
