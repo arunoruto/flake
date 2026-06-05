@@ -6,6 +6,11 @@
   imports = [
     # ./dprint
     ./ai
+    ./cloud
+    ./communication
+    ./documents
+    ./games
+    ./git
     ./atuin.nix
     ./astral.nix
     ./fastfetch.nix

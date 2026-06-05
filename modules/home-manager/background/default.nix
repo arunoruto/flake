@@ -8,7 +8,6 @@
   imports = [
     ./cli
     ./core-utils
-    ./programs
     ./services
     ./shell
 

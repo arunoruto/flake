@@ -12,7 +12,7 @@
   ];
 
   config = lib.mkIf config.programs.firefox.enable {
-    firefox.pwa.enable = true;
+    programs.firefox.pwa.enable = true;
 
     programs.firefox = {
       # languagePacks = ["de" "en-US"];

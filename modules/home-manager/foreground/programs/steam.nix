@@ -11,9 +11,9 @@ let
   };
 in
 {
-  options.steam.enable = lib.mkEnableOption "Enable steam and GE Proton";
+  options.programs.steam.geProton.enable = lib.mkEnableOption "Install GE Proton for Steam";
 
-  config = lib.mkIf config.steam.enable {
+  config = lib.mkIf config.programs.steam.geProton.enable {
     #home.sessionVariables.STEAM_EXTRA_COMPAT_TOOLS_PATHS = "~/.steam/root/compatibilitytools.d";
     home.file = {
       ".steam/root/compatibilitytools.d/GE-Proton${version}" = {

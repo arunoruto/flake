@@ -12,7 +12,6 @@ in
   imports = [
     ./background
     ./foreground
-    ./media
     ./theming
   ];
 

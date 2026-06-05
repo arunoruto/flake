@@ -10,6 +10,7 @@
     ./copilot.nix
     ./gemini.nix
     ./mcp.nix
+    ./mods.nix
     ./opencode
     ./pi
   ];
@@ -27,6 +28,7 @@
         copilot-cli.enable = true;
         gemini-cli.enable = true;
         mcp.enable = true;
+        mods.enable = true;
         ollama.defaultPath = "http://madara.king-little.ts.net:11434/v1";
         opencode.enable = true;
         pi.enable = false;

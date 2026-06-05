@@ -1,10 +1,4 @@
 { config, ... }:
-#let
-#  catppuccin-newsboat = builtins.fetchGit {
-#    url = "https://github.com/catppuccin/newsboat";
-#    ref = "main";
-#  };
-#in
 {
   programs.newsboat = {
     enable = config.hosts.desktop.enable;

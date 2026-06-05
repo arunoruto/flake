@@ -6,6 +6,7 @@
 }:
 {
   imports = [
+    ./audio
     ./nix-serve.nix
     ./nixai.nix
   ];

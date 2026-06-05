@@ -14,13 +14,12 @@
     # ./steam.nix
     ./thunderbird.nix
     ./vscode.nix
-    ./zathura.nix
   ];
 
   options.pc.programs.enable = lib.mkEnableOption "Enable GUI programs";
 
   config = lib.mkIf config.pc.programs.enable {
-    # steam.enable = lib.mkDefault false;
+    # programs.steam.geProton.enable = lib.mkDefault false;
 
     programs = {
       reference-manager.enable = lib.mkDefault true;
