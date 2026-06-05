@@ -6,9 +6,9 @@
 {
   imports = [
     ./browsers
+    ./gaming
     ./matlab
-    ./steam.nix
-    ./packages.nix
+    ./gui-packages.nix
   ];
 
   options.programs.enable = lib.mkEnableOption "Setup GUI Modules";

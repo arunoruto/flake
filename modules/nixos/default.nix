@@ -7,10 +7,7 @@
 {
   imports = [
     ./desktop
-    ./display
     ./environment
-    ./gaming
-    ./media
     ./programs
     ./security
     ./services

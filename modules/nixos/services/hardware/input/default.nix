@@ -2,7 +2,9 @@
 {
   imports = [
     ./kanata.nix
+    ./keyboard.nix
     ./keyd.nix
+    ./mouse.nix
     ./touchpad.nix
     ./vial.nix
   ];

@@ -6,6 +6,8 @@
 }:
 {
   imports = [
+    ./dm
+
     # ./cosmic.nix
     ./gnome.nix
     ./hyprland.nix

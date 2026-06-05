@@ -7,5 +7,6 @@
 {
   imports = [
     ./chess
+    ./steam.nix
   ];
 }

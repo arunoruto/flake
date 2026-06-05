@@ -8,7 +8,6 @@
     ./ai
     ./hardware
     ./home-assistant
-    ./input
     ./media
     ./nas
     ./network

@@ -9,7 +9,7 @@ let
 in
 {
   disabledModules = [ "services/networking/cloudflared.nix" ];
-  imports = [ ./cloudflared/new.nix ];
+  imports = [ ./new.nix ];
 
   options.services.cloudflared.defaultDomain = lib.mkOption {
     type = lib.types.str;

@@ -1,6 +1,6 @@
 lib: rec {
   systemConfig = import ../systems/lib.nix lib;
-  arr = import ../modules/nixos/media/arr/lib.nix lib;
+  arr = import ../modules/nixos/services/media/downloaders/arr/lib.nix lib;
   networking = import ../modules/nixos/services/network/lib.nix lib;
 
   getDirectories =
