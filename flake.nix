@@ -17,8 +17,8 @@
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";
     mac-app-util.url = "github:hraban/mac-app-util";
     stylix = {
-      url = "github:nix-community/stylix";
-      # url = "github:nix-community/stylix/release-26.05";
+      # url = "github:nix-community/stylix";
+      url = "github:nix-community/stylix/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     devix = {
