@@ -54,7 +54,7 @@ in
         iwe
         markdown-oxide
         marksman
-        nodePackages.prettier
+        prettier
       ];
     };
   };

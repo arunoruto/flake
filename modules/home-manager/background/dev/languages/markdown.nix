@@ -25,8 +25,8 @@ in
       ++ [ "iwe" ];
 
     formatter = {
-      package = pkgs.nodePackages.prettier;
-      command = lib.getExe pkgs.nodePackages.prettier;
+      package = pkgs.prettier;
+      command = lib.getExe pkgs.prettier;
       args = [
         "--parser"
         "markdown"
@@ -42,7 +42,7 @@ in
       iwe
       markdown-oxide
       marksman
-      nodePackages.prettier
+      prettier
     ];
   };
 }

@@ -16,7 +16,7 @@
       settings = {
         # preload = config.stylix.image;
         # wallpaper = ",${config.stylix.image}";
-        splash = true;
+        splash = lib.mkDefault true;
         ipc = false;
       };
     };

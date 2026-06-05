@@ -24,23 +24,23 @@ in
       args = [ "--stdio" ];
     };
 
-    gpt = {
-      enable = lib.mkOptionDefault false;
-      autoEnableByTags = true;
-      kind = "ai";
-      exposeToOpencode = false;
-      tags = [
-        "python"
-        "nix"
-      ];
-      package = pkgs.helix-gpt;
-      command = lib.getExe pkgs.helix-gpt;
-      args = [
-        "--handler"
-        "copilot"
-      ];
-      environmentScript = copilotApiKeyScript;
-    };
+    # gpt = {
+    #   enable = lib.mkOptionDefault false;
+    #   autoEnableByTags = true;
+    #   kind = "ai";
+    #   exposeToOpencode = false;
+    #   tags = [
+    #     "python"
+    #     "nix"
+    #   ];
+    #   package = pkgs.helix-gpt;
+    #   command = lib.getExe pkgs.helix-gpt;
+    #   args = [
+    #     "--handler"
+    #     "copilot"
+    #   ];
+    #   environmentScript = copilotApiKeyScript;
+    # };
 
     lsp-ai = {
       enable = lib.mkOptionDefault false;

@@ -11,6 +11,19 @@
 #   # monitorsConfig = pkgs.writeText "gdm_monitors.xml" (builtins.readFile ./monitors.xml);
 # in
 {
+  # nixpkgs.config.packageOverrides = pkgs: {
+  #   gnome = pkgs.gnome.overrideScope (
+  #     gFinal: gPrev: {
+  #       gtksourceview = gPrev.gtksourceview.overrideAttrs (oldAttrs: {
+  #         doCheck = false;
+  #       });
+  #     }
+  #   );
+  #   gtksourceview = pkgs.gtksourceview.overrideAttrs (oldAttrs: {
+  #     doCheck = false;
+  #   });
+  # };
+
   users.primaryUser = "mar";
 
   boot.binfmt.emulatedSystems = [
@@ -48,14 +61,15 @@
     nvidia = {
       nvidiaSettings = false;
       # package = config.boot.kernelPackages.nvidiaPackages.beta;
+      package = config.boot.kernelPackages.nvidiaPackages.legacy_580;
     };
   };
   yubikey.signing = "sanemi";
-  runners.YASF.enable = true;
+  # services.github-runners.YASF.enable = true;
   nfs.enable = true;
 
   programs = {
-    distrobox.enable = true;
+    # distrobox.enable = true;
     matlab = {
       enable = true;
       release = "R2025a";
@@ -76,7 +90,7 @@
         cudaPackages = pkgs.unstable.cudaPackages_12;
         cudaArches = [ "sm_61" ];
       };
-      acceleration = "cuda";
+      # acceleration = "cuda";
 
       # package = pkgs.unstable.ollama-vulkan;
       # acceleration = "vulkan";
@@ -113,7 +127,7 @@
       ];
     };
     harmonia = {
-      enable = true;
+      cache.enable = true;
       openFirewall = true;
     };
     beszel.agent = {
@@ -205,8 +219,11 @@
   environment.systemPackages = with pkgs; [
     signal-desktop
   ];
-  networking.firewall.allowedTCPPorts = lib.optionals config.services.go2rtc.enable [
-    1984
-    8554
-  ];
+  networking.firewall = {
+    trustedInterfaces = [ "tailscale0" ];
+    allowedTCPPorts = lib.optionals config.services.go2rtc.enable [
+      1984
+      8554
+    ];
+  };
 }

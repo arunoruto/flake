@@ -20,7 +20,7 @@
     inputs.direnv-instant.homeModules.direnv-instant
     # ./vivid-module.nix
     # ./vivid-filetype.nix
-    ./vivid-themes.nix
+    # ./vivid-themes.nix
   ];
 
   programs = {
@@ -58,7 +58,7 @@
     vivid = {
       enable = true;
       package = pkgs.unstable.vivid;
-      activeTheme = "nord";
+      activeTheme = lib.mkDefault "nord";
       # enableSessionVariables = true;
       # activeTheme = "stylix";
       # activeTheme = "gruvbox-dark";

@@ -63,22 +63,24 @@ let
   # Generate language-server configuration blocks
   toHelixLspConfigs =
     languages:
-    lib.foldl' lib.recursiveUpdate { } (
-      lib.mapAttrsToList (
-        langName: langOpts:
-        let
-          activeLsps = lib.filterAttrs (n: v: v.enable) langOpts.lsps;
-        in
-        lib.mapAttrs' (
-          lspName: lspOpts:
-          lib.nameValuePair "language-server.${lspName}" {
+    let
+      languageServers = lib.foldl' lib.recursiveUpdate { } (
+        lib.mapAttrsToList (
+          langName: langOpts:
+          let
+            activeLsps = lib.filterAttrs (n: v: v.enable) langOpts.lsps;
+          in
+          lib.mapAttrs (_: lspOpts: {
             command = lspOpts.command;
             args = lib.mkIf (lspOpts.args != [ ]) lspOpts.args;
             config = lib.mkIf (lspOpts.config != { }) lspOpts.config;
-          }
-        ) activeLsps
-      ) languages
-    );
+          }) activeLsps
+        ) languages
+      );
+    in
+    lib.optionalAttrs (languageServers != { }) {
+      language-server = languageServers;
+    };
 in
 {
   inherit

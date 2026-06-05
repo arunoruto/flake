@@ -1,12 +1,4 @@
 { pkgs, ... }:
-let
-  flavor = "Macchiato";
-  catppuccin_sway = "";
-in
-# catppuccin_sway = builtins.fetchGit {
-#   url = "https://github.com/catppuccin/i3";
-#   ref = "main";
-# };
 {
   wayland.windowManager.sway = {
     extraConfigEarly = ''

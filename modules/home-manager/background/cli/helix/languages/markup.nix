@@ -72,8 +72,8 @@
         taplo
         yaml-language-server
         yamlfmt
-        nodePackages.prettier
-        nodePackages.vscode-json-languageserver
+        prettier
+        vscode-json-languageserver
         # nodePackages.prettier-plugin-toml
       ];
     };

@@ -1,7 +1,7 @@
 {
   imports = [
     # ./copilot.nix
-    ./gpt.nix
+    # ./gpt.nix
     ./lsp-ai.nix
     # ./sourcery.nix
   ];

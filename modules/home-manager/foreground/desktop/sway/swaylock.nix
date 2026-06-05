@@ -4,13 +4,6 @@
   config,
   ...
 }:
-let
-  flavor = "macchiato";
-  catppuccin-swaylock = builtins.fetchGit {
-    url = "https://github.com/catppuccin/swaylock";
-    ref = "main";
-  };
-in
 {
   options.sway.lock.enable = lib.mkEnableOption "Custom sway lock config";
 

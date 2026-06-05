@@ -6,8 +6,8 @@
 }:
 {
   imports = [
-    ./module.nix
-    ./omo.nix
+    # ./module.nix
+    # ./omo.nix
     # ./ollama.nix
     ./theme.nix
   ];
@@ -24,8 +24,10 @@
     };
     package = pkgs.unstable.opencode;
     # package = pkgs.custom.opencode;
-    settings = {
+    tui = {
       theme = "stylix";
+    };
+    settings = {
       permission = {
         todowrite = "allow";
         todoread = "allow";
@@ -96,8 +98,8 @@
           tag = "v1.3.5";
           hash = "sha256-EAlKoqJuTMib+gcLscMtpS8Zzq/D/LmIRoG3g/XKThc=";
         })
-        + "plugins/caveman/skills/caveman";
+        + "/plugins/caveman/skills/caveman";
     };
-    rules = ../AGENTS.md;
+    context = ../AGENTS.md;
   };
 }

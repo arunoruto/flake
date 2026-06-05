@@ -25,8 +25,8 @@ in
     vscode-json-languageserver = {
       enable = jsonEnabled;
       tags = [ "json" ];
-      package = pkgs.nodePackages.vscode-json-languageserver;
-      command = lib.getExe pkgs.nodePackages.vscode-json-languageserver;
+      package = pkgs.vscode-json-languageserver;
+      command = lib.getExe pkgs.vscode-json-languageserver;
       args = [ "--stdio" ];
     };
 

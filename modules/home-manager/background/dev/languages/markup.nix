@@ -6,16 +6,16 @@
       extensions = [ ".json" ];
       lspServers = [ "vscode-json-languageserver" ];
       formatter = {
-        package = pkgs.nodePackages.prettier;
-        command = lib.getExe pkgs.nodePackages.prettier;
+        package = pkgs.prettier;
+        command = lib.getExe pkgs.prettier;
         args = [
           "--parser"
           "json"
         ];
       };
       packages = with pkgs; [
-        nodePackages.prettier
-        nodePackages.vscode-json-languageserver
+        prettier
+        vscode-json-languageserver
       ];
     };
 

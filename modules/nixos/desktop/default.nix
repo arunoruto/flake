@@ -25,7 +25,7 @@
     # DEs
     services.desktopManager = {
       gnome.enable = lib.mkDefault true;
-      cosmic.enable = lib.mkDefault true;
+      cosmic.enable = lib.mkDefault false;
       plasma6.enable = lib.mkDefault false;
     };
 

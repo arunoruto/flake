@@ -9,6 +9,7 @@
   config = lib.mkIf config.gnome.theming.enable {
     gtk = {
       enable = true;
+      gtk4.theme = lib.mkDefault null;
       # theme = {
       #   name = catppuccin_name;
       #   package = catppuccin_pkg;

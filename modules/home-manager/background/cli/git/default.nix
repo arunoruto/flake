@@ -143,8 +143,9 @@ in
         };
       };
       extensions = with pkgs; [
-        gh-copilot
-        gh-dash
+        # gh-copilot
+        # gh-dash
+        (if pkgs ? "gh-pr-review" then gh-pr-review else null)
       ];
     };
 

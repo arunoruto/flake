@@ -4,17 +4,6 @@
   config,
   ...
 }:
-# let
-#   flavor = "macchiato";
-#   catppuccin-rofi = builtins.fetchGit {
-#     url = "https://github.com/catppuccin/rofi";
-#     ref = "main";
-#   };
-#   catppuccin-mako = builtins.fetchGit {
-#     url = "https://github.com/catppuccin/mako";
-#     ref = "main";
-#   };
-# in
 {
   options.sway.services.enable = lib.mkEnableOption "Custom sway services";
 

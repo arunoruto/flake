@@ -47,6 +47,8 @@
       enableFishIntegration = lib.mkDefault config.programs.fish.enable;
       enableNushellIntegration = lib.mkDefault config.programs.nushell.enable;
       enableZshIntegration = lib.mkDefault config.programs.zsh.enable;
+
+      shellWrapperName = lib.mkDefault "y";
     };
   };
 }

@@ -11,9 +11,9 @@
       niri = {
         package = pkgs.unstable.niri;
       };
-      # If you are on a laptop, you can set up brightness and volume function keys as follows:
-      light.enable = true;
     };
+    # If you are on a laptop, you can set up brightness and volume function keys as follows:
+    hardware.acpilight.enable = lib.mkDefault true;
 
     environment.systemPackages = with pkgs; [
       fuzzel

@@ -27,29 +27,29 @@ in
       extraConfig = ''
         SetEnv TERM=xterm-256color
       '';
-      matchBlocks = {
+      settings = {
         "*" = {
           addKeysToAgent = "yes";
         };
 
         hublab = {
-          host = "gitlab.com github.com";
-          identitiesOnly = false;
+          Host = "gitlab.com github.com";
+          IdentitiesOnly = false;
           # identityFile = [
           #   "~/.ssh/id_sops"
           # ];
         };
         ultron = {
-          host = "ultron";
-          hostname = "ultron.king-little.ts.net";
-          user = "mar";
+          Host = "ultron";
+          HostName = "ultron.king-little.ts.net";
+          User = "mar";
           # forwardX11 = "yes";
         };
         marvin = {
-          host = "marvin";
-          hostname = "marvin.king-little.ts.net";
-          user = "mar";
-          extraOptions.PubkeyAuthentication = "no";
+          Host = "marvin";
+          HostName = "marvin.king-little.ts.net";
+          User = "mar";
+          PubkeyAuthentication = "no";
         };
       };
     };

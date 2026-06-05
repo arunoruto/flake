@@ -37,6 +37,7 @@
       };
       wayland.windowManager.hyprland = {
         # package = pkgs.unstable.hyprland;
+        configType = "lua";
         settings = {
           # monitor = ",preferred,auto,1.175";
           monitor = lib.mkDefault ",preferred,auto,1";
