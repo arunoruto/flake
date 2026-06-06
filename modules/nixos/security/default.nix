@@ -30,7 +30,7 @@
         pkgs.sudo;
   };
 
-  environment.systemPackages = with pkgs; [
-    clevis
-  ];
+  # environment.systemPackages = with pkgs; [
+  #   clevis
+  # ];
 }
