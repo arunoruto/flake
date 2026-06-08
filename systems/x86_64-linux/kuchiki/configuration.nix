@@ -28,9 +28,13 @@
 
   services = {
     tailscale.tsidp = {
-      enable = true;
+      enable = false;
       port = 41443;
       localPort = 41080;
+    };
+    cloudflared = {
+      enable = true;
+      defaultDomain = "arnaut.me";
     };
     # immich = {
     #   enable = true;
@@ -44,7 +48,7 @@
     #   mediaDir = "/mnt/flash/documents";
     # };
     scrutiny.collector = {
-      enable = true;
+      enable = false;
       settings.api.endpoint = "https://scrutiny.bv.e-technik.tu-dortmund.de";
     };
     traefik.enable = true;
@@ -68,7 +72,7 @@
     # };
     beszel.agent = {
       enable = true;
-      package = pkgs.custom.beszel;
+      package = pkgs.unstable.beszel;
       environment = {
         LOG_LEVEL = "info";
         GPU = "true";

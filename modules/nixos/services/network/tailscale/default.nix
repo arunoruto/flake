@@ -40,6 +40,8 @@
           else
             [
               "--ssh"
+              "--advertise-connector"
+              "--advertise-tags=tag:connector"
             ]
         );
         extraSetFlags = lib.optionals (!(lib.elem "desktop" config.system.tags)) [
