@@ -59,9 +59,11 @@ lib: {
               dataDir = lib.mkDefault "${cfg.dataDir}/${serviceName}";
             };
 
-            users.users."${serviceName}".extraGroups = lib.optionals (config.users.groups ? "media") [
-              config.users.groups.media.name
-            ];
+            users.users."${serviceName}".extraGroups =
+              (lib.optionals (config.users.groups ? "media") [
+                config.users.groups.media.name
+              ])
+              ++ (lib.optionals config.services.syncthing.enable [ config.services.syncthing.group ]);
           }
         //
           lib.optionalAttrs

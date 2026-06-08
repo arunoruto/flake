@@ -6,6 +6,7 @@
 {
   imports = [
     ./audio
+    ./arr
     ./downloaders
     ./players
     ./reading
@@ -34,9 +35,9 @@
     lib.mkMerge [
       (lib.mkIf cfg.enable {
         services = {
+          arr.enable = lib.mkDefault cfg.services;
           radarr.enable = lib.mkDefault cfg.services;
           sonarr.enable = lib.mkDefault cfg.services;
-          arr.enable = lib.mkDefault cfg.services;
           jellyfin.enable = lib.mkDefault cfg.services;
           plex.enable = lib.mkDefault cfg.services;
           tautulli.enable = lib.mkDefault cfg.services;
