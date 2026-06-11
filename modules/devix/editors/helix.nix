@@ -10,11 +10,12 @@ let
 
   # Filter enabled languages
   activeLanguages = lib.filterAttrs (n: v: v.enable) config.development.languages;
+  resolvedActiveLanguages = helixLib.resolveLanguages config.development activeLanguages;
 
   # Use pure functions to transform data
-  extractedPackages = helixLib.extractPackages activeLanguages;
-  translatedLanguages = helixLib.toHelixLanguages activeLanguages;
-  translatedLspConfigs = helixLib.toHelixLspConfigs activeLanguages;
+  extractedPackages = helixLib.extractPackages resolvedActiveLanguages;
+  translatedLanguages = helixLib.toHelixLanguages resolvedActiveLanguages;
+  translatedLspConfigs = helixLib.toHelixLspConfigs resolvedActiveLanguages;
 in
 {
   options.programs.helix = {

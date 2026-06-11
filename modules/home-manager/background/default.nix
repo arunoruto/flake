@@ -11,9 +11,6 @@
     ./services
     ./shell
 
-    ./dev/module.nix
-    ./dev
-
     ./nix-utils.nix
     ./secrets.nix
     ./ssh.nix

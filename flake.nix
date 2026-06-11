@@ -21,11 +21,6 @@
       url = "github:nix-community/stylix/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    devix = {
-      # url = "git+file:./devix";
-      url = "./devix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     devenv = {
       url = "github:cachix/devenv";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -187,12 +182,15 @@
       inherit lib;
       nixosModules.default = import ./modules/nixos;
       darwinModules.default = import ./modules/darwin;
-      homeModules.default = import ./modules/home-manager/default.nix;
+      homeModules = {
+        default = import ./modules/home-manager/default.nix;
+        devix = import ./modules/devix/targets/home;
+      };
       devenvModules = {
-        default = import ./modules/devenv;
-        core = ./modules/devenv/languages/core.nix;
-        helix = import ./modules/devenv/editors/helix.nix;
-        python = ./modules/devenv/profiles/python.nix;
+        default = import ./modules/devix;
+        core = ./modules/devix/languages/core.nix;
+        helix = import ./modules/devix/editors/helix.nix;
+        python = ./modules/devix/profiles/python.nix;
       };
 
       nixosConfigurations =
@@ -328,6 +326,7 @@
           formatter = pkgs-system.nixfmt-tree;
           checks = {
             pre-commit-check = inputs.git-hooks.lib.${system}.run {
+              package = pkgs-system.prek;
               src = ./.;
               hooks = {
                 nixfmt.enable = true;

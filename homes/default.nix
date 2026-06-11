@@ -40,7 +40,6 @@ lib.genAttrs unique-users (
     ++ (with inputs; [
       # stylix.homeManagerModules.stylix
       stylix.homeModules.stylix
-      devix.homeManagerModules.default
     ]);
   }
 )

@@ -2,6 +2,7 @@
   imports = [
     ./home.nix
     ./imports.nix
-    ./devenv
+    ./development
+    ../devix/targets/home
   ];
 }

@@ -295,22 +295,6 @@
         "type": "github"
       }
     },
-    "devix": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "path": "./devix",
-        "type": "path"
-      },
-      "original": {
-        "path": "./devix",
-        "type": "path"
-      },
-      "parent": []
-    },
     "direnv-instant": {
       "inputs": {
         "flake-parts": "flake-parts_3",
@@ -1510,7 +1494,6 @@
         "cpu-microcodes": "cpu-microcodes",
         "determinate": "determinate",
         "devenv": "devenv",
-        "devix": "devix",
         "direnv-instant": "direnv-instant",
         "disko": "disko",
         "git-hooks": "git-hooks_2",

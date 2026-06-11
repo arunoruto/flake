@@ -33,4 +33,14 @@
       ];
     };
   };
+
+  language = {
+    lspServers = [ "pyright" ];
+    formatters = [
+      "ruff-check"
+      "ruff-format"
+    ];
+    tabWidth = 4;
+    insertSpaces = true;
+  };
 }
