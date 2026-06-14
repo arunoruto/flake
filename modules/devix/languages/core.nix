@@ -85,11 +85,16 @@ in
     };
 
     defaultEditor = lib.mkOption {
-      type = lib.types.nullOr (lib.types.enum [ "helix" ]);
+      type = lib.types.nullOr (
+        lib.types.enum [
+          "helix"
+          "zed"
+        ]
+      );
       default = null;
       description = ''
-        Editor that should receive generated development language configuration.
-        The editor itself is configured through its target-specific options.
+        Preferred editor for EDITOR/VISUAL and future default-app integrations.
+        Generated editor configuration is controlled by programs.<editor>.enable.
       '';
     };
 

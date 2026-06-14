@@ -15,7 +15,6 @@ let
 
   cfg = config.development;
 
-  helixSelected = cfg.defaultEditor == "helix";
   helixEnabled = config.programs.helix.enable or false;
 
   # Get languages that are:
@@ -32,10 +31,7 @@ let
 in
 {
   config =
-    lib.mkIf
-      (
-        cfg.enable && cfg.autoConfigureEditors && helixSelected && helixEnabled && languagesForHelix != { }
-      )
+    lib.mkIf (cfg.enable && cfg.autoConfigureEditors && helixEnabled && languagesForHelix != { })
       {
         # Merge devenv-generated language config with existing helix config
         programs.helix.languages = lib.mkMerge [

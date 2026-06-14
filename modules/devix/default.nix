@@ -10,7 +10,9 @@
     ./languages/markdown.nix
     ./languages/typst.nix
     ./languages/latex.nix
-    ./languages/shells.nix
+    ./languages/bash.nix
+    ./languages/fish.nix
+    ./languages/nu.nix
     ./languages/go.nix
     ./languages/fortran.nix
     ./languages/julia.nix

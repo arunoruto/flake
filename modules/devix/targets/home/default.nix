@@ -12,7 +12,9 @@
     ../../languages/markdown.nix
     ../../languages/typst.nix
     ../../languages/latex.nix
-    ../../languages/shells.nix
+    ../../languages/bash.nix
+    ../../languages/fish.nix
+    ../../languages/nu.nix
     ../../languages/go.nix
     ../../languages/fortran.nix
     ../../languages/julia.nix
@@ -20,6 +22,8 @@
     ../../languages/grammar.nix
     ../../languages/ai.nix
     ./languages.nix
+    ./editor-env.nix
     ./helix.nix
+    ./zed.nix
   ];
 }

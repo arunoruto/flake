@@ -27,15 +27,10 @@
       vscode.enable = lib.mkDefault false;
       zathura.enable = lib.mkDefault true;
       zed-editor = {
-        enable = lib.mkDefault false;
+        enable = lib.mkDefault config.hosts.development.enable;
         package = pkgs.unstable.zed-editor;
         userSettings = {
           auto_update = false;
-          theme = {
-            mode = "system";
-            dark = "Gruvbox Dark";
-            light = "Gruvbox Light";
-          };
           hour_format = "hour24";
           vim_mode = false;
         };
