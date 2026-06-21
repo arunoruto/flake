@@ -24,9 +24,9 @@
   config = lib.mkMerge [
     (lib.mkIf config.hosts.development.enable {
       programs = {
+        antigravity-cli.enable = false;
         claude-code.enable = false;
         copilot-cli.enable = true;
-        gemini-cli.enable = true;
         mcp.enable = true;
         mods.enable = true;
         ollama.defaultPath = "http://madara.king-little.ts.net:11434/v1";

@@ -5,8 +5,8 @@
   ...
 }:
 {
-  config = lib.mkIf config.programs.gemini-cli.enable {
-    programs.gemini-cli = {
+  config = lib.mkIf config.programs.antigravity-cli.enable {
+    programs.antigravity-cli = {
       package = pkgs.unstable.gemini-cli;
       settings = {
         general = {
