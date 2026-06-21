@@ -77,6 +77,7 @@
       };
       plugin = [
         "opencode-gemini-auth@latest"
+        "opencode-openai-codex-auth@latest"
         # "oh-my-openagent"
       ];
     };
