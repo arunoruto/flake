@@ -7,36 +7,45 @@
   versionCheckHook,
 
   nodejs,
-  pnpm,
+  pnpm_10,
   pnpmConfigHook,
   fetchPnpmDeps,
 }:
 let
   tag-prefix = "@upstash/context7-mcp";
+
+  pnpmConfigHook_10 = pnpmConfigHook.override { pnpm = pnpm_10; };
+  fetchPnpmDeps_10 = fetchPnpmDeps.override { pnpm = pnpm_10; };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "context7-mcp";
-  version = "2.1.7";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "upstash";
     repo = "context7";
     tag = "${tag-prefix}@${finalAttrs.version}";
-    hash = "sha256-u0sFNX19ZBWvA7HYWdM4iI9AvEVz/CK6dLfZ80Rxa9c=";
+    hash = "sha256-Gf3GnVOceAMzsc1SYGQVriDzDD/dQYSoBSrCuQ5M4UI=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm
-    pnpmConfigHook
+    pnpm_10
+    pnpmConfigHook_10
+    # pnpmConfigHook
     makeWrapper
   ];
 
-  pnpmDeps = fetchPnpmDeps {
+  pnpmDeps = fetchPnpmDeps_10 {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 3;
-    hash = "sha256-kmZTF5+qgaDKCopdS5gvT7yDHBtR0HWLgchId5L9Rv4=";
+    hash = "sha256-S+TCwe4FJHjSLTUL/cPh+eRtWx/z7REUyfMNT0BgK7k=";
+    # hash = "sha256-kmZTF5+qgaDKCopdS5gvT7yDHBtR0HWLgchId5L9Rv4=";
   };
+
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    ulimit -n 4096
+  '';
 
   buildPhase = ''
     runHook preBuild

@@ -32,12 +32,17 @@
           command = lib.getExe (
             pkgs.writeShellApplication {
               name = "context7.sh";
-              runtimeInputs = with pkgs; [ context7-mcp ];
+              runtimeInputs = with pkgs.custom; [ context7-mcp ];
               text = ''
                 context7-mcp --api-key "$(cat ${config.sops.secrets."tokens/context7".path})"
               '';
             }
           );
+        };
+        nixos = {
+          disabled = true;
+          type = "remote";
+          url = "https://mcp-nixos.io/";
         };
         devenv = {
           disabled = true;
