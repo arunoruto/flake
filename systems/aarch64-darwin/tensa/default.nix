@@ -12,16 +12,6 @@
     "laptop"
   ];
 
-  # Platform and nixpkgs configuration
-  nixpkgs = {
-    hostPlatform = "aarch64-darwin";
-    overlays = [
-      self.overlays.additions
-      self.overlays.unstable-packages
-    ];
-    config.allowUnfree = true;
-  };
-
   # System packages
   environment.systemPackages =
     (with pkgs; [

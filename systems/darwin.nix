@@ -17,7 +17,15 @@ lib.attrsets.mergeAttrsList (
     arch:
     lib.genAttrs (lib.getDirectories ./${arch}) (
       hostname:
+      let
+        pkgs = import inputs.nixpkgs {
+          system = arch;
+          inherit (pkgs-attrs) config;
+          overlays = pkgs-attrs.overlays ++ [ self.overlays.python ];
+        };
+      in
       inputs.nix-darwin.lib.darwinSystem {
+        inherit pkgs;
         system = arch;
         specialArgs = {
           inherit inputs self;
@@ -25,21 +33,15 @@ lib.attrsets.mergeAttrsList (
         modules = [
           self.darwinModules.default
           {
-            nixpkgs = {
-              hostPlatform = arch;
-              config = pkgs-attrs.config;
-              overlays = pkgs-attrs.overlays ++ [ self.overlays.python ];
-            };
+            stylix.enable = true;
           }
           {
             networking.hostName = hostname;
             home-manager.sharedModules = [
-              inputs.stylix.homeModules.stylix
               (
                 { osConfig, ... }:
                 {
                   # Inherit stylix config from system (Darwin) level
-                  stylix.enable = true;
                   stylix.image = osConfig.stylix.image;
                   stylix.base16Scheme = osConfig.stylix.base16Scheme;
                   stylix.polarity = osConfig.stylix.polarity;
