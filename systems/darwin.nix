@@ -25,6 +25,13 @@ lib.attrsets.mergeAttrsList (
         modules = [
           self.darwinModules.default
           {
+            nixpkgs = {
+              hostPlatform = arch;
+              config = pkgs-attrs.config;
+              overlays = pkgs-attrs.overlays ++ [ self.overlays.python ];
+            };
+          }
+          {
             networking.hostName = hostname;
             home-manager.sharedModules = [
               inputs.stylix.homeModules.stylix
