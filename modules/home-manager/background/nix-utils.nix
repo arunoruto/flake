@@ -27,6 +27,7 @@ let
     ''
     + lib.optionalString (osConfig != null && pkgs.stdenv.hostPlatform.isDarwin) ''
       send -- "os = darwinConfigurations.${osConfig.networking.hostName}\r"
+      send -- "pkgs = os.pkgs\r"
     ''
     + ''
       interact
