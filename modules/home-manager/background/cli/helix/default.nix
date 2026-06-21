@@ -20,8 +20,8 @@ in
   config = lib.mkIf config.programs.helix.enable {
     programs.helix = {
       # package = if nightly then inputs.helix.packages.${pkgs.stdenv.hostPlatform.system}.default else pkgs.unstable.helix;
-      # package = pkgs.unstable.helix;
-      package = pkgs.unstable.steelix;
+      package = pkgs.unstable.helix;
+      # package = pkgs.unstable.steelix;
       defaultEditor = true;
       settings = {
         theme = lib.mkForce "stylix-custom";
