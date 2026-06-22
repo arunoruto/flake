@@ -17,15 +17,8 @@
     insertSpaces = true;
   };
 
-  consumerMeta.zed = {
-    name = "Matlab";
-    extensions = [ "matlab" ];
-    languageServers = [
-      "matlab-ls"
-      "..."
-    ];
-  };
-
+  # OpenCode-only: Zed has no first-class Matlab LSP adapter here, so Matlab is
+  # left out of the Zed consumer (no consumerMeta.zed).
   consumerMeta.opencode = {
     extensions = [ ".m" ];
   };

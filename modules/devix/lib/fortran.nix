@@ -20,15 +20,8 @@
     insertSpaces = true;
   };
 
-  consumerMeta.zed = {
-    name = "Fortran";
-    extensions = [ "fortran" ];
-    languageServers = [
-      "fortls"
-      "..."
-    ];
-  };
-
+  # OpenCode-only: Zed has no first-class Fortran LSP adapter here, so Fortran is
+  # left out of the Zed consumer (no consumerMeta.zed).
   consumerMeta.opencode = {
     extensions = [
       ".f90"
