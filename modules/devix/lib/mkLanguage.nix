@@ -66,6 +66,19 @@ in
           Zed only.
         '';
 
+        consumerMeta = lib.mkOption {
+          type = lib.types.attrsOf lib.types.anything;
+          default = data.consumerMeta or { };
+          visible = false;
+          internal = true;
+          description = ''
+            Per-consumer metadata sourced from lib/${name}.nix (e.g.
+            `consumerMeta.zed = { name; extensions; lspAdapters; }`). A consumer
+            adapter treats a language as supported only if it carries the
+            matching metadata here.
+          '';
+        };
+
         tabWidth = lib.mkOption {
           type = lib.types.int;
           default = meta.tabWidth;

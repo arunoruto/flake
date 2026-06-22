@@ -50,4 +50,12 @@
     tabWidth = 2;
     insertSpaces = true;
   };
+
+  # Zed consumer metadata. The Zed "Nix" extension provides the nil/nixd
+  # adapters, whose ids match the devix LSP registry names.
+  consumerMeta.zed = {
+    name = "Nix";
+    extensions = [ "nix" ];
+    lspAdapters = { };
+  };
 }

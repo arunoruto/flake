@@ -1,159 +1,39 @@
-# Pure functions for transforming development language data to Zed settings
+# Pure functions for transforming development language data to Zed settings.
+#
+# Zed-specific per-language metadata (display name, extensions to install,
+# optional devix-LSP-name -> Zed-adapter-id remapping) lives in each
+# lib/<lang>.nix under `consumerMeta.zed`. A language without that metadata is
+# simply not supported by Zed and is skipped.
+#
+# Languages are expected to arrive already resolved for the "zed" consumer
+# (see lib/consumers.nix `resolveForConsumer`), i.e. `lspServers`/`formatters`
+# are filtered to those enabled and exposed to Zed, with the resolved registry
+# entries attached as `lsps`/`formatterConfigs`.
 { lib }:
-
 let
-  zedLanguages = {
-    bash = {
-      name = "Shell Script";
-      extensions = [ ];
-      lspServers = [ "..." ];
-    };
-    fish = {
-      name = "Fish";
-      extensions = [ "fish" ];
-      lspServers = [
-        "fish-lsp"
-        "..."
-      ];
-    };
-    fortran = {
-      name = "Fortran";
-      extensions = [ "fortran" ];
-      lspServers = [
-        "fortls"
-        "..."
-      ];
-    };
-    go = {
-      name = "Go";
-      extensions = [ ];
-      lspServers = [
-        "gopls"
-        "..."
-      ];
-    };
-    json = {
-      name = "JSON";
-      extensions = [ ];
-      lspServers = [ "..." ];
-    };
-    latex = {
-      name = "LaTeX";
-      extensions = [ "latex" ];
-      lspServers = [
-        "texlab"
-        "..."
-      ];
-    };
-    markdown = {
-      name = "Markdown";
-      extensions = [ ];
-      lspServers = [ "..." ];
-    };
-    matlab = {
-      name = "Matlab";
-      extensions = [ "matlab" ];
-      lspServers = [
-        "matlab-ls"
-        "..."
-      ];
-    };
-    nix = {
-      name = "Nix";
-      extensions = [ "nix" ];
-      lspServers = [
-        "nil"
-        "nixd"
-        "..."
-      ];
-    };
-    nu = {
-      name = "Nu";
-      extensions = [ "nu" ];
-      lspServers = [ "..." ];
-    };
-    python = {
-      name = "Python";
-      extensions = [ ];
-      lspServers = [
-        "pyright"
-        "..."
-      ];
-    };
-    toml = {
-      name = "TOML";
-      extensions = [ ];
-      lspServers = [
-        "taplo"
-        "..."
-      ];
-    };
-    typst = {
-      name = "Typst";
-      extensions = [ "typst" ];
-      lspServers = [
-        "tinymist"
-        "..."
-      ];
-    };
-    xml = {
-      name = "XML";
-      extensions = [ "xml" ];
-      lspServers = [
-        "lemminx"
-        "..."
-      ];
-    };
-    yaml = {
-      name = "YAML";
-      extensions = [ ];
-      lspServers = [
-        "yaml-lsp"
-        "..."
-      ];
-    };
-  };
+  zedMeta = language: language.consumerMeta.zed or null;
 
-  knownZedAdapters = lib.unique (
-    lib.flatten (lib.mapAttrsToList (_: meta: meta.lspServers) zedLanguages)
-  );
-  knownZedAdapterNames = builtins.filter (name: name != "...") knownZedAdapters;
+  # Only languages that carry Zed metadata are supported by Zed (capability).
+  supported = languages: lib.filterAttrs (_: language: zedMeta language != null) languages;
 
-  resolveLanguages =
-    cfg: languages:
-    lib.mapAttrs (
-      name: language:
-      let
-        lspServers = builtins.filter (lspName: cfg.lsps.${lspName}.enable) language.lspServers;
-        formatters = builtins.filter (
-          formatterName: cfg.formatters.${formatterName}.enable
-        ) language.formatters;
-      in
-      language
-      // {
-        inherit lspServers formatters;
-        lsps = lib.genAttrs lspServers (lspName: cfg.lsps.${lspName});
-        formatterConfigs = lib.genAttrs formatters (formatterName: cfg.formatters.${formatterName});
-      }
-    ) languages;
+  # Map a devix LSP registry name to its Zed language-server adapter id
+  # (identity unless the language overrides it via lspAdapters).
+  zedAdapterId = meta: name: meta.lspAdapters.${name} or name;
 
-  languageMeta = name: zedLanguages.${name} or null;
-
-  formatterConfig = formatter: {
+  formatterToZed = formatter: {
     external = {
       command = formatter.command;
       arguments = formatter.args;
     };
   };
 
-  zedLspServers = language: (languageMeta language).lspServers or [ "..." ];
-
-  languageSettings =
+  languageSetting =
     name: language:
     let
-      meta = languageMeta name;
+      meta = zedMeta language;
+      adapterIds = map (zedAdapterId meta) language.lspServers;
       formatters = map (
-        formatterName: formatterConfig language.formatterConfigs.${formatterName}
+        formatterName: formatterToZed language.formatterConfigs.${formatterName}
       ) language.formatters;
     in
     lib.nameValuePair meta.name (
@@ -161,8 +41,8 @@ let
         tab_size = language.tabWidth;
         hard_tabs = !language.insertSpaces;
       }
-      // lib.optionalAttrs (meta.lspServers != [ ]) {
-        language_servers = meta.lspServers;
+      // lib.optionalAttrs (adapterIds != [ ]) {
+        language_servers = adapterIds;
       }
       // lib.optionalAttrs (formatters != [ ]) {
         formatter = if builtins.length formatters == 1 then builtins.head formatters else formatters;
@@ -170,18 +50,18 @@ let
       }
     );
 
+  # Per-LSP Zed settings (`lsp.<adapter-id>.binary` / `.settings`).
   lspSettings =
     languages:
-    let
-      allLsps = lib.foldl' lib.recursiveUpdate { } (
-        lib.mapAttrsToList (
-          langName: langOpts:
-          let
-            activeLsps = lib.filterAttrs (n: v: v.enable) langOpts.lsps;
-            knownLsps = lib.filterAttrs (n: _: builtins.elem n knownZedAdapterNames) activeLsps;
-          in
-          lib.mapAttrs (
-            _: lspOpts:
+    lib.foldl' lib.recursiveUpdate { } (
+      lib.mapAttrsToList (
+        _: language:
+        let
+          meta = zedMeta language;
+        in
+        lib.mapAttrs' (
+          lspName: lspOpts:
+          lib.nameValuePair (zedAdapterId meta lspName) (
             {
               binary = {
                 path = lspOpts.command;
@@ -193,21 +73,16 @@ let
             // lib.optionalAttrs (lspOpts.config != { }) {
               settings = lspOpts.config;
             }
-          ) knownLsps
-        ) languages
-      );
-    in
-    allLsps;
+          )
+        ) language.lsps
+      ) languages
+    );
 
   toZedSettings =
     languages:
     let
-      supportedLanguages = lib.filterAttrs (name: language: languageMeta name != null) languages;
-      languagesSettings = builtins.listToAttrs (
-        map (name: languageSettings name supportedLanguages.${name}) (
-          lib.sort lib.lessThan (builtins.attrNames supportedLanguages)
-        )
-      );
+      supportedLanguages = supported languages;
+      languagesSettings = builtins.listToAttrs (lib.mapAttrsToList languageSetting supportedLanguages);
       lsp = lspSettings supportedLanguages;
     in
     lib.optionalAttrs (languagesSettings != { }) { languages = languagesSettings; }
@@ -216,17 +91,14 @@ let
   extractExtensions =
     languages:
     lib.unique (
-      lib.flatten (
-        lib.mapAttrsToList (name: language: (languageMeta name).extensions or [ ]) (
-          lib.filterAttrs (name: language: languageMeta name != null) languages
-        )
+      lib.concatMap (language: (zedMeta language).extensions or [ ]) (
+        lib.attrValues (supported languages)
       )
     );
 in
 {
   inherit
-    extractExtensions
-    resolveLanguages
     toZedSettings
+    extractExtensions
     ;
 }

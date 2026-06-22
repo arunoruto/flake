@@ -6,22 +6,32 @@
 }:
 
 let
+  consumersLib = import ../../lib/consumers.nix { inherit lib; };
   zedLib = import ../../lib/zed.nix { inherit lib; };
 
   cfg = config.development;
-  zedEnabled = config.programs.zed-editor.enable or false;
 
-  languagesForZed = lib.filterAttrs (_: lang: lang.enable) cfg.languages;
-  resolvedLanguagesForZed = zedLib.resolveLanguages cfg languagesForZed;
+  # Languages enabled and exposed to Zed; within each, only the LSPs/formatters
+  # enabled and exposed to Zed. Languages without Zed metadata are dropped by
+  # the adapter (capability).
+  languagesForZed = consumersLib.languagesFor "zed" cfg.languages;
+  resolvedLanguagesForZed = consumersLib.resolveForConsumer "zed" cfg languagesForZed;
 
   zedSettings = zedLib.toZedSettings resolvedLanguagesForZed;
   zedExtensions = zedLib.extractExtensions resolvedLanguagesForZed;
+  hasZedConfig = zedSettings != { } || zedExtensions != [ ];
 in
 {
-  config = lib.mkIf (cfg.enable && cfg.autoConfigureEditors && zedEnabled && languagesForZed != { }) {
-    programs.zed-editor = {
-      extensions = zedExtensions;
-      userSettings = zedSettings;
-    };
-  };
+  config = lib.mkMerge [
+    {
+      development.consumers.zed.enable = lib.mkDefault (config.programs.zed-editor.enable or false);
+    }
+
+    (lib.mkIf (cfg.enable && cfg.autoConfigureEditors && cfg.consumers.zed.enable && hasZedConfig) {
+      programs.zed-editor = {
+        extensions = zedExtensions;
+        userSettings = zedSettings;
+      };
+    })
+  ];
 }

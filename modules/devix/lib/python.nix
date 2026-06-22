@@ -43,4 +43,12 @@
     tabWidth = 4;
     insertSpaces = true;
   };
+
+  # Zed consumer metadata. Presence of this block makes Zed treat Python as
+  # supported; the devix LSP registry names (pyright) match Zed's adapter ids.
+  consumerMeta.zed = {
+    name = "Python";
+    extensions = [ ];
+    lspAdapters = { };
+  };
 }
