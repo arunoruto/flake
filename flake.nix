@@ -330,16 +330,11 @@
               src = ./.;
               hooks = {
                 nixfmt.enable = true;
-                deadnix = {
-                  enable = true;
-                  settings = {
-                    # Report genuinely dead bindings only; skip the idiomatic
-                    # `final: prev:` overlay args and unused module arguments
-                    # (`{ config, lib, pkgs, ... }`) that are noise here.
-                    noLambdaArg = true;
-                    noLambdaPatternNames = true;
-                  };
-                };
+                # deadnix is intentionally NOT a commit hook: parked/commented-out
+                # code leaves orphaned bindings that would trip it. Run it manually
+                # instead (it's in the `nix` devShell):
+                #   deadnix --no-lambda-arg --no-lambda-pattern-names .
+                # deadnix.enable = true;
                 # statix.enable = true;
                 # nixfmt-rfc-style.enable = true;
               };
