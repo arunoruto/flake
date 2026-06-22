@@ -1,23 +1,10 @@
 # Pure functions for transforming development language data to Helix configuration
-{ lib, bash ? "bash" }:
+{
+  lib,
+  bash ? "bash",
+}:
 
 let
-  resolveLanguages =
-    cfg: languages:
-    lib.mapAttrs (
-      name: language:
-      let
-        lspServers = builtins.filter (lspName: cfg.lsps.${lspName}.enable) language.lspServers;
-        formatters = builtins.filter (formatterName: cfg.formatters.${formatterName}.enable) language.formatters;
-      in
-      language
-      // {
-        inherit lspServers formatters;
-        lsps = lib.genAttrs lspServers (lspName: cfg.lsps.${lspName});
-        formatterConfigs = lib.genAttrs formatters (formatterName: cfg.formatters.${formatterName});
-      }
-    ) languages;
-
   # Extract all packages from enabled LSPs and formatters across resolved languages.
   extractPackages =
     languages:
@@ -107,7 +94,6 @@ in
 {
   inherit
     extractPackages
-    resolveLanguages
     toHelixLanguages
     toHelixLspConfigs
     buildFormatterConfig

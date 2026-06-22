@@ -7,6 +7,7 @@
 }:
 
 let
+  consumersLib = import ../../lib/consumers.nix { inherit lib; };
   # Import the shared helix transformation library
   helixLib = import ../../lib/helix.nix {
     inherit lib;
@@ -15,28 +16,32 @@ let
 
   cfg = config.development;
 
-  helixEnabled = config.programs.helix.enable or false;
-
-  # Get languages that are:
-  # 1. Enabled
-  # 2. Have configureHelix = true (or default true)
-  languagesForHelix = lib.filterAttrs (
-    name: lang: lang.enable && (lang.configureHelix or true)
-  ) cfg.languages;
-  resolvedLanguagesForHelix = helixLib.resolveLanguages cfg languagesForHelix;
+  # Languages enabled and exposed to Helix; within each, only the LSPs/formatters
+  # that are enabled and exposed to Helix (consumers.helix.enable).
+  languagesForHelix = consumersLib.languagesFor "helix" cfg.languages;
+  resolvedLanguagesForHelix = consumersLib.resolveForConsumer "helix" cfg languagesForHelix;
 
   # Transform to helix format using shared library
   helixLanguages = helixLib.toHelixLanguages resolvedLanguagesForHelix;
   helixLspConfigs = helixLib.toHelixLspConfigs resolvedLanguagesForHelix;
 in
 {
-  config =
-    lib.mkIf (cfg.enable && cfg.autoConfigureEditors && helixEnabled && languagesForHelix != { })
+  config = lib.mkMerge [
+    # The Helix consumer is active whenever the Helix program is enabled (can be
+    # forced on/off via development.consumers.helix.enable).
+    {
+      development.consumers.helix.enable = lib.mkDefault (config.programs.helix.enable or false);
+    }
+
+    (lib.mkIf
+      (cfg.enable && cfg.autoConfigureEditors && cfg.consumers.helix.enable && languagesForHelix != { })
       {
-        # Merge devenv-generated language config with existing helix config
+        # Merge devix-generated language config with existing helix config
         programs.helix.languages = lib.mkMerge [
           (lib.mkIf (helixLanguages != [ ]) { language = helixLanguages; })
           helixLspConfigs
         ];
-      };
+      }
+    )
+  ];
 }

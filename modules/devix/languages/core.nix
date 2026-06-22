@@ -1,6 +1,8 @@
 { lib, ... }:
 
 let
+  consumers = import ../lib/consumers.nix { inherit lib; };
+
   lspSubmodule = lib.types.submodule (
     { name, ... }:
     {
@@ -9,6 +11,20 @@ let
           type = lib.types.bool;
           default = true;
           description = "Enable this language server.";
+        };
+
+        kind = lib.mkOption {
+          type = lib.types.enum [
+            "language"
+            "grammar"
+            "tool"
+            "ai"
+          ];
+          default = "language";
+          description = ''
+            Classification of this server, used by consumers to decide how to
+            attach it (e.g. AI/grammar servers may be handled specially).
+          '';
         };
 
         package = lib.mkOption {
@@ -34,6 +50,12 @@ let
           default = { };
           description = "Editor-specific configuration passed to this language server.";
         };
+
+        consumers = consumers.mkExposureOption ''
+          Per-consumer exposure for this language server. Each consumer defaults
+          to enabled; set e.g. `consumers.zed.enable = false` to keep this server
+          out of Zed while leaving it available to Helix/OpenCode.
+        '';
       };
     }
   );
@@ -65,6 +87,10 @@ let
           default = [ ];
           description = "Arguments passed to this formatter.";
         };
+
+        consumers = consumers.mkExposureOption ''
+          Per-consumer exposure for this formatter (see lsps.<name>.consumers).
+        '';
       };
     }
   );
@@ -96,6 +122,29 @@ in
         Preferred editor for EDITOR/VISUAL and future default-app integrations.
         Generated editor configuration is controlled by programs.<editor>.enable.
       '';
+    };
+
+    consumers = lib.mkOption {
+      type = lib.types.submodule {
+        options = lib.genAttrs consumers.names (
+          name:
+          lib.mkOption {
+            type = lib.types.submodule {
+              options.enable = lib.mkEnableOption "the ${name} consumer" // {
+                description = ''
+                  Whether the ${name} consumer is active. Adapters default this to
+                  the relevant `programs.*.enable`; set it explicitly to force a
+                  consumer on or off regardless of the program.
+                '';
+              };
+            };
+            default = { };
+            description = "Activation state for the ${name} consumer.";
+          }
+        );
+      };
+      default = { };
+      description = "Active editor/program consumers of the development configuration.";
     };
 
     lsps = lib.mkOption {
