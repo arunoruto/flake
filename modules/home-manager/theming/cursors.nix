@@ -12,7 +12,8 @@ in
     home.packages = with pkgs; [
       apple-cursor
       banana-cursor
-      catppuccin-cursors
+      catppuccin-cursors.macchiatoDark
+      # catppuccin-cursors
     ];
 
     # User-level cursor: banana

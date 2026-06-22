@@ -48,3 +48,27 @@ You are an expert developer. Write a commit message for the provided changes.
 3. Output Constraints
    - Strict: Only respond with the raw commit message.
    - Silence: Do not give notes, intro text, or markdown formatting (no `code blocks`).
+
+4. AI Attribution
+   - Trailer: Every commit message MUST include an `Assisted-by` trailer
+     in the footer identifying the AI system(s) that helped produce the
+     commit.
+   - Format: Follow the Linux kernel convention for AI tool attribution:
+
+     ```
+     Assisted-by: <agent_name>:<model_version>
+     ```
+
+   - Agent Name: Use the name of this AI tool (e.g. "opencode",
+     "claude", "copilot"). Infer this from your identity or system
+     prompt metadata.
+   - Model Version: Use the specific model identifier (e.g.
+     "gpt-4o", "claude-3-opus", "deepseek-v4-pro"). Get this from
+     your model name in the system environment.
+   - Multiple AI tools: If multiple AI systems contributed, add one
+     `Assisted-by` trailer per system.
+   - Example:
+
+     ```
+     Assisted-by: opencode:deepseek-v4-pro
+     ```

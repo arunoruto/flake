@@ -91,6 +91,7 @@
       beads = pkgs.unstable.beads.src + "/claude-plugin/skills/beads";
       # caveman = pkgs.caveman + "/skills/caveman";
       commit = ../skills/commit;
+      git-commit-nixpkgs = ../skills/git-commit-nixpkgs;
       devenv = ../skills/devenv;
       caveman =
         (pkgs.fetchFromGitHub {

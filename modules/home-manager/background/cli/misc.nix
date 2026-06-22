@@ -37,7 +37,7 @@
       nix-direnv.enable = true;
     };
 
-    direnv-instant.enable = false;
+    direnv-instant.enable = true;
     # direnv-instant.enable = pkgs.stdenv.hostPlatform.isLinux;
 
     fd.enable = true;

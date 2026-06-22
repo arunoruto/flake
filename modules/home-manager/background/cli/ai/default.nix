@@ -25,7 +25,7 @@
     (lib.mkIf config.hosts.development.enable {
       programs = {
         antigravity-cli.enable = false;
-        claude-code.enable = false;
+        claude-code.enable = true;
         copilot-cli.enable = true;
         mcp.enable = true;
         mods.enable = true;
