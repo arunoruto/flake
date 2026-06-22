@@ -1,7 +1,6 @@
 {
   inputs,
   lib,
-  pkgs,
   config,
   ...
 }:
@@ -28,14 +27,8 @@
   };
 
   config = {
-    environment.systemPackages = lib.optionals (lib.elem "desktop" config.system.tags) (
-      with pkgs;
-      [
-        inputs.colmena.packages.${pkgs.stdenv.hostPlatform.system}.colmena
-        deploy-rs
-      ]
-    );
-
+    # colmena/deploy-rs binaries live on `management`-tagged hosts (see
+    # ./tags/management.nix); this module only wires the deployment options.
     colmena.deployment.buildOnTarget = lib.mkDefault true;
   };
 }

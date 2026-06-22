@@ -35,7 +35,6 @@
     };
 
     environment.systemPackages = with pkgs; [
-      deploy-rs
       lsof
       lshw
       tree

@@ -49,6 +49,7 @@
     "desktop"
     "workstation"
     "development"
+    "management"
   ];
   hosts = {
     nvidia.enable = true;

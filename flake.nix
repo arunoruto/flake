@@ -330,7 +330,16 @@
               src = ./.;
               hooks = {
                 nixfmt.enable = true;
-                # deadnix.enable = true;
+                deadnix = {
+                  enable = true;
+                  settings = {
+                    # Report genuinely dead bindings only; skip the idiomatic
+                    # `final: prev:` overlay args and unused module arguments
+                    # (`{ config, lib, pkgs, ... }`) that are noise here.
+                    noLambdaArg = true;
+                    noLambdaPatternNames = true;
+                  };
+                };
                 # statix.enable = true;
                 # nixfmt-rfc-style.enable = true;
               };

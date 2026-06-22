@@ -27,7 +27,6 @@ let
 
   opsPkgs = with pkgs; [
     dust
-    ffmpeg
     iperf
     nmap
     ntfs3g
