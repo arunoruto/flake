@@ -51,4 +51,12 @@
     extensions = [ ];
     lspAdapters = { };
   };
+
+  # OpenCode consumer metadata: file extensions handled by this language.
+  consumerMeta.opencode = {
+    extensions = [
+      ".py"
+      ".pyi"
+    ];
+  };
 }

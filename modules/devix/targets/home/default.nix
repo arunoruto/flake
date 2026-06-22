@@ -25,5 +25,6 @@
     ./editor-env.nix
     ./helix.nix
     ./zed.nix
+    ./opencode.nix
   ];
 }

@@ -51,6 +51,24 @@ let
           description = "Editor-specific configuration passed to this language server.";
         };
 
+        environment = lib.mkOption {
+          type = lib.types.attrsOf lib.types.str;
+          default = { };
+          description = ''
+            Literal environment variables to set when launching this server.
+            Consumers that support it wrap the command in a shell launcher.
+          '';
+        };
+
+        environmentScript = lib.mkOption {
+          type = lib.types.lines;
+          default = "";
+          description = ''
+            Shell snippet prepended to the server launcher (e.g. to read a secret
+            into an env var). Used for AI servers; see lib/opencode.nix.
+          '';
+        };
+
         consumers = consumers.mkExposureOption ''
           Per-consumer exposure for this language server. Each consumer defaults
           to enabled; set e.g. `consumers.zed.enable = false` to keep this server

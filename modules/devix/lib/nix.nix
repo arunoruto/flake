@@ -58,4 +58,9 @@
     extensions = [ "nix" ];
     lspAdapters = { };
   };
+
+  # OpenCode consumer metadata: file extensions handled by this language.
+  consumerMeta.opencode = {
+    extensions = [ ".nix" ];
+  };
 }
