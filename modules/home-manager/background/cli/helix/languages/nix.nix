@@ -4,7 +4,7 @@
   lib,
   osConfig ? null,
   ...
-}@args:
+}:
 let
   ls = config.programs.helix.languages.language-server;
 in

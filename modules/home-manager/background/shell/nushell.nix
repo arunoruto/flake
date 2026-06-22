@@ -4,7 +4,7 @@
   pkgs,
   osConfig ? null,
   ...
-}@args:
+}:
 {
   programs = {
     nushell = {

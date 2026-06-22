@@ -4,9 +4,6 @@
   config,
   ...
 }:
-let
-  cfg = config.programs.dev;
-in
 {
   programs.dev.languages.julia = {
     extensions = [ ".jl" ];

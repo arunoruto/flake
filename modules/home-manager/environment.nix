@@ -3,9 +3,6 @@
   lib,
   ...
 }:
-let
-  inherit (config) user;
-in
 {
   options.environment.enable = lib.mkEnableOption "Set env vars for user";
 

@@ -5,9 +5,6 @@
   config,
   ...
 }:
-let
-  primaryUserName = config.users.primaryUser;
-in
 {
   imports = [ inputs.stylix.nixosModules.stylix ];
 

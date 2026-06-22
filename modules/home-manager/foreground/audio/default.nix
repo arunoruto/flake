@@ -4,7 +4,7 @@
   config,
   osConfig ? null,
   ...
-}@args:
+}:
 let
   isFrameworkHost = osConfig != null && lib.hasAttrByPath [ "hardware" "framework" ] osConfig;
 in

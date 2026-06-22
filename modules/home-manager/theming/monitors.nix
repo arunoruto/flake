@@ -5,7 +5,7 @@
   lib,
   osConfig ? null,
   ...
-}@args:
+}:
 {
   options.stylix.monitors = lib.mkOption {
     # type = lib.types.str;

@@ -5,7 +5,7 @@
   # pkgs,
   # inputs,
   ...
-}@args:
+}:
 {
   programs.wezterm = {
     enableZshIntegration = config.programs.zsh.enable;

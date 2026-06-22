@@ -4,7 +4,7 @@
   pkgs,
   osConfig ? null,
   ...
-}@args:
+}:
 let
   isLinux = pkgs.stdenv.hostPlatform.isLinux;
   hasNiri = isLinux && (osConfig != null) && osConfig.programs.niri.enable;

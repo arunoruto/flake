@@ -5,7 +5,7 @@
   inputs,
   osConfig ? null,
   ...
-}@args:
+}:
 {
   imports = [
     ./chrome.nix

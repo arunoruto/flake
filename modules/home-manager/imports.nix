@@ -3,7 +3,7 @@
   lib,
   pkgs,
   ...
-}@args:
+}:
 let
   # Check if we're on NixOS (osConfig.system.tags exists)
   isNixOS = osConfig != null && osConfig ? system && osConfig.system ? tags;
