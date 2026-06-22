@@ -16,4 +16,17 @@
     tabWidth = 4;
     insertSpaces = true;
   };
+
+  consumerMeta.zed = {
+    name = "Matlab";
+    extensions = [ "matlab" ];
+    languageServers = [
+      "matlab-ls"
+      "..."
+    ];
+  };
+
+  consumerMeta.opencode = {
+    extensions = [ ".m" ];
+  };
 }

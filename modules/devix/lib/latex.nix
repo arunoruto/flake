@@ -15,4 +15,21 @@
     tabWidth = 2;
     insertSpaces = true;
   };
+
+  consumerMeta.zed = {
+    name = "LaTeX";
+    extensions = [ "latex" ];
+    languageServers = [
+      "texlab"
+      "..."
+    ];
+  };
+
+  consumerMeta.opencode = {
+    extensions = [
+      ".tex"
+      ".sty"
+      ".cls"
+    ];
+  };
 }

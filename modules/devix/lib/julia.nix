@@ -22,4 +22,10 @@
     tabWidth = 4;
     insertSpaces = true;
   };
+
+  # OpenCode-only: Zed has no first-class Julia LSP adapter here, so Julia is
+  # left out of the Zed consumer (no consumerMeta.zed).
+  consumerMeta.opencode = {
+    extensions = [ ".jl" ];
+  };
 }

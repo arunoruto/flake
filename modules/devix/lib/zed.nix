@@ -1,9 +1,14 @@
 # Pure functions for transforming development language data to Zed settings.
 #
-# Zed-specific per-language metadata (display name, extensions to install,
-# optional devix-LSP-name -> Zed-adapter-id remapping) lives in each
-# lib/<lang>.nix under `consumerMeta.zed`. A language without that metadata is
-# simply not supported by Zed and is skipped.
+# Zed-specific per-language metadata lives in each lib/<lang>.nix under
+# `consumerMeta.zed`:
+#   - name           : Zed's display name for the language (settings key).
+#   - extensions     : Zed extensions to install for the language.
+#   - languageServers: the curated, ordered `language_servers` list Zed should
+#                      use. May contain the literal "..." token (Zed's "then the
+#                      defaults" marker) and deliberately omits devix servers
+#                      that Zed handles better with its own built-ins.
+# A language without that metadata is simply not supported by Zed and is skipped.
 #
 # Languages are expected to arrive already resolved for the "zed" consumer
 # (see lib/consumers.nix `resolveForConsumer`), i.e. `lspServers`/`formatters`
@@ -16,9 +21,9 @@ let
   # Only languages that carry Zed metadata are supported by Zed (capability).
   supported = languages: lib.filterAttrs (_: language: zedMeta language != null) languages;
 
-  # Map a devix LSP registry name to its Zed language-server adapter id
-  # (identity unless the language overrides it via lspAdapters).
-  zedAdapterId = meta: name: meta.lspAdapters.${name} or name;
+  # The curated server ids that name a real devix LSP (i.e. excluding the "..."
+  # Zed-defaults marker) — these are the ones we emit a `lsp.<id>.binary` for.
+  explicitServers = meta: builtins.filter (server: server != "...") meta.languageServers;
 
   formatterToZed = formatter: {
     external = {
@@ -31,7 +36,6 @@ let
     name: language:
     let
       meta = zedMeta language;
-      adapterIds = map (zedAdapterId meta) language.lspServers;
       formatters = map (
         formatterName: formatterToZed language.formatterConfigs.${formatterName}
       ) language.formatters;
@@ -41,8 +45,8 @@ let
         tab_size = language.tabWidth;
         hard_tabs = !language.insertSpaces;
       }
-      // lib.optionalAttrs (adapterIds != [ ]) {
-        language_servers = adapterIds;
+      // lib.optionalAttrs (meta.languageServers != [ ]) {
+        language_servers = meta.languageServers;
       }
       // lib.optionalAttrs (formatters != [ ]) {
         formatter = if builtins.length formatters == 1 then builtins.head formatters else formatters;
@@ -50,7 +54,9 @@ let
       }
     );
 
-  # Per-LSP Zed settings (`lsp.<adapter-id>.binary` / `.settings`).
+  # Per-LSP Zed settings (`lsp.<id>.binary` / `.settings`). Only servers that the
+  # language explicitly lists in its curated `languageServers` get a binary
+  # override; anything left to Zed's "..." defaults is not overridden.
   lspSettings =
     languages:
     lib.foldl' lib.recursiveUpdate { } (
@@ -58,23 +64,23 @@ let
         _: language:
         let
           meta = zedMeta language;
+          named = explicitServers meta;
+          emitted = lib.filterAttrs (lspName: _: builtins.elem lspName named) language.lsps;
         in
-        lib.mapAttrs' (
-          lspName: lspOpts:
-          lib.nameValuePair (zedAdapterId meta lspName) (
-            {
-              binary = {
-                path = lspOpts.command;
-              }
-              // lib.optionalAttrs (lspOpts.args != [ ]) {
-                arguments = lspOpts.args;
-              };
+        lib.mapAttrs (
+          _: lspOpts:
+          {
+            binary = {
+              path = lspOpts.command;
             }
-            // lib.optionalAttrs (lspOpts.config != { }) {
-              settings = lspOpts.config;
-            }
-          )
-        ) language.lsps
+            // lib.optionalAttrs (lspOpts.args != [ ]) {
+              arguments = lspOpts.args;
+            };
+          }
+          // lib.optionalAttrs (lspOpts.config != { }) {
+            settings = lspOpts.config;
+          }
+        ) emitted
       ) languages
     );
 

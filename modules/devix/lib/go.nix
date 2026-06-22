@@ -23,9 +23,27 @@
   };
 
   language = {
-    lspServers = [ "gopls" "golangci-lint-langserver" ];
+    lspServers = [
+      "gopls"
+      "golangci-lint-langserver"
+    ];
     formatters = [ "gofmt" ];
     tabWidth = 4;
     insertSpaces = true;
+  };
+
+  # Zed uses gopls (then its defaults); golangci-lint-langserver is Helix/
+  # OpenCode-only and is intentionally not surfaced to Zed.
+  consumerMeta.zed = {
+    name = "Go";
+    extensions = [ ];
+    languageServers = [
+      "gopls"
+      "..."
+    ];
+  };
+
+  consumerMeta.opencode = {
+    extensions = [ ".go" ];
   };
 }

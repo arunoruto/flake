@@ -21,4 +21,20 @@
     tabWidth = 2;
     insertSpaces = true;
   };
+
+  consumerMeta.zed = {
+    name = "YAML";
+    extensions = [ ];
+    languageServers = [
+      "yaml-lsp"
+      "..."
+    ];
+  };
+
+  consumerMeta.opencode = {
+    extensions = [
+      ".yaml"
+      ".yml"
+    ];
+  };
 }

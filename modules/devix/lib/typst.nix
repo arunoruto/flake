@@ -19,4 +19,17 @@
     tabWidth = 2;
     insertSpaces = true;
   };
+
+  consumerMeta.zed = {
+    name = "Typst";
+    extensions = [ "typst" ];
+    languageServers = [
+      "tinymist"
+      "..."
+    ];
+  };
+
+  consumerMeta.opencode = {
+    extensions = [ ".typ" ];
+  };
 }

@@ -16,4 +16,18 @@
     tabWidth = 2;
     insertSpaces = true;
   };
+
+  # Zed treats Bash as "Shell Script"; it uses its own default servers ("...").
+  consumerMeta.zed = {
+    name = "Shell Script";
+    extensions = [ ];
+    languageServers = [ "..." ];
+  };
+
+  consumerMeta.opencode = {
+    extensions = [
+      ".sh"
+      ".bash"
+    ];
+  };
 }

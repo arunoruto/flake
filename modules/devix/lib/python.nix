@@ -45,11 +45,14 @@
   };
 
   # Zed consumer metadata. Presence of this block makes Zed treat Python as
-  # supported; the devix LSP registry names (pyright) match Zed's adapter ids.
+  # supported; pyright is registered, with Zed's defaults kept after it ("...").
   consumerMeta.zed = {
     name = "Python";
     extensions = [ ];
-    lspAdapters = { };
+    languageServers = [
+      "pyright"
+      "..."
+    ];
   };
 
   # OpenCode consumer metadata: file extensions handled by this language.

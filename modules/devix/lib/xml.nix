@@ -15,4 +15,17 @@
     tabWidth = 2;
     insertSpaces = true;
   };
+
+  consumerMeta.zed = {
+    name = "XML";
+    extensions = [ "xml" ];
+    languageServers = [
+      "lemminx"
+      "..."
+    ];
+  };
+
+  consumerMeta.opencode = {
+    extensions = [ ".xml" ];
+  };
 }

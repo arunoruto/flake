@@ -25,13 +25,35 @@
     enable = true;
     package = pkgs.prettier;
     command = "prettier";
-    args = [ "--parser" "markdown" ];
+    args = [
+      "--parser"
+      "markdown"
+    ];
   };
 
   language = {
-    lspServers = [ "marksman" "markdown-oxide" "iwe" ];
+    lspServers = [
+      "marksman"
+      "markdown-oxide"
+      "iwe"
+    ];
     formatters = [ "prettier-markdown" ];
     tabWidth = 2;
     insertSpaces = true;
+  };
+
+  # The devix markdown LSPs (marksman/markdown-oxide/iwe) are Helix/OpenCode-only;
+  # Zed uses its own default Markdown servers ("...").
+  consumerMeta.zed = {
+    name = "Markdown";
+    extensions = [ ];
+    languageServers = [ "..." ];
+  };
+
+  consumerMeta.opencode = {
+    extensions = [
+      ".md"
+      ".markdown"
+    ];
   };
 }

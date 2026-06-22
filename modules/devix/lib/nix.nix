@@ -52,11 +52,15 @@
   };
 
   # Zed consumer metadata. The Zed "Nix" extension provides the nil/nixd
-  # adapters, whose ids match the devix LSP registry names.
+  # adapters; both are registered, with Zed's defaults kept after them ("...").
   consumerMeta.zed = {
     name = "Nix";
     extensions = [ "nix" ];
-    lspAdapters = { };
+    languageServers = [
+      "nil"
+      "nixd"
+      "..."
+    ];
   };
 
   # OpenCode consumer metadata: file extensions handled by this language.

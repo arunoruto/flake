@@ -21,4 +21,17 @@
     tabWidth = 2;
     insertSpaces = true;
   };
+
+  consumerMeta.zed = {
+    name = "Fish";
+    extensions = [ "fish" ];
+    languageServers = [
+      "fish-lsp"
+      "..."
+    ];
+  };
+
+  consumerMeta.opencode = {
+    extensions = [ ".fish" ];
+  };
 }
