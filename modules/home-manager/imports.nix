@@ -19,6 +19,7 @@ in
     hosts = {
       desktop.enable = lib.mkEnableOption "Desktop/GUI features";
       laptop.enable = lib.mkEnableOption "Sensible defaults for laptops";
+      workstation.enable = lib.mkEnableOption "Non-portable interactive workstation";
       development.enable = lib.mkEnableOption "Enable development tools";
     };
   };
@@ -29,6 +30,7 @@ in
       hosts = {
         desktop.enable = lib.mkDefault (lib.elem "desktop" osConfig.system.tags);
         laptop.enable = lib.mkDefault (lib.elem "laptop" osConfig.system.tags);
+        workstation.enable = lib.mkDefault (lib.elem "workstation" osConfig.system.tags);
         development.enable = lib.mkDefault (lib.elem "development" osConfig.system.tags);
       };
       # hostname = lib.mkDefault osConfig.networking.hostName;
@@ -57,6 +59,7 @@ in
       hosts = {
         desktop.enable = lib.mkDefault false;
         laptop.enable = lib.mkDefault false;
+        workstation.enable = lib.mkDefault false;
         development.enable = lib.mkDefault false;
       };
       foreground.enable = lib.mkDefault true;
