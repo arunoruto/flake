@@ -24,10 +24,12 @@ in
 {
   config = lib.mkMerge [
     {
-      development.consumers.zed.enable = lib.mkDefault (config.programs.zed-editor.enable or false);
+      development.consumers.zed.enable = lib.mkDefault (
+        cfg.autoConfigureEditors && (config.programs.zed-editor.enable or false)
+      );
     }
 
-    (lib.mkIf (cfg.enable && cfg.autoConfigureEditors && cfg.consumers.zed.enable && hasZedConfig) {
+    (lib.mkIf (cfg.enable && cfg.consumers.zed.enable && hasZedConfig) {
       programs.zed-editor = {
         extensions = zedExtensions;
         userSettings = zedSettings;

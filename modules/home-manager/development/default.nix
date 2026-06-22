@@ -1,6 +1,15 @@
-# Personal development configuration
-# Language and editor defaults are set here with lib.mkDefault,
-# allowing individual homes to override as needed.
+# Personal development configuration (POLICY).
+#
+# devix (modules/devix) is pure mechanism: it defines the language/LSP/formatter
+# registry and the per-consumer adapters, but enables nothing on its own. This
+# file is where the actual choices live — which languages/LSPs are on, and the
+# editor defaults — all via lib.mkDefault so individual homes can override.
+#
+# Consumers attach Stylix-style: each `development.consumers.<name>.enable`
+# defaults to `development.autoConfigureEditors && programs.<editor>.enable`.
+# So enabling an editor (helix here, zed in foreground/programs, opencode in
+# background/cli/ai) is enough for devix to configure it; force a consumer on or
+# off explicitly with `development.consumers.<name>.enable`.
 {
   config,
   lib,

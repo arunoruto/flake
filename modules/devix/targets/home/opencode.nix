@@ -46,14 +46,13 @@ in
 {
   config = lib.mkMerge [
     {
-      development.consumers.opencode.enable = lib.mkDefault (config.programs.opencode.enable or false);
+      development.consumers.opencode.enable = lib.mkDefault (
+        cfg.autoConfigureEditors && (config.programs.opencode.enable or false)
+      );
     }
 
-    (lib.mkIf
-      (cfg.enable && cfg.autoConfigureEditors && cfg.consumers.opencode.enable && hasOpencodeConfig)
-      {
-        programs.opencode.settings = opencodeSettings;
-      }
-    )
+    (lib.mkIf (cfg.enable && cfg.consumers.opencode.enable && hasOpencodeConfig) {
+      programs.opencode.settings = opencodeSettings;
+    })
   ];
 }

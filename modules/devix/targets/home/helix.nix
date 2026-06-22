@@ -27,21 +27,21 @@ let
 in
 {
   config = lib.mkMerge [
-    # The Helix consumer is active whenever the Helix program is enabled (can be
-    # forced on/off via development.consumers.helix.enable).
+    # The Helix consumer auto-enables when autoConfigureEditors is set and the
+    # Helix program is enabled (can be forced on/off via
+    # development.consumers.helix.enable).
     {
-      development.consumers.helix.enable = lib.mkDefault (config.programs.helix.enable or false);
+      development.consumers.helix.enable = lib.mkDefault (
+        cfg.autoConfigureEditors && (config.programs.helix.enable or false)
+      );
     }
 
-    (lib.mkIf
-      (cfg.enable && cfg.autoConfigureEditors && cfg.consumers.helix.enable && languagesForHelix != { })
-      {
-        # Merge devix-generated language config with existing helix config
-        programs.helix.languages = lib.mkMerge [
-          (lib.mkIf (helixLanguages != [ ]) { language = helixLanguages; })
-          helixLspConfigs
-        ];
-      }
-    )
+    (lib.mkIf (cfg.enable && cfg.consumers.helix.enable && languagesForHelix != { }) {
+      # Merge devix-generated language config with existing helix config
+      programs.helix.languages = lib.mkMerge [
+        (lib.mkIf (helixLanguages != [ ]) { language = helixLanguages; })
+        helixLspConfigs
+      ];
+    })
   ];
 }

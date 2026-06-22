@@ -123,8 +123,12 @@ in
       type = lib.types.bool;
       default = true;
       description = ''
-        Automatically configure enabled editors for active languages.
-        Set to false to manage editor configuration manually.
+        Master auto-enable for consumers, analogous to Stylix's
+        `stylix.autoEnable`. When true, each consumer defaults to active
+        whenever its program is enabled (`development.consumers.<name>.enable`
+        defaults to `programs.<editor>.enable`). Set to false to opt out of
+        automatic per-consumer enabling; you can still force an individual
+        consumer on via `development.consumers.<name>.enable = true`.
       '';
     };
 
