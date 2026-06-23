@@ -11,9 +11,13 @@ let
   # Home-manager's only tag use is the foundational hosts.* mapping below.
   # Routing that through the stylix-style `config.lib.tags.hasTag` option causes
   # infinite recursion (forcing config.lib drags in modules that read hosts.*),
-  # so HM keeps a small local predicate against osConfig. nixos/darwin use
-  # config.lib.tags.hasTag, where hasTag feeds leaf options (no cycle).
-  hasTag = tag: isNixOS && lib.elem tag osConfig.system.tags;
+  # so HM consumes the shared predicate locally against osConfig instead.
+  # nixos/darwin expose the same function via config.lib.tags.hasTag (leaf reads,
+  # no cycle).
+  hasTag = import ../../lib/has-tag.nix lib osConfig [
+    "system"
+    "tags"
+  ];
 in
 {
   imports = [
