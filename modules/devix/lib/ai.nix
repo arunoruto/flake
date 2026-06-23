@@ -20,7 +20,10 @@
   formatters = { };
 
   language = {
-    lspServers = [ "copilot" "lsp-ai" ];
+    lspServers = [
+      "copilot"
+      "lsp-ai"
+    ];
     formatters = [ ];
     tabWidth = 4;
     insertSpaces = true;

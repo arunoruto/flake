@@ -25,7 +25,11 @@
   formatters = { };
 
   language = {
-    lspServers = [ "ltex" "harper" "codebook" ];
+    lspServers = [
+      "ltex"
+      "harper"
+      "codebook"
+    ];
     formatters = [ ];
     tabWidth = 2;
     insertSpaces = true;
