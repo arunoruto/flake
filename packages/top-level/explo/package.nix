@@ -1,23 +1,63 @@
 {
   lib,
   buildGoModule,
+  buildNpmPackage,
   fetchFromGitHub,
-  # versionCheckHook,
+  versionCheckHook,
   nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "explo";
-  version = "0.11.5";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "LumePart";
     repo = "Explo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-A3ikFH0/C/dat1pf7t1Gp6bfitmbPHK+RKVzqsLzjc0=";
+    hash = "sha256-7FIDRNZn+Yh2c/oLU3Ggb4A9y+5q3vv17eVLmGR2Zeo=";
   };
 
-  vendorHash = "sha256-jTvxv0cyE/+BNkrajIj8E3xlftq+PCtGbmz+P3IuMFw=";
+  webui = buildNpmPackage {
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      meta
+      ;
+
+    sourceRoot = "${finalAttrs.src.name}/src/web/frontend";
+
+    npmDepsHash = "sha256-N+i+VFHKJ9OxHyQKJ3vSw50N3tLjvFVPeG5aU0hLzqw=";
+
+    buildPhase = ''
+      runHook preBuild
+
+      npx vite build --outDir dist
+
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out
+      cp -r dist/* $out
+
+      runHook postInstall
+    '';
+  };
+
+  vendorHash = "sha256-pa3WaVJU4WY/EyE3VttfEVOwwaxvkfxQj0wrwOmefYQ=";
+
+  ldflags = [
+    "-X explo/src/config.Version=${finalAttrs.version}"
+  ];
+
+  preBuild = ''
+    mkdir -p src/web/dist
+    cp -r ${finalAttrs.webui}/* src/web/dist
+  '';
 
   postInstall = ''
     mv $out/bin/main $out/bin/explo
@@ -25,9 +65,15 @@ buildGoModule (finalAttrs: {
     cp src/downloader/youtube_music/search_ytmusic.py $out/share/explo/
   '';
 
-  # nativeInstallCheckInputs = [ versionCheckHook ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--subpackage"
+      "webui"
+    ];
+  };
 
   meta = {
     description = "Spotify's \"Discover Weekly\" for self-hosted music systems";
