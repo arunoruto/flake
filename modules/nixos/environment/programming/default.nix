@@ -9,7 +9,7 @@
     ./python.nix
   ];
 
-  config = lib.mkIf (lib.elem "development" config.system.tags) {
+  config = lib.mkIf (lib.hasTag config "development") {
 
     environment = {
       systemPackages = with pkgs; [

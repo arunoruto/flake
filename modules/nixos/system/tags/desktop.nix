@@ -4,7 +4,7 @@
   ...
 }:
 {
-  config = lib.mkIf (lib.elem "desktop" config.system.tags) {
+  config = lib.mkIf (lib.hasTag config "desktop") {
     # Enable core GUI features
     display-manager.enable = lib.mkDefault true;
     desktop-environment.enable = lib.mkDefault true;

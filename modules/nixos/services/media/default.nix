@@ -52,10 +52,10 @@
 
         media.external-drives.enable = lib.mkDefault false;
       })
-      (lib.mkIf (lib.elem "desktop" config.system.tags) {
+      (lib.mkIf (lib.hasTag config "desktop") {
         services.pipewire.enable = lib.mkDefault true;
       })
-      (lib.mkIf (!(lib.elem "desktop" config.system.tags)) {
+      (lib.mkIf (!(lib.hasTag config "desktop")) {
         services.pipewire.enable = lib.mkForce false;
       })
     ];

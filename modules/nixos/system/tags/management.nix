@@ -6,7 +6,7 @@
   ...
 }:
 {
-  config = lib.mkIf (lib.elem "management" config.system.tags) {
+  config = lib.mkIf (lib.hasTag config "management") {
     # Fleet-management / deploy tooling. Heavy-duty machines that you deploy
     # *from* — not laptops, small PCs, or the deploy targets themselves
     # (colmena copies closures over SSH; targets don't need the binary).

@@ -4,7 +4,7 @@
   ...
 }:
 {
-  config = lib.mkIf (lib.elem "laptop" config.system.tags) {
+  config = lib.mkIf (lib.hasTag config "laptop") {
     tpm.enable = lib.mkDefault true;
     yubikey.enable = lib.mkDefault true;
   };

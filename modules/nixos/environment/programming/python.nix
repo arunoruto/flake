@@ -44,7 +44,7 @@ let
     ]);
 in
 {
-  config = lib.mkIf (lib.elem "development" config.system.tags) {
+  config = lib.mkIf (lib.hasTag config "development") {
     environment =
       let
         my-python = pkgs.python3.withPackages packages;

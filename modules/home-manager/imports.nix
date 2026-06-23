@@ -7,6 +7,10 @@
 let
   # Check if we're on NixOS (osConfig.system.tags exists)
   isNixOS = osConfig != null && osConfig ? system && osConfig.system ? tags;
+
+  # Home-manager gets a plain lib (no flake `lib.hasTag`), so use a local copy
+  # against the system's osConfig; false when there is no tagged system.
+  hasTag = tag: isNixOS && lib.elem tag osConfig.system.tags;
 in
 {
   imports = [
@@ -28,10 +32,10 @@ in
     # NixOS-specific configuration (tags-based)
     (lib.mkIf isNixOS {
       hosts = {
-        desktop.enable = lib.mkDefault (lib.elem "desktop" osConfig.system.tags);
-        laptop.enable = lib.mkDefault (lib.elem "laptop" osConfig.system.tags);
-        workstation.enable = lib.mkDefault (lib.elem "workstation" osConfig.system.tags);
-        development.enable = lib.mkDefault (lib.elem "development" osConfig.system.tags);
+        desktop.enable = lib.mkDefault (hasTag "desktop");
+        laptop.enable = lib.mkDefault (hasTag "laptop");
+        workstation.enable = lib.mkDefault (hasTag "workstation");
+        development.enable = lib.mkDefault (hasTag "development");
       };
       # hostname = lib.mkDefault osConfig.networking.hostName;
       keyboard = {
@@ -39,7 +43,7 @@ in
         variant = lib.mkDefault osConfig.services.xserver.xkb.variant;
       };
       theming = {
-        enable = lib.mkDefault (lib.elem "desktop" osConfig.system.tags);
+        enable = lib.mkDefault (hasTag "desktop");
         # image and scheme are handled by stylix
       };
     })
@@ -47,10 +51,7 @@ in
     # Darwin and NixOS common configuration
     (lib.mkIf (osConfig != null) {
       foreground.enable = lib.mkDefault (
-        if pkgs.stdenv.hostPlatform.isDarwin then
-          (lib.elem "desktop" osConfig.system.tags)
-        else
-          osConfig.programs.enable # Use NixOS custom option
+        if pkgs.stdenv.hostPlatform.isDarwin then (hasTag "desktop") else osConfig.programs.enable # Use NixOS custom option
       );
     })
 
