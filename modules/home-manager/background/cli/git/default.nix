@@ -22,8 +22,12 @@ in
     ./modules/glab.nix
     ./modules/tea.nix
     ./lazygit.nix
-    ./jujutsu.nix
+    # ./jujutsu.nix
   ];
+
+  warnings = lib.optional (
+    with config.programs; lazygit.enable && gitui.enable
+  ) "You have enabled both lazygit and gitui. You typically only need one Git TUI.";
 
   programs = {
     git = {
