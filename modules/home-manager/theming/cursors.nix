@@ -12,7 +12,7 @@ in
     home.packages = with pkgs; [
       apple-cursor
       banana-cursor
-      catppuccin-cursors.macchiatoDark
+      # catppuccin-cursors.macchiatoDark
       # catppuccin-cursors
     ];
 
