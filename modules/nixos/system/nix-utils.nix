@@ -23,13 +23,13 @@ in
             nix-output-monitor
             nvd
           ]
-          ++ (lib.optionals (lib.hasTag config "desktop") [ nixpkgs-manual ])
+          ++ (lib.optionals (config.lib.tags.hasTag "desktop") [ nixpkgs-manual ])
         );
       sessionVariables.NH_FLAKE = "/home/${primaryUserName}/.config/flake";
     };
 
     services = {
-      angrr.enable = lib.mkDefault (lib.hasTag config "development");
+      angrr.enable = lib.mkDefault (config.lib.tags.hasTag "development");
     };
 
     programs.nh = {

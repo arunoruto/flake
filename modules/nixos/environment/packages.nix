@@ -5,7 +5,7 @@
   ...
 }:
 let
-  hasTag = lib.hasTag config;
+  hasTag = config.lib.tags.hasTag;
 
   isDesktop = hasTag "desktop";
   isLaptop = hasTag "laptop";

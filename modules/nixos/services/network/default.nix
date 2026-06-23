@@ -26,11 +26,11 @@
       };
       netbird.enable = lib.mkDefault false;
     };
-    programs.localsend.enable = lib.mkDefault (lib.hasTag config "desktop");
+    programs.localsend.enable = lib.mkDefault (config.lib.tags.hasTag "desktop");
     environment.systemPackages = [
       pkgs.unixtools.netstat
     ]
-    ++ lib.optionals (lib.hasTag config "desktop") (
+    ++ lib.optionals (config.lib.tags.hasTag "desktop") (
       with pkgs;
       [
         bind
@@ -45,7 +45,7 @@
       networkmanager = {
         enable = true;
         wifi = {
-          powersave = lib.hasTag config "laptop";
+          powersave = config.lib.tags.hasTag "laptop";
           backend = lib.mkDefault "wpa_supplicant";
         };
       };

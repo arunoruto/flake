@@ -22,10 +22,17 @@
     '';
   };
 
-  # Tag metadata for colmena's hive so you can target e.g. `--on @desktop`.
-  # The colmena binary itself is installed only on `management` machines
-  # (see ./management.nix).
-  config = lib.optionalAttrs (inputs ? colmena) {
-    colmena.deployment.tags = config.system.tags;
-  };
+  config = lib.mkMerge [
+    # Expose `config.lib.tags.hasTag "<tag>"` to all modules (the stylix-style
+    # `config.lib` option pattern). LHS `lib.tags` is the option; RHS `lib` is
+    # the function library.
+    { lib.tags.hasTag = import ../../../../lib/has-tag.nix lib config; }
+
+    # Tag metadata for colmena's hive so you can target e.g. `--on @desktop`.
+    # The colmena binary itself is installed only on `management` machines
+    # (see ./management.nix).
+    (lib.optionalAttrs (inputs ? colmena) {
+      colmena.deployment.tags = config.system.tags;
+    })
+  ];
 }

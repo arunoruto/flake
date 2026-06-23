@@ -33,7 +33,7 @@
           "--accept-routes"
         ]
         ++ (
-          if (lib.hasTag config "desktop") then
+          if (config.lib.tags.hasTag "desktop") then
             [
               "--exit-node-allow-lan-access"
             ]
@@ -44,7 +44,7 @@
               "--advertise-tags=tag:connector"
             ]
         );
-        extraSetFlags = lib.optionals (!(lib.hasTag config "desktop")) [
+        extraSetFlags = lib.optionals (!(config.lib.tags.hasTag "desktop")) [
           "--advertise-exit-node"
         ];
         permitCertUid = if config.services.traefik.enable then "traefik" else null;

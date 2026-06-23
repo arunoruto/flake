@@ -24,7 +24,10 @@
   security = {
     polkit.enable = true;
     sudo.package =
-      if (lib.hasTag config "desktop") then pkgs.sudo.override { withInsults = true; } else pkgs.sudo;
+      if (config.lib.tags.hasTag "desktop") then
+        pkgs.sudo.override { withInsults = true; }
+      else
+        pkgs.sudo;
   };
 
   # environment.systemPackages = with pkgs; [

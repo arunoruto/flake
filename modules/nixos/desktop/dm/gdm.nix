@@ -9,7 +9,7 @@
     services = {
       displayManager = {
         gdm = {
-          autoSuspend = !(lib.hasTag config "laptop");
+          autoSuspend = !(config.lib.tags.hasTag "laptop");
         };
       };
       # displayManager.preStart = "sleep 1";

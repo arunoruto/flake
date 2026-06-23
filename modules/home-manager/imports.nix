@@ -8,8 +8,11 @@ let
   # Check if we're on NixOS (osConfig.system.tags exists)
   isNixOS = osConfig != null && osConfig ? system && osConfig.system ? tags;
 
-  # Home-manager gets a plain lib (no flake `lib.hasTag`), so use a local copy
-  # against the system's osConfig; false when there is no tagged system.
+  # Home-manager's only tag use is the foundational hosts.* mapping below.
+  # Routing that through the stylix-style `config.lib.tags.hasTag` option causes
+  # infinite recursion (forcing config.lib drags in modules that read hosts.*),
+  # so HM keeps a small local predicate against osConfig. nixos/darwin use
+  # config.lib.tags.hasTag, where hasTag feeds leaf options (no cycle).
   hasTag = tag: isNixOS && lib.elem tag osConfig.system.tags;
 in
 {
