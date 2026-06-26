@@ -16,6 +16,7 @@
     ../../languages/fish.nix
     ../../languages/nu.nix
     ../../languages/go.nix
+    ../../languages/rust.nix
     ../../languages/fortran.nix
     ../../languages/julia.nix
     ../../languages/matlab.nix
