@@ -54,6 +54,7 @@ in
           xml.enable = lib.mkDefault dev;
           typst.enable = lib.mkDefault dev;
           go.enable = lib.mkDefault dev;
+          rust.enable = lib.mkDefault dev;
           bash.enable = lib.mkDefault dev;
           fish.enable = lib.mkDefault dev;
           nu.enable = lib.mkDefault dev;
