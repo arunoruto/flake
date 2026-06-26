@@ -26,7 +26,7 @@
       programs = {
         antigravity-cli.enable = false;
         claude-code.enable = true;
-        copilot-cli.enable = true;
+        copilot-cli.enable = false;
         mcp.enable = true;
         mods.enable = true;
         ollama.defaultPath = "http://madara.king-little.ts.net:11434/v1";

@@ -9,8 +9,29 @@
     programs.yazi = {
       # package = pkgs.unstable.yazi;
       settings = {
+        open = {
+          prepend_rules = [
+            {
+              mime = "application/pdf";
+              use = "tdf";
+            }
+          ];
+        };
+        opener = {
+          tdf = [
+            {
+              run = ''tdf "$1"'';
+              block = true;
+              for = "unix";
+            }
+          ];
+        };
         plugin = {
           prepend_previewers = [
+            {
+              mime = "application/pdf";
+              run = ''piper -- pdftotext -l 1 "$1" -'';
+            }
             {
               mime = "text/markdown";
               run = ''piper -- CLICOLOR_FORCE=1 glow -w=$w -s=dark "$1"'';

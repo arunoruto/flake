@@ -19,15 +19,17 @@ let
       }
       send -- ":lf ${config.home.sessionVariables.NH_FLAKE}\r"
       expect -r "Added (\\d+) variables."
-      send -- "hm = homeConfigurations.${config.home.username}\r"
-      send -- "pkgs = hm.pkgs\r"
+      send -- "hms = homeConfigurations.${config.home.username}\r"
+      send -- "pkgs = hms.pkgs\r"
     ''
     + lib.optionalString (osConfig != null && pkgs.stdenv.hostPlatform.isLinux) ''
       send -- "os = nixosConfigurations.${osConfig.networking.hostName}\r"
+      send -- "hm = os.config.home-manager.users.${config.home.username}\r"
     ''
     + lib.optionalString (osConfig != null && pkgs.stdenv.hostPlatform.isDarwin) ''
       send -- "os = darwinConfigurations.${osConfig.networking.hostName}\r"
       send -- "pkgs = os.pkgs\r"
+      send -- "hm = os.config.home-manager.users.${config.home.username}\r"
     ''
     + ''
       interact

@@ -14,29 +14,32 @@
 let
   tag-prefix = "@upstash/context7-mcp";
 
-  pnpmConfigHook_10 = pnpmConfigHook.override { pnpm = pnpm_10; };
-  fetchPnpmDeps_10 = fetchPnpmDeps.override { pnpm = pnpm_10; };
+  pnpm = pnpm_10;
+  # pnpmConfigHook_custom = pnpmConfigHook.override { inherit pnpm; };
+  # fetchPnpmDeps_custom = fetchPnpmDeps.override { inherit pnpm; };
+  pnpmConfigHook_custom = pnpmConfigHook;
+  fetchPnpmDeps_custom = fetchPnpmDeps;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "context7-mcp";
-  version = "3.2.1";
+  version = "3.2.2";
 
   src = fetchFromGitHub {
     owner = "upstash";
     repo = "context7";
     tag = "${tag-prefix}@${finalAttrs.version}";
-    hash = "sha256-Gf3GnVOceAMzsc1SYGQVriDzDD/dQYSoBSrCuQ5M4UI=";
+    hash = "sha256-v3zKMnZsc0gWVAdgZwFTskWcFVlOU6sG2i+qDwjx+dw=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm_10
-    pnpmConfigHook_10
+    pnpm
+    pnpmConfigHook_custom
     # pnpmConfigHook
     makeWrapper
   ];
 
-  pnpmDeps = fetchPnpmDeps_10 {
+  pnpmDeps = fetchPnpmDeps_custom {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 3;
     hash = "sha256-S+TCwe4FJHjSLTUL/cPh+eRtWx/z7REUyfMNT0BgK7k=";
