@@ -22,13 +22,11 @@
     programs.ssh.enable = true;
 
     home = {
-      packages =
-        with pkgs;
-        [
-          dust
-          dysk
-          speedtest-cli
-        ];
+      packages = with pkgs; [
+        dust
+        dysk
+        speedtest-cli
+      ];
       file = {
         ".hushlogin".text = "";
       };
