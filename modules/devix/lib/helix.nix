@@ -53,6 +53,7 @@ let
     in
     {
       inherit name;
+      roots = lib.mkIf (langOpts.roots or null != null) langOpts.roots;
       auto-format = formatterConfig != null;
       formatter = lib.mkIf (formatterConfig != null) formatterConfig;
       language-servers = lib.mkIf (activeLsps != { }) langOpts.lspServers;

@@ -34,7 +34,7 @@
         pi.enable = false;
       };
       home.packages = with pkgs.unstable; [
-        beads
+        # beads
         # goose-cli
       ];
     })

@@ -39,8 +39,8 @@
       python.enable = lib.mkDefault config.hosts.development.enable;
       go.enable = lib.mkDefault config.hosts.development.enable;
       julia.enable = lib.mkDefault false;
-      fortran.enable = lib.mkDefault config.hosts.development.enable;
-      matlab.enable = lib.mkDefault config.hosts.development.enable;
+      fortran.enable = lib.mkDefault false;
+      matlab.enable = lib.mkDefault false;
       harper.enable = lib.mkDefault false;
     };
   };

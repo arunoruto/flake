@@ -4,7 +4,11 @@
   lsps.rust-analyzer = {
     enable = true;
     package = pkgs.rust-analyzer;
-    command = lib.getExe pkgs.rust-analyzer;
+    command = "rust-analyzer";
+    config = {
+      # files.watcher = "server";
+      cargo.sysrootSrc = "${pkgs.rustPlatform.rustLibSrc}";
+    };
   };
 
   formatters.rustfmt = {
@@ -19,6 +23,10 @@
     formatters = [ "rustfmt" ];
     tabWidth = 4;
     insertSpaces = true;
+    roots = [
+      "Cargo.toml"
+      "Cargo.lock"
+    ];
   };
 
   consumerMeta.zed = {
@@ -33,4 +41,9 @@
   consumerMeta.opencode = {
     extensions = [ ".rs" ];
   };
+
+  packages = with pkgs; [
+    rustc
+    cargo
+  ];
 }

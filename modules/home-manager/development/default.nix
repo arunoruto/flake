@@ -51,16 +51,16 @@ in
 
           # Tier 2 — development machines only.
           python.enable = lib.mkDefault dev;
-          xml.enable = lib.mkDefault dev;
+          xml.enable = lib.mkDefault false;
           typst.enable = lib.mkDefault dev;
           go.enable = lib.mkDefault dev;
           rust.enable = lib.mkDefault dev;
           bash.enable = lib.mkDefault dev;
           fish.enable = lib.mkDefault dev;
-          nu.enable = lib.mkDefault dev;
+          nu.enable = lib.mkDefault false;
           latex.enable = lib.mkDefault dev;
-          fortran.enable = lib.mkDefault dev;
-          matlab.enable = lib.mkDefault dev;
+          fortran.enable = lib.mkDefault false;
+          matlab.enable = lib.mkDefault false;
           julia.enable = lib.mkDefault false;
         };
 
@@ -74,7 +74,7 @@ in
       };
 
       programs.helix.enable = lib.mkDefault true;
-      programs.helix.package = pkgs.unstable.steelix;
+      programs.helix.package = pkgs.unstable.helix;
     }
     (lib.mkIf dev {
       home.packages = with pkgs.unstable; [ prek ];

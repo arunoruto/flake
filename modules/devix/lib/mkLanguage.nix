@@ -92,13 +92,25 @@ in
           visible = false;
           internal = true;
         };
+
+        roots = lib.mkOption {
+          type = lib.types.nullOr (lib.types.listOf lib.types.str);
+          default = meta.roots or null;
+          description = "Root files for workspace detection (e.g. Cargo.toml for Rust).";
+          visible = false;
+          internal = true;
+        };
       };
     };
   };
 
   config = lib.mkIf cfg.enable (
     lib.mkMerge (
-      registryDefs "lsps" (data.lsps or { }) ++ registryDefs "formatters" (data.formatters or { })
+      registryDefs "lsps" (data.lsps or { })
+      ++ registryDefs "formatters" (data.formatters or { })
+      ++ lib.optionals (data ? packages) [
+        { home.packages = data.packages; }
+      ]
     )
   );
 }

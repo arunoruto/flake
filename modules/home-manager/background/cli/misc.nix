@@ -74,17 +74,11 @@
 
   home.packages = lib.optionals config.hosts.development.enable (
     (with pkgs; [
-      broot
       fx
       gping
-      up
-      poppler-utils
-      q
     ])
     ++ (with pkgs.unstable; [
       devenv
-      browsh
-      firefox
     ])
   );
 }

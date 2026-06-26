@@ -88,7 +88,7 @@
     };
     skills = {
       # beads = pkgs.unstable.beads.src + "/skills/beads";
-      beads = pkgs.unstable.beads.src + "/claude-plugin/skills/beads";
+      # beads = pkgs.unstable.beads.src + "/claude-plugin/skills/beads";
       # caveman = pkgs.caveman + "/skills/caveman";
       commit = ../skills/commit;
       git-commit-nixpkgs = ../skills/git-commit-nixpkgs;

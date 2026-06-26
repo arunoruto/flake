@@ -17,15 +17,15 @@
 
         bash.enable = lib.mkDefault config.hosts.development.enable;
         fish.enable = lib.mkDefault config.hosts.development.enable;
-        nu.enable = lib.mkDefault config.hosts.development.enable;
+        nu.enable = lib.mkDefault false;
 
         latex.enable = lib.mkDefault config.hosts.development.enable;
         typst.enable = lib.mkDefault config.hosts.development.enable;
 
         python.enable = lib.mkDefault config.hosts.development.enable;
         go.enable = lib.mkDefault config.hosts.development.enable;
-        fortran.enable = lib.mkDefault config.hosts.development.enable;
-        matlab.enable = lib.mkDefault config.hosts.development.enable;
+        fortran.enable = lib.mkDefault false;
+        matlab.enable = lib.mkDefault false;
         julia.enable = lib.mkDefault false;
       };
 

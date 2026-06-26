@@ -7,7 +7,6 @@
   ];
 
   programs = {
-    iamb.enable = config.hosts.development.enable;
-    pop.enable = config.hosts.development.enable;
+    # pop.enable = config.hosts.development.enable;
   };
 }

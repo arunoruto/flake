@@ -10,6 +10,7 @@
   system.tags = [
     "desktop"
     "laptop"
+    "development"
   ];
 
   # System packages

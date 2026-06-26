@@ -12,4 +12,5 @@
 - [Networking](./networking/README.md)
   - [Cloudflared](./networking/cloudflared.md)
 - [Tips & Resources](./resources.md)
+- [Dev Tools](./dev-tools.md)
 - [Maintainer Notes](./maintainer-notes.md)

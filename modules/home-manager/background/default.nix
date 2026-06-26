@@ -28,18 +28,7 @@
           dust
           dysk
           speedtest-cli
-        ]
-        ++ lib.optionals config.hosts.development.enable (
-          with pkgs;
-          [
-            glow
-            hexyl
-            miller
-            ncdu
-            ouch
-            slides
-          ]
-        );
+        ];
       file = {
         ".hushlogin".text = "";
       };
