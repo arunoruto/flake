@@ -11,6 +11,8 @@
     ./documents
     ./games
     ./git
+    ./herdr
+
     ./atuin.nix
     ./astral.nix
     ./fastfetch.nix
@@ -27,6 +29,7 @@
 
     programs = {
       atuin.enable = lib.mkDefault true;
+      herdr.enable = lib.mkDefault true;
       serpl.enable = lib.mkDefault false;
       yazi.enable = lib.mkDefault true;
       zellij.enable = lib.mkDefault false;
