@@ -62,10 +62,12 @@
         # "services/explo/api-key" = { };
         # "services/explo/admin-system-password" = { };
         "tokens/plex" = { };
+        "tokens/youtube" = { };
       };
       templates."explo.env" = {
         content = ''
           API_KEY=${config.sops.placeholder."tokens/plex"}
+          YOUTUBE_API_KEY=${config.sops.placeholder."tokens/youtube"}
         '';
         #   YOUTUBE_API_KEY=${config.sops.placeholder."services/explo/youtube-api-key"}
         #   SYSTEM_PASSWORD=${config.sops.placeholder."services/explo/system-password"}
