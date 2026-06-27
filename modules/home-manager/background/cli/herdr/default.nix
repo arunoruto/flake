@@ -5,15 +5,16 @@
   ...
 }:
 {
-  imports = [ ./module.nix ];
+  imports = [
+    ./module.nix
+    ./theme.nix
+  ];
 
   config = {
     programs.herdr = lib.mkIf config.programs.herdr.enable {
       package = pkgs.custom.herdr;
 
       settings = {
-        theme.name = "catppuccin";
-
         ui = {
           mouse_capture = true;
           pane_borders = true;
@@ -23,10 +24,21 @@
         };
 
         keys = {
-          prefix = "ctrl+b";
-          zoom = "prefix+z";
+          prefix = "ctrl+space";
+          zoom = [
+            "prefix+z"
+            "prefix+m"
+          ];
           toggle_sidebar = "prefix+b";
-          detach = "prefix+q";
+          detach = "prefix+d";
+          command = [
+            {
+              key = "prefix+r";
+              type = "shell";
+              command = "herdr server reload-config";
+              description = "reload herdr config";
+            }
+          ];
         };
 
         session.resume_agents_on_restore = true;

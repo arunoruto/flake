@@ -64,7 +64,7 @@ in
 
     programs.zsh.initExtra = mkIf cfg.enableZshIntegration ''
       # herdr auto-attach
-      if [[ -z "$__HERDR_AUTO_ATTACHED" && -o interactive && "$TERM" != "dumb" ]]; then
+      if [[ -z "$__HERDR_AUTO_ATTACHED" && -z "$HERDR_SOCKET_PATH" && -o interactive && "$TERM" != "dumb" ]]; then
         export __HERDR_AUTO_ATTACHED=1
         exec herdr
       fi
@@ -72,7 +72,7 @@ in
 
     programs.fish.interactiveShellInit = mkIf cfg.enableFishIntegration ''
       # herdr auto-attach
-      if not set -q __HERDR_AUTO_ATTACHED; and status is-interactive; and test "$TERM" != dumb
+      if not set -q __HERDR_AUTO_ATTACHED; and not set -q HERDR_SOCKET_PATH; and status is-interactive; and test "$TERM" != dumb
         set -gx __HERDR_AUTO_ATTACHED 1
         exec herdr
       end
@@ -80,7 +80,7 @@ in
 
     programs.bash.initExtra = mkIf cfg.enableBashIntegration ''
       # herdr auto-attach
-      if [[ -z "$__HERDR_AUTO_ATTACHED" && "$-" == *i* && "$TERM" != "dumb" ]]; then
+      if [[ -z "$__HERDR_AUTO_ATTACHED" && -z "$HERDR_SOCKET_PATH" && "$-" == *i* && "$TERM" != "dumb" ]]; then
         export __HERDR_AUTO_ATTACHED=1
         exec herdr
       fi
