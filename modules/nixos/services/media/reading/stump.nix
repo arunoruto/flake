@@ -20,6 +20,7 @@
         STUMP_OIDC_ISSUER_URL = "https://id.arnaut.me";
         STUMP_OIDC_SCOPES = "openid,email,profile";
         STUMP_OIDC_ALLOW_REGISTRATION = "true";
+        STUMP_OIDC_DISABLE_LOCAL_AUTH = "true";
         STUMP_TRUST_PROXY_HEADERS = "true";
       };
       secretFiles = {
@@ -43,5 +44,7 @@
         owner = config.services.stump.user;
       };
     };
+
+    users.users.stump.extraGroups = [ "media" ];
   };
 }
