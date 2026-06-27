@@ -38,6 +38,11 @@
         }
         {
           hostname = "arr.${config.services.cloudflared.defaultDomain}";
+          path = "/readarr.*";
+          service = "http://sado.${config.services.tailscale.tailnet}.ts.net:${builtins.toString config.services.readarr.settings.server.port}";
+        }
+        {
+          hostname = "arr.${config.services.cloudflared.defaultDomain}";
           path = "/prowlarr.*";
           service = "http://shinji.${config.services.tailscale.tailnet}.ts.net:${builtins.toString config.services.prowlarr.settings.server.port}";
         }
