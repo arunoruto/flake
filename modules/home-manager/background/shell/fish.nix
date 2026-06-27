@@ -7,7 +7,8 @@
 {
   programs = {
     fish = {
-      package = pkgs.unstable.fish;
+      # package = pkgs.unstable.fish;
+      package = pkgs.fish;
       shellAliases = {
         grep = "rg";
         tss = "tailscale switch $(tailscale switch --list | tail -n +2 | fzf | tr -s ' ' | cut -d ' ' -f1)";

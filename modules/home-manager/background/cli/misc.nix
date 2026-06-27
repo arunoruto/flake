@@ -37,7 +37,7 @@
       nix-direnv.enable = true;
     };
 
-    direnv-instant.enable = true;
+    direnv-instant.enable = lib.mkDefault config.hosts.development.enable;
     # direnv-instant.enable = pkgs.stdenv.hostPlatform.isLinux;
 
     fd.enable = true;
