@@ -19,6 +19,7 @@
           text = ''
             BINDERY_LIBRARY_DIR=/mnt/flash/books
             BINDERY_DOWNLOAD_DIR=/mnt/flash/downloads/books
+            BINDERY_CONTACT=mirza.arnaut45@gmail.com
           '';
         }).outPath
       ];

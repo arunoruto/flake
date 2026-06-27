@@ -83,6 +83,7 @@ in
       environment = {
         BINDERY_PORT = toString cfg.port;
         BINDERY_DATA_DIR = cfg.dataDir;
+        BINDERY_DB_PATH = "${cfg.dataDir}/bindery.db";
         BINDERY_TELEMETRY_DISABLED = if cfg.telemetry.enable then "false" else "true";
       };
 
