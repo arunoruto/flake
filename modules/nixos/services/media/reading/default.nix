@@ -1,6 +1,7 @@
 { lib, config, ... }:
 {
   imports = [
+    ./bindery
     ./komga.nix
     ./stump.nix
     ./manga.nix

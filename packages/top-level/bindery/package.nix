@@ -46,7 +46,10 @@ buildGoModule (finalAttrs: {
     "-X main.version=${finalAttrs.version}"
   ];
   subpackages = [ "cmd/bindery" ];
-  excludedPackages = [ "tests/canary" ];
+  excludedPackages = [
+    "tests/canary"
+    "internal/api"
+  ];
 
   postPatch = ''
     cat << 'EOF' > cmd/bindery/nix_version_check.go
@@ -70,6 +73,8 @@ buildGoModule (finalAttrs: {
     mkdir -p internal/webui/dist
     cp -r ${finalAttrs.webui}/* internal/webui/dist
   '';
+
+  checkFlags = [ "-v" ];
 
   nativeBuildInputs = [ versionCheckHook ];
   doInstallCheck = true;

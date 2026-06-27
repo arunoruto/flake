@@ -122,6 +122,7 @@
       localPort = 41080;
     };
     stump.enable = true;
+    bindery.enable = true;
     # komga.enable = true;
     # immich = {
     #   enable = true;
