@@ -221,7 +221,9 @@ in
     };
 
     webui = {
-      enable = lib.mkEnableOption "Explo web configuration UI" // { default = true; };
+      enable = lib.mkEnableOption "Explo web configuration UI" // {
+        default = true;
+      };
 
       address = lib.mkOption {
         type = lib.types.str;
@@ -319,15 +321,18 @@ in
 
           path = cfg.extraPackages;
 
-          environment = lib.mapAttrs (_: envToString) cfg.environment // {
-            WEB_UI = "true";
-            WEB_ADDR = cfg.webui.address;
-            WEB_ENV_PATH = envPath;
-            WEB_DATA_PATH = webuiDataDir;
-            WEB_CACHE_MB = toString cfg.webui.cacheMb;
-          } // lib.optionalAttrs (cfg.webui.username != null) {
-            UI_USERNAME = cfg.webui.username;
-          };
+          environment =
+            lib.mapAttrs (_: envToString) cfg.environment
+            // {
+              WEB_UI = "true";
+              WEB_ADDR = cfg.webui.address;
+              WEB_ENV_PATH = envPath;
+              WEB_DATA_PATH = webuiDataDir;
+              WEB_CACHE_MB = toString cfg.webui.cacheMb;
+            }
+            // lib.optionalAttrs (cfg.webui.username != null) {
+              UI_USERNAME = cfg.webui.username;
+            };
 
           serviceConfig = {
             Type = "simple";
@@ -370,82 +375,82 @@ in
           };
 
           script = ''
-            ${lib.getExe pkgs.python3} -c '
-import os, json, sys, subprocess
-from datetime import datetime, timedelta
+                        ${lib.getExe pkgs.python3} -c '
+            import os, json, sys, subprocess
+            from datetime import datetime, timedelta
 
-now = datetime.now()
-env_path = os.environ["WEB_ENV_PATH"]
-explo_bin = os.environ["EXPLO_BIN"]
-state_file = os.path.join(os.environ.get("RUNTIME_DIRECTORY", "/tmp"), "explo-cron-state.json")
-lookback_max = timedelta(hours=24)
+            now = datetime.now()
+            env_path = os.environ["WEB_ENV_PATH"]
+            explo_bin = os.environ["EXPLO_BIN"]
+            state_file = os.path.join(os.environ.get("RUNTIME_DIRECTORY", "/tmp"), "explo-cron-state.json")
+            lookback_max = timedelta(hours=24)
 
-last_check = now - lookback_max
-try:
-    with open(state_file) as f:
-        last_check = datetime.fromisoformat(json.load(f)["last_check"])
-except Exception:
-    pass
+            last_check = now - lookback_max
+            try:
+                with open(state_file) as f:
+                    last_check = datetime.fromisoformat(json.load(f)["last_check"])
+            except Exception:
+                pass
 
-env_vars = {}
-try:
-    with open(env_path) as f:
-        for line in f:
-            line = line.strip()
-            if not line or line.startswith("#"):
-                continue
-            if "=" not in line:
-                continue
-            k, v = line.split("=", 1)
-            env_vars[k.strip()] = v.strip()
-except FileNotFoundError:
-    sys.exit(0)
+            env_vars = {}
+            try:
+                with open(env_path) as f:
+                    for line in f:
+                        line = line.strip()
+                        if not line or line.startswith("#"):
+                            continue
+                        if "=" not in line:
+                            continue
+                        k, v = line.split("=", 1)
+                        env_vars[k.strip()] = v.strip()
+            except FileNotFoundError:
+                sys.exit(0)
 
-def cron_dow(dt):
-    return dt.isoweekday() % 7
+            def cron_dow(dt):
+                return dt.isoweekday() % 7
 
-def cron_match(expr, dt):
-    parts = expr.split()
-    if len(parts) != 5:
-        return False
-    patterns = [
-        (parts[0], str(dt.minute)),
-        (parts[1], str(dt.hour)),
-        (parts[2], str(dt.day)),
-        (parts[3], str(dt.month)),
-        (parts[4], str(cron_dow(dt))),
-    ]
-    for pattern, value in patterns:
-        if pattern == "*":
-            continue
-        if pattern != value:
-            return False
-    return True
+            def cron_match(expr, dt):
+                parts = expr.split()
+                if len(parts) != 5:
+                    return False
+                patterns = [
+                    (parts[0], str(dt.minute)),
+                    (parts[1], str(dt.hour)),
+                    (parts[2], str(dt.day)),
+                    (parts[3], str(dt.month)),
+                    (parts[4], str(cron_dow(dt))),
+                ]
+                for pattern, value in patterns:
+                    if pattern == "*":
+                        continue
+                    if pattern != value:
+                        return False
+                return True
 
-current = last_check.replace(second=0, microsecond=0) + timedelta(minutes=1)
-run_count = 0
-while current <= now:
-    for key, val in env_vars.items():
-        if not key.endswith("_SCHEDULE") or not val:
-            continue
-        job = key[:-9]
-        flags = env_vars.get(f"{job}_FLAGS", "")
-        if cron_match(val, current):
-            cmd = [explo_bin, "--config", env_path]
-            if flags:
-                cmd.extend(flags.split())
-            print(f"[explo-cron] {current:%Y-%m-%d %H:%M} — running {job}", file=sys.stderr)
-            subprocess.run(cmd)
-            run_count += 1
-    current += timedelta(minutes=1)
+            current = last_check.replace(second=0, microsecond=0) + timedelta(minutes=1)
+            run_count = 0
+            while current <= now:
+                for key, val in env_vars.items():
+                    if not key.endswith("_SCHEDULE") or not val:
+                        continue
+                    job = key[:-9]
+                    flags = env_vars.get(f"{job}_FLAGS", "")
+                    if cron_match(val, current):
+                        cmd = [explo_bin, "--config", env_path]
+                        if flags:
+                            cmd.extend(flags.split())
+                        print(f"[explo-cron] {current:%Y-%m-%d %H:%M} — running {job}", file=sys.stderr)
+                        subprocess.run(cmd)
+                        run_count += 1
+                current += timedelta(minutes=1)
 
-if run_count:
-    print(f"[explo-cron] executed {run_count} job(s)", file=sys.stderr)
+            if run_count:
+                print(f"[explo-cron] executed {run_count} job(s)", file=sys.stderr)
 
-os.makedirs(os.path.dirname(state_file), exist_ok=True)
-with open(state_file, "w") as f:
-    json.dump({"last_check": now.isoformat()}, f)
-'
+            os.makedirs(os.path.dirname(state_file), exist_ok=True)
+            with open(state_file, "w") as f:
+                json.dump({"last_check": now.isoformat()}, f)
+            '
           '';
 
           serviceConfig = {
