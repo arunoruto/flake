@@ -10,9 +10,8 @@
       cfg = config.services.ytdlp-bot;
       sops-token = "tokens/telegram/ytdlp";
     in
-    {
+    lib.mkIf cfg.enable {
       services.ytdlp-bot = {
-        enable = true;
         authorizedUserId = "757770344";
         plexMusicDir = "/mnt/flash/music/singles";
         botTokenPath = config.sops.secrets.${sops-token}.path;
