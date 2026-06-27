@@ -139,7 +139,6 @@
       enable = true;
       openFirewall = true;
     };
-    readarr.enable = true;
     plex.enable = true;
     scrutiny.collector = {
       enable = false;

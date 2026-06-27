@@ -11,7 +11,7 @@
   config = lib.mkIf config.services.stump.enable {
     services.stump = {
       package = pkgs.unstable.stump;
-      ip = "0.0.0.0";
+      # ip = "0.0.0.0";
       port = 10001;
       openFirewall = lib.mkDefault false;
 
