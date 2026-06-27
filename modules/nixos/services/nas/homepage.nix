@@ -124,16 +124,16 @@
           opacity = 50; # 0-100
         };
       };
-      environmentFile =
-        lib.mkDefault
-          (pkgs.writeTextFile {
-            name = "homepage-env";
-            text = ''
-              HOMEPAGE_FILE_RADARR_KEY=${config.sops.secrets."tokens/arr/radarr".path}
-              HOMEPAGE_FILE_SONARR_KEY=${config.sops.secrets."tokens/arr/sonarr".path}
-              HOMEPAGE_FILE_FINNHUB_KEY=${config.sops.secrets."tokens/finnhub".path}
-            '';
-          }).outPath;
+      environmentFiles = lib.mkDefault [
+        (pkgs.writeTextFile {
+          name = "homepage-env";
+          text = ''
+            HOMEPAGE_FILE_RADARR_KEY=${config.sops.secrets."tokens/arr/radarr".path}
+            HOMEPAGE_FILE_SONARR_KEY=${config.sops.secrets."tokens/arr/sonarr".path}
+            HOMEPAGE_FILE_FINNHUB_KEY=${config.sops.secrets."tokens/finnhub".path}
+          '';
+        }).outPath
+      ];
     };
     sops.secrets."tokens/finnhub" = {
       mode = "0666";
