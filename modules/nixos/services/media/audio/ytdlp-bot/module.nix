@@ -8,7 +8,12 @@
 let
   cfg = config.services.ytdlp-bot;
 
-  pythonEnv = pkgs.python3.withPackages (ps: with ps; [ pytelegrambotapi ]);
+  pythonEnv = pkgs.python3.withPackages (
+    ps: with ps; [
+      requests
+      pytelegrambotapi
+    ]
+  );
 
   botPackage = pkgs.writeScriptBin "ytdlp-bot" ''
     #!${pythonEnv}/bin/python

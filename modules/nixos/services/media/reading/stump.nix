@@ -11,6 +11,7 @@
   config = lib.mkIf config.services.stump.enable {
     services.stump = {
       package = pkgs.unstable.stump;
+      ip = "0.0.0.0";
       port = 10001;
       openFirewall = lib.mkDefault false;
 
@@ -29,7 +30,7 @@
 
     services.cloudflared.tunnels."${config.networking.hostName}".ingress = [
       {
-        hostname = "stump.${config.services.cloudflared.defaultDomain}";
+        hostname = "library.${config.services.cloudflared.defaultDomain}";
         service = "http://localhost:${builtins.toString config.services.stump.port}";
       }
     ];
