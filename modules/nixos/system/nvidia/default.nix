@@ -34,7 +34,7 @@
 
         # package = lib.mkDefault config.boot.kernelPackages.nvidiaPackages.beta;
         # package = lib.mkDefault config.boot.kernelPackages.nvidiaPackages.production;
-        package = lib.mkDefault config.boot.kernelPackages.nvidiaPackages.stable;
+        # package = lib.mkDefault config.boot.kernelPackages.nvidiaPackages.stable;
         # package = lib.mkDefault config.boot.kernelPackages.nvidiaPackages.mkDriver {
         #   version = "555.58.02";
         #   sha256_64bit = "sha256-xctt4TPRlOJ6r5S54h5W6PT6/3Zy2R4ASNFPu8TSHKM=";
