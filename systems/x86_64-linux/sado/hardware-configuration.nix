@@ -66,6 +66,16 @@
     fsType = "zfs";
   };
 
+  fileSystems."/mnt/flash/music" = {
+    device = "flash/music";
+    fsType = "zfs";
+  };
+
+  fileSystems."/mnt/flash/downloads" = {
+    device = "flash/downloads";
+    fsType = "zfs";
+  };
+
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's
   # still possible to use this option, but it's recommended to use it in conjunction

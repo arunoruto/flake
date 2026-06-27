@@ -7,6 +7,8 @@
 {
   users.primaryUser = "mirza";
 
+  system.tags = [ "nas" ];
+
   hosts = {
     amd = {
       enable = true;
@@ -85,6 +87,12 @@
       };
       openFirewall = true;
     };
+    samba.directories = {
+      media =     { path = "/mnt/storage/media"; };
+      downloads = { path = "/mnt/storage/downloads"; };
+      appdata =   { path = "/mnt/storage/appdata"; };
+    };
+    samba.disableShares = [ "appdata" "downloads" ];
   };
 
   sops.secrets."tokens/beszel-marvin".mode = "0444";
