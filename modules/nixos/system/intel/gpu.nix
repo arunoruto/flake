@@ -13,11 +13,14 @@
       nvtopPackages.intel
     ];
 
-    hardware.graphics = {
-      enable = lib.mkDefault true;
-      extraPackages = with pkgs; [
-        vpl-gpu-rt
-      ];
+    hardware = {
+      intel-gpu-tools.enable = true;
+      graphics = {
+        enable = lib.mkDefault true;
+        extraPackages = with pkgs; [
+          vpl-gpu-rt
+        ];
+      };
     };
   };
 }
