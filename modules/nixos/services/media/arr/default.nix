@@ -9,6 +9,7 @@
     ./sonarr.nix
     ./radarr.nix
     ./lidarr.nix
+    ./readarr.nix
     ./recyclar.nix
     ./prowlarr.nix
   ];

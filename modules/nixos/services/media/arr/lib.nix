@@ -53,6 +53,7 @@ lib: {
             "radarr"
             "sonarr"
             "lidarr"
+            "readarr"
           ])
           {
             services."${serviceName}" = {
