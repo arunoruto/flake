@@ -7,7 +7,7 @@
 let
   python3Packages = python3.pkgs;
 in
-python3Packages.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication rec {
   pname = "soulsync";
   version = "2.4.1";
   # pyproject = true;
@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Nezreka";
     repo = "SoulSync";
-    tag = finalAttrs.version;
+    tag = version;
     hash = "sha256-v1ioMsTIYvMfSaK56p4y/tUMYQ/KV73R/e6yLSAHv0Y=";
   };
 
@@ -69,7 +69,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # in the exact order written, utilizing native bash fallback syntax (:-).
     makeWrapper ${python3.pkgs.gunicorn}/bin/gunicorn $out/bin/soulsync \
       --run 'export DATA_DIR="''${SOULSYNC_DATA_DIR:-$HOME/.local/share/soulsync}"' \
-      --run 'mkdir -p "$DATA_DIR/database" "$DATA_DIR/logs" "$DATA_DIR/config"' \
+      --run 'mkdir -p "$DATA_DIR/database" "$DATA_DIR/logs" "$DATA_DIR/config" "$DATA_DIR/Transfer"' \
       --run 'cd "$DATA_DIR"' \
       --run 'export SOULSYNC_DB_PATH="''${SOULSYNC_DB_PATH:-$DATA_DIR/database/music.db}"' \
       --run 'export SOULSYNC_LOG_DIR="''${SOULSYNC_LOG_DIR:-$DATA_DIR/logs}"' \
@@ -87,10 +87,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
   meta = {
     description = "Automated Music Discovery and Collection Manager";
     homepage = "https://ssync.net/";
-    changelog = "https://github.com/${finalAttrs.src.owner}/${finalAttrs.src.repo}/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/${src.owner}/${src.repo}/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ arunoruto ];
     mainProgram = "soulsync";
     platforms = lib.platforms.linux;
   };
-})
+}
