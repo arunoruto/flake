@@ -16,6 +16,8 @@ in
     (modulesPath + "/installer/cd-dvd/installation-cd-minimal.nix")
   ];
 
+  boot.zfs.forceImportRoot = false;
+
   isoImage.edition = hostname;
 
   nix.settings = {
