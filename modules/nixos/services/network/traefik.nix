@@ -132,22 +132,22 @@ in
                 service = "api@internal";
               };
             })
-            (lib.mkIf (config.services.cloudflared.enable) {
-              http = {
-                routers.www = {
-                  rule = "Host(`${config.services.cloudflared.defaultDomain}`)";
-                  # tls.certresolver = "cf";
-                  entrypoints = [ "websecure" ];
-                  middlewares = [ "www" ];
-                  service = "noop@internal";
-                };
-                middlewares.www.redirectregex = {
-                  regex = "^https://${config.services.cloudflared.defaultDomain}";
-                  replacement = "https://www.${config.services.cloudflared.defaultDomain}";
-                  permanent = true;
-                };
-              };
-            })
+            # (lib.mkIf (config.services.cloudflared.enable) {
+            #   http = {
+            #     routers.www = {
+            #       rule = "Host(`${config.services.cloudflared.defaultDomain}`)";
+            #       # tls.certresolver = "cf";
+            #       entrypoints = [ "websecure" ];
+            #       middlewares = [ "www" ];
+            #       service = "noop@internal";
+            #     };
+            #     middlewares.www.redirectregex = {
+            #       regex = "^https://${config.services.cloudflared.defaultDomain}";
+            #       replacement = "https://www.${config.services.cloudflared.defaultDomain}";
+            #       permanent = true;
+            #     };
+            #   };
+            # })
             # {
             #   http = {
             #     routers.paperless = {
