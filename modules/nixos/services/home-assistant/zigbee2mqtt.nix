@@ -5,36 +5,58 @@
   ...
 }:
 {
-  config = lib.mkIf (with config.services; (zigbee2mqtt.enable && mosquitto.enable)) {
-    services = {
-      zigbee2mqtt = {
-        package = pkgs.unstable.zigbee2mqtt;
-        settings = {
-          homeassistant.enabled = config.services.home-assistant.enable;
-          frontend = {
-            enabled = true;
-            port = 8080;
+  config = lib.mkMerge [
+    {
+      services = {
+        zigbee2mqtt = {
+          package = lib.mkDefault pkgs.unstable.zigbee2mqtt;
+          settings = {
+            # homeassistant.enabled = config.services.home-assistant.enable;
+            frontend = {
+              enabled = true;
+              port = 8080;
+            };
+            # mqtt = {
+            #   server = "mqtt://localhost:1883";
+            #   user = "zigbee2mqtt";
+            #   password = "mqtt2zigbee";
+            # };
+            # serial = {
+            #   # port = "tcp://10.42.42.69:6638";
+            #   # baudrate = 115200;
+            #   # adapter = "zstack";
+            #   # disable_led = false;
+            # };
           };
-          mqtt = {
-            server = "mqtt://localhost:1883";
-            user = "zigbee2mqtt";
-            password = "mqtt2zigbee";
-          };
-          # serial = {
-          #   # port = "tcp://10.42.42.69:6638";
-          #   # baudrate = 115200;
-          #   # adapter = "zstack";
-          #   # disable_led = false;
-          # };
         };
       };
-      home-assistant.config.ingress.zigbee2mqtt = {
-        work_mode = "ingress";
-        ui_mode = "normal";
-        title = "Zigbee2MQTT";
-        icon = "mdi:bee";
-        url = "localhost:8080";
+    }
+    (lib.mkIf (with config.services; (zigbee2mqtt.enable && mosquitto.enable)) {
+      services = {
+        zigbee2mqtt = {
+          settings = {
+            homeassistant.enabled = config.services.home-assistant.enable;
+            mqtt = {
+              server = "mqtt://localhost:1883";
+              user = "zigbee2mqtt";
+              password = "mqtt2zigbee";
+            };
+            # serial = {
+            #   # port = "tcp://10.42.42.69:6638";
+            #   # baudrate = 115200;
+            #   # adapter = "zstack";
+            #   # disable_led = false;
+            # };
+          };
+        };
+        home-assistant.config.ingress.zigbee2mqtt = {
+          work_mode = "ingress";
+          ui_mode = "normal";
+          title = "Zigbee2MQTT";
+          icon = "mdi:bee";
+          url = "localhost:8080";
+        };
       };
-    };
-  };
+    })
+  ];
 }
