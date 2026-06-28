@@ -24,17 +24,17 @@
         {
           hostname = "arr.${config.services.cloudflared.defaultDomain}";
           path = "/radarr.*";
-          service = "http://kuchiki.${config.services.tailscale.tailnet}.ts.net:${builtins.toString config.services.radarr.settings.server.port}";
+          service = "http://kuchiki.${config.services.tailscale.tailnet}.ts.net:${toString config.services.radarr.settings.server.port}";
         }
         {
           hostname = "arr.${config.services.cloudflared.defaultDomain}";
           path = "/sonarr.*";
-          service = "http://kuchiki.${config.services.tailscale.tailnet}.ts.net:${builtins.toString config.services.sonarr.settings.server.port}";
+          service = "http://kuchiki.${config.services.tailscale.tailnet}.ts.net:${toString config.services.sonarr.settings.server.port}";
         }
         {
           hostname = "arr.${config.services.cloudflared.defaultDomain}";
           path = "/lidarr.*";
-          service = "http://sado.${config.services.tailscale.tailnet}.ts.net:${builtins.toString config.services.lidarr.settings.server.port}";
+          service = "http://sado.${config.services.tailscale.tailnet}.ts.net:${toString config.services.lidarr.settings.server.port}";
         }
         {
           hostname = "arr.${config.services.cloudflared.defaultDomain}";
@@ -44,7 +44,7 @@
         {
           hostname = "arr.${config.services.cloudflared.defaultDomain}";
           path = "/prowlarr.*";
-          service = "http://shinji.${config.services.tailscale.tailnet}.ts.net:${builtins.toString config.services.prowlarr.settings.server.port}";
+          service = "http://shinji.${config.services.tailscale.tailnet}.ts.net:${toString config.services.prowlarr.settings.server.port}";
         }
       ];
     };
