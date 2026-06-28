@@ -15,7 +15,7 @@ git clone https://github.com/arunoruto/flake ~/.config/flake
 ### NixOS
 
 ```sh
-sudo nixos-rebuild switch --flake ~/.config/flake#<device-name> --accept-flake-config
+sudo nixos-rebuild switch --accept-flake-config --flake ~/.config/flake#<device-name>
 ```
 
 ### Darwin
