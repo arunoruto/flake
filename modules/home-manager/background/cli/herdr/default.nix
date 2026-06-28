@@ -15,12 +15,17 @@
       package = pkgs.custom.herdr;
 
       settings = {
+        onboarding = false;
+
+        terminal.default_shell = config.shell.main;
+
         ui = {
           mouse_capture = true;
           pane_borders = true;
           pane_gaps = true;
           confirm_close = true;
           sidebar_width = 32;
+          sound.enabled = false;
         };
 
         keys = {
