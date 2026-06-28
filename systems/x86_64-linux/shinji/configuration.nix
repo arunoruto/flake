@@ -23,10 +23,14 @@ in
 
   services = {
     xserver.desktopManager.kodi.enable = true;
-    home-assistant.enable = true;
-    zigbee2mqtt.settings.serial = {
-      port = "/dev/serial/by-id/usb-Texas_Instruments_TI_CC2531_USB_CDC___0X00124B0014D9C839-if00";
-      adapter = "zstack";
+    home-assistant.enable = false;
+    zigbee2mqtt = {
+      enable = false;
+      settings.serial = {
+        # port = "/dev/serial/by-id/usb-Texas_Instruments_TI_CC2531_USB_CDC___0X00124B0014D9C839-if00";
+        port = "/dev/serial/by-id/usb-SMLIGHT_SMLIGHT_SLZB-06p7_7af5d4d1efa5ed11b1cbf1a32981d5c7-if00-port0";
+        adapter = "zstack";
+      };
     };
     cloudflared.enable = true;
     traefik.enable = true;
