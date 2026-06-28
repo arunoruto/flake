@@ -6,6 +6,7 @@
 {
   config = lib.mkIf config.services.sabnzbd.enable {
     services.sabnzbd = {
+      configFile = lib.mkForce null;
     };
 
     systemd.services.sabnzbd.serviceConfig.UMask = "0002";

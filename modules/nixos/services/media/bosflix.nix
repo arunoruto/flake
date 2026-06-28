@@ -94,9 +94,9 @@
         in
         {
           services.sabnzbd.serviceConfig.ExecStart =
-            # lib.mkForce "${lib.getBin cfg.package}/bin/sabnzbd -d -f ${cfg.configFile} --inet_exposure 5 --disable-file-log --console";
+            # lib.mkForce "${lib.getBin cfg.package}/bin/sabnzbd -d -f ${"/var/lib/${cfg.stateDir}/sabnzbd.ini"} --inet_exposure 5 --disable-file-log --console";
             lib.mkForce
-              "${lib.getBin cfg.package}/bin/sabnzbd -d -f ${cfg.configFile} -s 0.0.0.0:8082 --inet_exposure 5";
+              "${lib.getBin cfg.package}/bin/sabnzbd -d -f ${"/var/lib/${cfg.stateDir}/sabnzbd.ini"} -s 0.0.0.0:8082 --inet_exposure 5";
 
           tmpfiles.settings = {
             "sabnzbd" = {
@@ -154,8 +154,8 @@
             };
           };
         };
-      # lib.mkForce "${lib.getBin cfg.package}/bin/sabnzbd -d -f ${cfg.configFile} --inet_exposure 5 --console";
-      # lib.mkForce "${lib.getBin cfg.package}/bin/sabnzbd -d -f ${cfg.configFile} --inet_exposure 5";
+      # lib.mkForce "${lib.getBin cfg.package}/bin/sabnzbd -d -f ${"/var/lib/${cfg.stateDir}/sabnzbd.ini"} --inet_exposure 5 --console";
+      # lib.mkForce "${lib.getBin cfg.package}/bin/sabnzbd -d -f ${"/var/lib/${cfg.stateDir}/sabnzbd.ini"} --inet_exposure 5";
 
       # nixpkgs.config.permittedInsecurePackages = [
       #   "aspnetcore-runtime-6.0.36"
