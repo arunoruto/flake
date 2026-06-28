@@ -10,7 +10,8 @@ lib: {
             tailurl = "${host}.${tailnet}.ts.net";
           in
           {
-            rule = "(Host(`${tailurl}`) || Host(`${host}`)) && PathPrefix(`/${serviceName}`)";
+            # rule = "(Host(`${tailurl}`) || Host(`${host}`)) && PathPrefix(`/${serviceName}`)";
+            rule = "Host(`${tailurl}`) && PathPrefix(`/${serviceName}`)";
             tls.certresolver = "ts";
             entrypoints = [ "websecure" ];
             service = serviceName;
