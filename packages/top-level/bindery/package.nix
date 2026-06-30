@@ -8,16 +8,19 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "bindery";
-  version = "1.22.3";
+  version = "1.23.1";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "vavallee";
     repo = "bindery";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GXHWx0V4SZYB+h/7n4VOq2AA3lW0QW5gyZ33/GE9kho=";
+    hash = "sha256-yrGOrSVJlrwEgi7KcrjJhmk4VrXzVtnE+cHgWngSQSM=";
   };
 
-  vendorHash = "sha256-gWpHkJYJE7WO1ju2dsfDi8RYeZoFgyBuDQ/zIjUxLBg=";
+  vendorHash = "sha256-cpwLh/JR0KFTQcglp7kn9Zaf6dJ+RlQ9Kdembub8q/s=";
 
   webui = buildNpmPackage {
     inherit (finalAttrs)
@@ -28,7 +31,7 @@ buildGoModule (finalAttrs: {
 
     sourceRoot = "${finalAttrs.src.name}/web";
 
-    npmDepsHash = "sha256-TEcFXFCrmkzq883GUy4cEr0AUIaQGJR0X0+KXbFCsgI=";
+    npmDepsHash = "sha256-yf9X5DVQSpl6zZf+nYl2XOGbiO9RX36VP4dxsZ4IrV0=";
 
     installPhase = ''
       runHook preInstall
@@ -94,6 +97,6 @@ buildGoModule (finalAttrs: {
     description = "Automated book download manager for Usenet";
     maintainers = with lib.maintainers; [ arunoruto ];
     license = lib.licenses.mit;
-    mainProgram = "bindery"; # Silences the versionCheckHook warning
+    mainProgram = "bindery";
   };
 })

@@ -55,6 +55,19 @@ in
         '';
       };
 
+      environment = lib.mkOption {
+        type = lib.types.attrsOf lib.types.str;
+        default = { };
+        example = {
+          BINDERY_OUTBOUND_PROXY = "http://proxy:8080";
+        };
+        description = ''
+          Extra environment variables to pass to Bindery.
+          Values here override any conflicting defaults set by the module
+          (e.g., `BINDERY_PORT`, `BINDERY_DATA_DIR`).
+        '';
+      };
+
       user = lib.mkOption {
         type = lib.types.str;
         default = "bindery";
@@ -85,7 +98,8 @@ in
         BINDERY_DATA_DIR = cfg.dataDir;
         BINDERY_DB_PATH = "${cfg.dataDir}/bindery.db";
         BINDERY_TELEMETRY_DISABLED = if cfg.telemetry.enable then "false" else "true";
-      };
+      }
+      // cfg.environment;
 
       serviceConfig = {
         Type = "simple";
