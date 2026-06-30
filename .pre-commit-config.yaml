@@ -1,0 +1,12 @@
+default_stages:
+  - pre-commit
+repos:
+  - repo: local
+    hooks:
+      - id: nix-fmt
+        name: nix fmt
+        entry: nix
+        args: ["fmt", "--", "--check"]
+        language: system
+        files: '\.nix$'
+        pass_filenames: false
