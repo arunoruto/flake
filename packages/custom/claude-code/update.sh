@@ -1,5 +1,5 @@
 #!/usr/bin/env nix
-#!nix shell --ignore-environment .#cacert .#coreutils .#curl .#bash --command bash
+#!nix shell --ignore-environment nixpkgs#cacert nixpkgs#coreutils nixpkgs#curl nixpkgs#bash --command bash
 
 set -euo pipefail
 
