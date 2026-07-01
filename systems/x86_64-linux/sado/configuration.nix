@@ -2,6 +2,11 @@
 {
   users.primaryUser = "mirza";
 
+  nix.settings = {
+    max-jobs = 1;
+    cores = 2;
+  };
+
   system.tags = [ "nas" ];
 
   # colmena.deployment.buildOnTarget = true;
