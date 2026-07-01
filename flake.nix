@@ -114,6 +114,7 @@
       url = "git+https://github.com/arunoruto/wallpapers.git?ref=main&shallow=1";
       flake = false;
     };
+    stump-fork.url = "github:arunoruto/stump/metadata-manual-search";
   };
 
   outputs =

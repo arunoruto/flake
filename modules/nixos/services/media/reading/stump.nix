@@ -10,7 +10,10 @@
 
   config = lib.mkIf config.services.stump.enable {
     services.stump = {
-      package = pkgs.unstable.stump;
+      package = pkgs.unstable.stump.overrideAttrs (_: {
+        src = inputs.stump-fork;
+        version = "0.1.5-fork";
+      });
       # ip = "0.0.0.0";
       port = 10001;
       openFirewall = lib.mkDefault false;
@@ -21,6 +24,7 @@
         STUMP_OIDC_SCOPES = "openid,email,profile";
         STUMP_OIDC_ALLOW_REGISTRATION = "true";
         STUMP_OIDC_DISABLE_LOCAL_AUTH = "true";
+        STUMP_ENABLE_UPLOAD = "true";
         STUMP_TRUST_PROXY_HEADERS = "true";
       };
       secretFiles = {
