@@ -98,6 +98,10 @@
         path = "/mnt/storage/appdata";
       };
     };
+    harmonia = {
+      cache.enable = true;
+      openFirewall = true;
+    };
     samba.disableShares = [
       "appdata"
       "downloads"
