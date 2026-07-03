@@ -10,3 +10,8 @@ repos:
         language: system
         files: '\.nix$'
         pass_filenames: false
+      - id: new-package-attrs
+        name: new packages set structuredAttrs/strictDeps
+        entry: ./scripts/check-new-packages.sh
+        language: script
+        files: 'packages/.*/package\.nix$'
