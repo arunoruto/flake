@@ -6,7 +6,7 @@ repos:
       - id: nix-fmt
         name: nix fmt
         entry: nix
-        args: ["fmt", "--", "--check"]
+        args: ["fmt", "--", "--fail-on-change", "--no-cache"]
         language: system
         files: '\.nix$'
         pass_filenames: false
