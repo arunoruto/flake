@@ -15,7 +15,14 @@ let
 in
 {
   disabledModules = [ "services/security/pocket-id.nix" ];
-  imports = [ "${inputs.nixpkgs-unstable}/nixos/modules/services/security/pocket-id.nix" ];
+  imports = [
+    "${inputs.nixpkgs-unstable}/nixos/modules/services/security/pocket-id.nix"
+    (lib.networking.mkTraefikModule {
+      serviceName = "pocket-id";
+      port = _: port;
+      url = lib.strings.removePrefix "https://" config.services.pocket-id.settings.APP_URL;
+    })
+  ];
   config = lib.mkIf config.services.pocket-id.enable {
     services = {
       pocket-id = {
@@ -24,20 +31,9 @@ in
           TRUST_PROXY = config.services.traefik.enable;
         };
         environmentFile = config.sops.templates."${pocket-id-env}".path;
+        traefik.enable = true;
       };
       traefik.dynamicConfigOptions.http = {
-        routers = {
-          pocket-id = {
-            # rule = "Host(`id.arnaut.me`)";
-            rule = "Host(`${lib.strings.removePrefix "https://" config.services.pocket-id.settings.APP_URL}`)";
-            tls.certresolver = "cf";
-            entrypoints = "websecure";
-            service = "pocket-id";
-          };
-        };
-        services.pocket-id.loadbalancer.servers = [
-          { url = "http://localhost:${builtins.toString port}"; }
-        ];
         middlewares.pocket-id.plugin.traefik-oidc-auth = {
           Secret = "\${POCKET_ID_SECRET}";
           Provider = {
