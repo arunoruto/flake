@@ -7,7 +7,7 @@
 {
   config = lib.mkIf config.programs.mcp.enable {
     programs.mcp.servers = lib.mkMerge [
-      (lib.mkIf config.programs.gh.enable {
+      (lib.mkIf (config.programs.gh.enable && config.hosts.development.enable) {
         github = {
           disabled = true;
           type = "stdio";
@@ -26,7 +26,7 @@
         };
       })
       {
-        context7 = {
+        context7 = lib.mkIf config.hosts.development.enable {
           disabled = true;
           type = "stdio";
           command = lib.getExe (
