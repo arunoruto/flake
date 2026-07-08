@@ -81,27 +81,8 @@
         # "oh-my-openagent"
       ];
     };
-    agents = {
-      commit = ../agents/COMMIT.md;
-      summirizer = ../agents/ACADEMIC-SUMMARIZER.md;
-      questioner = ../agents/ACADEMIC-QUESTIONER.md;
-    };
-    skills = {
-      # beads = pkgs.unstable.beads.src + "/skills/beads";
-      # beads = pkgs.unstable.beads.src + "/claude-plugin/skills/beads";
-      # caveman = pkgs.caveman + "/skills/caveman";
-      commit = ../skills/commit;
-      git-commit-nixpkgs = ../skills/git-commit-nixpkgs;
-      devenv = ../skills/devenv;
-      caveman =
-        (pkgs.fetchFromGitHub {
-          owner = "JuliusBrussee";
-          repo = "caveman";
-          tag = "v1.3.5";
-          hash = "sha256-EAlKoqJuTMib+gcLscMtpS8Zzq/D/LmIRoG3g/XKThc=";
-        })
-        + "/plugins/caveman/skills/caveman";
-    };
+    agents = config.ai.agentsOpenCode;
+    skills = config.ai.skills;
     context = ../AGENTS.md;
   };
 }
