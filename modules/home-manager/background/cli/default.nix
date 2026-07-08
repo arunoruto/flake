@@ -29,7 +29,7 @@
 
     programs = {
       atuin.enable = lib.mkDefault true;
-      herdr.enable = lib.mkDefault false;
+      herdr.enable = lib.mkDefault true;
       serpl.enable = lib.mkDefault false;
       yazi.enable = lib.mkDefault true;
       zellij.enable = lib.mkDefault false;
