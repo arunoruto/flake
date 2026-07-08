@@ -1,7 +1,7 @@
 .devenv
 
 # cachix/git-hooks: This file is auto-generated from the Nix configuration and doesn't need to be committed.
-.pre-commit-config.yaml
+# .pre-commit-config.yaml
 
 # Ignore build outputs from performing a nix-build or `nix build` command
 result
@@ -19,3 +19,14 @@ devenv.local.nix
 devenv.local.yaml
 
 .helix*
+
+# Devenv
+.devenv*
+devenv.local.nix
+devenv.local.yaml
+
+# direnv
+.direnv
+
+# pre-commit
+.pre-commit-config.yaml

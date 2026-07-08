@@ -11,6 +11,8 @@ buildGoModule (finalAttrs: {
   pname = "explo";
   version = "1.1.2";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "LumePart";
     repo = "Explo";
