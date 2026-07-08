@@ -13,6 +13,8 @@
     ./mods.nix
     ./opencode
     ./pi
+    ./skills
+    ./agents
   ];
 
   options.programs.ollama.defaultPath = lib.mkOption {

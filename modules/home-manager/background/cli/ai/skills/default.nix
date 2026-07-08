@@ -1,10 +1,14 @@
-{ lib, ... }:
 {
-  options.skills = lib.mkOption {
+  lib,
+  pkgs,
+  ...
+}:
+{
+  options.ai.skills = lib.mkOption {
     type = with lib.types; either (attrsOf (either lines path)) path;
     default = { };
     description = ''
-      Custom agent skills for agents.
+      Shared AI agent skills, consumed by opencode, claude-code, and other agents.
 
       This option can either be:
       - An attribute set defining skills
@@ -17,31 +21,18 @@
       - A path to a directory (creates `<agent>/skill/<name>/` with all files)
 
       If a path is used, it is expected to contain one folder per skill name, each
-      containing a {file}`SKILL.md`. The directory is symlinked to
-      {file}`$XDG_CONFIG_HOME/<agent>/skill/`.
-    '';
-    example = lib.literalExpression ''
-      {
-        git-release = '''
-          ---
-          name: git-release
-          description: Create consistent releases and changelogs
-          ---
-
-          ## What I do
-
-          - Draft release notes from merged PRs
-          - Propose a version bump
-          - Provide a copy-pasteable `gh release create` command
-        ''';
-
-        # A skill can also be a directory containing SKILL.md and other files.
-        data-analysis = ./skills/data-analysis;
-      }
+      containing a {file}`SKILL.md`.
     '';
   };
 
-  config = {
-
-  };
+  config.ai.skills =
+    let
+      skillsDir = ./.;
+    in
+    {
+      # caveman = pkgs.caveman + "/plugins/caveman/skills/caveman";
+      commit = skillsDir + /commit;
+      git-commit-nixpkgs = skillsDir + /git-commit-nixpkgs;
+      # devenv = skillsDir + /devenv;
+    };
 }
