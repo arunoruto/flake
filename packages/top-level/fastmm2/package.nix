@@ -3,6 +3,7 @@
   stdenv,
   fetchFromBitbucket,
   cmake,
+  blas,
   lapack,
   gfortran,
   hdf5-fortran,
@@ -26,6 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    blas
     lapack
     gfortran
     hdf5-fortran
