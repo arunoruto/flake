@@ -47,7 +47,6 @@ in
     if [ ! -e /etc/nixos/flake ]; then
       cp -r /iso/nixos-flake /etc/nixos/flake
       chmod -R u+w /etc/nixos/flake
-      sed -i '/self\.submodules = true;/d' /etc/nixos/flake/flake.nix
     fi
   '';
 

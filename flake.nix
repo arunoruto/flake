@@ -2,9 +2,6 @@
   description = "Mirzas Nix Config";
 
   inputs = {
-    # self.submodules = true;
-    # Stable
-    # nixpkgs.url = "github:nixos/nixpkgs/refs/tags/26.05-beta";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
     home-manager = {
       url = "github:nix-community/home-manager/release-26.05";
