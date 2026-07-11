@@ -7,7 +7,6 @@
 }:
 {
   imports = [
-    # ./arcwtf.nix
     ./pwa.nix
   ];
 

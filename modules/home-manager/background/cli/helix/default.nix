@@ -13,8 +13,6 @@ in
 {
   imports = [
     ./keys.nix
-    # ./languages
-    # ./unibear.nix
   ];
 
   config = lib.mkIf config.programs.helix.enable {

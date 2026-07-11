@@ -10,7 +10,6 @@
 
     ./avahi.nix
     ./cloudflared
-    # ./dns.nix
     ./ipv64.nix
     ./localsend.nix
     ./netbird.nix

@@ -11,9 +11,7 @@ in
 {
   imports = [
     ./services.nix
-    # ./theme.nix
     ./keybindings.nix
-    # ./swaync.nix
     ./swaylock.nix
   ];
 

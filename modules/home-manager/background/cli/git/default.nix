@@ -22,7 +22,6 @@ in
     ./modules/glab.nix
     ./modules/tea.nix
     ./lazygit.nix
-    # ./jujutsu.nix
   ];
 
   warnings = lib.optional (

@@ -15,7 +15,6 @@
 
     ./users
 
-    # ./pr.nix
   ];
 
   services.media.enable = lib.mkDefault false;

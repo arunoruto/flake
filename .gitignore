@@ -19,3 +19,6 @@ devenv.local.nix
 devenv.local.yaml
 
 .helix*
+
+# opencode local state (plans, node_modules)
+.opencode/

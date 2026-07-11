@@ -7,7 +7,6 @@
 {
   imports = [
     ./derper.nix
-    # ./serve.nix
     ./tsidp.nix
   ];
 

@@ -6,7 +6,6 @@
 }:
 {
   # imports = [
-  #   ./chess-tui.nix
   # ];
 
   config = lib.mkIf (config.hosts.desktop.enable) {

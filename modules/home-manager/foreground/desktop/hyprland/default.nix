@@ -9,12 +9,8 @@
     ./binds.nix
     ./idle.nix
     ./lock.nix
-    # ./panel.nix
     ./paper.nix
     ./plugins
-    #  ./services.nix
-    #  ./theme.nix
-    #  ./waybar
   ];
 
   # config =

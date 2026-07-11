@@ -12,10 +12,6 @@ let
   callPackage = pkgs.newScope { inherit lib self inputs; };
 in
 {
-  # Vanilla shells - simple and lightweight
   go = callPackage ./go.nix { };
   website = callPackage ./website.nix { };
-
-  # Devenv shells - managed separately for clarity
-  # python = callPackage ./python.nix { };
 }

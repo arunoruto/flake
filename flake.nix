@@ -25,10 +25,6 @@
       url = "github:cachix/devenv";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # lix-module = {
-    #   url = "https://git.lix.systems/lix-project/nixos-module/archive/2.93.0.tar.gz";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
     determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/*";
 
     # Nixpkgs
@@ -67,10 +63,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-flatpak.url = "github:gmodena/nix-flatpak";
-    # nix-ld = {
-    #   url = "github:nix-community/nix-ld";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
     direnv-instant = {
       url = "github:Mic92/direnv-instant";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
@@ -83,33 +75,10 @@
       url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # DEs
-    # plasma-manager = {
-    #   url = "github:nix-community/plasma-manager";
-    #   inputs = {
-    #     nixpkgs.follows = "nixpkgs";
-    #     home-manager.follows = "home-manager";
-    #   };
-    # };
-
-    # helix.url = "github:helix-editor/helix";
     zen-browser = {
       url = "github:0xc000022070/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
-      # url = "github:youwen5/zen-browser-flake";
-      # inputs.nixpkgs.follows = "nixpkgs";
     };
-    # nixvim-flake.url = "github:arunoruto/nvim.nix";
-
-    # PRs
-    # matlab-pr.url = "https://github.com/james-atkins/nixpkgs/tree/pr/matlab";
-
-    # Private
-    # secrets = {
-    #   # url = "git+ssh://git@github.com/arunoruto/secrets.nix.git?ref=main&shallow=1";
-    #   url = "git+https://github.com/arunoruto/secrets.nix.git?ref=main&shallow=1";
-    #   flake = false;
-    # };
     wallpapers = {
       url = "git+https://github.com/arunoruto/wallpapers.git?ref=main&shallow=1";
       flake = false;
@@ -310,20 +279,6 @@
               value = self.nixosConfigurations."iso-${h}".config.system.build.isoChecksums;
             }) isoHosts
           );
-          # packages.static-home = self.homeConfigurations."mirza".config.home.path;
-          # packages =
-          #   lib.attrsets.removeAttrs
-          #     (pkgs-system.lib.packagesFromDirectoryRecursive {
-          #       inherit (pkgs-system) callPackage newScope;
-          #       directory = ./packages/top-level;
-          #     })
-          #     [
-          #       "callPackage"
-          #       "newScope"
-          #       "overrideScope"
-          #       "packages"
-          #       "recurseForDerivations"
-          #     ];
           formatter = pkgs-system.nixfmt-tree;
           checks = {
             pre-commit-check = inputs.git-hooks.lib.${system}.run {

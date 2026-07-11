@@ -15,10 +15,6 @@ rec {
 
   # Python package addition and override
   python = final: prev: {
-    # python3 = prev.python3.override {
-    #   packageOverrides = final: prev: import ../packages/python.nix final.pkgs;
-    # };
-    # pythonPackages = final.python3.pkgs;
     pythonPackagesExtensions = (prev.pythonPackagesExtensions or [ ]) ++ [
       (
         python-final: python-prev:
@@ -33,20 +29,11 @@ rec {
     ];
   };
 
-  # KODi packages
+  # Kodi packages
   kodi = final: prev: {
     kodiPackages = prev.kodiPackages // {
       elementum = prev.kodiPackages.callPackage ../packages/kodiPackages/elementum/package.nix { };
     };
-    # // prev.lib.packagesFromDirectoryRecursive {
-    #   inherit (final.kodiPackages) callPackage;
-    #   inherit (prev) newScope;
-    #   directory = ../packages/kodiPackages;
-    # };
-
-    # kodi = prev.kodi.override {
-    #   withPackages = f: prev.kodi.withPackages (oldPkgs: f final.kodiPackages);
-    # };
   };
 
   # Home Assistant
@@ -76,20 +63,9 @@ rec {
   # You can change versions, add patches, set compilation flags, anything really.
   # https://nixos.wiki/wiki/Overlays
   modifications = final: prev: {
-    # example = prev.example.overrideAttrs (oldAttrs: rec {
-    # ...
-    # });
     fw-ectool = prev.fw-ectool.overrideAttrs (_: {
       cmakeFlags = [ "-DCMAKE_POLICY_VERSION_MINIMUM=3.5" ];
     });
-    # gtksourceview5 = prev.gtksourceview5.overrideAttrs (old: {
-    #   doCheck = false;
-    # });
-    # cudaPackages = prev.cudaPackages_11_8;
-    # ollama = prev.ollama.override {
-    #   acceleration = "cuda";
-    #   cudaPackages = final.cudaPackages_12_9;
-    # };
     paperlib = prev.paperlib.overrideAttrs (old: {
       nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ final.copyDesktopItems ];
       desktopItems = [

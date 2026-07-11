@@ -6,8 +6,6 @@
 }:
 {
   imports = [
-    # ./catppuccin.nix
-    #./pomodoro.nix
   ];
 
   programs.tmux =

@@ -8,9 +8,4 @@ lib: rec {
     builtins.attrNames (
       lib.attrsets.filterAttrs (_: fileType: fileType == "directory") (builtins.readDir path)
     );
-  getDirectoriesAndFilter =
-    path: file:
-    lib.lists.filter (dirName: builtins.pathExists (path + "/${dirName}" + "/${file}")) (
-      getDirectories path
-    );
 }

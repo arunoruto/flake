@@ -6,7 +6,6 @@
 {
   imports = [
     ./libreoffice.nix
-    # ./onlyoffice.nix
   ];
 
   options.documents.enable = lib.mkEnableOption "Enable document apps";
