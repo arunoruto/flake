@@ -262,6 +262,7 @@
                 shellHook = self.checks.${system}.pre-commit-check.shellHook;
                 buildInputs =
                   (with pkgs-system; [
+                    just
                     statix
                     deadnix
                     nixfmt-tree
