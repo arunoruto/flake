@@ -40,6 +40,20 @@ nix --experimental-features 'nix-command flakes' --accept-flake-config run nixpk
 
 > Some shells (e.g. zsh) require quoting the flake argument: `--flake './#<username>'`
 
+## Common tasks
+
+Day-to-day commands are wrapped in a `justfile` (run inside `nix develop .#nix`,
+which provides `just`):
+
+```sh
+just              # list all recipes
+just switch       # build + activate this host
+just update       # update flake inputs
+just check        # nix flake check
+just docs         # serve the docs locally
+```
+
 ## Documentation
 
-Full documentation site: `nix build .#docs` or `mdbook serve` in the repo root.
+Full documentation site: `nix build .#docs`, or `mdbook serve docs` for a live
+preview. Start with [Architecture](docs/architecture.md) for a map of the repo.

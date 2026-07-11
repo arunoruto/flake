@@ -1,10 +1,30 @@
 # Daily Usage
 
+## Task runner (`just`)
+
+Common commands live in the repo's `justfile`. Run `just --list` to see them all
+(`just` is available in the `nix develop .#nix` shell). The essentials:
+
+```sh
+just switch          # build + activate this host (NixOS or macOS)
+just home            # build + activate your home-manager config (standalone)
+just update          # update all flake inputs
+just fmt             # format all nix files
+just check           # nix flake check
+just docs            # serve these docs locally
+just iso <host>      # build an installer ISO (Linux)
+just deploy-tag nas  # colmena-deploy every host tagged `nas`
+just bump packages/top-level/<pkg>   # bump a custom package with nix-update
+```
+
+The recipes wrap `nh`, `nix`, `colmena`, and `sops` — read them in the `justfile`
+to see the exact commands.
+
 ## Nix Helper (`nh`)
 
-[`nh`](https://github.com/viperML/nh) is a convenience wrapper around common Nix operations.
-
-With `FLAKE` set in your environment:
+[`nh`](https://github.com/viperML/nh) is a convenience wrapper around common Nix
+operations. The flake sets `NH_FLAKE` to `~/.config/flake`, so these work from
+anywhere:
 
 ```sh
 nh os switch      # Update NixOS
@@ -12,14 +32,13 @@ nh home switch    # Update Home Manager
 nh clean all      # Garbage collection
 ```
 
-Without `FLAKE`:
+To point at a different checkout, override `NH_FLAKE` or pass the flake path
+explicitly:
 
 ```sh
 nh os switch ~/.config/flake#<device-name>
 nh home switch ~/.config/flake#<username>
 ```
-
-Set `FLAKE` via `environment.sessionVariables.FLAKE` in your system config.
 
 ## Clean-up
 
@@ -68,7 +87,7 @@ After that, remote builds will work without further configuration.
 Available shells (see `shells/`):
 
 ```sh
-nix develop .#go
-nix develop .#python
-nix develop .#nix   # includes statix, deadnix, nixfmt
+nix develop .#go        # Go toolchain
+nix develop .#website   # Hugo, for the website
+nix develop .#nix       # just + statix, deadnix, nixfmt (the repo dev shell)
 ```

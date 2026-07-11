@@ -4,7 +4,7 @@ This flake uses Cloudflare Tunnel (`cloudflared`) to expose selected services wi
 
 ## Module Location
 
-- Base wrapper module: `modules/nixos/services/network/cloudflared.nix`
+- Base wrapper module: `modules/nixos/services/network/cloudflared/default.nix`
 - Cloudflared service module: `modules/nixos/services/network/cloudflared/new.nix`
 
 ## One-Time Tunnel Bootstrap

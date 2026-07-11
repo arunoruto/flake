@@ -6,13 +6,15 @@
 git clone https://github.com/arunoruto/flake ~/.config/flake
 ```
 
-If you clone elsewhere, set the `FLAKE` environment variable:
+The flake sets `NH_FLAKE` (used by [`nh`](./daily-usage.md)) to `~/.config/flake`
+automatically. If you clone elsewhere, override it:
 
 ```sh
-export FLAKE=/path/to/flake
+export NH_FLAKE=/path/to/flake
 ```
 
-Commands throughout this guide assume `FLAKE` points to your flake directory.
+Most day-to-day commands are wrapped in the [`justfile`](./daily-usage.md) — run
+`just --list` from the repo root to see them.
 
 ## NixOS
 

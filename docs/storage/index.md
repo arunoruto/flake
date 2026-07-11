@@ -4,9 +4,9 @@
 
 | FS | Use in this flake | Best for |
 |---|---|---|
-| **ext4** | 11 hosts — root + data | Simplicity, zero maintenance |
-| **btrfs** | 3 hosts — root (shinji, yhwach, kyuubi) | Compression, snapshots |
-| **zfs** | 2 hosts — data pools only (sado, kuchiki) | Large storage, checksums |
+| **ext4** | the default root filesystem for most hosts | Simplicity, zero maintenance |
+| **btrfs** | root on shinji, yhwach, kyuubi | Compression, snapshots |
+| **zfs** | data pools only (sado, kuchiki) | Large storage, checksums |
 | **vfat** | Every host with `/boot` (EFI) | EFI system partition |
 
 ## Host → filesystem mapping
@@ -20,11 +20,11 @@
 | kuchiki | ext4 | zfs (`/mnt/storage`) | hardware-config |
 | kenpachi | ext4 (LVM) | — | disko |
 | aizen | ext4 (LVM) | — | disko |
-| 7 others | ext4 | — | hardware-config |
+| all others | ext4 | — | hardware-config |
 
 ## Choosing a filesystem for a new host
 
-- **ext4** — the default. Simple, proven, zero configuration. Used on 11 of 14 hosts.
+- **ext4** — the default. Simple, proven, zero configuration. Used on most hosts.
 - **btrfs** — when you want transparent zstd compression (saves ~25% on `/nix/store`) or snapshot support. Use the `@root` + `@nix` subvolume layout to keep snapshots lightweight. See [btrfs.md](./btrfs.md) for details.
 - **zfs** — only for dedicated data pools that benefit from checksums, dedup, or RAID-Z. Do not use for root: the out-of-tree kernel module frequently breaks on kernel updates.
 
@@ -37,7 +37,7 @@
 - Subvolume layout for btrfs
 - LVM volumes if needed
 
-Disko is imported per-host via `inputs.disko.nixosModules.disko` in the host's `disk.nix`. Currently 3 of 14 hosts use it (shinji, kenpachi, aizen). The rest use a manually-generated `hardware-configuration.nix` with explicit `fileSystems` entries.
+Disko is imported per-host via `inputs.disko.nixosModules.disko` in the host's `disk.nix`. A few hosts use it (shinji, kenpachi, aizen); the rest use a manually-generated `hardware-configuration.nix` with explicit `fileSystems` entries.
 
 When disko manages the filesystems, the `fileSystems` entries in `hardware-configuration.nix` should be **commented out** — disko generates them declaratively at build time.
 

@@ -10,13 +10,18 @@ This flake manages all Nix-based configurations — NixOS, nix-darwin, and Home 
 
 | Directory | Purpose |
 |-----------|---------|
-| `systems/` | NixOS and nix-darwin host configurations |
+| `systems/` | NixOS and nix-darwin host configurations (one directory per host) |
 | `homes/` | Home Manager user environments |
-| `modules/` | Reusable NixOS, darwin, and home-manager modules |
+| `modules/` | Reusable NixOS, darwin, home-manager, and devix (dev-env) modules |
 | `packages/` | Custom packages and overrides |
-| `shells/` | Dev shells (Go, Python, etc.) |
+| `shells/` | Dev shells (`nix develop .#go`, `.#website`, `.#nix`) |
 | `overlays/` | Nixpkgs overlays |
 | `lib/` | Helper functions |
+| `secrets/` | sops-encrypted secrets |
+| `docs/` | This documentation (mdBook) |
+
+See [Architecture](./architecture.md) for the full map, the tag system, and how
+to add a host or user.
 
 ## Key technologies
 
