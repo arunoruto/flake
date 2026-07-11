@@ -12,6 +12,14 @@
         open = {
           prepend_rules = [
             {
+              mime = "audio/flac";
+              use = "cliamp";
+            }
+            {
+              mime = "audio/mpeg";
+              use = "cliamp";
+            }
+            {
               mime = "application/pdf";
               use = "tdf";
             }
@@ -21,6 +29,13 @@
           tdf = [
             {
               run = ''tdf "$1"'';
+              block = true;
+              for = "unix";
+            }
+          ];
+          cliamp = [
+            {
+              run = ''cliamp "$1"'';
               block = true;
               for = "unix";
             }
@@ -50,12 +65,14 @@
           ];
         };
       };
-      # extraPackages = with pkgs; [
-      #   glow
-      #   miller
-      #   ouch
-      #   hexyl
-      # ];
+      extraPackages = with pkgs; [
+        cliamp
+        tdf
+        # glow
+        # miller
+        # ouch
+        # hexyl
+      ];
       plugins = {
         inherit (pkgs.yaziPlugins)
           glow
