@@ -32,8 +32,8 @@ let
       null
     else if builtins.length activeFormatters == 1 then
       {
-        command = (builtins.head activeFormatters).command;
-        args = (builtins.head activeFormatters).args;
+        inherit ((builtins.head activeFormatters)) command;
+        inherit ((builtins.head activeFormatters)) args;
       }
     else
       {
@@ -81,7 +81,7 @@ let
             activeLsps = lib.filterAttrs (n: v: v.enable) langOpts.lsps;
           in
           lib.mapAttrs (_: lspOpts: {
-            command = lspOpts.command;
+            inherit (lspOpts) command;
             args = lib.mkIf (lspOpts.args != [ ]) lspOpts.args;
             config = lib.mkIf (lspOpts.config != { }) lspOpts.config;
           }) activeLsps

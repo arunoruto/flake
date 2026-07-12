@@ -30,28 +30,30 @@
         TRACK_EXTENSION = "mp3";
       };
       environmentFile = config.sops.templates."explo.env".path;
-      schedules.weekly-exploration = lib.mkDefault {
-        enable = true;
-        OnCalendar = "Wed 08:00:00";
-        flags = [ ];
-      };
-      schedules.weekly-jams = lib.mkDefault {
-        enable = true;
-        OnCalendar = "Wed 08:00:00";
-        flags = [
-          "--playlist"
-          "weekly-jams"
-          # "--download-mode=skip"
-        ];
-      };
-      schedules.daily-jams = lib.mkDefault {
-        enable = true;
-        OnCalendar = "*-*-* 06:00:00";
-        flags = [
-          "--playlist"
-          "daily-jams"
-          # "--download-mode=skip"
-        ];
+      schedules = {
+        weekly-exploration = lib.mkDefault {
+          enable = true;
+          OnCalendar = "Wed 08:00:00";
+          flags = [ ];
+        };
+        weekly-jams = lib.mkDefault {
+          enable = true;
+          OnCalendar = "Wed 08:00:00";
+          flags = [
+            "--playlist"
+            "weekly-jams"
+            # "--download-mode=skip"
+          ];
+        };
+        daily-jams = lib.mkDefault {
+          enable = true;
+          OnCalendar = "*-*-* 06:00:00";
+          flags = [
+            "--playlist"
+            "daily-jams"
+            # "--download-mode=skip"
+          ];
+        };
       };
     };
 

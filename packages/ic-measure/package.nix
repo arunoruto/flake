@@ -12,8 +12,6 @@ let
     url = "https://dl.theimagingsource.com/5561fc6f-d2a3-5b24-82bc-b06c7f80c463/";
     hash = "";
   };
-
-  appimageContents = appimageTools.extract { inherit pname version src; };
 in
 appimageTools.wrapType2 rec {
   inherit pname version src;

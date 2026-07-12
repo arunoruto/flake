@@ -8,12 +8,14 @@
             "extend_line_up"
             "extend_to_line_bounds"
           ];
-          space.W = [ ":toggle soft-wrap.enable" ];
-          space.X = [ ":buffer-close" ];
-          space.i = {
-            e = ":toggle end-of-line-diagnostics warning disable";
-            c = ":toggle inline-diagnostics.cursor-line hint disable";
-            o = ":toggle inline-diagnostics.other-lines error disable";
+          space = {
+            W = [ ":toggle soft-wrap.enable" ];
+            X = [ ":buffer-close" ];
+            i = {
+              e = ":toggle end-of-line-diagnostics warning disable";
+              c = ":toggle inline-diagnostics.cursor-line hint disable";
+              o = ":toggle inline-diagnostics.other-lines error disable";
+            };
           };
           "C-e" = [
             ":sh rm -f /tmp/unique-file"

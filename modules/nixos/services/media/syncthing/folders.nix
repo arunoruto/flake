@@ -5,7 +5,6 @@
 }:
 let
   sadoDeviceId = "5L6CA45-Q2JJ7WK-RYDURDI-MBRGQPB-VTJEZ7U-6M25S3M-YTXBLRR-IVA6PQY";
-  kuchikiDeviceId = "C4TO46K-P5LXFD6-NULLWDR-A5MYGJ2-EQDBNOC-CZHYJNJ-33DJHWA-SPQ6RQ7";
 in
 {
   config = lib.mkIf config.services.syncthing.enable {

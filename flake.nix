@@ -265,13 +265,15 @@
                   entry = "./scripts/check-new-packages.sh";
                   files = "packages/.*/package\\.nix$";
                 };
-                # deadnix is intentionally NOT a commit hook: parked/commented-out
-                # code leaves orphaned bindings that would trip it. Run it manually
-                # instead (it's in the `nix` devShell):
-                #   deadnix --no-lambda-arg --no-lambda-pattern-names .
-                # deadnix.enable = true;
-                # statix.enable = true;
-                # nixfmt-rfc-style.enable = true;
+                deadnix = {
+                  enable = true;
+                  settings = {
+                    noLambdaArg = true;
+                    noLambdaPatternNames = true;
+                  };
+                };
+                # statix reads statix.toml (ignores generated hardware-configuration.nix)
+                statix.enable = true;
               };
             };
           };

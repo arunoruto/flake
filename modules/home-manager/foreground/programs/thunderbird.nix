@@ -6,7 +6,6 @@
 }:
 let
   realName = "Mirza Arnaut";
-  profiles = [ "mirza-test" ];
 in
 {
   programs.thunderbird = {

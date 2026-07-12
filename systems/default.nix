@@ -56,9 +56,9 @@ let
             { osConfig, ... }:
             {
               # Inherit stylix config from the system (Darwin) level
-              stylix.image = osConfig.stylix.image;
-              stylix.base16Scheme = osConfig.stylix.base16Scheme;
-              stylix.polarity = osConfig.stylix.polarity;
+              stylix = {
+                inherit (osConfig.stylix) image base16Scheme polarity;
+              };
             }
           )
           inputs.mac-app-util.homeManagerModules.default

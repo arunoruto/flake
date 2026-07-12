@@ -8,9 +8,6 @@
   buildNpmPackage,
   nixosTests,
 }:
-let
-  # buildGoModule = buildGo126Module;
-in
 buildGoModule (finalAttrs: {
   pname = "beszel";
   version = "0.18.7";

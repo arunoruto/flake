@@ -50,7 +50,6 @@ in
         (
           let
             path = lib.strings.substring 1 (-1) config.services.paperless.settings.PAPERLESS_FORCE_SCRIPT_NAME;
-            hostname-domain = "${config.networking.hostName}.${config.services.cloudflared.defaultDomain}";
           in
           {
             # traefik.dynamicConfigOptions = lib.networking.traefikConfig {

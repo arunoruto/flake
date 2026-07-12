@@ -8,7 +8,7 @@
   # imports = [
   # ];
 
-  config = lib.mkIf (config.hosts.desktop.enable) {
+  config = lib.mkIf config.hosts.desktop.enable {
     home.packages = with pkgs.unstable; [
       en-croissant
     ];

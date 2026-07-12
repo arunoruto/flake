@@ -1,4 +1,4 @@
-{ osConfig, lib, ... }@args:
+{ osConfig, lib, ... }:
 {
   # imports = [
   # ];

@@ -16,7 +16,7 @@ in
     package = lib.mkPackageOption pkgs "pi-coding-agent" { };
 
     settings = lib.mkOption {
-      type = jsonFormat.type;
+      inherit (jsonFormat) type;
       default = { };
       description = "JSON settings written to ~/.pi/agent/settings.json";
     };
@@ -126,17 +126,15 @@ in
         };
 
         Service = {
-          ExecStart = "${lib.getExe pkgs.bash} -lc ${lib.escapeShellArg (
-            "exec ${lib.getExe cfg.package} ${
-              lib.escapeShellArgs (
-                (lib.optionals (tauCfg.extension != null) [
-                  "-e"
-                  tauCfg.extension
-                ])
-                ++ tauCfg.extraArgs
-              )
-            } < <(${lib.getExe' pkgs.coreutils "tail"} -f /dev/null)"
-          )}";
+          ExecStart = "${lib.getExe pkgs.bash} -lc ${lib.escapeShellArg "exec ${lib.getExe cfg.package} ${
+            lib.escapeShellArgs (
+              (lib.optionals (tauCfg.extension != null) [
+                "-e"
+                tauCfg.extension
+              ])
+              ++ tauCfg.extraArgs
+            )
+          } < <(${lib.getExe' pkgs.coreutils "tail"} -f /dev/null)"}";
           Restart = "always";
           RestartSec = 5;
 

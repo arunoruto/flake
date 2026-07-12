@@ -143,7 +143,7 @@ in
     users.users = lib.mkIf (cfg.user == "soulsync") {
       soulsync = {
         isSystemUser = true;
-        group = cfg.group;
+        inherit (cfg) group;
         home = cfg.dataDir;
         description = "SoulSync service user";
       };

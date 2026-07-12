@@ -103,9 +103,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postConfigure
   '';
 
-  env.MODELS_DEV_API_JSON = "${models-dev}/dist/_api.json";
-  env.OPENCODE_VERSION = finalAttrs.version;
-  env.OPENCODE_CHANNEL = "stable";
+  env = {
+    MODELS_DEV_API_JSON = "${models-dev}/dist/_api.json";
+    OPENCODE_VERSION = finalAttrs.version;
+    OPENCODE_CHANNEL = "stable";
+  };
 
   buildPhase = ''
     runHook preBuild
