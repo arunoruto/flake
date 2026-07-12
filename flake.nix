@@ -118,9 +118,6 @@
       # image = "art/solar-system-minimal.jpg";
       image = "sun/the-fall-of-icarus-fall-size-3840.png";
 
-      # currently onlu x86 linux is used
-      # will maybe change in the future!
-      # -> look into flake parts/utils
       mkLib = nixpkgs: nixpkgs.lib.extend (final: prev: (import ./lib final));
       lib = mkLib nixpkgs;
       pkgs-attrs = {
@@ -140,10 +137,17 @@
           # nvidia.acceptLicense = true;
         };
       };
-      isoHosts = [
-        "shinji"
-        "kenpachi"
-      ];
+      # Auto-discovered hosts: { nixos = {...}; darwin = {...}; isoConfigurations = {...}; }
+      hosts = import ./systems {
+        inherit
+          inputs
+          self
+          lib
+          pkgs-attrs
+          scheme
+          image
+          ;
+      };
     in
     {
       inherit lib;
@@ -160,43 +164,9 @@
         python = ./modules/devix/profiles/python.nix;
       };
 
-      nixosConfigurations =
-        let
-          mkIso =
-            hostname:
-            lib.nixosSystem {
-              system = "x86_64-linux";
-              specialArgs = { inherit inputs self hostname; };
-              modules = [ ./systems/iso/installer.nix ];
-            };
-        in
-        import ./systems {
-          inherit
-            inputs
-            self
-            lib
-            pkgs-attrs
-            scheme
-            image
-            ;
-        }
-        // builtins.listToAttrs (
-          map (h: {
-            name = "iso-${h}";
-            value = mkIso h;
-          }) isoHosts
-        );
+      nixosConfigurations = hosts.nixos // hosts.isoConfigurations;
 
-      darwinConfigurations = import ./systems/darwin.nix {
-        inherit
-          inputs
-          self
-          lib
-          pkgs-attrs
-          scheme
-          image
-          ;
-      };
+      darwinConfigurations = hosts.darwin;
 
       homeConfigurations = import ./homes {
         inherit
@@ -214,7 +184,9 @@
       colmenaHive = colmena.lib.makeHive self.outputs.colmena;
       colmena =
         let
-          conf = self.nixosConfigurations;
+          # Only real hosts, not the installer images (iso-* have no colmena
+          # deployment options and would fail hive evaluation).
+          conf = hosts.nixos;
           system = "x86_64-linux";
         in
         {
@@ -226,6 +198,8 @@
             ) conf;
           };
         }
+        # `_module.specialArgs` / `_module.args.modules` are module-system
+        # internals; colmena needs the raw module list to build each node.
         // builtins.mapAttrs (name: value: {
           imports = value._module.args.modules;
           inherit (conf.${name}.config.colmena) deployment;
@@ -240,7 +214,7 @@
           "x86_64-linux"
         ];
       in
-      lib.systemConfig.eachSystem systems (
+      lib.eachSystem systems (
         system:
         let
           pkgs-system = import inputs.nixpkgs-unstable {
@@ -271,11 +245,10 @@
               };
             };
           legacyPackages = import ./packages pkgs-system;
-          packages = builtins.listToAttrs (
-            map (h: {
-              name = "iso-${h}";
-              value = self.nixosConfigurations."iso-${h}".config.system.build.isoChecksums;
-            }) isoHosts
+          # ISO images are x86_64-linux only; expose their checksums as packages
+          # so `nix build .#iso-<host>` works there.
+          packages = lib.optionalAttrs (system == "x86_64-linux") (
+            lib.mapAttrs (_: cfg: cfg.config.system.build.isoChecksums) hosts.isoConfigurations
           );
           formatter = pkgs-system.nixfmt-tree;
           checks = {

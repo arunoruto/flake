@@ -11,7 +11,8 @@
     ./services
     ./homebrew
     ./users
-    ../../homes/nixos.nix
+    # home-manager glue (../../homes/nixos.nix) is added by the host builder in
+    # systems/default.nix, symmetrically with NixOS hosts.
   ];
 
   environment = {

@@ -8,7 +8,7 @@
   image,
 }:
 let
-  unique-users = lib.lists.remove "keys" (lib.systemConfig.listDirs ./.);
+  unique-users = lib.lists.remove "keys" (lib.getDirectories ./.);
   pkgs = import inputs.nixpkgs ({ system = "x86_64-linux"; } // pkgs-attrs);
 in
 lib.genAttrs unique-users (
