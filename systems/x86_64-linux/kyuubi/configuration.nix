@@ -12,7 +12,7 @@ in
 {
   users.primaryUser = "mar";
 
-  programs.enable = true; # Enable GUI programs (browsers, etc.)
+  gui.enable = true; # Enable GUI programs (browsers, etc.)
   printing.enable = true;
   scanning.enable = true;
   system.tags = [ "workstation" ];

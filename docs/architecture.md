@@ -73,7 +73,7 @@ system.tags = [ "desktop" "workstation" "development" "management" ];
   unconditionally.
 - **`foreground/`** — everything that needs a display: desktop environments,
   bars, GUI programs, fonts-for-GUI. Gated behind `foreground.enable`, which
-  defaults from the `desktop` tag (darwin), the `programs.enable` option
+  defaults from the `desktop` tag (darwin), the `gui.enable` option
   (NixOS), or `true` (standalone home-manager).
 - **`theming/`** — stylix wiring, wallpaper, color scheme; enabled with the
   `desktop` tag.
@@ -111,12 +111,15 @@ Options defined by this flake (as opposed to upstream NixOS/HM options):
 | `users.primaryUser` | `modules/{nixos,darwin}/users/` | The one human this machine belongs to |
 | `users.users.<u>.isAdmin` | `modules/nixos/users/` | wheel + virtualisation groups |
 | `homes.users` / `homes.enable` | `homes/nixos.nix` | Which users get home-manager |
-| `programs.enable` | `modules/nixos/programs/` | "This host has GUI programs" (feeds `foreground.enable`) |
+| `gui.enable` | `modules/nixos/programs/` | "This host has GUI applications" (feeds `foreground.enable`) |
 | `desktop-environment.enable` | `modules/nixos/desktop/` | Desktop environment stack |
 | `hosts.{desktop,laptop,workstation,development}.enable` | `modules/home-manager/imports.nix` | HM-side mirror of the tags |
 | `foreground.enable` | `modules/home-manager/foreground/` | GUI-facing home config |
 | `theming.{enable,scheme,image}` | `modules/home-manager/theming/`, `modules/nixos/system/theming.nix` | Stylix scheme/wallpaper |
-| `nas.enable`, `davmail.enable`, `rssh.enable`, `tpm.enable`, `yubikey.enable`, `cachix.enable`, `latex.enable` | `modules/nixos/**` | Feature toggles for individual services |
+| `rssh.enable`, `yubikey.enable`, `cachix.enable`, `latex.enable` | `modules/nixos/**` | Feature toggles for individual services |
+
+NAS behaviour follows the `nas` tag, and the TPM2 stack is driven by the
+upstream `security.tpm2.enable` (this flake just layers PKCS11/tooling on top).
 
 New custom options should be namespaced (or documented here) so they stay
 distinguishable from upstream options.

@@ -11,9 +11,11 @@
     ./gui-packages.nix
   ];
 
-  options.programs.enable = lib.mkEnableOption "Setup GUI Modules";
+  # Host-facing toggle for GUI applications (browsers, Steam, GUI packages).
+  # Named `gui` to avoid colliding with upstream `programs.*`.
+  options.gui.enable = lib.mkEnableOption "GUI applications (browsers, Steam, ...)";
 
-  config = lib.mkIf config.programs.enable {
+  config = lib.mkIf config.gui.enable {
     programs.packages.enable = lib.mkDefault true;
 
     browsers.enable = lib.mkDefault true;

@@ -20,13 +20,12 @@
   };
   systemd.services.zfs-mount.enable = false;
   networking.hostId = "7923f829";
-  nas.enable = true;
 
   # firefox.enable = false;
   # chrome.enable = false;
   # steam.enable = false;
   # home.pc.enable = false;
-  programs.enable = false;
+  gui.enable = false;
 
   services = {
     tailscale.tsidp = {

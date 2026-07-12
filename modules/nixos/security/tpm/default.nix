@@ -9,17 +9,13 @@
     ./ssh-tpm-agent.nix
   ];
 
-  options.tpm.enable = lib.mkEnableOption "Enable TPM secuirty options";
-
-  config = lib.mkIf config.tpm.enable {
-    services.ssh-tpm-agent = {
-      enable = false;
-      package = pkgs.ssh-tpm-agent;
-      # userProxyPath = "yubikey-agent/yubikey-agent.sock";
-    };
-
+  # Driven by the upstream `security.tpm2.enable`; this module layers PKCS11,
+  # abrmd, and the TPM tooling (age-plugin-tpm, tpm2-totp) on top.
+  # NB: don't set `services.ssh-tpm-agent.enable` here — ssh-tpm-agent.nix sets
+  # `security.tpm2.enable` from it, so gating on tpm2.enable would form a cycle.
+  # ssh-tpm-agent defaults to off already.
+  config = lib.mkIf config.security.tpm2.enable {
     security.tpm2 = {
-      enable = true;
       pkcs11.enable = true;
       abrmd.enable = true;
       # tctiEnvironment.enable = true;

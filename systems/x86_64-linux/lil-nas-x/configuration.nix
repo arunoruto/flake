@@ -27,7 +27,7 @@
   # chrome.enable = false;
   # steam.enable = false;
   # home.pc.enable = false;
-  programs.enable = false;
+  gui.enable = false;
 
   services = {
     scrutiny.collector = {

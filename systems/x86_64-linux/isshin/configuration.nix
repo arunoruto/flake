@@ -19,7 +19,8 @@
   hosts = {
     amd.enable = true;
   };
-  tpm.enable = false;
+  # laptop tag defaults this on; isshin deliberately keeps TPM off.
+  security.tpm2.enable = false;
 
   # services = {
   #   auto-cpufreq.enable = true;

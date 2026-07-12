@@ -58,7 +58,7 @@ in
     # Darwin and NixOS common configuration
     (lib.mkIf (osConfig != null) {
       foreground.enable = lib.mkDefault (
-        if pkgs.stdenv.hostPlatform.isDarwin then (hasTag "desktop") else osConfig.programs.enable # Use NixOS custom option
+        if pkgs.stdenv.hostPlatform.isDarwin then (hasTag "desktop") else osConfig.gui.enable # NixOS custom option
       );
     })
 
