@@ -7,8 +7,6 @@
   ...
 }:
 let
-  # secretspath = builtins.toString inputs.secrets;
-  secretspath = "${inputs.self.outPath}/secrets";
   isDarwin = pkgs.stdenv.isDarwin;
 in
 {
@@ -17,8 +15,10 @@ in
   ];
 
   sops = {
-    defaultSopsFile = "${secretspath}/secrets.yaml";
-    # defaultSopsFile = "/home/mirza/Projects/secrets.nix/secrets.yaml";
+    # A path literal (not "${inputs.self.outPath}/...") so the store copy is
+    # content-addressed on secrets.yaml alone: unrelated repo changes no
+    # longer rebuild every home configuration.
+    defaultSopsFile = ../../../secrets/secrets.yaml;
     validateSopsFiles = false;
 
     age = {
