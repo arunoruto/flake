@@ -2,6 +2,8 @@ builds:
   branch: main
   exclude: []
   include:
-    - devShell.x86_64-linux
+    - devShells.x86_64-linux.*
+    - checks.x86_64-linux.*
     - homeConfigurations.*
     - nixosConfigurations.*
+    - darwinConfigurations.*

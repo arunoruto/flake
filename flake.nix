@@ -257,6 +257,14 @@
               src = ./.;
               hooks = {
                 nixfmt.enable = true;
+                # Newly added packages/**/package.nix must opt into
+                # __structuredAttrs and strictDeps (see the script).
+                new-package-attrs = {
+                  enable = true;
+                  name = "new packages set structuredAttrs/strictDeps";
+                  entry = "./scripts/check-new-packages.sh";
+                  files = "packages/.*/package\\.nix$";
+                };
                 # deadnix is intentionally NOT a commit hook: parked/commented-out
                 # code leaves orphaned bindings that would trip it. Run it manually
                 # instead (it's in the `nix` devShell):
