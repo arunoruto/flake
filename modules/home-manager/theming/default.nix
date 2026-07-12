@@ -7,6 +7,7 @@
 {
   imports = [
     ./cursors.nix
+    ./darwin-targets.nix
     ./fonts.nix
     ./icons.nix
     ./monitors.nix

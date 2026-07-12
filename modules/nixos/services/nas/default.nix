@@ -26,7 +26,7 @@
         # hd-idle.enable = true;
       };
     })
-    (lib.mkIf (lib.elem "nas" config.system.tags) {
+    (lib.mkIf (config.lib.tags.hasTag "nas") {
       services.samba.enable = lib.mkDefault true;
     })
   ];

@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }:
 let
@@ -10,20 +9,24 @@ let
 
   # Get shell from home-manager config for primary user
   shell = config.home-manager.users.${primaryUserName}.shell.main or "bash";
+
+  # Auto-import sibling user modules (mirza.nix, mar.nix, avatar.nix, ...).
+  # mk-user.nix is a helper (takes a username), not a module, so it is excluded.
+  siblingModules = map (name: ./. + "/${name}") (
+    lib.attrNames (
+      lib.filterAttrs (name: type: type == "regular" && name != "default.nix" && name != "mk-user.nix") (
+        builtins.readDir ./.
+      )
+    )
+  );
 in
 {
   imports = [
-    ./mirza.nix
-    ./mar.nix
-  ];
+    ../../shared/users.nix
+  ]
+  ++ siblingModules;
 
   options = {
-    # Primary user option - REQUIRED, must be set in system configuration
-    users.primaryUser = lib.mkOption {
-      type = lib.types.str;
-      description = "Name of the primary user for this system (receives home-manager, SSH keys, theming, etc.). This option is REQUIRED and must be set in your system configuration.";
-    };
-
     # Extend users.users type to add isAdmin option
     users.users = lib.mkOption {
       type = lib.types.attrsOf (
@@ -95,30 +98,5 @@ in
 
     # Configure home-manager for primary user by default
     homes.users = lib.mkDefault [ primaryUserName ];
-
-    # Accounts service configuration (if .face file exists)
-    systemd.tmpfiles.rules =
-      lib.optionals (config.home-manager.users.${primaryUserName}.home.file ? ".face")
-        (
-          let
-            account-service = pkgs.writeTextFile {
-              name = "accounts-service-config-${primaryUserName}";
-              text = lib.generators.toINI { } {
-                User = {
-                  Session = "gnome";
-                  Icon = "/var/lib/AccountsService/icons/${primaryUserName}";
-                  SystemAccount = "false";
-                };
-              };
-            };
-          in
-          [
-            ''C "/var/lib/AccountsService/users/${primaryUserName}" 0600 root root - ${account-service}''
-            ''d  "/var/lib/AccountsService/icons" 0755 root root -''
-            ''L+ "/var/lib/AccountsService/icons/${primaryUserName}" - - - - ${
-              config.home-manager.users.${primaryUserName}.home.file.".face".source
-            }''
-          ]
-        );
   };
 }
