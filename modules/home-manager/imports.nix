@@ -27,6 +27,13 @@ in
   ];
 
   options = {
+    # The user this home configuration belongs to; set by homes/default.nix
+    # (standalone) or homes/nixos.nix (as a NixOS/Darwin submodule).
+    user = lib.mkOption {
+      type = lib.types.str;
+      description = "Username this home configuration is built for.";
+    };
+
     hosts = {
       desktop.enable = lib.mkEnableOption "Desktop/GUI features";
       laptop.enable = lib.mkEnableOption "Sensible defaults for laptops";

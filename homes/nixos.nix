@@ -16,11 +16,8 @@ let
       # Note: stylix is imported at the system level (nixosModules.stylix or darwinModules.stylix)
       # which automatically configures home-manager, so we don't import it here
     ];
-    options.user = lib.mkOption {
-      type = lib.types.str;
-      default = username;
-    };
     config = {
+      user = lib.mkDefault username;
       home = {
         inherit username;
         homeDirectory = lib.mkForce (if isDarwin then "/Users/${username}" else "/home/${username}");

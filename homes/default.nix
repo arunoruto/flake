@@ -9,6 +9,8 @@
 }:
 let
   unique-users = lib.lists.remove "keys" (lib.getDirectories ./.);
+  # Standalone home-manager is only used on x86_64-linux machines; on Darwin
+  # (and NixOS) home-manager is wired in through the system configuration.
   pkgs = import inputs.nixpkgs ({ system = "x86_64-linux"; } // pkgs-attrs);
 in
 lib.genAttrs unique-users (
@@ -17,18 +19,8 @@ lib.genAttrs unique-users (
     inherit pkgs;
     extraSpecialArgs = { inherit inputs pkgs; };
     modules = [
-      # inputs.nur.hmModules.nur
-      # ./modules/home-manager/home.nix
       self.homeModules.default
-      (
-        { lib, ... }:
-        {
-          options.user = lib.mkOption {
-            type = lib.types.str;
-            default = user;
-          };
-        }
-      )
+      { user = lib.mkDefault user; }
       ./${user}
       {
         theming = {
