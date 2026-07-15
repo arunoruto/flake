@@ -2,6 +2,7 @@
 {
   imports = [
     ./bindery
+    ./mayberry
     ./komga.nix
     ./stump.nix
     ./manga.nix
