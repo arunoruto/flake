@@ -14,9 +14,9 @@
 
   config = lib.mkIf config.services.ai.enable {
     services = {
-      docs-mcp-server.enable = true;
-      ollama.enable = true;
-      open-webui.enable = true;
+      docs-mcp-server.enable = lib.mkDefault true;
+      ollama.enable = lib.mkDefault true;
+      open-webui.enable = lib.mkDefault true;
     };
   };
 
