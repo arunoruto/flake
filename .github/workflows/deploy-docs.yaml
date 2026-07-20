@@ -1,22 +1,20 @@
 name: Deploy Docs to GitHub Pages
-
 on:
   push:
+    branches:
+      - "main"
     paths:
       - "docs/**"
       - "packages/docs/**"
       - ".github/workflows/deploy-docs.yaml"
   workflow_dispatch:
-
 permissions:
   contents: read
   pages: write
   id-token: write
-
 concurrency:
   group: pages
   cancel-in-progress: false
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
