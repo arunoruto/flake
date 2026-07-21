@@ -21,6 +21,7 @@ in
     # Primary user option - REQUIRED, must be set in system configuration
     users.primaryUser = lib.mkOption {
       type = lib.types.str;
+      default = "mirza";
       description = "Name of the primary user for this system (receives home-manager, SSH keys, theming, etc.). This option is REQUIRED and must be set in your system configuration.";
     };
 
