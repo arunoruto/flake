@@ -5,7 +5,6 @@
 }:
 {
   imports = [
-    # ./custom/spotify.nix
   ];
 
   options.bars.waybar.enable = lib.mkEnableOption "Enable waybar config";

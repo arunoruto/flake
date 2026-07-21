@@ -1,7 +1,6 @@
-{ osConfig, lib, ... }@args:
+{ osConfig, lib, ... }:
 {
   # imports = [
-  #   ./yubikey.nix
   # ];
 
   # services.yubikey-touch-detector.enable = lib.mkDefault (

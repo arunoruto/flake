@@ -9,7 +9,7 @@ let
   jsonFormat = pkgs.formats.json { };
 
   transformMcpServer = name: server: {
-    name = name;
+    inherit name;
     value = {
       enabled = !(server.disabled or false);
     }
@@ -17,14 +17,14 @@ let
       if server ? url then
         {
           type = "http";
-          url = server.url;
+          inherit (server) url;
           tools = [ "*" ];
         }
-        // (lib.optionalAttrs (server ? headers) { headers = server.headers; })
+        // (lib.optionalAttrs (server ? headers) { inherit (server) headers; })
       else if server ? command then
         {
           type = "local";
-          command = server.command;
+          inherit (server) command;
           args = server.args or [ ];
           tools = [ "*" ];
         }
@@ -101,7 +101,7 @@ in
       };
       ".copilot/mcp-config.json" = lib.mkIf (cfg.mcp-settings != { } || transformedMcpServers != { }) {
         source = jsonFormat.generate "copilot-cli-settings.json" {
-          mcpServers = (lib.attrsets.recursiveUpdate transformedMcpServers cfg.settings);
+          mcpServers = lib.attrsets.recursiveUpdate transformedMcpServers cfg.settings;
         };
       };
     };

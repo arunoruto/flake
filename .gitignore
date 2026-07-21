@@ -20,13 +20,8 @@ devenv.local.yaml
 
 .helix*
 
-# Devenv
-.devenv*
-devenv.local.nix
-devenv.local.yaml
-
-# direnv
-.direnv
+# opencode local state (plans, node_modules)
+.opencode/
 
 # pre-commit
 .pre-commit-config.yaml

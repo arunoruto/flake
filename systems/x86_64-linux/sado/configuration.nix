@@ -97,7 +97,7 @@
 
   display-manager.enable = false;
   desktop-environment.enable = false;
-  programs.enable = false;
+  gui.enable = false;
 
   boot.kernelParams = [
     "pcie_aspm=force"

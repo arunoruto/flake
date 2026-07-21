@@ -69,39 +69,36 @@ in
   };
 
   config = mkIf cfg.enable {
-    services.samba.openFirewall = mkDefault true;
+    services = {
+      samba = {
+        openFirewall = mkDefault true;
 
-    services.samba.settings =
-      let
-        active = filterAttrs (name: _: !(elem name cfg.disableShares)) cfg.directories;
-      in
-      (builtins.mapAttrs (_: share: {
-        path = share.path;
-        browseable = if share.browseable then "yes" else "no";
-        "read only" = if share.writable then "no" else "yes";
-        "guest ok" = if share.guestOk then "yes" else "no";
-        "valid users" = concatStringsSep " " share.users;
-        "force user" = builtins.head share.users;
-        comment = share.comment;
-      }) active)
-      // {
-        global = {
-          "server min protocol" = mkDefault "SMB2_10";
-          "client min protocol" = mkDefault "SMB2_10";
-          "map to guest" = mkDefault "Bad User";
-        };
+        settings =
+          let
+            active = filterAttrs (name: _: !(elem name cfg.disableShares)) cfg.directories;
+          in
+          (builtins.mapAttrs (_: share: {
+            inherit (share) path;
+            browseable = if share.browseable then "yes" else "no";
+            "read only" = if share.writable then "no" else "yes";
+            "guest ok" = if share.guestOk then "yes" else "no";
+            "valid users" = concatStringsSep " " share.users;
+            "force user" = builtins.head share.users;
+            inherit (share) comment;
+          }) active)
+          // {
+            global = {
+              "server min protocol" = mkDefault "SMB2_10";
+              "client min protocol" = mkDefault "SMB2_10";
+              "map to guest" = mkDefault "Bad User";
+            };
+          };
       };
 
-    # services.samba.settings.global = {
-    #   "server min protocol" = mkDefault "SMB2_10";
-    #   "client min protocol" = mkDefault "SMB2_10";
-    #   "map to guest" = mkDefault "Bad User";
-    # };
-
-    services.samba-wsdd = {
-      enable = mkDefault cfg.enable;
-      openFirewall = mkDefault true;
+      samba-wsdd = {
+        enable = mkDefault cfg.enable;
+        openFirewall = mkDefault true;
+      };
     };
-
   };
 }

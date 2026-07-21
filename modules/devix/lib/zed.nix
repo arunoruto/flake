@@ -27,7 +27,7 @@ let
 
   formatterToZed = formatter: {
     external = {
-      command = formatter.command;
+      inherit (formatter) command;
       arguments = formatter.args;
     };
   };

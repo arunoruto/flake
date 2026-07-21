@@ -41,8 +41,7 @@ buildGoModule rec {
   vendorHash = "sha256-FIbkPE5KQ4w7Tc7kISQ7ZYFZAoMNGiVlFWzt8BPCf+A=";
 
   buildInputs =
-    [ ]
-    ++ (lib.optionals stdenv.isLinux [
+    (lib.optionals stdenv.isLinux [
       # For Linux clipboard support.
       xorg.libX11.dev
     ])

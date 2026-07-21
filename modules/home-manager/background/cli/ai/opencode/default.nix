@@ -6,9 +6,6 @@
 }:
 {
   imports = [
-    # ./module.nix
-    # ./omo.nix
-    # ./ollama.nix
     ./theme.nix
   ];
 

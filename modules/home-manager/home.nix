@@ -8,7 +8,6 @@ let
 in
 {
   imports = [
-    # ./hosts
     ./environment.nix
   ];
 

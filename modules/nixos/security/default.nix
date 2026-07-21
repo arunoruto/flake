@@ -15,7 +15,6 @@
 
   rssh.enable = lib.mkDefault (!config.yubikey.enable && config.services.openssh.enable);
   secrets.enable = lib.mkDefault true;
-  tpm.enable = lib.mkOptionDefault false;
   yubikey = {
     enable = lib.mkOptionDefault false;
     identifiers = { };

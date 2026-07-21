@@ -8,10 +8,8 @@
   imports = [
     ./dm
 
-    # ./cosmic.nix
     ./gnome.nix
     ./hyprland.nix
-    # ./kde.nix
     ./kodi.nix
     ./sway.nix
     ./niri.nix

@@ -7,8 +7,6 @@
 let
   primaryUserName = config.users.primaryUser;
   user-conf = config.users.users.${primaryUserName};
-  # secretspath = builtins.toString inputs.secrets;
-  secretspath = "${inputs.self.outPath}/secrets";
 in
 {
   imports = [
@@ -19,7 +17,10 @@ in
 
   config = lib.mkIf config.secrets.enable {
     sops = {
-      defaultSopsFile = "${secretspath}/secrets.yaml";
+      # A path literal (not "${inputs.self.outPath}/...") so the store copy is
+      # content-addressed on secrets.yaml alone: unrelated repo changes no
+      # longer rebuild every host's system derivation.
+      defaultSopsFile = ../../../secrets/secrets.yaml;
       validateSopsFiles = false;
 
       age = {

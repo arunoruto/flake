@@ -11,7 +11,6 @@
 
     ./flatpak.nix
     ./reference-manager.nix
-    # ./steam.nix
     ./thunderbird.nix
     ./vscode.nix
   ];

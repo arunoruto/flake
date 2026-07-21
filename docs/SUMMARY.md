@@ -1,6 +1,7 @@
 # Summary
 
 - [Introduction](./intro.md)
+- [Architecture](./architecture.md)
 - [Getting Started](./getting-started.md)
 - [Building ISOs](./iso.md)
 - [Secrets (sops-nix)](./sops.md)

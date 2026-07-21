@@ -6,7 +6,7 @@
 }:
 {
   # ICC color profiles for Framework laptops (desktop systems only)
-  config = lib.mkIf (config.hosts.desktop.enable) {
+  config = lib.mkIf config.hosts.desktop.enable {
     home.file = {
       ".local/share/icc/framework13-intel.icm".source = ./BOE_CQ_______NE135FBM_N41_01.icm;
       # ".local/share/icc/framework13-amd.icm".source = ./BOE_CQ_______NE135FBM_N41_03.icm;

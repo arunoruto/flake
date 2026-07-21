@@ -15,15 +15,11 @@
     ./tuning
     ./virtualization
 
-    ./davmail.nix
     ./github-runner.nix
     ./harmonia.nix
     ./ssh.nix
   ];
 
-  nas.enable = lib.mkDefault false;
-
-  davmail.enable = lib.mkDefault false;
   services = {
     ai.enable = lib.mkDefault false;
     flatpak.enable = lib.mkDefault config.xdg.portal.enable;

@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru = {
     bunDeps = stdenvNoCC.mkDerivation (finalDepsAttrs: {
       name = "${finalAttrs.pname}-bun-deps-${finalAttrs.version}";
-      src = finalAttrs.src;
+      inherit (finalAttrs) src;
 
       nativeBuildInputs = [ bun ];
 

@@ -6,7 +6,7 @@
 {
   users.primaryUser = "mirza";
 
-  tpm.enable = true;
+  security.tpm2.enable = true;
 
   colmena.deployment.buildOnTarget = false;
 

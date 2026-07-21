@@ -32,11 +32,15 @@
 
 ## Updating Custom Packages
 
-Use [nix-update](https://github.com/Mic92/nix-update):
+Use the `bump` recipe, which wraps [nix-update](https://github.com/Mic92/nix-update)
+and figures out the attribute path and platform for you:
 
 ```sh
-nix-update legacyPackages.x86_64-linux.<pkg> --flake --override-filename packages/top-level/<pkg>/package.nix
+just bump packages/top-level/<pkg>       # or packages/custom/<pkg>
 ```
+
+Under the hood it runs `scripts/bump-package.sh`; extra flags are passed straight
+through to `nix-update`, e.g. `just bump packages/top-level/<pkg> --version=1.2.3`.
 
 ## ZFS
 

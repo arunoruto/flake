@@ -11,10 +11,9 @@ let
   shell = config.home-manager.users.${primaryUser}.shell.main or defaultShell;
 in
 {
-  options.users.primaryUser = lib.mkOption {
-    type = lib.types.str;
-    description = "Primary user for this system (works on both NixOS and Darwin)";
-  };
+  imports = [
+    ../../shared/users.nix
+  ];
 
   config = {
     # Validate shell selection

@@ -9,7 +9,7 @@ stdenvNoCC.mkDerivation {
 
   src = lib.fileset.toSource {
     root = ./../..;
-    fileset = (lib.fileset.maybeMissing ./../../docs);
+    fileset = lib.fileset.maybeMissing ./../../docs;
   };
 
   nativeBuildInputs = [ mdbook ];

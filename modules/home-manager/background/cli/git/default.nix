@@ -22,7 +22,6 @@ in
     ./modules/glab.nix
     ./modules/tea.nix
     ./lazygit.nix
-    # ./jujutsu.nix
   ];
 
   warnings = lib.optional (
@@ -35,8 +34,8 @@ in
       lfs.enable = true;
       settings = {
         user = {
-          name = user.name;
-          email = user.email;
+          inherit (user) name;
+          inherit (user) email;
           signingkey = "${config.home.homeDirectory}/.ssh/id_ed25519.pub";
         };
         core = {
@@ -183,14 +182,7 @@ in
   sops.secrets."tokens/overleaf-cred".path = "${config.home.homeDirectory}/.config/git/overleaf";
 
   home = {
-    packages = [
-      # glab-pkg # Gitlab CLI tool
-    ]
-    # ++ lib.optionals (config.hosts.desktop.enable) [
-    #   pkgs.ai-commit
-    #   pkgs.git-quill
-    # ]
-    ++ lib.optionals (config.hosts.development.enable) [
+    packages = lib.optionals config.hosts.development.enable [
       # pkgs.ai-commit
       pkgs.git-quill
       # (pkgs.symlinkJoin {

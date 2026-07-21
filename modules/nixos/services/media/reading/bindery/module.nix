@@ -121,7 +121,7 @@ in
       bindery = {
         description = "Bindery service user";
         home = cfg.dataDir;
-        group = cfg.group;
+        inherit (cfg) group;
         isSystemUser = true;
       };
     };

@@ -5,7 +5,6 @@
 }:
 {
   imports = [
-    # ./paper-stylix.nix
   ];
 
   options.hypr.paper.enable = lib.mkEnableOption "Configure hyprpaper for wallpaper settings";

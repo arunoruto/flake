@@ -2,9 +2,6 @@
   description = "Mirzas Nix Config";
 
   inputs = {
-    # self.submodules = true;
-    # Stable
-    # nixpkgs.url = "github:nixos/nixpkgs/refs/tags/26.05-beta";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
     home-manager = {
       url = "github:nix-community/home-manager/release-26.05";
@@ -25,10 +22,6 @@
       url = "github:cachix/devenv";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # lix-module = {
-    #   url = "https://git.lix.systems/lix-project/nixos-module/archive/2.93.0.tar.gz";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
     determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/*";
 
     # Nixpkgs
@@ -67,10 +60,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-flatpak.url = "github:gmodena/nix-flatpak";
-    # nix-ld = {
-    #   url = "github:nix-community/nix-ld";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
     direnv-instant = {
       url = "github:Mic92/direnv-instant";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
@@ -83,33 +72,10 @@
       url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # DEs
-    # plasma-manager = {
-    #   url = "github:nix-community/plasma-manager";
-    #   inputs = {
-    #     nixpkgs.follows = "nixpkgs";
-    #     home-manager.follows = "home-manager";
-    #   };
-    # };
-
-    # helix.url = "github:helix-editor/helix";
     zen-browser = {
       url = "github:0xc000022070/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
-      # url = "github:youwen5/zen-browser-flake";
-      # inputs.nixpkgs.follows = "nixpkgs";
     };
-    # nixvim-flake.url = "github:arunoruto/nvim.nix";
-
-    # PRs
-    # matlab-pr.url = "https://github.com/james-atkins/nixpkgs/tree/pr/matlab";
-
-    # Private
-    # secrets = {
-    #   # url = "git+ssh://git@github.com/arunoruto/secrets.nix.git?ref=main&shallow=1";
-    #   url = "git+https://github.com/arunoruto/secrets.nix.git?ref=main&shallow=1";
-    #   flake = false;
-    # };
     wallpapers = {
       url = "git+https://github.com/arunoruto/wallpapers.git?ref=main&shallow=1";
       flake = false;
@@ -152,9 +118,6 @@
       # image = "art/solar-system-minimal.jpg";
       image = "sun/the-fall-of-icarus-fall-size-3840.png";
 
-      # currently onlu x86 linux is used
-      # will maybe change in the future!
-      # -> look into flake parts/utils
       mkLib = nixpkgs: nixpkgs.lib.extend (final: prev: (import ./lib final));
       lib = mkLib nixpkgs;
       pkgs-attrs = {
@@ -174,10 +137,17 @@
           # nvidia.acceptLicense = true;
         };
       };
-      isoHosts = [
-        "shinji"
-        "kenpachi"
-      ];
+      # Auto-discovered hosts: { nixos = {...}; darwin = {...}; isoConfigurations = {...}; }
+      hosts = import ./systems {
+        inherit
+          inputs
+          self
+          lib
+          pkgs-attrs
+          scheme
+          image
+          ;
+      };
     in
     {
       inherit lib;
@@ -194,43 +164,9 @@
         python = ./modules/devix/profiles/python.nix;
       };
 
-      nixosConfigurations =
-        let
-          mkIso =
-            hostname:
-            lib.nixosSystem {
-              system = "x86_64-linux";
-              specialArgs = { inherit inputs self hostname; };
-              modules = [ ./systems/iso/installer.nix ];
-            };
-        in
-        import ./systems {
-          inherit
-            inputs
-            self
-            lib
-            pkgs-attrs
-            scheme
-            image
-            ;
-        }
-        // builtins.listToAttrs (
-          map (h: {
-            name = "iso-${h}";
-            value = mkIso h;
-          }) isoHosts
-        );
+      nixosConfigurations = hosts.nixos // hosts.isoConfigurations;
 
-      darwinConfigurations = import ./systems/darwin.nix {
-        inherit
-          inputs
-          self
-          lib
-          pkgs-attrs
-          scheme
-          image
-          ;
-      };
+      darwinConfigurations = hosts.darwin;
 
       homeConfigurations = import ./homes {
         inherit
@@ -248,7 +184,9 @@
       colmenaHive = colmena.lib.makeHive self.outputs.colmena;
       colmena =
         let
-          conf = self.nixosConfigurations;
+          # Only real hosts, not the installer images (iso-* have no colmena
+          # deployment options and would fail hive evaluation).
+          conf = hosts.nixos;
           system = "x86_64-linux";
         in
         {
@@ -260,6 +198,8 @@
             ) conf;
           };
         }
+        # `_module.specialArgs` / `_module.args.modules` are module-system
+        # internals; colmena needs the raw module list to build each node.
         // builtins.mapAttrs (name: value: {
           imports = value._module.args.modules;
           inherit (conf.${name}.config.colmena) deployment;
@@ -274,7 +214,7 @@
           "x86_64-linux"
         ];
       in
-      lib.systemConfig.eachSystem systems (
+      lib.eachSystem systems (
         system:
         let
           pkgs-system = import inputs.nixpkgs-unstable {
@@ -283,6 +223,48 @@
               allowUnfree = true;
               # nvidia.acceptLicense = true;
             };
+          };
+          # Hooks that gate what lands in git history: formatting, the
+          # packages/**/package.nix convention, and keeping flake.lock
+          # CI-only. These run in `nix flake check`, so they must stay green.
+          ciHooks = {
+            nixfmt.enable = true;
+            # Newly added packages/**/package.nix must opt into
+            # __structuredAttrs and strictDeps (see the script).
+            new-package-attrs = {
+              enable = true;
+              name = "new packages set structuredAttrs/strictDeps";
+              entry = "./scripts/check-new-packages.sh";
+              files = "packages/.*/package\\.nix$";
+            };
+            # flake.lock is bumped only by the scheduled Update Lockfile
+            # action (see .github/workflows/update.yaml); reject local commits.
+            lockfile-managed-by-ci = {
+              enable = true;
+              name = "flake.lock is CI-managed";
+              entry = "./scripts/block-lockfile-commit.sh";
+              files = "^flake\\.lock$";
+              pass_filenames = false;
+            };
+          };
+          # statix/deadnix are lints, not correctness gates: enforced on
+          # commit locally, but excluded from `checks` so a lint finding
+          # never fails CI.
+          lintHooks = {
+            deadnix = {
+              enable = true;
+              settings = {
+                noLambdaArg = true;
+                noLambdaPatternNames = true;
+              };
+            };
+            # statix reads statix.toml (ignores generated hardware-configuration.nix)
+            statix.enable = true;
+          };
+          gitHooksLocal = inputs.git-hooks.lib.${system}.run {
+            package = pkgs-system.prek;
+            src = ./.;
+            hooks = ciHooks // lintHooks;
           };
         in
         {
@@ -293,52 +275,29 @@
             })
             // {
               nix = pkgs-system.mkShell {
-                shellHook = self.checks.${system}.pre-commit-check.shellHook;
+                inherit (gitHooksLocal) shellHook;
                 buildInputs =
                   (with pkgs-system; [
+                    just
                     statix
                     deadnix
                     nixfmt-tree
                   ])
-                  ++ self.checks.${system}.pre-commit-check.enabledPackages;
+                  ++ gitHooksLocal.enabledPackages;
               };
             };
           legacyPackages = import ./packages pkgs-system;
-          packages = builtins.listToAttrs (
-            map (h: {
-              name = "iso-${h}";
-              value = self.nixosConfigurations."iso-${h}".config.system.build.isoChecksums;
-            }) isoHosts
+          # ISO images are x86_64-linux only; expose their checksums as packages
+          # so `nix build .#iso-<host>` works there.
+          packages = lib.optionalAttrs (system == "x86_64-linux") (
+            lib.mapAttrs (_: cfg: cfg.config.system.build.isoChecksums) hosts.isoConfigurations
           );
-          # packages.static-home = self.homeConfigurations."mirza".config.home.path;
-          # packages =
-          #   lib.attrsets.removeAttrs
-          #     (pkgs-system.lib.packagesFromDirectoryRecursive {
-          #       inherit (pkgs-system) callPackage newScope;
-          #       directory = ./packages/top-level;
-          #     })
-          #     [
-          #       "callPackage"
-          #       "newScope"
-          #       "overrideScope"
-          #       "packages"
-          #       "recurseForDerivations"
-          #     ];
           formatter = pkgs-system.nixfmt-tree;
           checks = {
             pre-commit-check = inputs.git-hooks.lib.${system}.run {
               package = pkgs-system.prek;
               src = ./.;
-              hooks = {
-                nixfmt.enable = true;
-                # deadnix is intentionally NOT a commit hook: parked/commented-out
-                # code leaves orphaned bindings that would trip it. Run it manually
-                # instead (it's in the `nix` devShell):
-                #   deadnix --no-lambda-arg --no-lambda-pattern-names .
-                # deadnix.enable = true;
-                # statix.enable = true;
-                # nixfmt-rfc-style.enable = true;
-              };
+              hooks = ciHooks;
             };
           };
         }

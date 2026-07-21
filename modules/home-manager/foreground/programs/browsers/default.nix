@@ -64,10 +64,7 @@
           } update;
 
         home = {
-          packages = [
-            # inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
-          ]
-          ++ lib.optionals config.programs.vivaldi.enable [ pkgs.vivaldi-ffmpeg-codecs ];
+          packages = lib.optionals config.programs.vivaldi.enable [ pkgs.vivaldi-ffmpeg-codecs ];
           # sessionVariables = {
           #   # Firefox
           #   BROWSER = "${config.programs.firefox.finalPackage}/bin/firefox";

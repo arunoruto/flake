@@ -10,16 +10,13 @@ let
 in
 {
   imports = [
-    # ./ags
     ./eww
-    # ./quickshell
     ./waybar
   ];
 
   # config = lib.mkIf (args ? nixosConfig) {
   config = lib.mkIf config.foreground.enable {
     bars = {
-      # ags.enable = lib.mkDefault false;
       eww.enable = lib.mkDefault false;
       waybar.enable = lib.mkDefault false;
     };

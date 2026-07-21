@@ -5,7 +5,6 @@
 }:
 let
   pathToUserKeys = lib.path.append ../../../. "homes/${config.home.username}/keys";
-  pathToYubikeys = lib.path.append ../../../. "homes/keys";
   keys =
     pathToKeys:
     lib.lists.forEach (builtins.attrNames (builtins.readDir pathToKeys)) (

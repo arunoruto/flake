@@ -6,7 +6,6 @@
 }:
 let
   cfg = config.services.traefik;
-  traefik-config-env = "traefik-config.env";
 in
 {
   config = lib.mkIf cfg.enable (

@@ -5,17 +5,8 @@
   ...
 }:
 {
-  # config = lib.mkIf config.services.ollama.enable {
-  config = {
+  config = lib.mkIf config.services.ollama.enable {
     services.ollama = {
-      # package = pkgs.ollama;
-      # package = pkgs.unstable.ollama;
-      # if config.hosts.nvidia.enable then
-      #   pkgs.unstable.ollama-cuda
-      # else if config.hosts.amd.enable then
-      #   pkgs.unstable.ollama-rocm
-      # else
-      #   pkgs.unstable.ollama;
       package = lib.mkDefault (
         if config.hosts.nvidia.enable then
           pkgs.ollama-cuda
@@ -37,13 +28,6 @@
         "gemma4:e2b"
       ];
       openFirewall = true;
-      # acceleration =
-      #   if config.hosts.nvidia.enable then
-      #     "cuda"
-      #   else if config.hosts.amd.enable then
-      #     "rocm"
-      #   else
-      #     null;
       environmentVariables = {
         OLLAMA_ORIGINS = "moz-extension://*";
       };
@@ -55,7 +39,7 @@
           MemoryDenyWriteExecute = lib.mkForce false;
         };
       };
-      ollama-custom-models = lib.mkIf config.services.ollama.enable {
+      ollama-custom-models = {
         description = "Build custom Ollama models with constrained context";
         wantedBy = [ "multi-user.target" ];
         after = [ "ollama.service" ];
@@ -92,5 +76,4 @@
       };
     };
   };
-
 }

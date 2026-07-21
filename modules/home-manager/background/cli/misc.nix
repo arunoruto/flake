@@ -18,9 +18,6 @@
 {
   imports = [
     inputs.direnv-instant.homeModules.direnv-instant
-    # ./vivid-module.nix
-    # ./vivid-filetype.nix
-    # ./vivid-themes.nix
   ];
 
   programs = {

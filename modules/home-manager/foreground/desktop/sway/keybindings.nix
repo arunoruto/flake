@@ -8,7 +8,6 @@ let
   inherit (config.wayland.windowManager.sway.config) modifier;
   terminal = "wezterm";
   menu = "${pkgs.rofi}/bin/rofi -show drun";
-  lockscreen = "${pkgs.swaylock}/bin/swaylock";
   left = "Left";
   right = "Right";
   up = "Up";

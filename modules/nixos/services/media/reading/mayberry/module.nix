@@ -112,7 +112,7 @@ in
     users.users = lib.mkIf (cfg.user == "mayberry") {
       mayberry = {
         isSystemUser = true;
-        group = cfg.group;
+        inherit (cfg) group;
         description = "Mayberry daemon user";
         home = "/var/lib/mayberry";
       };

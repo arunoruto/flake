@@ -1,7 +1,14 @@
 builds:
   branch: main
-  exclude: []
+  exclude:
+    # Full installer images are heavy to build in CI; they stay evaluable via
+    # `nix flake check` and buildable locally with `just iso <host>`.
+    # Keep in sync with the host list in systems/iso/default.nix.
+    - nixosConfigurations.iso-shinji
+    - nixosConfigurations.iso-kenpachi
   include:
-    - devShell.x86_64-linux
+    - devShells.x86_64-linux.*
+    - checks.x86_64-linux.*
     - homeConfigurations.*
     - nixosConfigurations.*
+    - darwinConfigurations.*

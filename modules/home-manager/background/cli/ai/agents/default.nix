@@ -122,59 +122,61 @@ in
   };
 
   config = {
-    ai.agents = {
-      commit = {
-        description = "Generates conventional commit messages from diffs";
-        content = ./COMMIT.md;
-        tools = {
-          bash = false;
-          write = false;
-          edit = false;
-          webfetch = false;
-          mcp = false;
+    ai = {
+      agents = {
+        commit = {
+          description = "Generates conventional commit messages from diffs";
+          content = ./COMMIT.md;
+          tools = {
+            bash = false;
+            write = false;
+            edit = false;
+            webfetch = false;
+            mcp = false;
+          };
+          temperature = 0.1;
         };
-        temperature = 0.1;
-      };
-      summirizer = {
-        description = "Deeply analyzes text using structured reasoning (CoT, ToT) to extract core meaning.";
-        content = ./ACADEMIC-SUMMARIZER.md;
-        tools = {
-          read = true;
-          webfetch = true;
-          write = true;
-          edit = false;
-          bash = false;
+        summirizer = {
+          description = "Deeply analyzes text using structured reasoning (CoT, ToT) to extract core meaning.";
+          content = ./ACADEMIC-SUMMARIZER.md;
+          tools = {
+            read = true;
+            webfetch = true;
+            write = true;
+            edit = false;
+            bash = false;
+          };
+          temperature = 0.1;
         };
-        temperature = 0.1;
-      };
-      questioner = {
-        description = "Analyzes text using structured reasoning (CoT, ToT) to generate deep insights and essential questions.";
-        content = ./ACADEMIC-QUESTIONER.md;
-        tools = {
-          read = true;
-          webfetch = true;
-          write = true;
-          edit = false;
-          bash = false;
+        questioner = {
+          description = "Analyzes text using structured reasoning (CoT, ToT) to generate deep insights and essential questions.";
+          content = ./ACADEMIC-QUESTIONER.md;
+          tools = {
+            read = true;
+            webfetch = true;
+            write = true;
+            edit = false;
+            bash = false;
+          };
+          temperature = 0.1;
         };
-        temperature = 0.1;
-      };
-      fable = {
-        description = "Claude Fable 5 persona and behavioral rules";
-        content = ./FABLE.md;
-        tools = {
-          bash = true;
-          write = true;
-          edit = true;
-          read = true;
-          webfetch = true;
-          skill = true;
-          mcp = true;
+        fable = {
+          description = "Claude Fable 5 persona and behavioral rules";
+          content = ./FABLE.md;
+          tools = {
+            bash = true;
+            write = true;
+            edit = true;
+            read = true;
+            webfetch = true;
+            skill = true;
+            mcp = true;
+          };
         };
       };
-    };
 
-    ai.agentsOpenCode = lib.mapAttrs (_: v: v.opencode) (process config.ai.agents);
-    ai.agentsClaude = lib.mapAttrs (_: v: v.claude) (process config.ai.agents);
+      agentsOpenCode = lib.mapAttrs (_: v: v.opencode) (process config.ai.agents);
+      agentsClaude = lib.mapAttrs (_: v: v.claude) (process config.ai.agents);
+    };
   };
 }
