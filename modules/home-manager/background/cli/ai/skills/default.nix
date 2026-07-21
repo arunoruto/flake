@@ -1,10 +1,15 @@
-{ lib, ... }:
 {
-  options.skills = lib.mkOption {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+{
+  options.ai.skills = lib.mkOption {
     type = with lib.types; either (attrsOf (either lines path)) path;
     default = { };
     description = ''
-      Custom agent skills for agents.
+      Shared AI agent skills, consumed by opencode, claude-code, and other agents.
 
       This option can either be:
       - An attribute set defining skills
@@ -17,31 +22,45 @@
       - A path to a directory (creates `<agent>/skill/<name>/` with all files)
 
       If a path is used, it is expected to contain one folder per skill name, each
-      containing a {file}`SKILL.md`. The directory is symlinked to
-      {file}`$XDG_CONFIG_HOME/<agent>/skill/`.
-    '';
-    example = lib.literalExpression ''
-      {
-        git-release = '''
-          ---
-          name: git-release
-          description: Create consistent releases and changelogs
-          ---
+      containing a {file}`SKILL.md`.
 
-          ## What I do
-
-          - Draft release notes from merged PRs
-          - Propose a version bump
-          - Provide a copy-pasteable `gh release create` command
-        ''';
-
-        # A skill can also be a directory containing SKILL.md and other files.
-        data-analysis = ./skills/data-analysis;
-      }
+      By default, skills are auto-discovered from {file}`.agents/skills/` at the
+      flake root and this skill directory. Only subdirectories are included.
     '';
   };
 
-  config = {
+  options.ai.skillsExclude = lib.mkOption {
+    type = lib.types.listOf lib.types.str;
+    default = [ "devenv" ];
+    description = "Skill directory names to exclude from auto-discovery.";
+  };
 
+  config.ai = {
+    skillsExclude = [ "devenv" ];
+    skills =
+      let
+        skillsDir = ./.;
+        flakeSkillsDir = ../../../../../../.agents/skills;
+
+        discoverSkills =
+          dir: excluded:
+          let
+            entries = builtins.readDir dir;
+          in
+          builtins.listToAttrs (
+            map
+              (name: {
+                inherit name;
+                value = dir + "/${name}";
+              })
+              (
+                builtins.filter (name: entries.${name} == "directory" && !(builtins.elem name excluded)) (
+                  builtins.attrNames entries
+                )
+              )
+          );
+      in
+      (discoverSkills flakeSkillsDir config.ai.skillsExclude)
+      // (discoverSkills skillsDir config.ai.skillsExclude);
   };
 }

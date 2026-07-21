@@ -1,15 +1,3 @@
----
-description: Generates conventional commit messages from diffs
-mode: subagent
-temperature: 0.1
-tools:
-  bash: false
-  write: false
-  edit: false
-  webfetch: false
-  mcp: false
----
-
 Use conventional commits style:
 
 ```

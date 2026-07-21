@@ -82,10 +82,10 @@
   };
   # virtualisation.incus.enable = true;
   services = {
-    ai.enable = true;
+    ai.enable = false;
     open-webui.enable = lib.mkForce false;
     ollama = {
-      enable = true;
+      enable = false;
       package = pkgs.unstable.ollama.override {
         acceleration = "cuda";
         cudaPackages = pkgs.unstable.cudaPackages_12;

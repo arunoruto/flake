@@ -1,23 +1,17 @@
 ---
-name: git-commit-message
+name: conventional-commit
 description: Generates conventional commit messages from diffs
-license: MIT
-compatibility: opencode
-metadata:
-  audience: developers
-  workflow: git
 ---
 
-## What I do
+## Purpose and scope
 
-- Analyze diffs to understand _what_ changed and _why_
-- Generate strictly formatted Conventional Commit messages
-- Prioritize important changes over trivial formatting
+- Generate strictly formatted Conventional Commits from git diffs.
+- Prioritize important logic changes over trivial formatting noise.
+- Applies to both staged and unstaged diffs.
 
 ## When to use me
 
-Pipe your staged changes into this skill:
-`git diff --staged | opencode run git-commit`
+Provide a diff and this skill will generate a commit message for the changes.
 
 ## Instructions
 
@@ -39,7 +33,8 @@ You are an expert developer. Write a commit message for the provided changes.
      [optional footer(s)]
      ```
 
-   - Prefix: Use a valid semantic prefix (fix, feat, chore, refactor, style, docs, perf, test, ci, build).
+   - Prefix: Use a valid semantic prefix (feat, fix, chore, refactor, style, docs, perf, test, ci, build, revert).
+   - Breaking changes: Append `!` after the type/scope (e.g., `feat!:` or `feat(api)!:`) and include `BREAKING CHANGE:` in the footer.
    - Tense: Use imperative present tense (e.g., "add" not "added", "fix" not "fixed").
    - Header: Maximum 50 characters.
    - Body: Hard wrap lines at 72 characters.
@@ -67,8 +62,46 @@ You are an expert developer. Write a commit message for the provided changes.
      your model name in the system environment.
    - Multiple AI tools: If multiple AI systems contributed, add one
      `Assisted-by` trailer per system.
-   - Example:
 
-     ```
-     Assisted-by: opencode:deepseek-v4-pro
-     ```
+## Request changes when
+
+- The type is missing or not from the allowed list.
+- The description is missing or uses past tense instead of imperative mood.
+- The header exceeds 50 characters.
+- Body lines are not wrapped at 72 characters.
+- Any line starts with `#`.
+- The description duplicates the type instead of describing the change.
+- The body restates the description without adding context.
+
+## Checklist
+
+- [ ] Type is a valid conventional commit prefix.
+- [ ] Description is in imperative present tense.
+- [ ] Header is 50 characters or fewer.
+- [ ] Body explains _what_ and _why_, not just _what_.
+- [ ] Body lines are wrapped at 72 characters.
+- [ ] No line starts with `#`.
+- [ ] Breaking changes use `!` notation and `BREAKING CHANGE:` footer.
+- [ ] Assisted-by trailer is present.
+
+## Examples
+
+### Simple
+
+```
+feat(auth): add password reset flow
+```
+
+### Complex
+
+```
+feat(api)!: switch to token-based authentication
+
+Replace session cookies with JWT tokens for stateless auth.
+Refresh tokens are stored in httpOnly cookies.
+
+BREAKING CHANGE: all existing sessions are invalidated.
+Clients must migrate to the new token flow.
+
+Assisted-by: opencode:deepseek-v4-pro
+```
