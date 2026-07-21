@@ -274,6 +274,15 @@
                 };
                 # statix reads statix.toml (ignores generated hardware-configuration.nix)
                 statix.enable = true;
+                # flake.lock is bumped only by the scheduled Update Lockfile
+                # action (see .github/workflows/update.yaml); reject local commits.
+                lockfile-managed-by-ci = {
+                  enable = true;
+                  name = "flake.lock is CI-managed";
+                  entry = "./scripts/block-lockfile-commit.sh";
+                  files = "^flake\\.lock$";
+                  pass_filenames = false;
+                };
               };
             };
           };
