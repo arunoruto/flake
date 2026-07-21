@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   pkgs,
   ...
@@ -22,17 +23,44 @@
 
       If a path is used, it is expected to contain one folder per skill name, each
       containing a {file}`SKILL.md`.
+
+      By default, skills are auto-discovered from {file}`.agents/skills/` at the
+      flake root and this skill directory. Only subdirectories are included.
     '';
   };
 
-  config.ai.skills =
-    let
-      skillsDir = ./.;
-    in
-    {
-      # caveman = pkgs.caveman + "/plugins/caveman/skills/caveman";
-      commit = skillsDir + /commit;
-      git-commit-nixpkgs = skillsDir + /git-commit-nixpkgs;
-      # devenv = skillsDir + /devenv;
-    };
+  options.ai.skillsExclude = lib.mkOption {
+    type = lib.types.listOf lib.types.str;
+    default = [ "devenv" ];
+    description = "Skill directory names to exclude from auto-discovery.";
+  };
+
+  config.ai = {
+    skillsExclude = [ "devenv" ];
+    skills =
+      let
+        skillsDir = ./.;
+        flakeSkillsDir = ../../../../../../.agents/skills;
+
+        discoverSkills =
+          dir: excluded:
+          let
+            entries = builtins.readDir dir;
+          in
+          builtins.listToAttrs (
+            map
+              (name: {
+                inherit name;
+                value = dir + "/${name}";
+              })
+              (
+                builtins.filter (name: entries.${name} == "directory" && !(builtins.elem name excluded)) (
+                  builtins.attrNames entries
+                )
+              )
+          );
+      in
+      (discoverSkills flakeSkillsDir config.ai.skillsExclude)
+      // (discoverSkills skillsDir config.ai.skillsExclude);
+  };
 }
