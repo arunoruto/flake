@@ -224,6 +224,48 @@
               # nvidia.acceptLicense = true;
             };
           };
+          # Hooks that gate what lands in git history: formatting, the
+          # packages/**/package.nix convention, and keeping flake.lock
+          # CI-only. These run in `nix flake check`, so they must stay green.
+          ciHooks = {
+            nixfmt.enable = true;
+            # Newly added packages/**/package.nix must opt into
+            # __structuredAttrs and strictDeps (see the script).
+            new-package-attrs = {
+              enable = true;
+              name = "new packages set structuredAttrs/strictDeps";
+              entry = "./scripts/check-new-packages.sh";
+              files = "packages/.*/package\\.nix$";
+            };
+            # flake.lock is bumped only by the scheduled Update Lockfile
+            # action (see .github/workflows/update.yaml); reject local commits.
+            lockfile-managed-by-ci = {
+              enable = true;
+              name = "flake.lock is CI-managed";
+              entry = "./scripts/block-lockfile-commit.sh";
+              files = "^flake\\.lock$";
+              pass_filenames = false;
+            };
+          };
+          # statix/deadnix are lints, not correctness gates: enforced on
+          # commit locally, but excluded from `checks` so a lint finding
+          # never fails CI.
+          lintHooks = {
+            deadnix = {
+              enable = true;
+              settings = {
+                noLambdaArg = true;
+                noLambdaPatternNames = true;
+              };
+            };
+            # statix reads statix.toml (ignores generated hardware-configuration.nix)
+            statix.enable = true;
+          };
+          gitHooksLocal = inputs.git-hooks.lib.${system}.run {
+            package = pkgs-system.prek;
+            src = ./.;
+            hooks = ciHooks // lintHooks;
+          };
         in
         {
           devShells =
@@ -233,7 +275,7 @@
             })
             // {
               nix = pkgs-system.mkShell {
-                shellHook = self.checks.${system}.pre-commit-check.shellHook;
+                inherit (gitHooksLocal) shellHook;
                 buildInputs =
                   (with pkgs-system; [
                     just
@@ -241,7 +283,7 @@
                     deadnix
                     nixfmt-tree
                   ])
-                  ++ self.checks.${system}.pre-commit-check.enabledPackages;
+                  ++ gitHooksLocal.enabledPackages;
               };
             };
           legacyPackages = import ./packages pkgs-system;
@@ -255,35 +297,7 @@
             pre-commit-check = inputs.git-hooks.lib.${system}.run {
               package = pkgs-system.prek;
               src = ./.;
-              hooks = {
-                nixfmt.enable = true;
-                # Newly added packages/**/package.nix must opt into
-                # __structuredAttrs and strictDeps (see the script).
-                new-package-attrs = {
-                  enable = true;
-                  name = "new packages set structuredAttrs/strictDeps";
-                  entry = "./scripts/check-new-packages.sh";
-                  files = "packages/.*/package\\.nix$";
-                };
-                deadnix = {
-                  enable = true;
-                  settings = {
-                    noLambdaArg = true;
-                    noLambdaPatternNames = true;
-                  };
-                };
-                # statix reads statix.toml (ignores generated hardware-configuration.nix)
-                statix.enable = true;
-                # flake.lock is bumped only by the scheduled Update Lockfile
-                # action (see .github/workflows/update.yaml); reject local commits.
-                lockfile-managed-by-ci = {
-                  enable = true;
-                  name = "flake.lock is CI-managed";
-                  entry = "./scripts/block-lockfile-commit.sh";
-                  files = "^flake\\.lock$";
-                  pass_filenames = false;
-                };
-              };
+              hooks = ciHooks;
             };
           };
         }
