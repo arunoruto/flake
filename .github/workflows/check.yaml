@@ -61,8 +61,14 @@ jobs:
           cat $GITHUB_STEP_SUMMARY
       - name: Check Flake
         run: nix flake check --extra-experimental-features pipe-operators --accept-flake-config
-    # - name: Linting
-    #   run: nix run nixpkgs#statix -- check
+      # statix/deadnix are lints, not correctness gates (see flake.nix's
+      # lintHooks) — run them for visibility but don't fail the job on findings.
+      - name: Lint (statix)
+        continue-on-error: true
+        run: nix run nixpkgs#statix -- check
+      - name: Lint (deadnix)
+        continue-on-error: true
+        run: nix run nixpkgs#deadnix -- --no-lambda-arg --no-lambda-pattern-names --fail .
 
 # check-flake-debug:
 #   name: Check Flake (debug mode)
