@@ -107,18 +107,24 @@ in
 
     home = {
       packages =
-        (with pkgs; [
-          # unstable.nixfmt-rfc-style
-          unstable.nixfmt
+        (
+          with pkgs;
+          [
+            nix-output-monitor
+            nvd
 
-          nix-du
-          nix-index # for developing nixpkgs
-          nix-tree
-          nix-update
-          nix-output-monitor
-          nvd
-          unstable.nixpkgs-review
-        ])
+            unstable.nixfmt
+
+            just
+          ]
+          ++ lib.optionals config.hosts.development.enable [
+            nix-du
+            nix-index # for developing nixpkgs
+            nix-tree
+            nix-update
+            nixpkgs-review
+          ]
+        )
         ++ [
           nix-repl # my nix repl wrapper
         ]
