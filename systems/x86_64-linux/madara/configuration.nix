@@ -75,7 +75,7 @@
       enable = true;
       release = "R2025a";
     };
-    niri.enable = true;
+    niri.enable = false;
   };
   virtualisation = {
     # docker.enable = true;
@@ -220,11 +220,17 @@
   environment.systemPackages = with pkgs; [
     signal-desktop
   ];
-  networking.firewall = {
-    trustedInterfaces = [ "tailscale0" ];
-    allowedTCPPorts = lib.optionals config.services.go2rtc.enable [
-      1984
-      8554
+  networking = {
+    nameservers = [
+      "1.1.1.1"
+      "1.0.0.1"
     ];
+    firewall = {
+      trustedInterfaces = [ "tailscale0" ];
+      allowedTCPPorts = lib.optionals config.services.go2rtc.enable [
+        1984
+        8554
+      ];
+    };
   };
 }
