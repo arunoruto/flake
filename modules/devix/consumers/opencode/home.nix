@@ -1,4 +1,4 @@
-# OpenCode integration for development language profiles
+# OpenCode adapter: render the resolved language set into opencode.json.
 {
   config,
   lib,
@@ -7,13 +7,13 @@
 }:
 
 let
-  consumersLib = import ../../lib/consumers.nix { inherit lib; };
-  opencodeLib = import ../../lib/opencode.nix { inherit lib; };
+  consumers = import ../registry.nix { inherit lib; };
+  opencodeLib = import ./transform.nix { inherit lib; };
 
-  cfg = config.development;
+  cfg = config.devix;
 
-  languagesForOpencode = consumersLib.languagesFor "opencode" cfg.languages;
-  resolvedLanguagesForOpencode = consumersLib.resolveForConsumer "opencode" cfg languagesForOpencode;
+  languagesForOpencode = consumers.languagesFor "opencode" cfg.languages;
+  resolved = consumers.resolveForConsumer "opencode" cfg languagesForOpencode;
 
   # Build a server's launcher command. Bare command + args, unless the server
   # needs env/secret setup, in which case wrap it in a shell launcher that
@@ -40,19 +40,11 @@ let
       in
       [ (lib.getExe wrapper) ] ++ lspOpts.args;
 
-  opencodeSettings = opencodeLib.toOpencodeSettings mkCommand resolvedLanguagesForOpencode;
+  opencodeSettings = opencodeLib.toOpencodeSettings mkCommand resolved;
   hasOpencodeConfig = opencodeSettings != { };
 in
 {
-  config = lib.mkMerge [
-    {
-      development.consumers.opencode.enable = lib.mkDefault (
-        cfg.autoConfigureEditors && (config.programs.opencode.enable or false)
-      );
-    }
-
-    (lib.mkIf (cfg.enable && cfg.consumers.opencode.enable && hasOpencodeConfig) {
-      programs.opencode.settings = opencodeSettings;
-    })
-  ];
+  config = lib.mkIf (cfg.enable && cfg.consumers.opencode.enable && hasOpencodeConfig) {
+    programs.opencode.settings = opencodeSettings;
+  };
 }

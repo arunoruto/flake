@@ -1,25 +1,16 @@
 # Pure functions for transforming development language data to Zed settings.
 #
-# Zed-specific per-language metadata lives in each lib/<lang>.nix under
-# `consumerMeta.zed`:
-#   - name           : Zed's display name for the language (settings key).
-#   - extensions     : Zed extensions to install for the language.
-#   - languageServers: the curated, ordered `language_servers` list Zed should
-#                      use. May contain the literal "..." token (Zed's "then the
-#                      defaults" marker) and deliberately omits devix servers
-#                      that Zed handles better with its own built-ins.
-# A language without that metadata is simply not supported by Zed and is skipped.
+# Zed's per-language metadata is typed by `metaOptions` in ./default.nix and
+# supplied by each languages/<lang>.nix under `consumerMeta.zed`.
 #
-# Languages are expected to arrive already resolved for the "zed" consumer
-# (see lib/consumers.nix `resolveForConsumer`), i.e. `lspServers`/`formatters`
-# are filtered to those enabled and exposed to Zed, with the resolved registry
-# entries attached as `lsps`/`formatterConfigs`.
+# Languages arrive already filtered and resolved for the "zed" consumer (see
+# ../registry.nix): capability-checked, so `consumerMeta.zed` is non-null for
+# every one of them, with `lspServers`/`formatters` narrowed to what is enabled
+# and exposed to Zed and the resolved registry entries attached as
+# `lsps`/`formatterConfigs`.
 { lib }:
 let
-  zedMeta = language: language.consumerMeta.zed or null;
-
-  # Only languages that carry Zed metadata are supported by Zed (capability).
-  supported = languages: lib.filterAttrs (_: language: zedMeta language != null) languages;
+  zedMeta = language: language.consumerMeta.zed;
 
   # The curated server ids that name a real devix LSP (i.e. excluding the "..."
   # Zed-defaults marker) — these are the ones we emit a `lsp.<id>.binary` for.
@@ -87,20 +78,15 @@ let
   toZedSettings =
     languages:
     let
-      supportedLanguages = supported languages;
-      languagesSettings = builtins.listToAttrs (lib.mapAttrsToList languageSetting supportedLanguages);
-      lsp = lspSettings supportedLanguages;
+      languagesSettings = builtins.listToAttrs (lib.mapAttrsToList languageSetting languages);
+      lsp = lspSettings languages;
     in
     lib.optionalAttrs (languagesSettings != { }) { languages = languagesSettings; }
     // lib.optionalAttrs (lsp != { }) { inherit lsp; };
 
   extractExtensions =
     languages:
-    lib.unique (
-      lib.concatMap (language: (zedMeta language).extensions or [ ]) (
-        lib.attrValues (supported languages)
-      )
-    );
+    lib.unique (lib.concatMap (language: (zedMeta language).extensions) (lib.attrValues languages));
 in
 {
   inherit

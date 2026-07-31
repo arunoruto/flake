@@ -1,34 +1,35 @@
 # Pure transforms: development languages -> OpenCode (opencode.json) settings.
 #
-# OpenCode attaches LSP servers and formatters to files by extension. A language
-# is supported by OpenCode iff it carries `consumerMeta.opencode = { extensions }`
-# (file-extension globs like ".py"). `mkCommand serverName lspOpts` builds the
-# launcher command array — the home target supplies it so this stays pure (it
-# wraps the command for env/secret setup when needed).
+# OpenCode attaches LSP servers and formatters to files by extension, which it
+# learns from `consumerMeta.opencode.extensions` (typed by `metaOptions` in
+# ./default.nix). `mkCommand serverName lspOpts` builds the launcher command
+# array — the home target supplies it so this stays pure (it wraps the command
+# for env/secret setup when needed).
+#
+# Languages arrive already filtered and resolved for the "opencode" consumer
+# (see ../registry.nix), so `consumerMeta.opencode` is non-null throughout.
 { lib }:
 let
-  ocMeta = language: language.consumerMeta.opencode or null;
-  supported = languages: lib.filterAttrs (_: language: ocMeta language != null) languages;
+  ocMeta = language: language.consumerMeta.opencode;
 
-  # serverName -> file extensions aggregated across supported languages using it.
+  # serverName -> file extensions aggregated across the languages using it.
   extensionsByServer =
     languages:
     lib.foldl' (
       acc: language:
       let
-        exts = (ocMeta language).extensions or [ ];
+        inherit ((ocMeta language)) extensions;
       in
       lib.foldl' (
-        acc2: serverName: acc2 // { ${serverName} = lib.unique ((acc2.${serverName} or [ ]) ++ exts); }
+        acc2: serverName:
+        acc2 // { ${serverName} = lib.unique ((acc2.${serverName} or [ ]) ++ extensions); }
       ) acc language.lspServers
-    ) { } (lib.attrValues (supported languages));
+    ) { } (lib.attrValues languages);
 
-  # Resolved LSP option-sets across supported languages, keyed by server name.
+  # Resolved LSP option-sets across the languages, keyed by server name.
   lspOptsByServer =
     languages:
-    lib.foldl' lib.recursiveUpdate { } (
-      lib.mapAttrsToList (_: language: language.lsps) (supported languages)
-    );
+    lib.foldl' lib.recursiveUpdate { } (lib.mapAttrsToList (_: language: language.lsps) languages);
 
   toLspSettings =
     mkCommand: languages:
@@ -43,13 +44,13 @@ let
       initialization = opts.${serverName}.config;
     }) exts;
 
-  # formatterName -> { command; extensions } aggregated across supported languages.
+  # formatterName -> { command; extensions } aggregated across the languages.
   toFormatterSettings =
     languages:
     lib.foldl' (
       acc: language:
       let
-        exts = (ocMeta language).extensions or [ ];
+        exts = (ocMeta language).extensions;
       in
       lib.foldl' (
         acc2: formatterName:
@@ -64,7 +65,7 @@ let
           };
         }
       ) acc language.formatters
-    ) { } (lib.attrValues (supported languages));
+    ) { } (lib.attrValues languages);
 
   toOpencodeSettings =
     mkCommand: languages:

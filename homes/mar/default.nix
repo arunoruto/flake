@@ -13,7 +13,7 @@
       zsh.enable = true;
     };
 
-    development = {
+    devix = {
       lsps.nixd.config = {
         nixpkgs.expr = "import (builtins.getFlake ''${config.home.sessionVariables.NH_FLAKE}'').inputs.nixpkgs { }";
         formatting.command = [ "nix fmt" ];
@@ -24,10 +24,8 @@
         diagnostics = { };
       };
 
-      formatters.nixfmt = {
-        package = pkgs.unstable.nixfmt;
-        command = lib.getExe pkgs.unstable.nixfmt;
-      };
+      # `command` follows `package`, so pointing at the unstable build is enough.
+      formatters.nixfmt.package = pkgs.unstable.nixfmt;
     };
 
     # Disable KDE/Plasma theming (mar uses GNOME)

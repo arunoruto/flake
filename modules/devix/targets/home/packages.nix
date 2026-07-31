@@ -1,3 +1,6 @@
+# Install the LSPs and formatters that the enabled languages actually reference,
+# addons included, and assert that every referenced name exists in the
+# registries.
 {
   config,
   lib,
@@ -5,11 +8,14 @@
 }:
 
 let
-  cfg = config.development;
+  consumers = import ../../consumers/registry.nix { inherit lib; };
+
+  cfg = config.devix;
   enabledLanguages = lib.filterAttrs (_: language: language.enable) cfg.languages;
-  referencedLsps = lib.sort lib.lessThan (
-    lib.unique (lib.concatMap (language: language.lspServers) (lib.attrValues enabledLanguages))
-  );
+
+  # Consumer-independent: a server exposed to only one consumer still needs
+  # installing, so this counts every attachment regardless of exposure.
+  referencedLsps = lib.sort lib.lessThan (consumers.referencedLsps cfg);
   referencedFormatters = lib.sort lib.lessThan (
     lib.unique (lib.concatMap (language: language.formatters) (lib.attrValues enabledLanguages))
   );
@@ -54,11 +60,11 @@ in
     assertions = [
       {
         assertion = missingLsps == [ ];
-        message = "development.languages references unknown LSPs: ${lib.concatStringsSep ", " missingLsps}";
+        message = "devix.languages / devix.addons reference unknown LSPs: ${lib.concatStringsSep ", " missingLsps}";
       }
       {
         assertion = missingFormatters == [ ];
-        message = "development.languages references unknown formatters: ${lib.concatStringsSep ", " missingFormatters}";
+        message = "devix.languages references unknown formatters: ${lib.concatStringsSep ", " missingFormatters}";
       }
     ];
 

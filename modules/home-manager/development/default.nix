@@ -5,11 +5,11 @@
 # file is where the actual choices live — which languages/LSPs are on, and the
 # editor defaults — all via lib.mkDefault so individual homes can override.
 #
-# Consumers attach Stylix-style: each `development.consumers.<name>.enable`
-# defaults to `development.autoConfigureEditors && programs.<editor>.enable`.
+# Consumers attach Stylix-style: each `devix.consumers.<name>.enable`
+# defaults to `devix.autoEnable && programs.<editor>.enable`.
 # So enabling an editor (helix here, zed in foreground/programs, opencode in
 # background/cli/ai) is enough for devix to configure it; force a consumer on or
-# off explicitly with `development.consumers.<name>.enable`.
+# off explicitly with `devix.consumers.<name>.enable`.
 {
   config,
   lib,
@@ -31,7 +31,7 @@ in
 
   config = lib.mkMerge [
     {
-      development = {
+      devix = {
         enable = lib.mkDefault true;
         defaultEditor = lib.mkDefault "helix";
 
@@ -64,18 +64,26 @@ in
           julia.enable = lib.mkDefault false;
         };
 
-        lsps = {
-          codebook.enable = lib.mkDefault dev;
-          ltex.enable = lib.mkDefault dev;
-          harper.enable = lib.mkDefault false;
-          copilot.enable = lib.mkDefault false;
-          lsp-ai.enable = lib.mkDefault false;
+        # Addons contribute servers to the languages above rather than being
+        # languages themselves. `grammar` attaches ltex + codebook to the prose
+        # formats (markdown, latex, typst); see modules/devix/addons/.
+        addons = {
+          grammar.enable = lib.mkDefault dev;
+          ai.enable = lib.mkDefault false;
         };
+
+        # Which build of a server to use is this flake's choice, not devix's:
+        # the data files stay on plain nixpkgs so the exported modules work
+        # without our overlays. `command` follows `package` automatically.
+        lsps.nixd.package = pkgs.unstable.nixd;
       };
 
       programs.helix.enable = lib.mkDefault true;
       programs.helix.package = pkgs.unstable.helix;
     }
+    (lib.mkIf config.devix.addons.ai.enable {
+      devix.lsps.copilot.package = pkgs.unstable.copilot-language-server;
+    })
     (lib.mkIf dev {
       home.packages = with pkgs.unstable; [ prek ];
     })

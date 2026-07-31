@@ -159,8 +159,8 @@
       };
       devenvModules = {
         default = import ./modules/devix;
-        core = ./modules/devix/languages/core.nix;
-        helix = import ./modules/devix/editors/helix.nix;
+        core = ./modules/devix/core;
+        helix = import ./modules/devix/consumers/helix/devenv.nix;
         python = ./modules/devix/profiles/python.nix;
       };
 

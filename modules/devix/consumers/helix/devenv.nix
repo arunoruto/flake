@@ -6,14 +6,12 @@
 }:
 let
   tomlFormat = pkgs.formats.toml { };
-  consumersLib = import ../lib/consumers.nix { inherit lib; };
-  helixLib = import ../lib/helix.nix { inherit lib; };
+  consumersLib = import ../registry.nix { inherit lib; };
+  helixLib = import ./transform.nix { inherit lib; };
 
   # Languages enabled and exposed to Helix (consumers.helix.enable)
-  activeLanguages = consumersLib.languagesFor "helix" config.development.languages;
-  resolvedActiveLanguages =
-    consumersLib.resolveForConsumer "helix" config.development
-      activeLanguages;
+  activeLanguages = consumersLib.languagesFor "helix" config.devix.languages;
+  resolvedActiveLanguages = consumersLib.resolveForConsumer "helix" config.devix activeLanguages;
 
   # Use pure functions to transform data
   extractedPackages = helixLib.extractPackages resolvedActiveLanguages;

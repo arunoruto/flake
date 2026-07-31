@@ -1,10 +1,9 @@
 { ... }:
 {
   imports = [
-    ../languages/python.nix
+    ../languages
+    ../addons
   ];
 
-  development.languages.python = {
-    enable = true;
-  };
+  devix.languages.python.enable = true;
 }

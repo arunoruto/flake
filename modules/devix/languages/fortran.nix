@@ -1,5 +1,32 @@
-import ../lib/mkLanguage.nix {
-  name = "fortran";
-  libPath = ../lib/fortran.nix;
-  description = "Fortran development environment";
+{ lib, pkgs }:
+
+{
+  lsps.fortls = {
+    enable = true;
+    package = pkgs.fortls;
+  };
+
+  formatters.fprettify = {
+    enable = true;
+    package = pkgs.fprettify;
+  };
+
+  language = {
+    lspServers = [ "fortls" ];
+    formatters = [ "fprettify" ];
+    tabWidth = 4;
+    insertSpaces = true;
+  };
+
+  # OpenCode-only: Zed has no first-class Fortran LSP adapter here, so Fortran is
+  # left out of the Zed consumer (no consumerMeta.zed).
+  consumerMeta.opencode = {
+    extensions = [
+      ".f90"
+      ".f95"
+      ".f03"
+      ".f"
+      ".for"
+    ];
+  };
 }

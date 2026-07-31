@@ -1,31 +1,19 @@
-# Home-manager integration for development language profiles
-{ ... }:
+# Home Manager target: the devix option schema, every language definition, the
+# shared package/assertion handling, and one adapter per registered consumer.
+{ lib, ... }:
+
+let
+  consumers = import ../../consumers/registry.nix { inherit lib; };
+in
 {
   imports = [
-    ../../languages/core.nix
-    ../../languages/nix.nix
-    ../../languages/python.nix
-    ../../languages/json.nix
-    ../../languages/yaml.nix
-    ../../languages/toml.nix
-    ../../languages/xml.nix
-    ../../languages/markdown.nix
-    ../../languages/typst.nix
-    ../../languages/latex.nix
-    ../../languages/bash.nix
-    ../../languages/fish.nix
-    ../../languages/nu.nix
-    ../../languages/go.nix
-    ../../languages/rust.nix
-    ../../languages/fortran.nix
-    ../../languages/julia.nix
-    ../../languages/matlab.nix
-    ../../languages/grammar.nix
-    ../../languages/ai.nix
-    ./languages.nix
+    ../../core
+    ../../core/renames.nix
+    ../../languages
+    ../../addons
+    ./auto-enable.nix
     ./editor-env.nix
-    ./helix.nix
-    ./zed.nix
-    ./opencode.nix
-  ];
+    ./packages.nix
+  ]
+  ++ consumers.homeModules;
 }

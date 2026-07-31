@@ -1,10 +1,10 @@
 { lib, ... }:
 
 let
-  consumers = import ../lib/consumers.nix { inherit lib; };
+  consumers = import ../consumers/registry.nix { inherit lib; };
 
   lspSubmodule = lib.types.submodule (
-    { name, ... }:
+    { name, config, ... }:
     {
       options = {
         enable = lib.mkOption {
@@ -35,8 +35,14 @@ let
 
         command = lib.mkOption {
           type = lib.types.str;
-          default = name;
-          description = "Command used to start this language server.";
+          default = if config.package != null then lib.getExe config.package else name;
+          defaultText = lib.literalExpression "lib.getExe package, or the registry key when there is no package";
+          description = ''
+            Command used to start this language server. Derived from `package`,
+            so pointing `package` at a different build (an unstable one, say) is
+            normally all you need. Set this explicitly when the binary is not the
+            package's main program.
+          '';
         };
 
         args = lib.mkOption {
@@ -79,7 +85,7 @@ let
   );
 
   formatterSubmodule = lib.types.submodule (
-    { name, ... }:
+    { name, config, ... }:
     {
       options = {
         enable = lib.mkOption {
@@ -96,8 +102,12 @@ let
 
         command = lib.mkOption {
           type = lib.types.str;
-          default = name;
-          description = "Command used to run this formatter.";
+          default = if config.package != null then lib.getExe config.package else name;
+          defaultText = lib.literalExpression "lib.getExe package, or the registry key when there is no package";
+          description = ''
+            Command used to run this formatter. Derived from `package`; set it
+            explicitly when the binary is not the package's main program.
+          '';
         };
 
         args = lib.mkOption {
@@ -114,56 +124,58 @@ let
   );
 in
 {
-  options.development = {
-    enable = lib.mkEnableOption "development environment integration" // {
+  options.devix = {
+    enable = lib.mkEnableOption "devix" // {
+      description = ''
+        Whether to let devix configure development tooling. When off, the
+        language and addon definitions are still available as options but no
+        editor is configured and no language server is installed.
+      '';
       default = false;
     };
 
-    autoConfigureEditors = lib.mkOption {
+    autoEnable = lib.mkOption {
       type = lib.types.bool;
       default = true;
       description = ''
         Master auto-enable for consumers, analogous to Stylix's
         `stylix.autoEnable`. When true, each consumer defaults to active
-        whenever its program is enabled (`development.consumers.<name>.enable`
+        whenever its program is enabled (`devix.consumers.<name>.enable`
         defaults to `programs.<editor>.enable`). Set to false to opt out of
         automatic per-consumer enabling; you can still force an individual
-        consumer on via `development.consumers.<name>.enable = true`.
+        consumer on via `devix.consumers.<name>.enable = true`.
       '';
     };
 
     defaultEditor = lib.mkOption {
-      type = lib.types.nullOr (
-        lib.types.enum [
-          "helix"
-          "zed"
-        ]
-      );
+      type = lib.types.nullOr (lib.types.enum (lib.attrNames consumers.editorCommands));
       default = null;
       description = ''
         Preferred editor for EDITOR/VISUAL and future default-app integrations.
+        The candidates are the consumers that declare an `editorCommand`.
         Generated editor configuration is controlled by programs.<editor>.enable.
       '';
     };
 
     consumers = lib.mkOption {
       type = lib.types.submodule {
-        options = lib.genAttrs consumers.names (
-          name:
+        options = lib.mapAttrs (
+          name: entry:
           lib.mkOption {
             type = lib.types.submodule {
               options.enable = lib.mkEnableOption "the ${name} consumer" // {
                 description = ''
-                  Whether the ${name} consumer is active. Adapters default this to
-                  the relevant `programs.*.enable`; set it explicitly to force a
-                  consumer on or off regardless of the program.
+                  Whether the ${name} consumer (${entry.description}) is active.
+                  This defaults to the consumer's own `programs.*.enable`; set it
+                  explicitly to force a consumer on or off regardless of the
+                  program.
                 '';
               };
             };
             default = { };
             description = "Activation state for the ${name} consumer.";
           }
-        );
+        ) consumers.entries;
       };
       default = { };
       description = "Active editor/program consumers of the development configuration.";
