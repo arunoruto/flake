@@ -4,6 +4,7 @@
   rustPlatform,
   fetchFromGitHub,
   zig_0_15,
+  installShellFiles,
   cctools,
   xcbuild,
   versionCheckHook,
@@ -11,7 +12,7 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "herdr";
-  version = "0.7.1";
+  version = "0.7.3";
 
   __structuredAttrs = true;
 
@@ -19,10 +20,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "ogulcancelik";
     repo = "herdr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/WnsUO1DuSmBfVo8LCFaDJEZvSrYnJZPyRNqASbPzV8=";
+    hash = "sha256-Q2yvMs/N6oAF8xnRIrMxEOOV6Aj8aAXQzuvcaux2enA=";
   };
 
-  cargoHash = "sha256-enVFwIGTM7oBg3teWC6MO/bdT/jDIKbaxKq4jE9E0aw=";
+  cargoHash = "sha256-DRjcIJXWGxiA9c7xIiQoWU9az2EFjXsnFKu5sC933eE=";
 
   zigDeps = zig_0_15.fetchDeps {
     inherit (finalAttrs) pname version;
@@ -33,6 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     zig_0_15.hook
+    installShellFiles
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     cctools
@@ -55,7 +57,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall = ''
     cp SKILL.md $out/
-  '';
+  ''
+  + (lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd herdr \
+      --bash <("$out/bin/herdr" completion bash) \
+      --fish <("$out/bin/herdr" completion fish) \
+      --zsh <("$out/bin/herdr" completion zsh)
+  '');
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
@@ -72,7 +80,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://herdr.dev";
     changelog = "https://github.com/ogulcancelik/herdr/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ kevinpita ];
+    maintainers = with lib.maintainers; [
+      kevinpita
+      faukah
+    ];
     mainProgram = "herdr";
     platforms = lib.platforms.unix;
   };
