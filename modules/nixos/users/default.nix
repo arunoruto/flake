@@ -19,6 +19,38 @@ let
       )
     )
   );
+
+  # Does secrets.yaml have a `passwords.<primaryUserName>` entry? sops-nix
+  # fails activation outright if a declared secret's path doesn't exist in
+  # the file, so the hashed-password wiring below only applies when it does.
+  # Only the top-level *keys* of an ENC[]-valued sops file are cleartext, so
+  # this scans the raw YAML text for the `passwords:` block specifically
+  # (other sections, e.g. `ssh_keys:`, reuse the same usernames as keys).
+  hasPasswordSecret =
+    let
+      lines = lib.splitString "\n" (builtins.readFile ../../../secrets/secrets.yaml);
+      isTopLevelKey = line: line != "" && !(lib.hasPrefix " " line) && !(lib.hasPrefix "\t" line);
+      step =
+        acc: line:
+        if acc.found then
+          acc
+        else if isTopLevelKey line then
+          {
+            inSection = line == "passwords:";
+            found = false;
+          }
+        else if acc.inSection && lib.hasPrefix "    ${primaryUserName}:" line then
+          {
+            inherit (acc) inSection;
+            found = true;
+          }
+        else
+          acc;
+    in
+    (lib.foldl' step {
+      inSection = false;
+      found = false;
+    } lines).found;
 in
 {
   imports = [
@@ -54,8 +86,11 @@ in
       }
     ];
 
-    # SOPS secret for the primary user
-    sops.secrets."passwords/${primaryUserName}".neededForUsers = true;
+    # SOPS secret for the primary user's login password — only declared when
+    # secrets.yaml actually has one, see hasPasswordSecret above.
+    sops.secrets = lib.mkIf hasPasswordSecret {
+      "passwords/${primaryUserName}".neededForUsers = true;
+    };
 
     # Base user configuration for the primary user
     users.users.${primaryUserName} = {
@@ -76,6 +111,9 @@ in
         "uinput"
         "tss" # tss group has access to TPM devices
       ];
+    }
+    // lib.optionalAttrs hasPasswordSecret {
+      hashedPasswordFile = config.sops.secrets."passwords/${primaryUserName}".path;
     };
 
     # Enable fish
