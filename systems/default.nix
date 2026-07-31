@@ -14,11 +14,21 @@ let
   # `iso` is not an architecture; it holds the installer image definitions.
   archs = lib.lists.remove "iso" (lib.getDirectories ./.);
 
+  # pkgs is instantiated here rather than by the nixpkgs module, so a host
+  # cannot set `nixpkgs.config` from its configuration.nix (the module asserts
+  # against it). A host that needs its own nixpkgs `config` — permitted
+  # insecure packages, cudaSupport, … — drops a `nixpkgs.nix` next to its
+  # configuration.nix; its attributes are merged over the shared config.
   mkPkgs =
-    arch:
+    arch: hostname:
+    let
+      hostConfigPath = ./${arch}/${hostname}/nixpkgs.nix;
+      hostConfig = lib.optionalAttrs (lib.pathExists hostConfigPath) (import hostConfigPath);
+    in
     import inputs.nixpkgs {
       system = arch;
-      inherit (pkgs-attrs) config overlays;
+      inherit (pkgs-attrs) overlays;
+      config = pkgs-attrs.config // hostConfig;
     };
 
   # Module list for a NixOS host.
@@ -83,7 +93,7 @@ let
       modules = (if darwin then darwinModules else nixosModules) arch hostname;
     in
     builder {
-      pkgs = mkPkgs arch;
+      pkgs = mkPkgs arch hostname;
       system = arch;
       specialArgs = { inherit inputs self; };
       inherit modules;
