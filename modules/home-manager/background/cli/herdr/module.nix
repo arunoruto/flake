@@ -1,37 +1,26 @@
+# Additions to the upstream programs.herdr module (./upstream.nix, dropped once
+# home-manager ships it). Nothing here may *declare* an option upstream owns —
+# enable/package/settings are only read, never redeclared, so this file keeps
+# working unchanged when the import above it flips to the real upstream module.
 {
   config,
-  pkgs,
   lib,
   ...
 }:
 let
   inherit (lib)
-    mkEnableOption
-    mkPackageOption
     mkOption
     mkIf
     types
-    optional
     optionalString
     ;
 
   cfg = config.programs.herdr;
-  settingsFormat = pkgs.formats.toml { };
 
-  configFile = pkgs.runCommand "herdr-config.toml" { } ''
-    cp ${settingsFormat.generate "herdr-config.toml" cfg.settings} $out
-    ${optionalString (cfg.extraConfig != "") ''
-      echo >> $out
-      cat ${pkgs.writeText "herdr-extra-config.toml" cfg.extraConfig} >> $out
-    ''}
-  '';
+  herdr = if cfg.package == null then "herdr" else lib.getExe cfg.package;
 in
 {
   options.programs.herdr = {
-    enable = mkEnableOption "herdr";
-
-    package = mkPackageOption pkgs "herdr" { nullable = true; };
-
     autoAttach = mkOption {
       type = types.bool;
       default = false;
@@ -41,64 +30,82 @@ in
       '';
     };
 
-    settings = mkOption {
-      inherit (settingsFormat) type;
-      default = { };
-      description = ''
-        Settings for herdr config.toml.
-
-        See <https://herdr.dev/docs/configuration/> for all options.
-      '';
-    };
-
     extraConfig = mkOption {
       type = types.lines;
       default = "";
-      description = "Extra TOML appended to the herdr config.toml.";
+      example = ''
+        [ui]
+        pane_borders = false
+      '';
+      description = ''
+        Extra TOML merged into {option}`programs.herdr.settings`.
+
+        Parsed with `builtins.fromTOML` at evaluation time, so syntax errors
+        surface during the build rather than when herdr starts.
+
+        This becomes an ordinary definition of {option}`programs.herdr.settings`
+        and follows the module system's merge rules, exactly like the settings
+        set in ./default.nix and ./theme.nix: tables merge key by key, arrays
+        of tables (`[[keys.command]]`) are concatenated in unspecified order,
+        and redefining a scalar that is already set elsewhere is an evaluation
+        error naming the conflicting path rather than a silent override.
+      '';
     };
 
-    enableZshIntegration = mkEnableOption "zsh integration for auto-attaching to herdr";
+    # Default from home.shell.enable<Shell>Integration rather than a bare
+    # mkEnableOption, so the shells this host actually configures decide.
+    enableBashIntegration = lib.hm.shell.mkBashIntegrationOption { inherit config; };
 
-    enableFishIntegration = mkEnableOption "fish integration for auto-attaching to herdr";
+    enableFishIntegration = lib.hm.shell.mkFishIntegrationOption { inherit config; };
 
-    enableBashIntegration = mkEnableOption "bash integration for auto-attaching to herdr";
+    enableZshIntegration = lib.hm.shell.mkZshIntegrationOption { inherit config; };
   };
 
   config = mkIf cfg.enable {
-    home.packages = optional (cfg.package != null) cfg.package;
+    programs.herdr.settings = fromTOML cfg.extraConfig;
 
-    xdg.configFile = mkIf (cfg.settings != { } || cfg.extraConfig != "") {
-      "herdr/config.toml".source = configFile;
-    };
-
+    # herdr is one headless server hosting N named sessions, so `herdr status`
+    # asks "is the server up?" — auto-attach deliberately joins a running server
+    # and never spawns one, which keeps a client from starting a server whose
+    # protocol version it may not match.
     programs = {
-      zsh.initContent = mkIf cfg.enableZshIntegration ''
-        # herdr auto-attach
-        if [[ -z "$__HERDR_AUTO_ATTACHED" && -z "$HERDR_SOCKET_PATH" && ${
-          optionalString (!cfg.autoAttach) ''-n "$SSH_TTY" && ''
-        }-o interactive && "$TERM" != "dumb" ]]; then
-          export __HERDR_AUTO_ATTACHED=1
-          exec herdr
-        fi
-      '';
+      zsh.initContent = mkIf cfg.enableZshIntegration (
+        # Runs early: the snippet execs, so there is no point paying for the
+        # rest of zshrc first.
+        lib.mkOrder 200 ''
+          # herdr auto-attach
+          if [[ -z "$HERDR_NO_AUTO_ATTACH" && -z "$__HERDR_AUTO_ATTACHED" && -z "$HERDR_SOCKET_PATH" && ${
+            optionalString (!cfg.autoAttach) ''-n "$SSH_TTY" && ''
+          }-o interactive && "$TERM" != "dumb" ]]; then
+            if ${herdr} status >/dev/null 2>&1; then
+              export __HERDR_AUTO_ATTACHED=1
+              exec ${herdr}
+            fi
+          fi
+        ''
+      );
 
       fish.interactiveShellInit = mkIf cfg.enableFishIntegration ''
         # herdr auto-attach
-        if not set -q __HERDR_AUTO_ATTACHED; and not set -q HERDR_SOCKET_PATH; ${
+        if not set -q HERDR_NO_AUTO_ATTACH; and not set -q __HERDR_AUTO_ATTACHED; and not set -q HERDR_SOCKET_PATH; ${
           optionalString (!cfg.autoAttach) "and set -q SSH_TTY; "
         }and status is-interactive; and test "$TERM" != dumb
-          set -gx __HERDR_AUTO_ATTACHED 1
-          exec herdr
+          if ${herdr} status >/dev/null 2>&1
+            set -gx __HERDR_AUTO_ATTACHED 1
+            exec ${herdr}
+          end
         end
       '';
 
       bash.initExtra = mkIf cfg.enableBashIntegration ''
         # herdr auto-attach
-        if [[ -z "$__HERDR_AUTO_ATTACHED" && -z "$HERDR_SOCKET_PATH" && ${
+        if [[ -z "$HERDR_NO_AUTO_ATTACH" && -z "$__HERDR_AUTO_ATTACHED" && -z "$HERDR_SOCKET_PATH" && ${
           optionalString (!cfg.autoAttach) ''-n "$SSH_TTY" && ''
         }"$-" == *i* && "$TERM" != "dumb" ]]; then
-          export __HERDR_AUTO_ATTACHED=1
-          exec herdr
+          if ${herdr} status >/dev/null 2>&1; then
+            export __HERDR_AUTO_ATTACHED=1
+            exec ${herdr}
+          fi
         fi
       '';
     };

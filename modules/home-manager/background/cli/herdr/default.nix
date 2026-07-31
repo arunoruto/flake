@@ -2,17 +2,25 @@
   config,
   pkgs,
   lib,
+  osConfig ? null,
   ...
 }:
 {
   imports = [
+    # Drop at home-manager 26.11 — upstream ships modules/programs/herdr.nix.
+    ./upstream.nix
     ./module.nix
     ./theme.nix
   ];
 
   config = {
     programs.herdr = lib.mkIf config.programs.herdr.enable {
-      package = pkgs.unstable.herdr;
+      package =
+        if ((osConfig != null) && (osConfig.networking.hostName == "madara")) then
+          pkgs.custom.herdr
+        else
+          pkgs.unstable.herdr;
+      # package = pkgs.unstable.herdr;
 
       settings = {
         onboarding = false;
@@ -91,9 +99,6 @@
 
         session.resume_agents_on_restore = true;
       };
-
-      enableZshIntegration = true;
-      enableFishIntegration = lib.mkDefault config.programs.fish.enable;
     };
 
     # Session switcher. herdr has no in-app session manager and blocks
