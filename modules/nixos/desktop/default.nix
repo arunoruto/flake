@@ -30,7 +30,7 @@
     # WMs
     programs = {
       sway.enable = lib.mkDefault false;
-      hyprland.enable = lib.mkDefault true;
+      hyprland.enable = lib.mkDefault false;
     };
 
     # Compositor
