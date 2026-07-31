@@ -49,8 +49,17 @@ bump pkg *flags:
 
 # ── docs ────────────────────────────────────────────────────────────
 
+# Regenerate the devix option reference into docs/devix/reference (gitignored)
+docs-reference:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    out=$(nix build --no-link --print-out-paths .#docs-devix-reference)
+    mkdir -p docs/devix/reference
+    install -m644 "$out"/*.md docs/devix/reference/
+    echo "regenerated docs/devix/reference from modules/devix"
+
 # Serve the mdBook docs locally with live reload
-docs:
+docs: docs-reference
     nix run nixpkgs#mdbook -- serve docs --open
 
 # Build the docs like CI does

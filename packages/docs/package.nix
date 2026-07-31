@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   mdbook,
+  docs-devix-reference,
 }:
 stdenvNoCC.mkDerivation {
   pname = "flake-docs";
@@ -16,7 +17,15 @@ stdenvNoCC.mkDerivation {
 
   buildPhase = ''
     runHook preBuild
+
+    # docs/devix/reference is generated from the option descriptions in
+    # modules/devix, so it is not part of the source tree (see .gitignore).
+    # `just docs` drops the same files in place for local previews.
+    mkdir -p docs/devix/reference
+    cp ${docs-devix-reference}/*.md docs/devix/reference/
+
     cd docs && mdbook build --dest-dir $out
+
     runHook postBuild
   '';
 

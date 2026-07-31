@@ -13,7 +13,7 @@ and where to start when adding something new.
 | `modules/nixos/` | NixOS modules (desktop, services, system, security, users, …). |
 | `modules/darwin/` | nix-darwin modules (homebrew, services, system, users). |
 | `modules/home-manager/` | Home Manager modules — the largest tree, see [background vs foreground](#background-vs-foreground). |
-| `modules/devix/` | Development-environment *mechanism*: a registry of languages, LSPs, and formatters consumed by editors (helix, zed, opencode). Exposed as `homeModules.devix` and `devenvModules.*`. |
+| `modules/devix/` | Development-environment *mechanism*: a registry of languages, addons, LSPs, and formatters consumed by editors (helix, zed, opencode). Exposed as `homeModules.devix` and `devenvModules.*`. See [devix](#devix). |
 | `homes/<user>/` | Per-user Home Manager entry points, auto-discovered for standalone `homeConfigurations`. SSH public keys live in `homes/<user>/keys/`. |
 | `lib/` | Small helper library layered onto `nixpkgs.lib` (directory listing, tag predicate, `eachSystem`). |
 | `overlays/` | Nixpkgs overlays: custom packages, modifications, `pkgs.unstable`, … |
@@ -86,6 +86,23 @@ system.tags = [ "desktop" "workstation" "development" "management" ];
 - **`development/`** — *policy*: which languages/tools from `modules/devix`
   (the mechanism) are turned on for `development`-tagged hosts.
 
+## devix
+
+Development-environment *mechanism*: describe a language once — its language
+servers, formatters and indentation — and every editor that consumes the
+description configures itself from it. Stylix's idea, applied to dev tooling.
+
+It is documented in its own section, starting at [devix](./devix/README.md):
+[concepts](./devix/concepts.md), [usage](./devix/usage.md),
+[adding a language](./devix/adding-a-language.md),
+[adding an editor](./devix/adding-an-editor.md), and a generated
+[support matrix](./devix/reference/support-matrix.md) and option reference.
+
+The one thing worth repeating here is the split this repository depends on:
+`modules/devix` is pure mechanism and enables nothing, while
+`modules/home-manager/development/` is the policy that decides which languages
+are on for which hosts.
+
 ## Adding a host
 
 1. Create `systems/<arch>/<hostname>/default.nix` (plus `configuration.nix`,
@@ -120,6 +137,7 @@ Options defined by this flake (as opposed to upstream NixOS/HM options):
 | `gui.enable` | `modules/nixos/programs/` | "This host has GUI applications" (feeds `foreground.enable`) |
 | `desktop-environment.enable` | `modules/nixos/desktop/` | Desktop environment stack |
 | `hosts.{desktop,laptop,workstation,development}.enable` | `modules/home-manager/imports.nix` | HM-side mirror of the tags |
+| `devix.*` | `modules/devix/` | Development environments — see the [devix](./devix/README.md) section |
 | `foreground.enable` | `modules/home-manager/foreground/` | GUI-facing home config |
 | `theming.{enable,scheme,image}` | `modules/home-manager/theming/`, `modules/nixos/system/theming.nix` | Stylix scheme/wallpaper |
 | `rssh.enable`, `yubikey.enable`, `cachix.enable`, `latex.enable` | `modules/nixos/**` | Feature toggles for individual services |

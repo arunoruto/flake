@@ -7,6 +7,7 @@ pkgs.lib.makeScope pkgs.newScope (
     copilot-language-server = self.callPackage ./copilot-language-server/package.nix { };
     dpcpp-prop = self.callPackage ./dpcpp/proprietary4.nix { };
     docs = self.callPackage ./docs/package.nix { };
+    docs-devix-reference = self.callPackage ./docs/devix-reference.nix { };
     gemini-cli-custom = self.callPackage ./gemini-cli/package.nix { };
     trmnl = self.callPackage ./trmnl/package.nix { };
 
