@@ -7,7 +7,10 @@
 {
   users.primaryUser = "mirza";
 
-  system.tags = [ "nas" ];
+  system.tags = [
+    "nas"
+    "server"
+  ];
 
   hosts = {
     amd = {

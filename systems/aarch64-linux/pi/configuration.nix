@@ -6,6 +6,8 @@
 {
   users.primaryUser = "mirza";
 
+  system.tags = [ "server" ];
+
   networking = {
     networkmanager = {
       enable = true;

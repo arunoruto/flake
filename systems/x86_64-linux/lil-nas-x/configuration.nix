@@ -7,6 +7,8 @@
 {
   users.primaryUser = "mirza";
 
+  system.tags = [ "server" ];
+
   hosts = {
     intel = {
       enable = true;

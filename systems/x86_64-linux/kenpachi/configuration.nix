@@ -6,6 +6,8 @@
 {
   users.primaryUser = "mirza";
 
+  system.tags = [ "server" ];
+
   security.tpm2.enable = true;
 
   colmena.deployment.buildOnTarget = false;

@@ -12,6 +12,7 @@
     ./laptop.nix
     ./workstation.nix
     ./management.nix
+    ./server.nix
   ];
 
   # Tag metadata for colmena's hive so you can target e.g. `--on @desktop`.

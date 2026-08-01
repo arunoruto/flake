@@ -1,6 +1,8 @@
 _: {
   users.primaryUser = "mirza";
 
+  system.tags = [ "server" ];
+
   colmena.deployment.buildOnTarget = false;
 
   boot.loader = {

@@ -10,6 +10,8 @@ in
 {
   users.primaryUser = "mirza";
 
+  system.tags = [ "server" ];
+
   colmena.deployment = {
     targetHost = config.networking.hostName;
   };

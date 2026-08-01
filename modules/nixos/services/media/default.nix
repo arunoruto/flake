@@ -28,35 +28,29 @@
     openFirewall = lib.mkEnableOption "Open all firewall ports of media services";
   };
 
+  # Whether pipewire runs is decided by the tag modules (interactive tags
+  # default it on, `server` defaults it off); see modules/nixos/system/tags/.
   config =
     let
       cfg = config.services.media;
     in
-    lib.mkMerge [
-      (lib.mkIf cfg.enable {
-        services = {
-          arr.enable = lib.mkDefault cfg.services;
-          radarr.enable = lib.mkDefault cfg.services;
-          sonarr.enable = lib.mkDefault cfg.services;
-          jellyfin.enable = lib.mkDefault cfg.services;
-          plex.enable = lib.mkDefault cfg.services;
-          tautulli.enable = lib.mkDefault cfg.services;
-        };
+    lib.mkIf cfg.enable {
+      services = {
+        arr.enable = lib.mkDefault cfg.services;
+        radarr.enable = lib.mkDefault cfg.services;
+        sonarr.enable = lib.mkDefault cfg.services;
+        jellyfin.enable = lib.mkDefault cfg.services;
+        plex.enable = lib.mkDefault cfg.services;
+        tautulli.enable = lib.mkDefault cfg.services;
+      };
 
-        users.groups.media = {
-          gid = 420;
-          members = [
-            config.users.primaryUser
-          ];
-        };
+      users.groups.media = {
+        gid = 420;
+        members = [
+          config.users.primaryUser
+        ];
+      };
 
-        media.external-drives.enable = lib.mkDefault false;
-      })
-      (lib.mkIf (config.lib.tags.hasTag "desktop") {
-        services.pipewire.enable = lib.mkDefault true;
-      })
-      (lib.mkIf (!(config.lib.tags.hasTag "desktop")) {
-        services.pipewire.enable = lib.mkForce false;
-      })
-    ];
+      media.external-drives.enable = lib.mkDefault false;
+    };
 }

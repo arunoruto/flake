@@ -7,7 +7,10 @@
     cores = 2;
   };
 
-  system.tags = [ "nas" ];
+  system.tags = [
+    "nas"
+    "server"
+  ];
 
   # colmena.deployment.buildOnTarget = true;
   hosts = {
@@ -153,7 +156,6 @@
     #   enable = false;
     #   openFirewall = true;
     # };
-    pipewire.enable = false;
     samba = {
       directories = {
         photos = {

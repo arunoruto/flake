@@ -2,6 +2,8 @@
 {
   users.primaryUser = "mirza";
 
+  system.tags = [ "server" ];
+
   nix.settings = {
     max-jobs = 1;
     cores = 0;

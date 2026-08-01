@@ -6,6 +6,8 @@
 {
   users.primaryUser = "mirza";
 
+  system.tags = [ "server" ];
+
   programs = {
     firefox.enable = false;
     # chrome.enable = false;

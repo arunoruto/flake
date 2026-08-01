@@ -28,22 +28,26 @@
         package = pkgs.unstable.tailscale;
         port = tailscale-port;
         useRoutingFeatures = "client";
+        # Advertising (exit node, connector, tailscale-SSH) is a server
+        # *role*, keyed on the server tag — not on "doesn't have desktop":
+        # a laptop or workstation without the desktop tag must never route
+        # tailnet traffic. Everything else is a plain client.
         extraUpFlags = [
           "--accept-routes"
         ]
         ++ (
-          if (config.lib.tags.hasTag "desktop") then
-            [
-              "--exit-node-allow-lan-access"
-            ]
-          else
+          if (config.lib.tags.hasTag "server") then
             [
               "--ssh"
               "--advertise-connector"
               "--advertise-tags=tag:connector"
             ]
+          else
+            [
+              "--exit-node-allow-lan-access"
+            ]
         );
-        extraSetFlags = lib.optionals (!(config.lib.tags.hasTag "desktop")) [
+        extraSetFlags = lib.optionals (config.lib.tags.hasTag "server") [
           "--advertise-exit-node"
         ];
         permitCertUid = if config.services.traefik.enable then "traefik" else null;

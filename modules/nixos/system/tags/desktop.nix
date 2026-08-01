@@ -9,6 +9,7 @@
     display-manager.enable = lib.mkDefault true;
     desktop-environment.enable = lib.mkDefault true;
     gui.enable = lib.mkDefault true;
+    services.pipewire.enable = lib.mkDefault true;
 
     # Enable features for desktop systems (GUI, LaTeX, upgrades)
     latex.enable = lib.mkDefault true;

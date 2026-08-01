@@ -14,6 +14,7 @@ let
     management = "fleet management: colmena / deploy-rs installed";
     nas = "storage box: drives, samba, NAS services";
     gaming = "game launchers (steam) and games";
+    server = "headless infrastructure box: tailscale exit node/connector/SSH, no sound stack";
   };
 in
 {

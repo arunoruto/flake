@@ -61,13 +61,16 @@ system.tags = [ "desktop" "workstation" "development" "management" ];
 - The known tags are enumerated in `modules/shared/tags.nix` — the option type
   rejects anything else at eval time, so a typo or a tag without consumers
   cannot slip in silently. Current tags: `desktop`, `laptop`, `workstation`,
-  `development`, `management`, `nas`, `gaming` (each with a one-line meaning
-  in that file).
+  `development`, `management`, `nas`, `gaming`, `server` (each with a one-line
+  meaning in that file).
 - Modules query tags through `config.lib.tags.hasTag "<tag>"` (the predicate lives
   in `lib/has-tag.nix`; the option is declared under `modules/{nixos,darwin}/system/tags/`).
 - Tag modules under `modules/{nixos,darwin}/system/tags/` translate tags into
   concrete settings (e.g. `desktop` enables the desktop environment stack,
-  `management` installs colmena, `gaming` enables Steam).
+  `management` installs colmena, `gaming` enables Steam). Server *roles* key on
+  the `server` tag — tailscale exit-node/connector/SSH advertising and the
+  no-sound-stack default — never on the *absence* of an interactive tag: a
+  workstation or laptop without `desktop` is still somebody's machine.
 - Colmena reuses the same tags for deployment targeting:
   `colmena apply --on @desktop` (wired via `colmena.deployment.tags`).
 - Home Manager cannot read `config.lib.tags` without infinite recursion, so

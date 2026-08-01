@@ -7,5 +7,6 @@
   config = lib.mkIf (config.lib.tags.hasTag "workstation") {
     security.tpm2.enable = lib.mkDefault true;
     yubikey.enable = lib.mkDefault true;
+    services.pipewire.enable = lib.mkDefault true;
   };
 }
