@@ -8,8 +8,10 @@ let
   secret-file = "config/cloudflared/${config.networking.hostName}";
 in
 {
+  # module.nix is a vendored copy of the upstream cloudflared module,
+  # replacing the nixpkgs one (disabled below).
   disabledModules = [ "services/networking/cloudflared.nix" ];
-  imports = [ ./new.nix ];
+  imports = [ ./module.nix ];
 
   options.services.cloudflared.defaultDomain = lib.mkOption {
     type = lib.types.str;
