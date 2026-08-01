@@ -13,7 +13,6 @@
 
     ./gpu.nix
     ./rocm.nix
-    ./zluda.nix
   ];
 
   options.hosts.amd.enable = lib.mkEnableOption "Setup amd tools";
@@ -22,7 +21,6 @@
     hosts.amd = {
       gpu.enable = lib.mkDefault config.facter.detected.graphics.amd.enable;
       rocm.enable = lib.mkDefault false;
-      zluda.enable = lib.mkDefault false;
     };
 
     services = {
