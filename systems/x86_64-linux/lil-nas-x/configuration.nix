@@ -18,17 +18,6 @@
   # systemd.services.zfs-mount.enable = false;
   # networking.hostId = "7923f829";
 
-  # display-manager.enable = lib.mkForce false;
-  # desktop-environment.enable = lib.mkForce false;
-  display-manager.enable = false;
-  desktop-environment.enable = false;
-
-  # firefox.enable = false;
-  # chrome.enable = false;
-  # steam.enable = false;
-  # home.pc.enable = false;
-  gui.enable = false;
-
   services = {
     scrutiny.collector = {
       enable = true;

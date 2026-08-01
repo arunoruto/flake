@@ -6,9 +6,6 @@
 {
   users.primaryUser = "mirza";
 
-  # display-manager.enable = lib.mkForce false;
-  # desktop-environment.enable = lib.mkForce false;
-
   programs = {
     firefox.enable = false;
     # chrome.enable = false;

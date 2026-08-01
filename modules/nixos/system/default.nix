@@ -28,11 +28,6 @@
   config = {
     nix-utils.enable = lib.mkDefault true;
     secureboot.enable = lib.mkDefault false;
-    hosts = {
-      amd.enable = lib.mkDefault false;
-      intel.enable = lib.mkDefault false;
-      nvidia.enable = lib.mkDefault false;
-    };
 
     environment.systemPackages = with pkgs; [
       lsof

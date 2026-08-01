@@ -42,7 +42,6 @@
   #   cudaCapabilities = [ "6.1" ];
   # };
 
-  gui.enable = true; # Enable GUI programs (browsers, etc.)
   printing.enable = true;
   scanning.enable = true;
   system.tags = [

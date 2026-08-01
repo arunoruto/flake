@@ -95,10 +95,6 @@
     ];
   };
 
-  display-manager.enable = false;
-  desktop-environment.enable = false;
-  gui.enable = false;
-
   boot.kernelParams = [
     "pcie_aspm=force"
     "pcie_aspm.policy=powersupersave"
