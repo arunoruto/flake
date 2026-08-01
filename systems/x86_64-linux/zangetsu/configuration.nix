@@ -9,6 +9,7 @@
   system.tags = [
     "desktop"
     "laptop"
+    "gaming"
   ];
 
   # Eanble fingerprint for framework laptop

@@ -8,6 +8,7 @@
   imports = [
     ../../../shared/tags.nix
     ./desktop.nix
+    ./gaming.nix
     ./laptop.nix
     ./workstation.nix
     ./management.nix

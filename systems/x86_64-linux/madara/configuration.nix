@@ -50,6 +50,7 @@
     "workstation"
     "development"
     "management"
+    "gaming"
   ];
   hosts = {
     nvidia.enable = true;

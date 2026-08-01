@@ -19,7 +19,5 @@
     programs.packages.enable = lib.mkDefault true;
 
     browsers.enable = lib.mkDefault true;
-    # TODO: make tag for gaming
-    programs.steam.enable = lib.mkDefault true;
   };
 }
