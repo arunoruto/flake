@@ -51,7 +51,7 @@ Custom packages live under `legacyPackages`: `nix build .#<pkg>` (top-level) or 
 
 ### The tag system
 
-Hosts self-describe with `system.tags = [ "desktop" "workstation" "development" "management" ... ]` instead of many toggles. NixOS/darwin modules query `config.lib.tags.hasTag "<tag>"` (predicate in `lib/has-tag.nix`, option in `modules/{nixos,darwin}/system/tags/`); tag modules there translate tags into concrete settings. The baseline for untagged hosts is deliberately slim. Colmena reuses the same tags for deploy targeting (`colmena apply --on @<tag>`).
+Hosts self-describe with `system.tags = [ "desktop" "workstation" "development" "management" ... ]` instead of many toggles. The known tags are enumerated (with their meanings) in `modules/shared/tags.nix`; the option type is an enum, so an unknown tag is an eval error — extend that list when adding a tag. NixOS/darwin modules query `config.lib.tags.hasTag "<tag>"` (predicate in `lib/has-tag.nix`, option in `modules/{nixos,darwin}/system/tags/`); tag modules there translate tags into concrete settings. The baseline for untagged hosts is deliberately slim. Colmena reuses the same tags for deploy targeting (`colmena apply --on @<tag>`).
 
 Home Manager modules **cannot** read `config.lib.tags` (infinite recursion); `modules/home-manager/imports.nix` maps the OS tags onto `hosts.{desktop,laptop,workstation,development}.enable`, so inside HM modules gate on `config.hosts.*.enable`.
 

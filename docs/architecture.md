@@ -58,11 +58,16 @@ Hosts describe themselves with a list of tags instead of toggling dozens of opti
 system.tags = [ "desktop" "workstation" "development" "management" ];
 ```
 
+- The known tags are enumerated in `modules/shared/tags.nix` — the option type
+  rejects anything else at eval time, so a typo or a tag without consumers
+  cannot slip in silently. Current tags: `desktop`, `laptop`, `workstation`,
+  `development`, `management`, `nas`, `gaming` (each with a one-line meaning
+  in that file).
 - Modules query tags through `config.lib.tags.hasTag "<tag>"` (the predicate lives
   in `lib/has-tag.nix`; the option is declared under `modules/{nixos,darwin}/system/tags/`).
 - Tag modules under `modules/{nixos,darwin}/system/tags/` translate tags into
   concrete settings (e.g. `desktop` enables the desktop environment stack,
-  `management` installs colmena).
+  `management` installs colmena, `gaming` enables Steam).
 - Colmena reuses the same tags for deployment targeting:
   `colmena apply --on @desktop` (wired via `colmena.deployment.tags`).
 - Home Manager cannot read `config.lib.tags` without infinite recursion, so
