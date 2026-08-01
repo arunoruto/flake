@@ -1,6 +1,13 @@
 lib: rec {
-  arr = import ../modules/nixos/services/media/arr/lib.nix lib;
-  networking = import ../modules/nixos/services/network/lib.nix lib;
+  arr = import ./arr.nix lib;
+  networking = import ./networking.nix lib;
+
+  # Tag predicate, pre-bound to the function library:
+  #   lib.hasTag config [ "system" "tags" ] "desktop" -> bool
+  # NixOS/darwin modules normally use the bound form `config.lib.tags.hasTag`
+  # instead (see modules/shared/tags.nix); ./has-tag.nix documents why
+  # home-manager imports the file directly.
+  hasTag = import ./has-tag.nix lib;
 
   # Directory names (only) inside `path`.
   getDirectories =
