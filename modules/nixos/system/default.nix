@@ -35,12 +35,11 @@
       tree
     ];
 
-    # This value determines the NixOS release from which the default
-    # settings for stateful data, like file locations and database versions
-    # on your system were taken. It‘s perfectly fine and recommended to leave
-    # this value at the release version of the first install of this system.
-    # Before changing this value read the documentation for this option
-    # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-    system.stateVersion = "23.11"; # Did you read the comment?
+    # stateVersion is a per-host, install-time fact: it pins the defaults of
+    # stateful services (database layouts, file locations) to the release the
+    # machine was first installed with, and should then never change. This is
+    # only the fallback for the oldest hosts — a host installed on a later
+    # release must set its own value in its configuration.nix.
+    system.stateVersion = lib.mkDefault "23.11";
   };
 }
