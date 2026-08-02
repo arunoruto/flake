@@ -21,6 +21,7 @@ boot target=host:
 # Build and activate this Mac's nix-darwin config
 [macos]
 switch target=host:
+    ulimit -n 4096
     nh darwin switch . -H {{ target }}
 
 # Build and activate a user's home-manager config
