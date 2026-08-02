@@ -98,6 +98,11 @@ check:
 clean:
     nh clean all
 
+# Remove nix-darwin user launchd agents left behind by an earlier generation
+[macos]
+prune-agents *flags:
+    ./scripts/prune-user-agents.sh {{ flags }}
+
 # Evaluate every nixos/darwin/home configuration; prints one drvPath per line
 eval-all:
     #!/usr/bin/env bash
