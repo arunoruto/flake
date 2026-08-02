@@ -38,7 +38,7 @@ Custom packages live under `legacyPackages`: `nix build .#<pkg>` (top-level) or 
 - **Never commit `flake.lock`** — it is bumped only by the scheduled Update Lockfile GitHub action; a pre-commit hook (`scripts/block-lockfile-commit.sh`) rejects local commits touching it.
 - **New `packages/**/package.nix` files must set `__structuredAttrs = true;` and `strictDeps = true;`** (`scripts/check-new-packages.sh`). Existing packages are grandfathered.
 - Formatting (`nixfmt`) is CI-enforced via `nix flake check`. `statix`/`deadnix` run as local commit hooks only and never fail CI.
-- Garnix builds all configurations on `main` (except the `iso-*` images), so every config must at least evaluate.
+- Every configuration must at least evaluate. CI (`.github/workflows/check.yaml`) runs `nix flake check`; `just eval-all` walks every nixos/darwin/home config locally. Nothing *builds* the configurations in CI, so a config that evaluates but fails to build only surfaces on `just switch` / `just deploy`.
 
 ## Architecture
 
