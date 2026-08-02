@@ -76,6 +76,7 @@ in
         # the data files stay on plain nixpkgs so the exported modules work
         # without our overlays. `command` follows `package` automatically.
         lsps.nixd.package = pkgs.unstable.nixd;
+        formatters.nixfmt.package = pkgs.unstable.nixfmt;
       };
 
       programs.helix.enable = lib.mkDefault true;

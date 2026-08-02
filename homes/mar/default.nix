@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }:
 {
@@ -23,9 +22,6 @@
         };
         diagnostics = { };
       };
-
-      # `command` follows `package`, so pointing at the unstable build is enough.
-      formatters.nixfmt.package = pkgs.unstable.nixfmt;
     };
 
     # Disable KDE/Plasma theming (mar uses GNOME)
