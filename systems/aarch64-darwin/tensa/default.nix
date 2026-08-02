@@ -32,6 +32,25 @@
     polarity = "dark";
   };
 
+  # Tiling window manager. yabai tiles inside native macOS Spaces, so the
+  # Desktops in Mission Control keep working; AeroSpace (the alternative in
+  # modules/darwin/services/window-manager/) replaces Spaces instead and would
+  # fight them. Enabling both trips an assertion.
+  #
+  # skhd, the hotkey daemon, comes with it — chord is ctrl+alt.
+  services.yabai = {
+    # enable = true;
+    config = {
+      # Roomier than the module default; the built-in 3024x1964 panel has the
+      # pixels to spare.
+      top_padding = 12;
+      bottom_padding = 12;
+      left_padding = 12;
+      right_padding = 12;
+      window_gap = 12;
+    };
+  };
+
   # Darwin-specific modules configuration
   homebrew = {
     enable = true;
