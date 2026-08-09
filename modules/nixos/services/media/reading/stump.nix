@@ -11,11 +11,12 @@
   config = lib.mkMerge [
     {
       services.stump = {
-        package = pkgs.unstable.stump.overrideAttrs (_: {
-          src = inputs.stump-fork;
-          version = "0.1.5-fork";
-          doCheck = false;
-        });
+        package = pkgs.unstable.stump;
+        # package = pkgs.unstable.stump.overrideAttrs (_: {
+        #   src = inputs.stump-fork;
+        #   version = "0.1.5-fork";
+        #   doCheck = false;
+        # });
         # ip = "0.0.0.0";
         port = 10001;
         openFirewall = lib.mkDefault false;
