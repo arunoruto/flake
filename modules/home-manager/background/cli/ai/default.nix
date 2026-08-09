@@ -45,8 +45,9 @@
     })
     {
       programs = {
+        claude-code.enable = true;
         mcp.enable = true;
-        opencode.enable = true;
+        # opencode.enable = true;
       };
     }
   ];
