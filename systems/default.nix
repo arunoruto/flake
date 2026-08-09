@@ -49,7 +49,6 @@ let
     ++ (with inputs; [
       nixos-facter-modules.nixosModules.facter
       home-manager.nixosModules.home-manager
-      determinate.nixosModules.default
     ]);
 
   # Module list for a nix-darwin host. Stylix is configured directly by the
@@ -81,7 +80,6 @@ let
       stylix.darwinModules.stylix
       home-manager.darwinModules.home-manager
       sops-nix.darwinModules.sops
-      determinate.darwinModules.default
       mac-app-util.darwinModules.default
     ]);
 
