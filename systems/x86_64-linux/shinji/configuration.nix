@@ -15,6 +15,7 @@ in
   colmena.deployment = {
     targetHost = config.networking.hostName;
   };
+  boot.kernelPackages = pkgs.linuxPackages;
   hosts.intel.enable = true;
   bosflix = {
     enable = true;
@@ -48,9 +49,13 @@ in
       enable = true;
       domainKeyPath = config.sops.secrets."tokens/ipv64/orahovica".path;
     };
+    # microsocks = {
+    #   enable = true;
+    #   ip = "100.105.115.20";
+    # };
     qbittorrent.enable = true;
     sabnzbd.enable = true;
-    suwayomi-server.enable = true;
+    suwayomi-server.enable = false;
   };
 
   security.pki.certificateFiles = [
