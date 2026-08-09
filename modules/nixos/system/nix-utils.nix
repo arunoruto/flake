@@ -19,6 +19,7 @@ in
         with pkgs;
         (
           [
+            nix-search
             nix-tree
             nix-output-monitor
             nvd
