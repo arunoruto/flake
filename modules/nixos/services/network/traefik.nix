@@ -195,6 +195,7 @@ in
         http-port
         https-port
       ];
+      services.tailscale.permitCertUid = "traefik";
     }
   );
 }
