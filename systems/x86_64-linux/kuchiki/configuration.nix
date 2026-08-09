@@ -98,6 +98,7 @@
       cache.enable = true;
       openFirewall = true;
     };
+    # stump.enable = true;
     samba.disableShares = [
       "appdata"
       "downloads"
