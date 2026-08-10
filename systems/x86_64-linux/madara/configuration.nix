@@ -125,6 +125,10 @@
           hostname = "jupyter.${config.services.cloudflared.defaultDomain}";
           service = "http://localhost:8888";
         }
+        {
+          hostname = "typst.${config.services.cloudflared.defaultDomain}";
+          service = "http://localhost:5599";
+        }
       ];
     };
     harmonia = {
