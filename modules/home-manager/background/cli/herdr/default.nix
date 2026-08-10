@@ -86,7 +86,8 @@
             "prefix+z"
             "prefix+m"
           ];
-          resize = "prefix+r";
+          # Renamed from `resize` in herdr 0.7.x; same default binding.
+          resize_mode = "prefix+r";
           command = [
             {
               key = "prefix+shift+r";
