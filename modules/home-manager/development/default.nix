@@ -3,7 +3,11 @@
 # devix (modules/devix) is pure mechanism: it defines the language/LSP/formatter
 # registry and the per-consumer adapters, but enables nothing on its own. This
 # file is where the actual choices live — which languages/LSPs are on, and the
-# editor defaults — all via lib.mkDefault so individual homes can override.
+# editor defaults.
+#
+# Toggles are lib.mkDefault, so a home can just reassign them. The package pins
+# near the bottom are plain definitions instead: they have to outrank devix's
+# own mkDefault, so a home overrides those with lib.mkForce.
 #
 # Consumers attach Stylix-style: each `devix.consumers.<name>.enable`
 # defaults to `devix.autoEnable && programs.<editor>.enable`.
@@ -75,6 +79,12 @@ in
         # Which build of a server to use is this flake's choice, not devix's:
         # the data files stay on plain nixpkgs so the exported modules work
         # without our overlays. `command` follows `package` automatically.
+        #
+        # Plain definitions on purpose: they beat devix's own mkDefault, and a
+        # home that wants a different build says so with lib.mkForce. Don't
+        # re-pin these in homes/<user> without it — two plain definitions of the
+        # same package are a "defined multiple times" eval error, not an
+        # override.
         lsps.nixd.package = pkgs.unstable.nixd;
         formatters.nixfmt.package = pkgs.unstable.nixfmt;
       };
