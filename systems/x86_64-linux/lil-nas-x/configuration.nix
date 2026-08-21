@@ -51,10 +51,12 @@
       gpu.enable = true;
     };
     nvidia.enable = true;
-    # zfs.enable = true;
+    zfs.enable = true;
   };
-  # systemd.services.zfs-mount.enable = false;
-  # networking.hostId = "7923f829";
+  systemd.services.zfs-mount.enable = false;
+  # Unique to this host - must not match kuchiki, or ZFS cannot tell
+  # the two apart when a pool is imported.
+  networking.hostId = "2dc03b5d";
 
   services = {
     scrutiny.collector = {

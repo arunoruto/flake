@@ -9,7 +9,9 @@
 
   config = lib.mkIf config.hosts.zfs.enable {
     boot = {
-      kernelPackages = pkgs.linuxPackages;
+      # mkDefault so a host that also enables nvidia (which pins the same
+      # kernel) does not hit a duplicate-definition error.
+      kernelPackages = lib.mkDefault pkgs.linuxPackages;
       supportedFilesystems = {
         zfs = lib.mkDefault true;
       };
