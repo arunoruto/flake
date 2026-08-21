@@ -63,6 +63,21 @@
     # ];
   };
 
+  fileSystems."/mnt/storage/documents" = {
+    device = "storage/documents";
+    fsType = "zfs";
+  };
+
+  fileSystems."/mnt/storage/backup" = {
+    device = "storage/backup";
+    fsType = "zfs";
+  };
+
+  fileSystems."/mnt/storage/data" = {
+    device = "storage/data";
+    fsType = "zfs";
+  };
+
   #fileSystems."/mnt/flash" = {
   #  device = "flash";
   #  fsType = "zfs";
