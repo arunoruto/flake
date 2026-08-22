@@ -40,6 +40,59 @@
     ];
   };
 
+  # ZFS pool 'storage' - raidz2 across the three 18TB disks.
+  # Datasets use mountpoint=legacy, so systemd owns the mounts and derives
+  # mount ordering from the paths (parent before children).
+  fileSystems."/mnt/storage" = {
+    device = "storage";
+    fsType = "zfs";
+  };
+
+  fileSystems."/mnt/storage/media" = {
+    device = "storage/media";
+    fsType = "zfs";
+  };
+
+  fileSystems."/mnt/storage/personal" = {
+    device = "storage/personal";
+    fsType = "zfs";
+  };
+
+  fileSystems."/mnt/storage/personal/photos" = {
+    device = "storage/personal/photos";
+    fsType = "zfs";
+  };
+
+  fileSystems."/mnt/storage/personal/video" = {
+    device = "storage/personal/video";
+    fsType = "zfs";
+  };
+
+  fileSystems."/mnt/storage/personal/documents" = {
+    device = "storage/personal/documents";
+    fsType = "zfs";
+  };
+
+  fileSystems."/mnt/storage/personal/dev" = {
+    device = "storage/personal/dev";
+    fsType = "zfs";
+  };
+
+  fileSystems."/mnt/storage/personal/backup" = {
+    device = "storage/personal/backup";
+    fsType = "zfs";
+  };
+
+  fileSystems."/mnt/storage/appdata" = {
+    device = "storage/appdata";
+    fsType = "zfs";
+  };
+
+  fileSystems."/mnt/storage/downloads" = {
+    device = "storage/downloads";
+    fsType = "zfs";
+  };
+
   swapDevices = [ ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
