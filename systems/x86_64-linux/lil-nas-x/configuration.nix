@@ -102,6 +102,13 @@
   };
 
   hardware = {
+    # The Quadro P400 (Pascal GP107) was dropped from the 595.x branch, which
+    # logs "will ignore this GPU" and leaves the card unused. 580.xx is the
+    # last branch supporting it. Pinning also stops the driver version itself
+    # churning with nixpkgs, so rebuilds only follow kernel bumps - and the
+    # derivation then matches madara's, which can serve it from its cache.
+    nvidia.package = config.boot.kernelPackages.nvidiaPackages.legacy_580;
+
     fancontrol = {
       enable = true;
       # hwmon indices are assigned in module-load order and are NOT stable: the
