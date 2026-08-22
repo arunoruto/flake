@@ -85,7 +85,8 @@
     };
     beszel.agent = {
       enable = true;
-      package = pkgs.custom.beszel;
+      package = pkgs.unstable.beszel;
+      # package = pkgs.custom.beszel;
       environment = {
         LOG_LEVEL = "info";
         GPU = "true";
@@ -103,19 +104,47 @@
   hardware = {
     fancontrol = {
       enable = true;
+      # hwmon indices are assigned in module-load order and are NOT stable: the
+      # ZFS kernel switch moved coretemp from hwmon5 to hwmon4 and fancontrol
+      # refused to start. @IT@/@CT@ are resolved by chip name at service start
+      # (see systemd.services.fancontrol below) so a reshuffle cannot break it.
       config = ''
         INTERVAL=10
-        DEVPATH=hwmon2=devices/platform/it87.2624 hwmon5=devices/platform/coretemp.0
-        DEVNAME=hwmon2=it8622 hwmon5=coretemp
-        FCTEMPS=hwmon2/pwm3=hwmon5/temp1_input
-        FCFANS= hwmon2/pwm3=hwmon2/fan3_input
-        MINTEMP=hwmon2/pwm3=20
-        MAXTEMP=hwmon2/pwm3=60
-        MINSTART=hwmon2/pwm3=150
-        MINSTOP=hwmon2/pwm3=100
+        DEVPATH=@IT@=devices/platform/it87.2624 @CT@=devices/platform/coretemp.0
+        DEVNAME=@IT@=it8622 @CT@=coretemp
+        FCTEMPS=@IT@/pwm3=@CT@/temp1_input
+        FCFANS=@IT@/pwm3=@IT@/fan3_input
+        MINTEMP=@IT@/pwm3=20
+        MAXTEMP=@IT@/pwm3=60
+        MINSTART=@IT@/pwm3=150
+        MINSTOP=@IT@/pwm3=100
       '';
     };
   };
+
+  systemd.services.fancontrol.serviceConfig.ExecStart = lib.mkForce (
+    let
+      template = pkgs.writeText "fancontrol.conf.in" config.hardware.fancontrol.config;
+    in
+    pkgs.writeShellScript "fancontrol-resolve" ''
+      set -eu
+      hw() {
+        for d in /sys/class/hwmon/hwmon*; do
+          if [ "$(cat "$d/name" 2>/dev/null)" = "$1" ]; then
+            basename "$d"
+            return 0
+          fi
+        done
+        echo "fancontrol: hwmon chip '$1' not present" >&2
+        exit 1
+      }
+      IT=$(hw it8622)
+      CT=$(hw coretemp)
+      echo "fancontrol: it8622=$IT coretemp=$CT"
+      ${pkgs.gnused}/bin/sed -e "s|@IT@|$IT|g" -e "s|@CT@|$CT|g" ${template} >/run/fancontrol.conf
+      exec ${pkgs.lm_sensors}/bin/fancontrol /run/fancontrol.conf
+    ''
+  );
 
   sops.secrets."tokens/beszel-marvin".mode = "0444";
 }
