@@ -115,6 +115,14 @@ in
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
 
+      # EXTRA_FILESYSTEMS may name raw devices (sdb, nvme0n1p1) or mount points
+      # (/mnt/storage). Hold the agent until the mount points are actually
+      # mounted: started too early it measures the empty directory underneath
+      # and reports the root filesystem's usage instead of the pool's.
+      unitConfig.RequiresMountsFor = lib.filter (lib.hasPrefix "/") (
+        lib.splitString "," cfg.environment.EXTRA_FILESYSTEMS
+      );
+
       environment = lib.mapAttrs (
         _: v: if builtins.isBool v then (if v then "true" else "false") else toString v
       ) cfg.environment;
