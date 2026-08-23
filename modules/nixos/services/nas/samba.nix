@@ -60,6 +60,22 @@ in
       description = "Samba shared directories. Mapped to services.samba.settings internally.";
     };
 
+    macosCompat = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Load the fruit VFS module for macOS clients.
+
+        Without it, Finder stores resource forks and metadata as separate
+        AppleDouble files - the `._name` stubs that litter a share and, being
+        real files, survive long after whatever they described. With it, that
+        metadata goes into xattrs instead, and Finder behaves properly
+        (correct rename semantics, no spurious dotfiles).
+
+        Harmless for Linux and Windows clients; fruit only engages for macOS.
+      '';
+    };
+
     passwordFile = mkOption {
       type = types.nullOr types.path;
       default = null;
@@ -109,6 +125,16 @@ in
               "server min protocol" = mkDefault "SMB2_10";
               "client min protocol" = mkDefault "SMB2_10";
               "map to guest" = mkDefault "Bad User";
+            }
+            // lib.optionalAttrs cfg.macosCompat {
+              # Order matters: fruit must precede streams_xattr.
+              "vfs objects" = mkDefault "catia fruit streams_xattr";
+              "fruit:metadata" = mkDefault "stream";
+              "fruit:model" = mkDefault "MacSamba";
+              "fruit:posix_rename" = mkDefault "yes";
+              "fruit:veto_appledouble" = mkDefault "no";
+              "fruit:wipe_intentionally_left_blank_rfork" = mkDefault "yes";
+              "fruit:delete_empty_adfiles" = mkDefault "yes";
             };
           };
       };
