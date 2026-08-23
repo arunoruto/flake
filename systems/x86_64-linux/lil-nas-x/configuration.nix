@@ -83,6 +83,20 @@
         pwmPaths = [ "/sys/class/hwmon/hwmon2/pwm2:25:10" ];
       };
     };
+    # The nas tag enables samba, but without directories it exports nothing.
+    # media is the library; personal holds the irreplaceable set (photos, home
+    # video, documents, git repos, hassio backups). appdata and downloads are
+    # deliberately not shared - service state and scratch have no business on
+    # the network.
+    samba.directories = {
+      media = {
+        path = "/mnt/storage/media";
+      };
+      personal = {
+        path = "/mnt/storage/personal";
+      };
+    };
+
     beszel.agent = {
       enable = true;
       package = pkgs.unstable.beszel;
