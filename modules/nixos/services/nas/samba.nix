@@ -158,8 +158,13 @@ in
           ) active)
           // {
             global = {
-              "server min protocol" = mkDefault "SMB2_10";
-              "client min protocol" = mkDefault "SMB2_10";
+              # SMB2_10 is the Windows 7 dialect from 2009. SMB3 brings
+              # per-share encryption and multi-channel, and is supported by
+              # Windows 8+, macOS 10.10+ and any current Linux cifs client.
+              # mkDefault, so a host with a genuinely ancient client can drop
+              # back without editing this module.
+              "server min protocol" = mkDefault "SMB3";
+              "client min protocol" = mkDefault "SMB3";
               "map to guest" = mkDefault "Bad User";
             }
             // lib.optionalAttrs cfg.macosCompat {
