@@ -16,6 +16,10 @@ let
     ;
   cfg = config.services.samba;
   primaryUser = config.users.primaryUser;
+  # Share names flagged as Time Machine destinations and not blacklisted.
+  tmShares = builtins.attrNames (
+    filterAttrs (name: share: share.timeMachine && !(elem name cfg.disableShares)) cfg.directories
+  );
 in
 {
   options.services.samba = {
@@ -47,6 +51,29 @@ in
                 default = false;
                 description = "Allow guest access without authentication";
               };
+              timeMachine = mkOption {
+                type = types.bool;
+                default = false;
+                description = ''
+                  Advertise this share as a Time Machine destination.
+
+                  Adds the fruit Time Machine support and an avahi _adisk._tcp
+                  record, so macOS discovers it in System Settings without
+                  needing `tmutil setdestination`.
+                '';
+              };
+
+              sizeLimit = mkOption {
+                type = types.nullOr types.str;
+                default = null;
+                example = "2T";
+                description = ''
+                  Cap for a Time Machine share, e.g. "2T". Time Machine expands
+                  to fill whatever it is given, so an uncapped destination will
+                  eventually consume the pool.
+                '';
+              };
+
               users = mkOption {
                 type = types.listOf types.str;
                 default = [ primaryUser ];
@@ -111,15 +138,24 @@ in
           let
             active = filterAttrs (name: _: !(elem name cfg.disableShares)) cfg.directories;
           in
-          (builtins.mapAttrs (_: share: {
-            inherit (share) path;
-            browseable = if share.browseable then "yes" else "no";
-            "read only" = if share.writable then "no" else "yes";
-            "guest ok" = if share.guestOk then "yes" else "no";
-            "valid users" = concatStringsSep " " share.users;
-            "force user" = builtins.head share.users;
-            inherit (share) comment;
-          }) active)
+          (builtins.mapAttrs (
+            _: share:
+            {
+              inherit (share) path;
+              browseable = if share.browseable then "yes" else "no";
+              "read only" = if share.writable then "no" else "yes";
+              "guest ok" = if share.guestOk then "yes" else "no";
+              "valid users" = concatStringsSep " " share.users;
+              "force user" = builtins.head share.users;
+              inherit (share) comment;
+            }
+            // lib.optionalAttrs share.timeMachine {
+              "fruit:time machine" = "yes";
+            }
+            // lib.optionalAttrs (share.timeMachine && share.sizeLimit != null) {
+              "fruit:time machine max size" = share.sizeLimit;
+            }
+          ) active)
           // {
             global = {
               "server min protocol" = mkDefault "SMB2_10";
@@ -143,6 +179,42 @@ in
         enable = mkDefault cfg.enable;
         openFirewall = mkDefault true;
       };
+    };
+
+    # Advertise Time Machine shares over mDNS. Samba here is built without
+    # its own mDNS registration, so avahi does it: _adisk._tcp is what makes
+    # the destination appear in System Settings, and _device-info._tcp makes
+    # Finder show it as a Time Capsule rather than a generic server.
+    services.avahi = mkIf (tmShares != [ ]) {
+      enable = mkDefault true;
+      publish = {
+        enable = mkDefault true;
+        userServices = mkDefault true;
+      };
+      extraServiceFiles.samba-timemachine = ''
+        <?xml version="1.0" standalone='no'?>
+        <!DOCTYPE service-group SYSTEM "avahi-service.dtd">
+        <service-group>
+          <name replace-wildcards="yes">%h</name>
+          <service>
+            <type>_smb._tcp</type>
+            <port>445</port>
+          </service>
+          <service>
+            <type>_device-info._tcp</type>
+            <port>0</port>
+            <txt-record>model=TimeCapsule8,119</txt-record>
+          </service>
+          <service>
+            <type>_adisk._tcp</type>
+            <port>9</port>
+        ${concatStringsSep "\n" (
+          lib.imap0 (i: name: "    <txt-record>dk${toString i}=adVN=${name},adVF=0x82</txt-record>") tmShares
+        )}
+            <txt-record>sys=waMa=0,adVF=0x100</txt-record>
+          </service>
+        </service-group>
+      '';
     };
 
     # Seed Samba's own password database from a secret. smbd reads it at
