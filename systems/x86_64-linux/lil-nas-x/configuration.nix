@@ -88,6 +88,12 @@
     # video, documents, git repos, hassio backups). appdata and downloads are
     # deliberately not shared - service state and scratch have no business on
     # the network.
+    # Samba keeps its own password database - SMB authenticates with NTLM, so
+    # the server needs an NT hash and cannot reuse the system login hash. This
+    # is a distinct random credential: if it leaks it grants the two shares
+    # below and nothing else.
+    samba.passwordFile = config.sops.secrets."samba/mirza".path;
+
     samba.directories = {
       media = {
         path = "/mnt/storage/media";
@@ -167,5 +173,8 @@
     ''
   );
 
-  sops.secrets."tokens/beszel-marvin".mode = "0444";
+  sops.secrets = {
+    "tokens/beszel-marvin".mode = "0444";
+    "samba/mirza" = { };
+  };
 }
