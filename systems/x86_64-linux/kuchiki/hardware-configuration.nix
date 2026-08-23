@@ -38,8 +38,47 @@
     ];
   };
 
+  # raidz2 rebuild: layout mirrors lil-nas-x so the two hosts are
+  # interchangeable and replication maps one-to-one. Datasets use
+  # mountpoint=legacy, so systemd owns the mounts and derives ordering
+  # from the paths.
   fileSystems."/mnt/storage" = {
     device = "storage";
+    fsType = "zfs";
+  };
+
+  fileSystems."/mnt/storage/media" = {
+    device = "storage/media";
+    fsType = "zfs";
+  };
+
+  fileSystems."/mnt/storage/personal" = {
+    device = "storage/personal";
+    fsType = "zfs";
+  };
+
+  fileSystems."/mnt/storage/personal/photos" = {
+    device = "storage/personal/photos";
+    fsType = "zfs";
+  };
+
+  fileSystems."/mnt/storage/personal/video" = {
+    device = "storage/personal/video";
+    fsType = "zfs";
+  };
+
+  fileSystems."/mnt/storage/personal/documents" = {
+    device = "storage/personal/documents";
+    fsType = "zfs";
+  };
+
+  fileSystems."/mnt/storage/personal/dev" = {
+    device = "storage/personal/dev";
+    fsType = "zfs";
+  };
+
+  fileSystems."/mnt/storage/personal/backup" = {
+    device = "storage/personal/backup";
     fsType = "zfs";
   };
 
@@ -50,31 +89,6 @@
 
   fileSystems."/mnt/storage/downloads" = {
     device = "storage/downloads";
-    fsType = "zfs";
-  };
-
-  fileSystems."/mnt/storage/media" = {
-    device = "storage/media";
-    fsType = "zfs";
-    # options = [
-    #   "zfsutil"
-    #   "rw"
-    #   "acl"
-    # ];
-  };
-
-  fileSystems."/mnt/storage/documents" = {
-    device = "storage/documents";
-    fsType = "zfs";
-  };
-
-  fileSystems."/mnt/storage/backup" = {
-    device = "storage/backup";
-    fsType = "zfs";
-  };
-
-  fileSystems."/mnt/storage/data" = {
-    device = "storage/data";
     fsType = "zfs";
   };
 
