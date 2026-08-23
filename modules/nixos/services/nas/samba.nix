@@ -165,6 +165,11 @@ in
               # back without editing this module.
               "server min protocol" = mkDefault "SMB3";
               "client min protocol" = mkDefault "SMB3";
+              # "desired" encrypts whenever the client can, and falls back
+              # rather than refusing when it cannot - so it costs nothing for
+              # clients that do not negotiate it. Use "required" to refuse
+              # unencrypted sessions outright.
+              "smb encrypt" = mkDefault "desired";
               "map to guest" = mkDefault "Bad User";
             }
             // lib.optionalAttrs cfg.macosCompat {
