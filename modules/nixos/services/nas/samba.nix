@@ -60,6 +60,24 @@ in
       description = "Samba shared directories. Mapped to services.samba.settings internally.";
     };
 
+    passwordFile = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      example = "config.sops.secrets.\"samba/mirza\".path";
+      description = ''
+        File containing the plaintext SMB password for the primary user.
+
+        Samba cannot reuse the system login hash: SMB authenticates with NTLM
+        challenge-response, so the server needs the NT hash (MD4 of the
+        UTF-16LE password), while users.users.<name>.hashedPassword is a
+        yescrypt/SHA-512 crypt hash. Neither is derivable from the other, so
+        Samba keeps its own password database.
+
+        When set, a oneshot unit seeds that database before smbd starts,
+        making the share user declarative instead of a manual `smbpasswd -a`.
+      '';
+    };
+
     disableShares = mkOption {
       type = types.listOf types.str;
       default = [ ];
@@ -99,6 +117,25 @@ in
         enable = mkDefault cfg.enable;
         openFirewall = mkDefault true;
       };
+    };
+
+    # Seed Samba's own password database from a secret. smbd reads it at
+    # startup, so this has to land first.
+    systemd.services.samba-provision-users = mkIf (cfg.passwordFile != null) {
+      description = "Seed the Samba password database";
+      wantedBy = [ "multi-user.target" ];
+      before = [ "samba-smbd.service" ];
+      requiredBy = [ "samba-smbd.service" ];
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+      };
+      script = ''
+        install -d -m 0700 /var/lib/samba/private
+        pw=$(cat ${toString cfg.passwordFile})
+        printf '%s\n%s\n' "$pw" "$pw" \
+          | ${pkgs.samba}/bin/smbpasswd -s -a ${primaryUser}
+      '';
     };
   };
 }
