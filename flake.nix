@@ -149,7 +149,11 @@
     in
     {
       inherit lib;
-      nixosModules.default = import ./modules/nixos;
+      nixosModules = {
+        default = import ./modules/nixos;
+        # Reusable Steam-machine module (split-ready, see docs/steamos/).
+        steamos = import ./modules/steamos;
+      };
       darwinModules.default = import ./modules/darwin;
       homeModules = {
         default = import ./modules/home-manager/default.nix;
