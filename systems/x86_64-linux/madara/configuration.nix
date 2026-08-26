@@ -44,6 +44,8 @@
 
   printing.enable = true;
   scanning.enable = true;
+  # LaTeX is opt-in per host (no longer part of the desktop tag)
+  latex.enable = true;
   system.tags = [
     "desktop"
     "workstation"
