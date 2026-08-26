@@ -19,7 +19,7 @@ buildGoModule rec {
   # Possibly works around sporadic "signal: illegal instruction" error when
   # cross-compiling with macOS Rosetta.
   preBuild =
-    if stdenv.isLinux && stdenv.isx86_64 then
+    if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64 then
       ''
         export GODEBUG=asyncpreemptoff=1
       ''
@@ -41,17 +41,17 @@ buildGoModule rec {
   vendorHash = "sha256-FIbkPE5KQ4w7Tc7kISQ7ZYFZAoMNGiVlFWzt8BPCf+A=";
 
   buildInputs =
-    (lib.optionals stdenv.isLinux [
+    (lib.optionals stdenv.hostPlatform.isLinux [
       # For Linux clipboard support.
       xorg.libX11.dev
     ])
-    ++ (lib.optionals stdenv.isDarwin [
+    ++ (lib.optionals stdenv.hostPlatform.isDarwin [
       # For macOS clipboard support.
       darwin.apple_sdk.frameworks.Cocoa
     ]);
 
   # Un-Nix the build so it can dlopen() X11 outside of Nix environments.
-  # preFixup = if stdenv.isLinux then ''
+  # preFixup = if stdenv.hostPlatform.isLinux then ''
   #   patchelf --remove-rpath --set-interpreter ${linuxInterpreter} $out/bin/${pname}
   # '' else null;
 }

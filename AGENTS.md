@@ -40,6 +40,10 @@ Custom packages live under `legacyPackages`: `nix build .#<pkg>` (top-level) or 
 - Formatting (`nixfmt`) is CI-enforced via `nix flake check`. `statix`/`deadnix` run as local commit hooks only and never fail CI.
 - Every configuration must at least evaluate. CI (`.github/workflows/check.yaml`) runs `nix flake check`; `just eval-all` walks every nixos/darwin/home config locally. Nothing *builds* the configurations in CI, so a config that evaluates but fails to build only surfaces on `just switch` / `just deploy`.
 
+## Conventions (not hook-enforced)
+
+- **Platform checks go through `hostPlatform`**: write `stdenv.hostPlatform.isLinux` / `.isDarwin` / `.isx86_64` — the bare `stdenv.isLinux` forms are deprecated in nixpkgs and emit evaluation warnings. The tree was swept clean of them (2026-08); don't reintroduce one.
+
 ## Architecture
 
 ### Host/user auto-discovery

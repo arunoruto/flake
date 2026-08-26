@@ -6,7 +6,11 @@
 }:
 let
   primaryUserName = config.users.primaryUser;
-  homedir = if pkgs.stdenv.isLinux then "/home/${primaryUserName}" else throw "Only setup for Linux!";
+  homedir =
+    if pkgs.stdenv.hostPlatform.isLinux then
+      "/home/${primaryUserName}"
+    else
+      throw "Only setup for Linux!";
   yubikey-up =
     let
       yubikeyIds = lib.concatStringsSep " " (

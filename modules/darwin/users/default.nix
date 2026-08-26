@@ -7,7 +7,7 @@
 let
   primaryUser = config.users.primaryUser;
   # Platform-specific fallback: bash for Linux, zsh for macOS
-  defaultShell = if pkgs.stdenv.isDarwin then "zsh" else "bash";
+  defaultShell = if pkgs.stdenv.hostPlatform.isDarwin then "zsh" else "bash";
   shell = config.home-manager.users.${primaryUser}.shell.main or defaultShell;
 in
 {

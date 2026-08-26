@@ -118,7 +118,7 @@ in
   config = lib.mkIf cfg.enable {
     home.packages = lib.optionals (cfg.package != null) [ cfg.package ];
 
-    systemd.user.services = lib.mkIf (tauCfg.enable && pkgs.stdenv.isLinux) {
+    systemd.user.services = lib.mkIf (tauCfg.enable && pkgs.stdenv.hostPlatform.isLinux) {
       pi-tau = {
         Unit = {
           Description = "Pi Tau backend (RPC)";

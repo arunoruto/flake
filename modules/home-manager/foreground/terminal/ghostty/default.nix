@@ -12,7 +12,7 @@ let
   #   hash = "sha256-5c3WBG3Litw/ayLI6mlCoGw+EIHrj3vkgc4j8+4K0OY=";
   # };
   custom-config = "config-custom";
-  isDarwin = pkgs.stdenv.isDarwin;
+  isDarwin = pkgs.stdenv.hostPlatform.isDarwin;
 
   # On Darwin, ghostty from nixpkgs doesn't work, so we use a fake package
   # Users should install Ghostty manually via the official installer

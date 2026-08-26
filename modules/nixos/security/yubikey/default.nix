@@ -6,7 +6,11 @@
 }:
 let
   primaryUserName = config.users.primaryUser;
-  homedir = if pkgs.stdenv.isLinux then "/home/${primaryUserName}" else throw "Only setup for Linux!";
+  homedir =
+    if pkgs.stdenv.hostPlatform.isLinux then
+      "/home/${primaryUserName}"
+    else
+      throw "Only setup for Linux!";
 in
 {
   imports = [
@@ -67,7 +71,7 @@ in
       };
     };
 
-    security.pam = lib.optionalAttrs pkgs.stdenv.isLinux {
+    security.pam = lib.optionalAttrs pkgs.stdenv.hostPlatform.isLinux {
       # sshAgentAuth.enable = true;
       u2f = {
         enable = true;
