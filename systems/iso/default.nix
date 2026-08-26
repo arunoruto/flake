@@ -9,6 +9,7 @@ let
   hosts = [
     "shinji"
     "kenpachi"
+    "yhwach"
   ];
 
   mkIso =

@@ -20,18 +20,29 @@ sudo dd if=result/iso/*.iso of=/dev/sdX bs=4M status=progress conv=fsync
 
 ## Adding a new ISO target
 
-Append the hostname to the `isoHosts` list in `flake.nix`:
+Append the hostname to the `hosts` list in `systems/iso/default.nix`:
 
 ```nix
-isoHosts = [ "shinji" "kenpachi" "zangetsu" ];
+hosts = [ "shinji" "kenpachi" "yhwach" ];
 ```
 
 The generic `installer.nix` module:
 - Sets `isoImage.edition` = hostname (distinguishable filenames like `nixos-shinji-25.11-x86_64-linux.iso`)
 - Embeds the flake source at `/nixos-flake` → copied to `/etc/nixos/flake` at boot
-- Includes `disko` in the live Nix store
-- Prints MOTD instructions referencing the hostname
-- Provides an `autoinstall` systemd oneshot (triggers when `autoinstall` is in `/proc/cmdline`)
+- Includes `disko` and `nixos-facter` in the live Nix store
+- Prints MOTD instructions referencing the hostname, including a step to
+  create/refresh the host's `facter.json` in the embedded flake — a stale
+  report force-loads drivers for hardware that is gone and fails the initrd
+  build
+- Provides an `autoinstall` systemd oneshot (triggers when `autoinstall` is in
+  `/proc/cmdline`); it refreshes an existing `facter.json` automatically, but
+  never introduces one on hosts that do not carry a report
+- For lanzaboote hosts (`secureboot.enable`): ships `sbctl` plus a `create-sb-keys`
+  helper, and the install steps grow a secure-boot-keys step — restore the
+  previous machine's PKI bundle to `/mnt/etc/secureboot`, or create fresh keys
+  (which the firmware only accepts after re-enrollment: setup mode, then
+  `sbctl enroll-keys` on the installed system). Autoinstall creates fresh keys
+  automatically when none are present.
 
 ## Install workflow
 
