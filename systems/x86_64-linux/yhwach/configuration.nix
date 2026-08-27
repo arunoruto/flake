@@ -19,6 +19,10 @@
     enable = true;
     desktopSession = "gnome";
   };
+  # 26.05's gamescope 3.16.23 mis-composites after the Big Picture overlay
+  # closes (black region where the menu was, game never refocused); trying
+  # the newer compositor from unstable (3.16.25).
+  programs.gamescope.package = pkgs.unstable.gamescope;
 
   # NOTE: currently inert — yubikey.enable came from the workstation tag,
   # which is off; set yubikey.enable = true if this box should keep it.
