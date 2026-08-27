@@ -48,6 +48,6 @@ Passed through to nixpkgs, not duplicated here:
 |--------|---------|
 | `programs.steam.gamescopeSession.args` | gamescope flags: output size, refresh, HDR, VRR, … |
 | `programs.steam.gamescopeSession.env` | Environment for the session |
-| `programs.steam.gamescopeSession.steamArgs` | Arguments for Steam itself (defaults include `-steamos3`) |
+| `programs.steam.gamescopeSession.steamArgs` | Arguments for Steam itself. The module defaults these to the SteamOS set (`-gamepadui -steamos3 -steampal -steamdeck -pipewire-dmabuf`) — without `-steamos3`, overlay focus handling breaks (input-stranded "frozen" games) and the power menu lacks "Switch to Desktop" |
 | `programs.steam.extraCompatPackages` | e.g. `proton-ge-bin` |
 | `programs.gamescope.capSysNice` | Let gamescope renice itself. Known to be fragile with Steam's FHS environment — leave off unless you have verified it works. |

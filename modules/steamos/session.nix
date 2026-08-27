@@ -78,7 +78,24 @@ in
         # `programs.steam.gamescopeSession.{args,env,steamArgs}`.
         programs.steam = {
           enable = lib.mkDefault true;
-          gamescopeSession.enable = lib.mkDefault true;
+          gamescopeSession = {
+            enable = lib.mkDefault true;
+            # Run Steam as a SteamOS session, not a fullscreened desktop app
+            # (nixpkgs defaults to plain `-tenfoot`): -steamos3 ties Steam
+            # into gamescope's focus handling — without it, closing the
+            # overlay strands input focus and the running game appears
+            # frozen — and the deck-style flags enable the full Gaming Mode
+            # UI including the power-menu "Switch to Desktop" button that
+            # session switching relies on. Same set ChimeraOS/Jovian use on
+            # non-Deck hardware.
+            steamArgs = lib.mkDefault [
+              "-gamepadui"
+              "-steamos3"
+              "-steampal"
+              "-steamdeck"
+              "-pipewire-dmabuf"
+            ];
+          };
         };
       }
 
