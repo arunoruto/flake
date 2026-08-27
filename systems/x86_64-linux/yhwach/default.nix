@@ -2,7 +2,8 @@
 {
   imports = [
     (inputs.nixos-hardware.outPath + "/common/cpu/intel/coffee-lake")
-    (inputs.nixos-hardware.outPath + "/common/gpu/amd")
+    # AMD GPU support comes from hosts.amd.gpu.enable, which pulls in
+    # nixos-hardware's common/gpu/amd (see modules/nixos/system/amd/gpu.nix)
 
     ./configuration.nix
     ./disk.nix
