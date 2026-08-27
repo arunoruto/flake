@@ -32,6 +32,9 @@ in
         # nothing needs to be added to hardware.graphics manually.
         hardware.amdgpu.opencl.enable = config.facter.detected.graphics.amd.enable;
 
+        # Fan curves, power limits and profiles (daemon + GUI)
+        services.lact.enable = lib.mkDefault true;
+
         environment.systemPackages = with pkgs; [
           amdgpu_top
           nvtopPackages.amd
