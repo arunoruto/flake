@@ -1,12 +1,70 @@
 # How it works
 
-Three pieces, three files:
+Four pieces, four files:
 
 | File | Piece |
 |------|-------|
-| `session.nix` | The Gaming Mode session (nixpkgs' `programs.steam.gamescopeSession`) and the `steamos-session-select` switcher Steam calls. |
+| `gaming-mode.nix` | The Gaming Mode session: the gamescope session script, and the system-level bits it depends on. |
+| `session-select.nix` | The `steamos-session-select` switcher Steam calls, plus the "Return to Gaming Mode" desktop entry. |
 | `autostart.nix` | The login loop: greetd running the `steamos-session` launcher instead of a display manager. |
 | `default.nix` | Options, assertions, warnings. |
+
+## The Gaming Mode session
+
+nixpkgs has `programs.steam.gamescopeSession`, and this module used to just
+turn it on. It boils Valve's session down to:
+
+```sh
+gamescope --steam -- steam -tenfoot
+```
+
+That is enough to *see* Gaming Mode, but not enough for it to behave, because
+Steam decides at startup what Gaming Mode can do by reading its environment,
+and expects a compositor set up a particular way. So the module ships its own
+session script — `steamos-gamescope-session`, registered as `steam.desktop`,
+the same session name — modelled on Valve's `gamescope-session` with the Steam
+Deck hardware parts removed.
+
+The parts that matter:
+
+**Two Xwayland servers** (`--xwayland-count 2` + `STEAM_MULTIPLE_XWAYLANDS=1`).
+SteamOS gives the Deck UI one X server and isolates games onto a second one.
+With a single server the Steam UI and the game share one focus stack, and the
+Steam-button overlay strands focus on the way out: the game keeps running but
+stops being drawn and stops receiving input, until something forces Steam to
+re-assert focus (opening a full-screen view, or "Resume" on the game's page).
+
+**The WSI layer** (`ENABLE_GAMESCOPE_WSI=1` plus `gamescope-wsi` in
+`hardware.graphics.extraPackages{,32}`). `VK_LAYER_FROG_gamescope_wsi` is how a
+game's Vulkan swapchain is handed to gamescope directly. It carries frame
+pacing, the framerate limiter, and HDR — without it HDR content is tonemapped
+down to SDR no matter what else is enabled.
+
+**Capability flags** — the `STEAM_GAMESCOPE_*` and `STEAM_*` variables. These
+are not gamescope settings; Steam reads them once and believes them, and they
+are what makes toggles (HDR, VRR, tearing, scaling filters, the performance
+overlay) appear in Gaming Mode's menus. The module only advertises what this
+session actually provides, which is why the Deck-specific ones (fan control,
+backlight, status LED, CEC, drive adoption) are absent, along with the ones
+that depend on Valve's patched Mesa (dynamic VRS, the fifo fps limiter).
+
+**Session type.** `XDG_SESSION_TYPE=x11`: Steam and its games are X11 clients
+of gamescope's Xwayland servers, whatever the login path called the session.
+
+**Runtime state.** The script creates gamescope's mode-save file, the limiter
+fifo, and seeds the mangoapp config — the reason a plain `env`-and-`args`
+option pair could not express this session.
+
+**The performance overlay's config path** is one place this module knowingly
+diverges from Valve. The 0–4 levels in Gaming Mode are MangoHud's built-in
+presets (1 fps-only, 2 the Deck-style horizontal bar, 3 adds temps and clocks,
+4 full); Steam selects one by writing `preset=N` into
+`~/.local/share/Steam/config/mangohud.conf` and then running
+`mangohudctl toggle reload_config`, which makes mangoapp re-parse its config.
+Valve's script points `MANGOHUD_CONFIGFILE` at a fresh `mktemp` instead, so
+mangoapp ends up watching a file Steam never writes and every level looks the
+same. This module points it at the file Steam actually writes, and seeds it
+only when absent so an existing level survives.
 
 ## The login loop
 
@@ -25,8 +83,46 @@ The launcher does the part a display manager would normally do:
    registry GDM/SDDM would consult, so anything that registers a Wayland
    session (GNOME, Plasma, the gamescope Steam session, …) is launchable.
 3. Export the session identity (`XDG_SESSION_TYPE`, `XDG_SESSION_DESKTOP`,
-   `XDG_CURRENT_DESKTOP` from the file's `DesktopNames=`) and `exec` the
+   `XDG_CURRENT_DESKTOP` from the file's `DesktopNames=`), push it into the
+   systemd user manager and D-Bus activation environment, and `exec` the
    file's `Exec=` line.
+
+### Where the session's output goes
+
+greetd hands its child the console, so a session started this way prints to
+whichever display owns `fbcon` — which is not necessarily the GPU the session
+renders on, and is unreachable over SSH. A Gaming Mode that fails to start then
+leaves a black screen and no way to ask why. The launcher runs the session
+under `systemd-cat` instead, so it is all in the journal:
+
+```sh
+journalctl -t steamos-session
+```
+
+`systemd-cat` execs the session rather than forking it, so greetd still sees
+one child and its bookkeeping is unchanged.
+
+### Making the session look like a session
+
+Occupying greetd's *greeter* slot is what buys the respawn loop, and it is
+also what nearly makes Desktop Mode impossible. greetd never sets
+`XDG_SESSION_TYPE` at all and marks its sessions `XDG_SESSION_CLASS=greeter`,
+so logind registers every one of them as `class=greeter type=tty`. Gaming Mode
+does not care — gamescope, like every wlroots compositor, promotes its own
+session type once it holds the DRM device — but a desktop does:
+
+- GNOME's shell unit carries `AssertEnvironment=XDG_SESSION_TYPE=wayland`;
+- a `type=tty` session is never eligible to be the user's logind *display*
+  session, and mutter refuses to start without a logind session it can
+  resolve.
+
+So the module fixes it at both ends. A `pam_env` rule on the greetd PAM
+service — ordered after the base one and well before `pam_systemd` — sets
+`XDG_SESSION_TYPE=wayland` and `XDG_SESSION_CLASS=user`, so logind *creates*
+the session correctly instead of it being corrected afterwards. And step 3
+above pushes the identity into the systemd user manager, because gnome-shell
+runs as a user service (`org.gnome.Shell@.service`) and would otherwise
+inherit none of it.
 
 Because the selection file is consumed on every cycle, **Gaming Mode is
 always the fallback**: rebooting, logging out of the desktop, or a crashed
@@ -77,6 +173,11 @@ On the desktop, a **Return to Gaming Mode** launcher entry (the same script,
   another VT and log in there.
 - **No greeter, no password** in `autoStart` mode — by design, see the
   security note in the [README](./README.md).
+- **gamescope runs Steam as its child**, where Valve starts gamescope and
+  Steam as separate systemd user units wired together by a ready socket. The
+  simpler shape costs the session's D-Bus/systemd integration
+  (`gamescope-session.target`, the stats socket other tools consume) but keeps
+  the module to one script.
 - Valve's deeper integration (steamos-manager D-Bus API, updater, power
   button daemon, per-device quirks) is out of scope; use Jovian if you need
   it.

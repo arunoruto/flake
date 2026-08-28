@@ -9,9 +9,11 @@ SteamOS.
 It is deliberately *not* [Jovian-NixOS](https://github.com/Jovian-Experiments/Jovian-NixOS).
 Jovian ships Valve's full stack (steamos-manager, powerbuttond, vendor
 gamescope-session, Deck hardware support) and is the right choice for an
-actual Steam Deck. This module instead composes what nixpkgs already
-provides — `programs.steam.gamescopeSession` and `greetd` — with two small
-scripts, and is aimed at ordinary PCs used as living-room machines.
+actual Steam Deck. This module instead reimplements the small part of that
+stack a PC actually needs — a gamescope session modelled on Valve's, a session
+switcher, and a `greetd` login loop — and is aimed at ordinary PCs used as
+living-room machines. Nothing here is fetched from Valve: the session is a
+~40-line script built from upstream nixpkgs' gamescope and Steam.
 
 ## Split-ready
 
@@ -77,14 +79,17 @@ Requirements and expectations:
 - Steam itself is unfree; `nixpkgs.config.allowUnfree` (or an equivalent
   predicate) must permit it.
 
-Gamescope flags (resolution, refresh rate, HDR, …) are configured through the
-upstream options, e.g.:
+HDR, VRR and the performance overlay are on by default and need no
+configuration — see [Options](./options.md#display-features). Resolution,
+refresh rate and anything else gamescope takes go through
+`steamos.gamescope.args` (one list element per argv entry):
 
 ```nix
-programs.steam.gamescopeSession.args = [
-  "--output-width 3840"
-  "--output-height 2160"
-  "--hdr-enabled"
+steamos.gamescope.args = [
+  "--output-width"
+  "3840"
+  "--output-height"
+  "2160"
 ];
 ```
 

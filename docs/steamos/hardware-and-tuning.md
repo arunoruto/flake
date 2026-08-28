@@ -97,17 +97,24 @@ Everything below is upstream nixpkgs options — listed here because finding
 them is the hard part.
 
 **Match gamescope to your display.** By default gamescope picks something
-sensible; being explicit avoids surprises on TVs:
+sensible; being explicit avoids surprises on TVs. One list element per argv
+entry:
 
 ```nix
-programs.steam.gamescopeSession.args = [
-  "--output-width 3840"
-  "--output-height 2160"
-  "--nested-refresh 120"
-  "--adaptive-sync"   # VRR, if the display supports it
-  "--hdr-enabled"     # HDR — AMD GPUs only, and recent gamescope
+steamos.gamescope.args = [
+  "--output-width"
+  "3840"
+  "--output-height"
+  "2160"
+  "--nested-refresh"
+  "120"
 ];
 ```
+
+HDR and VRR are not in that list because `steamos.hdr.enable` and
+`steamos.vrr.enable` are on by default — they pass the gamescope flag *and*
+tell Steam the session supports the feature, which is what puts the toggles in
+Gaming Mode's display settings.
 
 **A new GPU wants a new kernel.** Release-branch LTS kernels lag GPU support
 by months (RDNA 4 is the current example):
@@ -160,3 +167,27 @@ covers most of it.
 - **Updates**: Gaming Mode's own "check for updates" updates games, not the
   OS — system updates stay `nixos-rebuild` / your deploy tool. SteamOS-style
   atomic OS updates are exactly what NixOS generations already are.
+
+## Machines with two GPUs
+
+A desktop with a discrete card *and* an active integrated one (any Intel or AMD
+CPU with video output enabled in firmware) has a trap waiting: nothing pins
+which GPU gamescope composites on. It selects a Vulkan device, then opens the
+DRM node that matches it — and which card that turns out to be depends on
+kernel enumeration order, which is not stable across boots. The same machine
+can come up on the discrete card for weeks and then, one boot, land on the
+iGPU, open a DRM node with no connected output, fail to create a backend, and
+leave you at a black screen with greetd looping until it hits its restart
+limit.
+
+Pin it by PCI ID:
+
+```nix
+steamos.gamescope.args = [
+  "--prefer-vk-device"
+  "1002:7590"   # `lspci -nn | grep -i vga`, or /sys/class/drm/card*/device/{vendor,device}
+];
+```
+
+`gamescope --steam ... 2>&1 | grep 'selecting physical device'` confirms the
+choice; it names the card it settled on.
