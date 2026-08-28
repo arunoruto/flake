@@ -27,10 +27,33 @@
     # chose the iGPU it opened i915's node, which has no connected output,
     # failed to create a backend, and greetd hit its restart limit with a
     # black screen. Pin the discrete card by PCI ID.
-    gamescope.args = [
-      "--prefer-vk-device"
-      "1002:7590"
-    ];
+    gamescope = {
+      args = [
+        "--prefer-vk-device"
+        "1002:7590"
+
+        # The TV's *preferred* EDID mode is 4K60, so gamescope settles there
+        # even though the driver also offers 3840x2160@120 (and @100). Ask for
+        # it explicitly. 4K120 is a 1188 MHz pixel clock, over twice what
+        # HDMI 2.0's 600 MHz TMDS ceiling carries, so amdgpu drives it as
+        # YCbCr 4:2:0 (594 MHz) — which this TV advertises for exactly these
+        # modes. Chroma subsampling costs nothing in games or video and softens
+        # small text a little. An unavailable mode falls back to the preferred
+        # one rather than failing, so this cannot black-screen the box.
+        "--output-width"
+        "3840"
+        "--output-height"
+        "2160"
+        "--nested-refresh"
+        "120"
+      ];
+
+      # gamescope only builds a dynamic refresh-rate list for *internal*
+      # panels; for external displays the switching Steam's display settings
+      # would drive is off behind this ConVar. Any ConVar can be overridden
+      # with a `gamescope_<name>` environment variable.
+      env.gamescope_drm_allow_dynamic_modes_for_external_display = "true";
+    };
   };
   # The overlay-close symptom this was chasing (game stops being drawn and
   # stops taking input until Steam is forced to re-assert focus) turned out to
