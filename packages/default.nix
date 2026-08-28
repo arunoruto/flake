@@ -61,6 +61,15 @@ pkgs.lib.makeScope pkgs.newScope (
     );
   }
   // {
+    deckyPlugins = pkgs.lib.makeScope pkgs.newScope (
+      self-decky:
+      pkgs.lib.packagesFromDirectoryRecursive {
+        inherit (self-decky) callPackage newScope;
+        directory = ./deckyPlugins;
+      }
+    );
+  }
+  // {
     custom = pkgs.lib.makeScope pkgs.newScope (
       self-custom:
       (pkgs.lib.packagesFromDirectoryRecursive {

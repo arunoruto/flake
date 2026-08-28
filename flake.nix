@@ -128,6 +128,7 @@
             kodi
             home-assistant
             custom-packages
+            decky-plugins
           ])
           ++ (with inputs; [ nur.overlays.default ]);
         config = {

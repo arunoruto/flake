@@ -52,6 +52,11 @@ rec {
       );
   };
 
+  # Decky Loader plugins, available under pkgs.deckyPlugins.*
+  decky-plugins = final: prev: {
+    inherit ((import ../packages prev)) deckyPlugins;
+  };
+
   # Custom packages in versioned namespace
   # These packages are available under pkgs.custom.*
   # Use this for packages where you want control over using custom vs upstream versions
