@@ -29,15 +29,15 @@
     home.packages =
       (with pkgs; [
         # gimp
-        inkscape
+        # inkscape
         # obs-studio
         #okular
-        rnote
+        # rnote
         # via
         # vial
         #qbittorrent
 
-        exercism
+        # exercism
       ])
       ++ (with pkgs.unstable; [
         gimp3
