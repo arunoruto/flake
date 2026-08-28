@@ -60,6 +60,28 @@ in
       description = "Directory holding installed plugins and their data.";
     };
 
+    plugins = lib.mkOption {
+      type = lib.types.listOf lib.types.package;
+      default = [ ];
+      example = lib.literalExpression "with pkgs.deckyPlugins; [ hltb-for-deck protondb-decky ]";
+      description = ''
+        Plugins to install declaratively. Each is symlinked into the plugin
+        directory, which Decky scans for directories containing a
+        `plugin.json`; it resolves symlinks, so store paths load normally.
+
+        This composes with the in-game store rather than replacing it: plugins
+        installed through Decky's UI are ordinary directories alongside these
+        symlinks and keep working. What a plugin declared here gives up is
+        Decky's own updater — the version is whatever the package pins — and
+        uninstalling it from the UI only removes the symlink until the next
+        boot restores it.
+
+        Per-plugin settings and data are unaffected either way: Decky keeps
+        those in `settings/` and `data/` beside the plugin directory, never
+        inside it, which is what lets these be read-only.
+      '';
+    };
+
     extraPackages = lib.mkOption {
       type = lib.types.listOf lib.types.package;
       default = [ ];
@@ -125,7 +147,15 @@ in
           user = steamUser;
           mode = "0644";
         };
-      };
+      }
+      // lib.listToAttrs (
+        map (plugin: {
+          name = "${cfg.stateDir}/plugins/${plugin.deckyPluginName or plugin.pname}";
+          # L+ replaces whatever is there, so a declared plugin wins over a
+          # copy the in-game store left behind under the same name.
+          value."L+".argument = "${plugin}/${plugin.deckyPluginName or plugin.pname}";
+        }) cfg.plugins
+      );
 
       # Upstream requires root: the loader setuids to the unprivileged user to
       # run plugins itself, and running it unprivileged is unsupported and

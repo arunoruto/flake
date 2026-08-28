@@ -21,7 +21,13 @@
 
     # The plugin loader is packaged in this repo (packages/top-level), so
     # pkgs.decky-loader resolves here even though nixpkgs has no such package.
-    decky-loader.enable = true;
+    decky-loader = {
+      enable = true;
+      plugins = with pkgs.deckyPlugins; [
+        hltb-for-deck
+        protondb-decky
+      ];
+    };
 
     # This box has two GPUs — the RX 9060 XT and the 8700K's UHD 630 — and
     # nothing pins which one gamescope composites on. Left to itself it picks

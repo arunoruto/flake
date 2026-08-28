@@ -244,3 +244,37 @@ how Decky works, not something this module adds on top.
 
 The service also gets `lsof` and `systemctl` on its `PATH` — the loader uses
 the first to find that CEF socket and the second to manage its own unit.
+
+### `steamos.decky-loader.plugins`
+
+Type `list of package`, default `[ ]`. Plugins installed declaratively:
+
+```nix
+steamos.decky-loader.plugins = with pkgs.deckyPlugins; [
+  hltb-for-deck
+  protondb-decky
+];
+```
+
+Each is symlinked into the plugin directory. Decky scans that directory for
+subdirectories containing a `plugin.json` and resolves symlinks on the way, so
+store paths load exactly like installed ones.
+
+**This composes with the in-game store rather than replacing it.** Plugins
+installed through Decky's UI are ordinary directories sitting alongside these
+symlinks, and keep working and updating as normal — so you can declare the ones
+you rely on and still try something from the store without touching your
+configuration.
+
+What a declared plugin gives up is Decky's own updater: its version is whatever
+the package pins, so updating means bumping the package. Uninstalling one from
+the UI removes only the symlink, which the next boot restores — declarative
+wins, which is the point, but it is a behaviour change worth knowing.
+
+Per-plugin *settings and data* are unaffected either way. Decky keeps those in
+`settings/<plugin>` and `data/<plugin>` beside the plugin directory, never
+inside it, which is exactly what makes read-only store paths workable here.
+
+Plugins are packaged in `packages/deckyPlugins/`, built by `buildDeckyPlugin`
+from the prebuilt tarball each plugin publishes per release. Adding one is a
+handful of lines — `pname`, `version`, `owner`, `hash`.
