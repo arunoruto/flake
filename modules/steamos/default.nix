@@ -22,6 +22,7 @@ in
 {
   imports = [
     ./gaming-mode.nix
+    ./tweaks.nix
     ./session-select.nix
     ./autostart.nix
   ];
@@ -170,6 +171,20 @@ in
         mode, where the loader ignores `LD_LIBRARY_PATH`/`LD_PRELOAD`, which
         has historically broken launching it from Steam's FHS environment.
         Turn it on and verify Gaming Mode still starts before keeping it.
+      '';
+    };
+
+    tweaks.enable = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = ''
+        Apply the parts of SteamOS' opinionated system tuning that are not
+        specific to Valve's hardware: compressed swap, an out-of-memory killer
+        that acts before the kernel's does, and a handful of network sysctls
+        games trip over.
+
+        Every setting is a {option}`lib.mkDefault`, so an individual one can
+        still be overridden without turning the whole group off.
       '';
     };
 

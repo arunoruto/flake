@@ -1,12 +1,13 @@
 # How it works
 
-Four pieces, four files:
+Five pieces, five files:
 
 | File | Piece |
 |------|-------|
 | `gaming-mode.nix` | The Gaming Mode session: the gamescope session script, and the system-level bits it depends on. |
 | `session-select.nix` | The `steamos-session-select` switcher Steam calls, plus the "Return to Gaming Mode" desktop entry. |
 | `autostart.nix` | The login loop: greetd running the `steamos-session` launcher instead of a display manager. |
+| `tweaks.nix` | SteamOS' system tuning — zram, earlyoom, a couple of network sysctls — behind `steamos.tweaks.enable`. |
 | `default.nix` | Options, assertions, warnings. |
 
 ## The Gaming Mode session

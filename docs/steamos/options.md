@@ -162,6 +162,19 @@ steamos.gamescope.wsi = {
 };
 ```
 
+## `steamos.tweaks.enable`
+
+Type `bool`, default `true`. SteamOS' opinionated system tuning, minus
+everything specific to Valve's hardware. Every setting below is a `mkDefault`,
+so an individual one can be overridden without turning the group off.
+
+| Setting | Why |
+|---------|-----|
+| `zramSwap` — zstd, 50% of RAM, priority 100 | A console has no swap partition to fall back on, and shader compilation, Proton and a browser-based UI will happily use everything. |
+| `services.earlyoom` — 5% free memory and swap | Under pressure the kernel's own OOM killer arrives long after the machine stopped responding, which on a controller-driven box means reaching for the power button. |
+| `net.ipv4.tcp_mtu_probing = 1` | Some storefronts and matchmaking services sit behind PMTU black holes. |
+| `net.ipv4.tcp_fin_timeout = 5` | A game killed and relaunched cannot rebind its port while the old socket lingers, and the default timeout is far longer than a relaunch takes. |
+
 ## What else the module sets
 
 Beyond the session itself:
@@ -170,7 +183,6 @@ Beyond the session itself:
 |---------|-----|
 | `security.pam.loginLimits` — hard `nice` of `-8` for `steamos.user` | Proton runs some threads at negative niceness. Scoped to the account the session logs in as, not system-wide. |
 | A polkit rule for NetworkManager, when `steamos.user` is set and `networking.networkmanager.enable` is on | Gaming Mode's Wi-Fi settings write *system* connections, which normally needs the `networkmanager` group — impossible to grant mid-setup with only a controller in hand. Scoped to that one user's local, active session; Jovian grants it to everyone in `users`. |
-| `net.ipv4.tcp_mtu_probing = 1`, `net.ipv4.tcp_fin_timeout = 5` | PMTU black holes break some storefronts; a game killed and relaunched cannot rebind its port while the old socket lingers. Both `mkDefault`. |
 
 Controller access is deliberately **not** handled here. `programs.steam` turns
 on `hardware.steam-hardware`, which installs Valve's `steam-devices` rules —

@@ -263,12 +263,6 @@ in
       }
     ];
 
-    # Some games cannot reuse their TCP ports if killed and restarted quickly,
-    # and a few storefronts trip over PMTU black holes. Both match SteamOS.
-    boot.kernel.sysctl = {
-      "net.ipv4.tcp_mtu_probing" = lib.mkDefault 1;
-      "net.ipv4.tcp_fin_timeout" = lib.mkDefault 5;
-    };
     # Gaming Mode's network settings write *system* connections, which
     # normally needs the networkmanager group — impossible to grant mid-setup
     # on a machine you drive with a controller. Jovian allows this for anyone
