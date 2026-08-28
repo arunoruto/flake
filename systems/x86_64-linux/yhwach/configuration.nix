@@ -13,6 +13,17 @@
   # RDNA 4 wants the freshest amdgpu/mesa stack, not the default LTS kernel.
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
+  # Experiment: Steam offers no 4K in its normal resolution list and only
+  # reaches it through "custom", despite gamescope publishing the full mode
+  # list. -steamdeck/-steampal tell Steam it is Deck hardware, whose panel is
+  # 1280x800 — the suspected reason it filters the list down. Dropping them to
+  # see if the list gains 4K; put them back if the Deck UI loses character.
+  steamos.steamArgs = [
+    "-gamepadui"
+    "-steamos3"
+    "-pipewire-dmabuf"
+  ];
+
   # Steam machine: boot straight into Gaming Mode, with GNOME one
   # "Switch to Desktop" away (see modules/steamos and docs/steamos/).
   steamos = {
