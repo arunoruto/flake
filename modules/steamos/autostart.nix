@@ -69,7 +69,20 @@ let
     # shellcheck disable=SC2086
     ${pkgs.dbus}/bin/dbus-update-activation-environment --systemd $identity || true
 
-    eval "exec $exec_line"
+    # Send the session's output to the journal rather than to the VT.
+    #
+    # greetd hands its child the console, so by default everything the session
+    # prints — gamescope's startup, its errors, a compositor's death rattle —
+    # lands on whichever display owns fbcon. That is the wrong place twice
+    # over: it is invisible unless something is plugged into the GPU that
+    # happens to hold the framebuffer console (not necessarily the one the
+    # session renders on), and it is unreachable over SSH, so a session that
+    # fails to start leaves a black screen and no way to ask why. In the
+    # journal it is `journalctl -t steamos-session` from anywhere.
+    #
+    # systemd-cat execs the session rather than forking it, so greetd still
+    # sees exactly one child and its session bookkeeping is unchanged.
+    eval "exec ${lib.getExe' pkgs.systemd "systemd-cat"} --identifier=steamos-session -- $exec_line"
   '';
 in
 {
