@@ -1,6 +1,6 @@
 # How it works
 
-Five pieces, five files:
+Six pieces, six files:
 
 | File | Piece |
 |------|-------|
@@ -8,6 +8,7 @@ Five pieces, five files:
 | `session-select.nix` | The `steamos-session-select` switcher Steam calls, plus the "Return to Gaming Mode" desktop entry. |
 | `autostart.nix` | The login loop: greetd running the `steamos-session` launcher instead of a display manager. |
 | `tweaks.nix` | SteamOS' system tuning — zram, earlyoom, a couple of network sysctls — behind `steamos.tweaks.enable`. |
+| `decky-loader.nix` | The Decky plugin loader service, behind `steamos.decky-loader.enable`. |
 | `default.nix` | Options, assertions, warnings. |
 
 ## The Gaming Mode session

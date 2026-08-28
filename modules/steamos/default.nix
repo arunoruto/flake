@@ -21,6 +21,7 @@ let
 in
 {
   imports = [
+    ./decky-loader.nix
     ./gaming-mode.nix
     ./tweaks.nix
     ./session-select.nix

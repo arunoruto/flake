@@ -191,3 +191,37 @@ rules for every controller Steam supports. A blanket
 `KERNEL=="hidraw*", TAG+="uaccess"` would hand the session every HID device on
 the machine, which is more than Valve grants on a Deck. If you have a pad that
 Valve's list misses, add a rule for that device.
+
+## `steamos.decky-loader`
+
+[Decky Loader](https://github.com/SteamDeckHomebrew/decky-loader) injects a
+plugin menu into Steam's Gaming Mode UI.
+
+| Option | Type | Default | Purpose |
+|--------|------|---------|---------|
+| `.enable` | `bool` | `false` | Run the loader. |
+| `.package` | `null or package` | `pkgs.decky-loader or null` | What to run. |
+| `.user` | `str` | `"decky"` | Unprivileged user plugins run as; created automatically when left at the default. |
+| `.stateDir` | `path` | `/var/lib/decky-loader` | Installed plugins and their data. |
+| `.extraPackages` | `list of package` | `[ ]` | Extra tools on the loader's `PATH`, for plugins that shell out. |
+| `.extraPythonPackages` | `function` | `_: [ ]` | Extra Python modules importable by plugins, as a function of the interpreter's package set. |
+
+**nixpkgs does not package Decky Loader.** `package` therefore defaults to
+`pkgs.decky-loader` only when something has provided it, and to `null`
+otherwise — in which case the module configures nothing and emits a warning
+rather than failing to evaluate. That keeps this tree usable against a bare
+nixpkgs, which is the same constraint the rest of it follows. This repo builds
+one in `packages/top-level/decky-loader`, so `pkgs.decky-loader` resolves here;
+elsewhere, supply your own:
+
+```nix
+steamos.decky-loader = {
+  enable = true;
+  package = inputs.somewhere.packages.${pkgs.system}.decky-loader;
+  extraPythonPackages = ps: [ ps.hid ];
+};
+```
+
+The service runs as **root** and drops to `user` for plugins. That is upstream's
+design, not an oversight — running the loader unprivileged is unsupported and
+[breaks](https://github.com/SteamDeckHomebrew/decky-loader/issues/446).
