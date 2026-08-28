@@ -225,3 +225,22 @@ steamos.decky-loader = {
 The service runs as **root** and drops to `user` for plugins. That is upstream's
 design, not an oversight — running the loader unprivileged is unsupported and
 [breaks](https://github.com/SteamDeckHomebrew/decky-loader/issues/446).
+
+### What the module does for Decky beyond running it
+
+Decky does not draw its own window — it injects into Steam's UI over the CEF
+debugger that `steamwebhelper` opens on `127.0.0.1:8080`, and Steam only opens
+that when `.cef-enable-remote-debugging` exists in its data directory at
+startup. Without it the loader starts, serves happily on port 1337, and is
+simply never visible in Gaming Mode.
+
+So the module creates that file in `steamos.user`'s Steam directory. **Steam
+has to be restarted afterwards** — switching the configuration is not enough,
+since Steam only reads the flag when it launches.
+
+Be aware of what that implies: an unauthenticated debugger into the Steam
+client, bound to loopback, for as long as Decky is enabled. That is inherent to
+how Decky works, not something this module adds on top.
+
+The service also gets `lsof` and `systemctl` on its `PATH` — the loader uses
+the first to find that CEF socket and the second to manage its own unit.

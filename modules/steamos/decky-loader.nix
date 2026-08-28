@@ -16,6 +16,12 @@ let
   cfg = config.steamos.decky-loader;
   enabled = config.steamos.enable && cfg.enable && cfg.package != null;
 
+  # Decky injects its UI through Steam's CEF debugger, so the flag file that
+  # makes Steam open it has to live in the *Steam* user's home — not the
+  # unprivileged account plugins run as.
+  steamUser = config.steamos.user;
+  steamHome = config.users.users.${steamUser}.home;
+
   # Plugins that need extra Python modules get them through the loader's own
   # interpreter, which the package exposes for exactly this.
   package = cfg.package.overridePythonAttrs (old: {
@@ -105,6 +111,20 @@ in
           inherit (cfg) user;
           mode = "0755";
         };
+      }
+      // lib.optionalAttrs (steamUser != null) {
+        # Decky reaches into Steam's UI over the CEF debugger that
+        # steamwebhelper opens on 127.0.0.1:8080, and Steam only opens it when
+        # this file exists at startup. Without it the loader runs, serves on
+        # 1337 and is simply never visible in Gaming Mode — which is the whole
+        # symptom. Steam has to be restarted after it appears.
+        #
+        # Note this does mean an unauthenticated debugger into the Steam
+        # client, bound to loopback, for as long as Decky is enabled.
+        "${steamHome}/.local/share/Steam/.cef-enable-remote-debugging".f = {
+          user = steamUser;
+          mode = "0644";
+        };
       };
 
       # Upstream requires root: the loader setuids to the unprivileged user to
@@ -114,7 +134,15 @@ in
         description = "Decky Loader";
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
-        path = cfg.extraPackages;
+
+        # lsof is how the loader finds steamwebhelper's CEF socket, and it
+        # drives its own unit through systemctl; neither is guaranteed to be
+        # on a service's default PATH.
+        path = [
+          pkgs.lsof
+          config.systemd.package
+        ]
+        ++ cfg.extraPackages;
 
         environment = {
           UNPRIVILEGED_USER = cfg.user;
