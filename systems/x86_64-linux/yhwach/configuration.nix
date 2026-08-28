@@ -18,6 +18,19 @@
   steamos = {
     enable = true;
     desktopSession = "gnome";
+
+    # This box has two GPUs — the RX 9060 XT and the 8700K's UHD 630 — and
+    # nothing pins which one gamescope composites on. Left to itself it picks
+    # a Vulkan device and then opens the DRM node that matches it, so which
+    # card it lands on rides on kernel enumeration order, which is not stable
+    # across boots (amdgpu has come up as both card0 and card1 here). When it
+    # chose the iGPU it opened i915's node, which has no connected output,
+    # failed to create a backend, and greetd hit its restart limit with a
+    # black screen. Pin the discrete card by PCI ID.
+    gamescope.args = [
+      "--prefer-vk-device"
+      "1002:7590"
+    ];
   };
   # The overlay-close symptom this was chasing (game stops being drawn and
   # stops taking input until Steam is forced to re-assert focus) turned out to
