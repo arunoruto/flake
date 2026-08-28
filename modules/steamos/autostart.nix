@@ -43,13 +43,31 @@ let
     fi
 
     exec_line="$(${pkgs.gnugrep}/bin/grep -m1 '^Exec=' "$desktop_file" | ${pkgs.coreutils}/bin/cut -d= -f2-)"
-    desktop_names="$(${pkgs.gnugrep}/bin/grep -m1 '^DesktopNames=' "$desktop_file" | ${pkgs.coreutils}/bin/cut -d= -f2-)"
+    desktop_names="$(${pkgs.gnugrep}/bin/grep -m1 '^DesktopNames=' "$desktop_file" | ${pkgs.coreutils}/bin/cut -d= -f2- || true)"
 
     export XDG_SESSION_TYPE=wayland
     export XDG_SESSION_DESKTOP="$session"
     if [ -n "$desktop_names" ]; then
       export XDG_CURRENT_DESKTOP="$desktop_names"
     fi
+
+    # Hand the session identity to the systemd user manager and to D-Bus
+    # activation. A compositor started as a *user service* rather than as our
+    # child inherits none of it otherwise, and GNOME's shell unit gates on it
+    # (`AssertEnvironment=XDG_SESSION_TYPE=wayland`) before it will even run.
+    # The logind session itself is made to match further down, in the pam_env
+    # rule — both halves are needed.
+    identity=""
+    for var in XDG_SESSION_ID XDG_SESSION_TYPE XDG_SESSION_DESKTOP \
+               XDG_CURRENT_DESKTOP XDG_SEAT XDG_VTNR; do
+      if [ -n "''${!var:-}" ]; then
+        identity="$identity $var"
+      fi
+    done
+    # shellcheck disable=SC2086
+    ${pkgs.systemd}/bin/systemctl --user import-environment $identity || true
+    # shellcheck disable=SC2086
+    ${pkgs.dbus}/bin/dbus-update-activation-environment --systemd $identity || true
 
     eval "exec $exec_line"
   '';
@@ -64,6 +82,36 @@ in
         command = lib.getExe steamos-session;
         inherit (cfg) user;
       };
+    };
+
+    # Tell logind what kind of session this is, before it creates one.
+    #
+    # greetd never sets XDG_SESSION_TYPE at all, and marks its sessions
+    # XDG_SESSION_CLASS=greeter — reasonable for a greeter, wrong for us,
+    # because occupying the greeter slot is exactly how this module gets its
+    # respawn loop. logind therefore registers every session as
+    # `class=greeter type=tty`, and that is what Desktop Mode trips over:
+    # GNOME's shell unit carries `AssertEnvironment=XDG_SESSION_TYPE=wayland`,
+    # a `type=tty` session is never eligible to be the user's logind *display*
+    # session, and mutter refuses to start without one it can resolve.
+    # gamescope hides the problem in Gaming Mode by promoting the session type
+    # itself once it holds the DRM device, which a desktop compositor does
+    # not do.
+    #
+    # pam_env runs well before pam_systemd in the stack, so setting the two
+    # variables there means the session is created correctly rather than
+    # corrected afterwards.
+    security.pam.services.greetd.rules.session.steamos-session-identity = {
+      order = config.security.pam.services.greetd.rules.session.env.order + 1;
+      control = "optional";
+      modulePath = "${pkgs.linux-pam}/lib/security/pam_env.so";
+      args = [
+        "conffile=${pkgs.writeText "steamos-greetd-pam-environment" ''
+          XDG_SESSION_TYPE DEFAULT=wayland OVERRIDE=wayland
+          XDG_SESSION_CLASS DEFAULT=user OVERRIDE=user
+        ''}"
+        "readenv=0"
+      ];
     };
   };
 }
