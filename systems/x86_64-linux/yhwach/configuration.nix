@@ -19,10 +19,18 @@
     enable = true;
     desktopSession = "gnome";
   };
-  # 26.05's gamescope 3.16.23 mis-composites after the Big Picture overlay
-  # closes (black region where the menu was, game never refocused); trying
-  # the newer compositor from unstable (3.16.25).
+  # The overlay-close symptom this was chasing (game stops being drawn and
+  # stops taking input until Steam is forced to re-assert focus) turned out to
+  # be the session, not the compositor: Gaming Mode needs a second Xwayland
+  # server for games. modules/steamos now sets that up, so this pin is likely
+  # unnecessary — drop it back to the release gamescope and retest.
   programs.gamescope.package = pkgs.unstable.gamescope;
+  # The WSI Vulkan layer talks a versioned protocol to gamescope; keep it on
+  # the same build as the compositor above.
+  steamos.gamescope.wsi = {
+    packages = [ pkgs.unstable.gamescope-wsi ];
+    packages32 = [ pkgs.unstable.pkgsi686Linux.gamescope-wsi ];
+  };
 
   # NOTE: currently inert — yubikey.enable came from the workstation tag,
   # which is off; set yubikey.enable = true if this box should keep it.
