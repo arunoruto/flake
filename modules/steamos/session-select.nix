@@ -50,7 +50,15 @@ let
     # End the current graphical session; the login loop then starts the
     # selected one. In Gaming Mode a clean Steam shutdown takes gamescope
     # (and thus the session) down with it; from a desktop we ask logind.
-    if ${pkgs.procps}/bin/pgrep -x gamescope > /dev/null; then
+    #
+    # Detect Gaming Mode by the variable gamescope exports into its children
+    # (Steam, and so this script) rather than by process name: gamescope
+    # renames itself to "gamescope-wl" under the DRM backend, so a plain
+    # `pgrep -x gamescope` never matches and every switch became a hard
+    # logind kill — which tears the DRM session out from under gamescope and
+    # crashes it on the way down instead of letting Steam save state.
+    if [ -n "''${GAMESCOPE_WAYLAND_DISPLAY:-}" ] \
+      || ${pkgs.procps}/bin/pgrep -x 'gamescope(-wl)?' > /dev/null; then
       exec ${lib.getExe' config.programs.steam.package "steam"} -shutdown
     else
       exec ${pkgs.systemd}/bin/loginctl terminate-session "''${XDG_SESSION_ID:-}"
