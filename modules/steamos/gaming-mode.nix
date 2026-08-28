@@ -225,8 +225,10 @@ in
     programs.steam = {
       enable = lib.mkDefault true;
       # This module provides the session itself; nixpkgs' minimal one would
-      # register a second `steam.desktop` and collide with it.
-      gamescopeSession.enable = false;
+      # register a second `steam.desktop` and collide with it. Forced rather
+      # than merged, so a consumer that had switched it on gets this session
+      # instead of a module-system conflict they cannot act on.
+      gamescopeSession.enable = lib.mkForce false;
     };
 
     programs.gamescope = {
@@ -239,22 +241,22 @@ in
     environment.systemPackages = [ steamos-gamescope-session ];
 
     hardware.graphics = lib.mkIf cfg.gamescope.wsi.enable {
-      extraPackages = cfg.gamescope.wsi.packages;
-      extraPackages32 = cfg.gamescope.wsi.packages32;
+      extraPackages = [ cfg.gamescope.wsi.package ];
+      extraPackages32 = [ cfg.gamescope.wsi.package32 ];
     };
 
-    # Controllers reached over hidraw, and Steam Input's virtual devices.
-    # hardware.steam-hardware covers Valve's own hardware; this covers the
-    # third-party pads Steam Input drives through hidraw.
-    services.udev.extraRules = ''
-      KERNEL=="hidraw*", TAG+="uaccess"
-      KERNEL=="uinput", SUBSYSTEM=="misc", TAG+="uaccess", OPTIONS+="static_node=uinput"
-    '';
+    # Controller access comes from hardware.steam-hardware, which
+    # programs.steam turns on: it installs Valve's steam-devices rules, which
+    # already tag /dev/uinput for the active session and carry uaccess rules
+    # for every controller Steam supports. Nothing to add here — a blanket
+    # `KERNEL=="hidraw*", TAG+="uaccess"` would hand the session every HID
+    # device on the machine, which is more than Valve grants on a Deck.
 
-    # Proton wants to run some threads at negative niceness.
-    security.pam.loginLimits = [
+    # Proton runs some threads at negative niceness. Scope the allowance to
+    # the user Gaming Mode logs in as rather than granting it system-wide.
+    security.pam.loginLimits = lib.mkIf (cfg.user != null) [
       {
-        domain = "*";
+        domain = cfg.user;
         type = "hard";
         item = "nice";
         value = "-8";
@@ -267,23 +269,24 @@ in
       "net.ipv4.tcp_mtu_probing" = lib.mkDefault 1;
       "net.ipv4.tcp_fin_timeout" = lib.mkDefault 5;
     };
-
-    # Gaming Mode's network settings write system connections, which normally
-    # needs the networkmanager group. On a machine you drive with a controller
-    # there is no way to grant that mid-setup, so allow the local active
-    # session to do it — the same rule Jovian ships.
-    security.polkit.extraConfig = lib.mkIf config.networking.networkmanager.enable ''
-      // steamos: let the local, active user configure Wi-Fi from Gaming Mode
-      polkit.addRule(function(action, subject) {
-        if (
-          action.id.indexOf("org.freedesktop.NetworkManager") == 0 &&
-          subject.isInGroup("users") &&
-          subject.local &&
-          subject.active
-        ) {
-          return polkit.Result.YES;
-        }
-      });
-    '';
+    # Gaming Mode's network settings write *system* connections, which
+    # normally needs the networkmanager group — impossible to grant mid-setup
+    # on a machine you drive with a controller. Jovian allows this for anyone
+    # in `users`; scope it to the one account the session runs as instead.
+    security.polkit.extraConfig =
+      lib.mkIf (cfg.user != null && config.networking.networkmanager.enable)
+        ''
+          // steamos: let ${cfg.user} configure Wi-Fi from Gaming Mode
+          polkit.addRule(function(action, subject) {
+            if (
+              action.id.indexOf("org.freedesktop.NetworkManager") == 0 &&
+              subject.user == ${builtins.toJSON cfg.user} &&
+              subject.local &&
+              subject.active
+            ) {
+              return polkit.Result.YES;
+            }
+          });
+        '';
   };
 }

@@ -148,28 +148,34 @@ The layer is how games present *through* gamescope instead of through plain
 Xwayland WSI; it carries frame pacing, the framerate limiter, and HDR
 swapchains. Requires `hardware.graphics.enable32Bit` (asserted).
 
-### `steamos.gamescope.wsi.packages` / `.packages32`
+### `steamos.gamescope.wsi.package` / `.package32`
 
-Type `list of package`, defaulting to `[ pkgs.gamescope-wsi ]` and
-`[ pkgs.pkgsi686Linux.gamescope-wsi ]`. Override these to keep the layer in
+Defaulting to `pkgs.gamescope-wsi` and `pkgs.pkgsi686Linux.gamescope-wsi`. The
+layer speaks a versioned protocol to gamescope, so override these to keep it in
 step with a non-default `programs.gamescope.package`:
 
 ```nix
 programs.gamescope.package = pkgs.unstable.gamescope;
 steamos.gamescope.wsi = {
-  packages = [ pkgs.unstable.gamescope-wsi ];
-  packages32 = [ pkgs.unstable.pkgsi686Linux.gamescope-wsi ];
+  package = pkgs.unstable.gamescope-wsi;
+  package32 = pkgs.unstable.pkgsi686Linux.gamescope-wsi;
 };
 ```
 
-## What the module sets on your behalf
+## What else the module sets
 
-Beyond the session itself, `steamos.enable` applies the parts of SteamOS'
-system configuration that Gaming Mode depends on:
+Beyond the session itself:
 
 | Setting | Why |
 |---------|-----|
-| `services.udev.extraRules` — `uaccess` on `hidraw*` and `uinput` | Third-party controllers over hidraw, and Steam Input's virtual devices. Valve's own hardware is covered by `hardware.steam-hardware`. |
-| `security.pam.loginLimits` — hard `nice` `-8` | Proton runs some threads at negative niceness. |
-| `net.ipv4.tcp_mtu_probing = 1`, `net.ipv4.tcp_fin_timeout = 5` | PMTU black holes break some storefronts; some games cannot rebind their TCP port if killed and restarted quickly. Both `mkDefault`. |
-| A polkit rule for NetworkManager (only when `networking.networkmanager.enable`) | Gaming Mode's Wi-Fi settings write *system* connections, which normally needs the `networkmanager` group — impossible to grant mid-setup with only a controller. Scoped to the local, active session. |
+| `security.pam.loginLimits` — hard `nice` of `-8` for `steamos.user` | Proton runs some threads at negative niceness. Scoped to the account the session logs in as, not system-wide. |
+| A polkit rule for NetworkManager, when `steamos.user` is set and `networking.networkmanager.enable` is on | Gaming Mode's Wi-Fi settings write *system* connections, which normally needs the `networkmanager` group — impossible to grant mid-setup with only a controller in hand. Scoped to that one user's local, active session; Jovian grants it to everyone in `users`. |
+| `net.ipv4.tcp_mtu_probing = 1`, `net.ipv4.tcp_fin_timeout = 5` | PMTU black holes break some storefronts; a game killed and relaunched cannot rebind its port while the old socket lingers. Both `mkDefault`. |
+
+Controller access is deliberately **not** handled here. `programs.steam` turns
+on `hardware.steam-hardware`, which installs Valve's `steam-devices` rules —
+those already tag `/dev/uinput` for the active session and carry `uaccess`
+rules for every controller Steam supports. A blanket
+`KERNEL=="hidraw*", TAG+="uaccess"` would hand the session every HID device on
+the machine, which is more than Valve grants on a Deck. If you have a pad that
+Valve's list misses, add a rule for that device.

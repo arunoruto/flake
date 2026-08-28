@@ -64,8 +64,8 @@
   # The WSI Vulkan layer talks a versioned protocol to gamescope; keep it on
   # the same build as the compositor above.
   steamos.gamescope.wsi = {
-    packages = [ pkgs.unstable.gamescope-wsi ];
-    packages32 = [ pkgs.unstable.pkgsi686Linux.gamescope-wsi ];
+    package = pkgs.unstable.gamescope-wsi;
+    package32 = pkgs.unstable.pkgsi686Linux.gamescope-wsi;
   };
 
   # NOTE: currently inert — yubikey.enable came from the workstation tag,

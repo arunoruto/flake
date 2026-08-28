@@ -127,7 +127,7 @@ in
       };
 
       fontScale = lib.mkOption {
-        type = lib.types.nullOr (lib.types.either lib.types.float lib.types.ints.positive);
+        type = lib.types.nullOr lib.types.numbers.positive;
         default = null;
         example = 2.7;
         description = ''
@@ -144,7 +144,7 @@ in
       };
 
       backgroundAlpha = lib.mkOption {
-        type = lib.types.nullOr (lib.types.either lib.types.float lib.types.ints.unsigned);
+        type = lib.types.nullOr (lib.types.numbers.between 0 1);
         default = 0.8;
         example = 0.5;
         description = ''
@@ -214,26 +214,19 @@ in
           '';
         };
 
-        packages = lib.mkOption {
-          type = lib.types.listOf lib.types.package;
-          default = [ pkgs.gamescope-wsi ];
-          defaultText = lib.literalExpression "[ pkgs.gamescope-wsi ]";
-          description = ''
-            64-bit builds of the gamescope WSI layer, added to
-            {option}`hardware.graphics.extraPackages`. Override this to keep
-            the layer in step with a non-default
+        package = lib.mkPackageOption pkgs "gamescope-wsi" {
+          extraDescription = ''
+            Added to {option}`hardware.graphics.extraPackages`. The layer
+            speaks a versioned protocol to gamescope, so override this to keep
+            it in step with a non-default
             {option}`programs.gamescope.package`.
           '';
         };
 
-        packages32 = lib.mkOption {
-          type = lib.types.listOf lib.types.package;
-          default = [ pkgs.pkgsi686Linux.gamescope-wsi ];
-          defaultText = lib.literalExpression "[ pkgs.pkgsi686Linux.gamescope-wsi ]";
-          description = ''
-            32-bit builds of the gamescope WSI layer, added to
-            {option}`hardware.graphics.extraPackages32`. Needed by 32-bit
-            games and by Proton's 32-bit halves.
+        package32 = lib.mkPackageOption pkgs [ "pkgsi686Linux" "gamescope-wsi" ] {
+          extraDescription = ''
+            Added to {option}`hardware.graphics.extraPackages32`. Needed by
+            32-bit games and by Proton's 32-bit halves.
           '';
         };
       };
@@ -268,4 +261,6 @@ in
       to get a Desktop Mode.
     '';
   };
+
+  meta.maintainers = [ ];
 }
