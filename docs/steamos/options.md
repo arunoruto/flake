@@ -329,3 +329,41 @@ need Valve's `cecd`, which this tree does not ship.
 to reach for it, and the interface specification has no display or resolution
 interface at all — Steam sets the game resolution directly through gamescope's
 `GAMESCOPE_XWAYLAND_MODE_CONTROL` atom, from a list it builds itself.
+
+## `steamos.loginManager`
+
+Type `enum [ "greetd" "sddm" ]`, default `"greetd"`. Which display manager owns
+the login path when `steamos.autoStart` is on. The difference is not cosmetic.
+
+| | `greetd` | `sddm` |
+|---|---|---|
+| Needs anything outside nixpkgs | no | yes — `steamos-manager` |
+| logind session | class `greeter`, type `tty`, corrected by a `pam_env` rule | class `user`, type `wayland` natively |
+| Respawn loop | greetd's greeter slot, used kiosk-style | `sddm.autoLogin.relogin` |
+| Session switching | `steamos-session-select` writes a state file the launcher consumes | SteamOS Manager's `SessionManagement1`, which Steam drives directly |
+| Closure | small | Qt, mitigated by `sddm.wayland.enable` |
+
+**greetd** is the default because it is self-contained: nothing here needs a
+package nixpkgs does not have. The price is that greetd registers its sessions
+as class `greeter`, type `tty`, which desktop compositors refuse to start on,
+so the module corrects it with a `pam_env` rule — a fix that works but that
+upstream never intended.
+
+**sddm** is what SteamOS itself runs, so Valve's software finds the shape it
+expects and nothing needs correcting. It also unlocks `steamos.manager`, which
+this path enables for you: switching goes through the interface Steam prefers,
+rather than through a script emulating it.
+
+Two things the module arranges on the SDDM path so it actually works:
+
+- Gaming Mode is registered under `gamescope-wayland` as well as `steam`.
+  SteamOS Manager asks for `gamescope-wayland.desktop` by name when Steam
+  requests game mode and that string is not configurable, so without the alias
+  you could leave Gaming Mode but never return to it.
+- `steamos-session-select` keeps its name but delegates to
+  `steamosctl switch-to-game-mode`/`switch-to-desktop-mode`, so the desktop's
+  "Return to Gaming Mode" entry works the same on both paths.
+
+Picking `sddm` without a `steamos-manager` package is an assertion, not a
+silent no-op — nothing else can write SDDM's autologin drop-in, so the module
+refuses rather than leaving you with a switch that does nothing.

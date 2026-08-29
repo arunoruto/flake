@@ -27,6 +27,7 @@ in
     ./tweaks.nix
     ./session-select.nix
     ./autostart.nix
+    ./sddm.nix
   ];
 
   options.steamos = {
@@ -47,10 +48,37 @@ in
       type = lib.types.bool;
       default = true;
       description = ''
-        Boot straight into Gaming Mode. This owns the login path with a
-        greetd session loop, so it cannot be combined with a regular
-        display manager (GDM/SDDM/...). Disable it to merely register the
-        "Steam" session with whatever display manager you already run.
+        Boot straight into Gaming Mode. This owns the login path — see
+        {option}`steamos.loginManager` for which display manager does it — so
+        it cannot be combined with another one. Disable it to merely register
+        the "Steam" session with whatever display manager you already run.
+      '';
+    };
+
+    loginManager = lib.mkOption {
+      type = lib.types.enum [
+        "greetd"
+        "sddm"
+      ];
+      default = "greetd";
+      description = ''
+        Which display manager owns the login path when
+        {option}`steamos.autoStart` is on. Two shapes, and the difference is
+        not cosmetic:
+
+        `greetd` is self-contained. It needs nothing outside nixpkgs, and
+        session switching goes through the `steamos-session-select` script
+        this module ships. The cost is that greetd registers its sessions as
+        logind class `greeter`, type `tty`, so the module corrects that with a
+        `pam_env` rule for desktop compositors to be willing to start.
+
+        `sddm` is what SteamOS itself runs, and matches what Valve's software
+        expects. Sessions come out as class `user`, type `wayland` with no
+        correction needed, and switching goes through SteamOS Manager's
+        `SessionManagement1` interface — the path the Steam client prefers.
+        It requires {option}`steamos.manager` and therefore a
+        `steamos-manager` package, which nixpkgs does not have; an assertion
+        will tell you if it is missing.
       '';
     };
 
@@ -269,6 +297,19 @@ in
       {
         assertion = cfg.gamescope.wsi.enable -> config.hardware.graphics.enable32Bit;
         message = "steamos.gamescope.wsi.enable needs hardware.graphics.enable32Bit for the 32-bit layer.";
+      }
+      {
+        assertion = (cfg.autoStart && cfg.loginManager == "sddm") -> cfg.manager.package != null;
+        message = ''
+          steamos.loginManager = "sddm" needs SteamOS Manager: on that path
+          session switching goes through its SessionManagement1 interface, and
+          nothing else can write SDDM's autologin drop-in.
+
+          nixpkgs does not package steamos-manager, so set
+          steamos.manager.package, provide pkgs.steamos-manager through an
+          overlay, or use steamos.loginManager = "greetd", which needs nothing
+          outside nixpkgs.
+        '';
       }
     ];
 

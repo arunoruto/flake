@@ -43,21 +43,21 @@ in
           steamos.manager.package or provide pkgs.steamos-manager through an
           overlay.
         ''
-        ++ lib.optional (enabled && config.steamos.autoStart) ''
-          steamos.manager.enable is on together with steamos.autoStart, and
-          those two disagree about how sessions are switched.
+        ++ lib.optional (enabled && config.steamos.autoStart && config.steamos.loginManager == "greetd") ''
+          steamos.manager.enable is on while steamos.loginManager is
+          "greetd", and those two disagree about how sessions are switched.
 
-          SteamOS Manager advertises the SessionManagement1 interface, which
-          Steam prefers over the steamos-session-select script this module
-          ships. Its implementation switches sessions by writing an SDDM
+          SteamOS Manager advertises the SessionManagement1 interface,
+          which Steam prefers over the steamos-session-select script the
+          greetd path ships. It switches sessions by writing an SDDM
           autologin drop-in to /etc/sddm.conf.d and stopping
-          graphical-session.target — and it asks for "gamescope-wayland.desktop"
-          by name, where this module registers "steam". Nothing reads that
-          config under greetd, so "Switch to Desktop" will drop back into
-          Gaming Mode instead of reaching the desktop.
+          graphical-session.target, and it asks for
+          "gamescope-wayland.desktop" by name where that path registers
+          "steam". Nothing reads either under greetd, so "Switch to
+          Desktop" would drop back into Gaming Mode.
 
-          Everything else the daemon offers is unaffected. If you need Desktop
-          Mode more than the performance controls, leave this off.
+          Either set steamos.loginManager = "sddm", which wires the two up
+          together, or leave the manager off.
         '';
     }
 

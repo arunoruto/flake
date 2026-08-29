@@ -9,12 +9,30 @@
 let
   cfg = config.steamos;
 
+  # On the SDDM path the switching is SteamOS Manager's job — it writes the
+  # autologin drop-in and ends the session, which is what the Steam client
+  # drives directly over D-Bus. Keep the script name anyway, so the desktop's
+  # "Return to Gaming Mode" entry and anything else calling it by hand still
+  # work; it just delegates instead of implementing its own mechanism.
+  steamos-session-select-sddm = pkgs.writeShellScriptBin "steamos-session-select" ''
+    set -eu
+
+    case "''${1:-gamescope}" in
+      gamescope | steam)
+        exec ${lib.getExe cfg.manager.package} switch-to-game-mode
+        ;;
+      *)
+        exec ${lib.getExe cfg.manager.package} switch-to-desktop-mode
+        ;;
+    esac
+  '';
+
   # The Steam client hardcodes invocations of `steamos-session-select` for the
   # "Switch to Desktop" button in Gaming Mode (historically with Valve's KDE
   # session names as the argument), so the binary name and the accepted
   # arguments follow Valve's script. Selection is written to a state file that
   # the login loop (see ./autostart.nix) consumes exactly once.
-  steamos-session-select = pkgs.writeShellScriptBin "steamos-session-select" ''
+  steamos-session-select-greetd = pkgs.writeShellScriptBin "steamos-session-select" ''
     set -eu
 
     request="''${1:-gamescope}"
@@ -64,6 +82,9 @@ let
       exec ${pkgs.systemd}/bin/loginctl terminate-session "''${XDG_SESSION_ID:-}"
     fi
   '';
+
+  steamos-session-select =
+    if cfg.loginManager == "sddm" then steamos-session-select-sddm else steamos-session-select-greetd;
 
   # SteamOS ships the same affordance on the desktop: an icon that brings
   # you back to Gaming Mode.

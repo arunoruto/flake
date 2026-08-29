@@ -1,4 +1,6 @@
-# Boot into Gaming Mode: a greetd session loop instead of a display manager.
+# Boot into Gaming Mode the self-contained way: a greetd session loop instead
+# of a display manager. Selected by steamos.loginManager = "greetd", the
+# default; see ./sddm.nix for the SteamOS-shaped alternative.
 #
 # greetd's `default_session` is (ab)used kiosk-style: it runs the launcher
 # below as the configured user, and respawns it whenever the session ends.
@@ -86,7 +88,7 @@ let
   '';
 in
 {
-  config = lib.mkIf (cfg.enable && cfg.autoStart) {
+  config = lib.mkIf (cfg.enable && cfg.autoStart && cfg.loginManager == "greetd") {
     services.greetd = {
       enable = true;
       # No initial_session: default_session *is* the autologin, so the loop

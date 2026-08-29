@@ -1,12 +1,13 @@
 # How it works
 
-Seven pieces, seven files:
+Eight pieces, eight files:
 
 | File | Piece |
 |------|-------|
 | `gaming-mode.nix` | The Gaming Mode session: the gamescope session script, and the system-level bits it depends on. |
 | `session-select.nix` | The `steamos-session-select` switcher Steam calls, plus the "Return to Gaming Mode" desktop entry. |
-| `autostart.nix` | The login loop: greetd running the `steamos-session` launcher instead of a display manager. |
+| `autostart.nix` | The default login path: a greetd session loop running the `steamos-session` launcher. |
+| `sddm.nix` | The SteamOS-shaped login path: SDDM autologin plus SteamOS Manager, behind `steamos.loginManager = "sddm"`. |
 | `tweaks.nix` | SteamOS' system tuning — zram, earlyoom, a couple of network sysctls — behind `steamos.tweaks.enable`. |
 | `decky-loader.nix` | The Decky plugin loader service, behind `steamos.decky-loader.enable`. |
 | `manager.nix` | The SteamOS Manager daemon, behind `steamos.manager.enable`. |

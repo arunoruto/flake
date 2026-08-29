@@ -204,20 +204,34 @@ let
       ${lib.getExe' config.programs.steam.package "steam"} ${lib.escapeShellArgs cfg.steamArgs}
   '';
 
+  sessionEntry = ''
+    [Desktop Entry]
+    Name=Steam
+    Comment=Steam Gaming Mode (gamescope)
+    Exec=${lib.getExe steamos-gamescope-session}
+    Type=Application
+    DesktopNames=gamescope
+  '';
+
   # Registered under the name "steam" — the same session name nixpkgs'
   # gamescopeSession uses — so switching away and back (./session-select.nix)
   # keeps working, and so does anything already referring to it.
+  #
+  # On the SDDM path it is registered under Valve's name as well. SteamOS
+  # Manager asks for "gamescope-wayland.desktop" by name when Steam requests
+  # game mode, and that string is not configurable, so the session has to
+  # answer to it or switching back from the desktop fails.
+  sessionAliases = [ "steam" ] ++ lib.optional (cfg.loginManager == "sddm") "gamescope-wayland";
+
   sessionPackage =
-    (pkgs.writeTextDir "share/wayland-sessions/steam.desktop" ''
-      [Desktop Entry]
-      Name=Steam
-      Comment=Steam Gaming Mode (gamescope)
-      Exec=${lib.getExe steamos-gamescope-session}
-      Type=Application
-      DesktopNames=gamescope
-    '').overrideAttrs
-      (_: {
-        passthru.providedSessions = [ "steam" ];
+    (pkgs.writeTextDir "share/wayland-sessions/steam.desktop" sessionEntry).overrideAttrs
+      (old: {
+        buildCommand =
+          old.buildCommand
+          + lib.optionalString (cfg.loginManager == "sddm") ''
+            ln -s steam.desktop "$out/share/wayland-sessions/gamescope-wayland.desktop"
+          '';
+        passthru.providedSessions = sessionAliases;
       });
 in
 {
