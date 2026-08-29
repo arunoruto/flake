@@ -107,6 +107,94 @@ let
     lib.mapAttrsToList (name: value: "export ${name}=${lib.escapeShellArg value}") sessionEnv
   );
 
+  # How many columns the horizontal levels lay out. Shared with the scale
+  # calculation, which uses it to work out how wide the table would be.
+  mangoappTableColumns = 20;
+
+  # What each performance-overlay level looks like. Defining a preset here
+  # replaces MangoHud's built-in one, so each is spelled out — minus the Deck's
+  # battery readouts, which a desktop has nothing to fill in. The sizing
+  # placeholder is substituted at session start, once the display is known.
+  mangoappPresets =
+    let
+      sizing = "font_scale=@fontScale@" + alpha;
+      denseSizing = "font_scale=@denseScale@" + alpha;
+      alpha = lib.optionalString (
+        cfg.mangoapp.backgroundAlpha != null
+      ) "\nbackground_alpha=${toString cfg.mangoapp.backgroundAlpha}";
+    in
+    pkgs.writeText "steamos-mangoapp-presets.conf" ''
+      [preset 0]
+      no_display
+
+      [preset 1]
+      ${sizing}
+      legacy_layout=0
+      cpu_stats=0
+      gpu_stats=0
+      fps
+      fps_only
+      frametime=0
+
+      [preset 2]
+      ${denseSizing}
+      legacy_layout=0
+      horizontal
+      hud_no_margin
+      table_columns=${toString mangoappTableColumns}
+      fps
+      frame_timing=1
+      frametime=0
+      cpu_stats
+      cpu_power
+      gpu_stats
+      gpu_power
+      ram
+      vram
+
+      [preset 3]
+      ${denseSizing}
+      legacy_layout=0
+      horizontal
+      hud_no_margin
+      table_columns=${toString mangoappTableColumns}
+      fps
+      frame_timing=1
+      frametime=0
+      cpu_stats
+      cpu_power
+      cpu_temp
+      cpu_mhz
+      gpu_stats
+      gpu_power
+      gpu_temp
+      gpu_core_clock
+      gpu_mem_clock
+      ram
+      vram
+      hdr
+
+      [preset 4]
+      ${denseSizing}
+      full
+      throttling_status=0
+      io_read=0
+      io_write=0
+      arch=0
+      engine_version=0
+      gamemode=0
+      vkbasalt=0
+      frame_count=0
+      show_fps_limit=0
+      resolution=0
+      media_player=0
+      version=0
+      frame_timing_detailed=1
+      refresh_rate=1
+      network=1
+      hdr
+    '';
+
   steamos-gamescope-session = pkgs.writeShellScriptBin "steamos-gamescope-session" ''
     set -eu
 
@@ -151,44 +239,81 @@ let
         ${pkgs.coreutils}/bin/printf '%s\n' no_display control=mangohud > "$MANGOHUD_CONFIGFILE"
       fi
 
-      # Size the overlay for the display. MangoHud draws it at a fixed size
-      # tuned for the Deck's 1280x800 panel, so on a 4K television it is a
-      # speck. Steam rewrites the config file above whenever the level
-      # changes, so the scale cannot live in it — MANGOHUD_CONFIG is applied
-      # *after* the file, and `read_cfg` is what keeps the file (and with it
-      # Steam's preset) being read at all.
+      # Size the overlay for the display, through the *presets* file rather
+      # than the config.
+      #
+      # MangoHud draws the overlay at a size tuned for the Deck's 1280x800
+      # panel, so on a 4K television it is a speck. Steam owns the config file
+      # above and rewrites it on every level change, so the sizing cannot live
+      # there. Two other routes do not work either:
+      #
+      #   - MANGOHUD_CONFIG makes mangoapp draw every element twice. MangoHud
+      #     applies the preset once while reading the config and again while
+      #     re-reading the environment, appending to the same element list with
+      #     nothing to deduplicate it — at level 1 that is two FPS counters.
+      #   - leaving MANGOHUD_CONFIGFILE unset, so MangoHud merges its usual
+      #     search path, hands the variable to gamescope, which points it at a
+      #     temporary file of its own and bypasses that path anyway.
+      #
+      # MANGOHUD_PRESETSFILE is read independently of both. Steam still chooses
+      # the level; this decides what each level looks like.
+      # Two scales, because one does not fit every level.
+      #
+      # Level 1 is a single number and can take the full scale. The denser
+      # levels lay out a table whose width MangoHud computes as
+      # `font_size * font_scale * table_columns * 4.6`; at the full scale that
+      # comes to ~5960px on this display and spills off the right edge, and the
+      # vertical `full` level spills off the bottom for the same reason. So the
+      # dense levels get whatever scale still fits the widest row, which is
+      # still far larger than MangoHud's default.
       ${
         if cfg.mangoapp.fontScale != null then
-          "font_scale=${toString cfg.mangoapp.fontScale}"
+          ''
+            font_scale=${toString cfg.mangoapp.fontScale}
+            dense_scale=${toString cfg.mangoapp.fontScale}
+          ''
         else
           ''
-            font_scale="$(
+            eval "$(
               for modes in /sys/class/drm/*/modes; do
                 connector="''${modes%/modes}"
                 [ "$(cat "$connector/status" 2>/dev/null)" = connected ] || continue
                 ${pkgs.coreutils}/bin/head -n1 "$modes" 2>/dev/null
               done \
-                | ${pkgs.coreutils}/bin/cut -dx -f2 \
-                | ${pkgs.coreutils}/bin/sort -rn \
+                | ${pkgs.gnused}/bin/sed 's/x/ /' \
+                | ${pkgs.coreutils}/bin/sort -k2 -rn \
                 | ${pkgs.coreutils}/bin/head -n1 \
-                | ${pkgs.gawk}/bin/awk '
-                    { height = $1 + 0 }
+                | ${pkgs.gawk}/bin/awk -v cols=${toString mangoappTableColumns} '
+                    { width = $1 + 0; height = $2 + 0 }
                     END {
+                      # Fall back to the Deck panel, which is what MangoHud
+                      # sizes itself for, so an unreadable display yields 1.
+                      if (width < 1280) width = 1280
                       if (height < 800) height = 800
+
                       scale = height / 800
                       if (scale > 4) scale = 4
-                      printf "%.2f", scale
+
+                      # Widest the table may be, leaving a small margin.
+                      fits = (width * 0.95) / (24 * 4.6 * cols)
+                      dense = (fits < scale ? fits : scale)
+                      if (dense < 1) dense = 1
+
+                      printf "font_scale=%.2f dense_scale=%.2f", scale, dense
                     }
                   '
             )"
-            [ -n "$font_scale" ] || font_scale=1
+            [ -n "''${font_scale:-}" ] || font_scale=1
+            [ -n "''${dense_scale:-}" ] || dense_scale=1
           ''
       }
-      export MANGOHUD_CONFIG="read_cfg,font_scale=$font_scale${
-        lib.optionalString (
-          cfg.mangoapp.backgroundAlpha != null
-        ) ",background_alpha=${toString cfg.mangoapp.backgroundAlpha}"
-      }"
+      mangohud_dir="''${XDG_CONFIG_HOME:-$HOME/.config}/MangoHud"
+      export MANGOHUD_PRESETSFILE="$mangohud_dir/steamos-presets.conf"
+      ${pkgs.coreutils}/bin/mkdir -p "$mangohud_dir"
+      ${pkgs.gnused}/bin/sed \
+        -e "s|@fontScale@|$font_scale|g" \
+        -e "s|@denseScale@|$dense_scale|g" \
+        ${mangoappPresets} > "$MANGOHUD_PRESETSFILE"
     ''}
 
     # The session identity is exported into the systemd user manager by the
