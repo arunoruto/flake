@@ -46,6 +46,17 @@ in
     # autologin drop-in into /etc/sddm.conf.d and ending the session.
     steamos.manager.enable = true;
 
+    # The daemon only publishes SessionManagement1 — the interface Steam's
+    # "Switch to Desktop" calls — when it finds this marker, which is how it
+    # decides whether it is responsible for the login session at all. Without
+    # it the interface is simply absent and both Steam and steamosctl fail
+    # with "Unknown interface". SDDM reads the directory as config, so the
+    # file has to be valid and empty of settings.
+    environment.etc."sddm.conf.d/holo.conf".text = ''
+      # Marker: tells SteamOS Manager it owns session switching on this
+      # machine. Managed by modules/steamos; no settings belong here.
+    '';
+
     # Vendor failsafe: a stale temporary session config would otherwise pin the
     # machine to a session that no longer starts, with no way back in.
     systemd.services.display-manager.serviceConfig.ExecStartPre = [

@@ -58,6 +58,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     substituteInPlace data/system/*.service data/user/steamos-manager*.service \
       --replace-warn /usr/lib/steamos-manager "$out/lib/steamos-manager" \
       --replace-warn /usr/bin/steamosctl "$out/bin/steamosctl"
+
+    # Upstream probes /usr/lib/sddm/sddm.conf.d for a marker file to decide
+    # whether it manages sessions, and only publishes SessionManagement1 if it
+    # finds one. Nothing lives under /usr here, so the interface never appeared
+    # and "Switch to Desktop" had nothing to call. Jovian patches this same
+    # constant; a substitution does the job without carrying a patch file.
+    substituteInPlace steamos-manager/src/session.rs \
+      --replace-fail '/usr/lib/sddm/sddm.conf.d' '/etc/sddm.conf.d'
   '';
 
   # Mirrors upstream's Makefile install target, minus the pieces that only make
