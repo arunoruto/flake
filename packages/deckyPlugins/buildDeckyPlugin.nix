@@ -1,7 +1,7 @@
 # Builder for Decky Loader plugins.
 #
-# A plugin is plain content: a directory holding `plugin.json`, `main.py` and a
-# built `dist/`. Decky keeps each plugin's settings and data in sibling
+# A plugin is plain content: a directory holding `plugin.json`, a built `dist/`
+# and, if it has a backend, `main.py`. Decky keeps settings and data in sibling
 # `settings/` and `data/` directories rather than inside the plugin itself, so
 # nothing writes into these outputs at runtime and they are safe to keep in the
 # store and symlink into place.
@@ -48,10 +48,11 @@ stdenvNoCC.mkDerivation (
         mkdir -p "$out"
         cp -r . "$out/${repo}"
 
-        # Decky imports <plugin>/main.py unconditionally. Frontend-only plugins
-        # ship no backend, and the store serves them with an empty stub; match
-        # that so the loader can import them.
-        [ -e "$out/${repo}/main.py" ] || touch "$out/${repo}/main.py"
+        # Note there is deliberately no `main.py` stub for frontend-only
+        # plugins. Decky decides whether a plugin has a backend with
+        # `passive = not path.isfile(main.py)`, so an empty file makes it try
+        # `module.Plugin()` and fail with "module '_' has no attribute
+        # 'Plugin'". A plugin without a backend must simply not have the file.
 
         runHook postInstall
       '';
