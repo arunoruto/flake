@@ -28,6 +28,17 @@ python3.pkgs.buildPythonPackage (finalAttrs: {
   # the dependency fetch so the two agree on the lockfile.
   postPatch = ''
     rm frontend/pnpm-workspace.yaml
+
+    # Every helper the loader shells out to — killall, systemctl, lsof — is
+    # spawned with the environment replaced by a single variable, so the child
+    # gets no PATH and Python falls back to searching /bin:/usr/bin. On an FHS
+    # distribution that finds them; here it finds nothing, and the failure is
+    # not cosmetic: without killall the loader cannot inject its frontend into
+    # Steam at all, so plugins load and then never appear. Pass PATH through.
+    substituteInPlace backend/decky_loader/localplatform/localplatformlinux.py \
+      --replace-fail \
+        'env: ENV | None = {"LD_LIBRARY_PATH": ""}' \
+        'env: ENV | None = {"LD_LIBRARY_PATH": "", "PATH": os.environ.get("PATH", "")}'
   '';
 
   pnpmDeps = fetchPnpmDeps {
