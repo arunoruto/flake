@@ -1,6 +1,6 @@
 # How it works
 
-Six pieces, six files:
+Seven pieces, seven files:
 
 | File | Piece |
 |------|-------|
@@ -9,6 +9,7 @@ Six pieces, six files:
 | `autostart.nix` | The login loop: greetd running the `steamos-session` launcher instead of a display manager. |
 | `tweaks.nix` | SteamOS' system tuning — zram, earlyoom, a couple of network sysctls — behind `steamos.tweaks.enable`. |
 | `decky-loader.nix` | The Decky plugin loader service, behind `steamos.decky-loader.enable`. |
+| `manager.nix` | The SteamOS Manager daemon, behind `steamos.manager.enable`. |
 | `default.nix` | Options, assertions, warnings. |
 
 ## The Gaming Mode session

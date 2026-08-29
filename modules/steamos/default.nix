@@ -22,6 +22,7 @@ in
 {
   imports = [
     ./decky-loader.nix
+    ./manager.nix
     ./gaming-mode.nix
     ./tweaks.nix
     ./session-select.nix

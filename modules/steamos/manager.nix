@@ -64,20 +64,23 @@ in
     (lib.mkIf enabled {
       environment.systemPackages = [ cfg.package ];
       services.dbus.packages = [ cfg.package ];
-      systemd.packages = [ cfg.package ];
 
-      # Upstream ships the system daemon D-Bus-activated, but Steam expects it
-      # to already be running when it probes at startup.
-      systemd.services.steamos-manager = {
-        overrideStrategy = "asDropin";
-        wantedBy = [ "multi-user.target" ];
-      };
+      systemd = {
+        packages = [ cfg.package ];
 
-      # The user daemon is the half that exposes the public interface, and it
-      # only makes sense once there is a graphical session to serve.
-      systemd.user.services.steamos-manager = {
-        overrideStrategy = "asDropin";
-        wantedBy = [ "graphical-session.target" ];
+        # Upstream ships the system daemon D-Bus-activated, but Steam expects
+        # it to already be running when it probes at startup.
+        services.steamos-manager = {
+          overrideStrategy = "asDropin";
+          wantedBy = [ "multi-user.target" ];
+        };
+
+        # The user daemon is the half that exposes the public interface, and it
+        # only makes sense once there is a graphical session to serve.
+        user.services.steamos-manager = {
+          overrideStrategy = "asDropin";
+          wantedBy = [ "graphical-session.target" ];
+        };
       };
     })
   ];

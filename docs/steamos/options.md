@@ -278,3 +278,54 @@ inside it, which is exactly what makes read-only store paths workable here.
 Plugins are packaged in `packages/deckyPlugins/`, built by `buildDeckyPlugin`
 from the prebuilt tarball each plugin publishes per release. Adding one is a
 handful of lines — `pname`, `version`, `owner`, `hash`.
+
+## `steamos.manager`
+
+[SteamOS Manager](https://gitlab.steamos.cloud/holo/steamos-manager) is the
+system daemon Steam queries for things it cannot reach itself. Steam probes the
+interface at startup and shows only the settings the daemon can actually back,
+so on hardware that is not a Steam Deck most of it simply does not appear.
+
+| Option | Type | Default | Purpose |
+|--------|------|---------|---------|
+| `.enable` | `bool` | `false` | Run the daemon. |
+| `.package` | `null or package` | `pkgs.steamos-manager or null` | What to run. |
+
+Like Decky's, the package is not in nixpkgs; this repo builds one in
+`packages/top-level/steamos-manager`, and elsewhere the option resolves to
+`null` and the module stays inert with a warning.
+
+### Why it is off by default
+
+**Enabling it on a greetd login path breaks "Switch to Desktop."** The daemon
+advertises `SessionManagement1`, which Steam prefers over the
+`steamos-session-select` script this module ships — and upstream implements
+session switching by writing an SDDM autologin drop-in:
+
+```rust
+const CONFIG_PREFIX: &str = "/etc/sddm.conf.d";
+write(paths.temp_config(), format!("[Autologin]\nSession={session}\n"))
+```
+
+Nothing reads that under greetd, and it asks for `gamescope-wayland.desktop` by
+name where this module registers `steam`. The result is a stop of
+`graphical-session.target` followed by greetd putting you straight back into
+Gaming Mode. The module warns when it sees both options on.
+
+That assumption is not unreasonable of Valve — SteamOS ships KDE and SDDM — but
+it is baked into the daemon rather than abstracted behind the display manager.
+
+### What you actually get on a desktop
+
+Plausibly working: `TdpLimit1`, `GpuPerformanceLevel1`, `GpuPowerProfile1`,
+`CpuScaling1`, `CpuBoost1`, `PerformanceProfile1` (generic amdgpu and cpufreq
+sysfs) and `Storage1` (external drive formatting).
+
+Not available: `FanControl1`, `BatteryChargeLimit1`, `AmbientLightSensor1`,
+`UpdateBios1` and `UpdateDock1` are Steam Deck hardware; `HdmiCec1`/`HdmiCec2`
+need Valve's `cecd`, which this tree does not ship.
+
+**It does not fix Gaming Mode's resolution list.** That was the original reason
+to reach for it, and the interface specification has no display or resolution
+interface at all — Steam sets the game resolution directly through gamescope's
+`GAMESCOPE_XWAYLAND_MODE_CONTROL` atom, from a list it builds itself.
