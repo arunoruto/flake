@@ -15,6 +15,17 @@
 let
   cfg = config.steamos.manager;
   enabled = config.steamos.enable && cfg.enable && cfg.package != null;
+
+  # With no state file the manager's "Switch to Desktop" falls back to
+  # plasma.desktop, which only exists on Valve's image; SDDM then cannot
+  # find the session and drops back into Gaming Mode. Seed the state with
+  # the configured desktop session instead. Only desktop_session is set:
+  # the remaining fields carry usable serde defaults, and the login-mode
+  # enum serializes differently from what its TOML name suggests.
+  seedState = pkgs.writeText "steamos-manager-state.toml" ''
+    [session_manager]
+    desktop_session = "${config.steamos.desktopSession}.desktop"
+  '';
 in
 {
   options.steamos.manager = {
@@ -82,6 +93,15 @@ in
           wantedBy = [ "graphical-session.target" ];
         };
       };
+    })
+
+    (lib.mkIf (enabled && config.steamos.desktopSession != null) {
+      # `C` copies only when the file is absent, so a session later chosen
+      # over D-Bus (SetDefaultDesktopSession) is not overwritten on boot.
+      systemd.user.tmpfiles.users.${config.steamos.user}.rules = [
+        "d %h/.config/steamos-manager 0755 - - -"
+        "C %h/.config/steamos-manager/state.toml 0644 - - - ${seedState}"
+      ];
     })
   ];
 }

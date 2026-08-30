@@ -322,6 +322,28 @@ let
     # x11 inside Gaming Mode, and leaking that into the user manager would
     # follow us into Desktop Mode.
 
+    ${lib.optionalString (cfg.manager.enable && cfg.loginManager == "sddm") ''
+      # SteamOS Manager ends a session by stopping graphical-session.target,
+      # which on SteamOS proper takes the whole session down because every
+      # session unit is bound to it. Here gamescope is a plain child of
+      # sddm-helper, so stopping that target used to do nothing and "Switch
+      # to Desktop" hung forever. Park a stand-in unit in the target whose
+      # stop shuts Steam down cleanly; gamescope and the session follow it
+      # down, and SDDM's Relogin then starts whichever session the manager
+      # wrote into its temp drop-in. The unit name is load-bearing: the
+      # manager also reads gamescope-session.service to answer "which mode
+      # am I in".
+      ${pkgs.systemd}/bin/systemctl --user reset-failed gamescope-session.service 2>/dev/null || true
+      ${pkgs.systemd}/bin/systemctl --user stop gamescope-session.service 2>/dev/null || true
+      ${pkgs.systemd}/bin/systemd-run --user --collect --quiet \
+        --unit=gamescope-session.service \
+        --property=RemainAfterExit=yes \
+        --property=PartOf=graphical-session.target \
+        --property=Wants=graphical-session.target \
+        --property=ExecStop='${lib.getExe' config.programs.steam.package "steam"} -shutdown' \
+        ${pkgs.coreutils}/bin/true || true
+    ''}
+
     # Steam opens a file descriptor per shader cache entry, among other things.
     ulimit -n 524288 || true
 
