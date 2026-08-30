@@ -165,12 +165,14 @@ in
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
 
-        # lsof is how the loader finds steamwebhelper's CEF socket, and it
-        # drives its own unit through systemctl; neither is guaranteed to be
-        # on a service's default PATH.
+        # Everything the loader shells out to. lsof finds steamwebhelper's CEF
+        # socket, systemctl drives its own unit, and python3 is how it works
+        # out the PYTHONPATH to hand plugins with a backend — none of which are
+        # guaranteed to be on a service's default PATH.
         path = [
           pkgs.lsof
           config.systemd.package
+          cfg.package.passthru.python
         ]
         ++ cfg.extraPackages;
 
@@ -178,6 +180,14 @@ in
           UNPRIVILEGED_USER = cfg.user;
           UNPRIVILEGED_PATH = cfg.stateDir;
           PLUGIN_PATH = "${cfg.stateDir}/plugins";
+        }
+        // lib.optionalAttrs (cfg.plugins != [ ]) {
+          # The loader chowns and chmods each plugin directory on load to
+          # repair ownership after a store-bought install. Declared plugins are
+          # read-only store paths, where that can only fail, so turn it off
+          # once any of them are in play. Plugins installed through the UI end
+          # up owned by the loader anyway, since it is what unpacks them.
+          CHOWN_PLUGIN_PATH = "0";
         };
 
         serviceConfig = {
