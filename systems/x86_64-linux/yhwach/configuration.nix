@@ -19,6 +19,13 @@
     enable = true;
     desktopSession = "gnome";
 
+    # The SteamOS-shaped login path rather than the self-contained greetd
+    # loop: SDDM autologin, with session switching handled by SteamOS
+    # Manager the way Valve's image does it. Worth the extra moving parts
+    # here because "Switch to Desktop" is then Steam talking to the daemon
+    # over D-Bus, instead of our own script guessing at the running session.
+    loginManager = "sddm";
+
     # The plugin loader is packaged in this repo (packages/top-level), so
     # pkgs.decky-loader resolves here even though nixpkgs has no such package.
     decky-loader = {
