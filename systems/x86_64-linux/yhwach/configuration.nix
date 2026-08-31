@@ -1,4 +1,9 @@
-{ pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 {
   users.primaryUser = "mirza";
 
@@ -15,17 +20,32 @@
 
   # HDMI 2.1 Fixed Rate Link. The open driver gained FRL in 7.2 but ships it
   # behind DC_FRL_MASK (1 << 10) so that VRR and ALLM could settle first;
-  # upstream plans to flip the default in 7.4. 0x2 is the stock mask
+  # upstream intends to flip the default in 7.4. 0x2 is the stock mask
   # (DC_MULTI_MON_PP_MCLK_SWITCH), so 0x402 is "stock plus FRL".
   #
   # The parameter is spelled dcfeaturemask, not dc_feature_mask; the kernel
-  # silently logs "unknown parameter ... ignored" for the latter.
+  # silently logs "unknown parameter ... ignored" for the latter and carries
+  # on with the default, which reads as the feature simply not working.
   #
   # This is what lets the TV hang off the card's own HDMI port at 4K120
   # instead of going out over DisplayPort through a protocol converter. The
   # converter route works but costs a DSC-compressed link and a PCON whose
   # FRL training fails often enough to black-screen the machine at boot.
-  boot.kernelParams = [ "amdgpu.dcfeaturemask=0x402" ];
+  #
+  # Gated on the kernel version so it disappears by itself once the default
+  # flips; the warning below is the reminder to delete this block outright.
+  boot.kernelParams = lib.optional (lib.versionOlder config.boot.kernelPackages.kernel.version "7.4") "amdgpu.dcfeaturemask=0x402";
+
+  warnings = lib.optional (lib.versionAtLeast config.boot.kernelPackages.kernel.version "7.4") ''
+    yhwach: kernel ${config.boot.kernelPackages.kernel.version} enables HDMI 2.1
+    FRL by default, so the amdgpu.dcfeaturemask=0x402 workaround is no longer
+    applied and the block setting it in systems/x86_64-linux/yhwach can go.
+
+    Worth re-testing VRR at the same time: it needs the HDMI Forum VSDB to be
+    read for a sink that has no AMD FreeSync block, which is a separate patch
+    series ("drm/amd: VRR fixes, HDMI Gaming Features") that had not landed
+    when this was written.
+  '';
 
   # Steam machine: boot straight into Gaming Mode, with GNOME one
   # "Switch to Desktop" away (see modules/steamos and docs/steamos/).
