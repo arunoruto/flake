@@ -74,6 +74,24 @@ docs-build:
 iso target:
     nix build .#iso-{{ target }} -o result-iso-{{ target }}
 
+# ── hardware ────────────────────────────────────────────────────────
+
+# Regenerate after any hardware change. A stale report describes the machine
+# that used to be here — yhwach once carried one that force-loaded a departed
+# card's nvidia module into the initrd. Note the file must be tracked by git
+# before the flake can see it at all, hence the intent-to-add below.
+
+# Write a nixos-facter hardware report for a host (defaults to this one)
+[linux]
+facter target=host:
+    sudo nix run \
+      --option experimental-features "nix-command flakes" \
+      --option extra-substituters https://numtide.cachix.org \
+      --option extra-trusted-public-keys numtide.cachix.org-1:2ps1kLBUWjxIneOy1Ik6cQjb41X0iXVXeHigGmycPPE= \
+      github:numtide/nixos-facter -- -o systems/{{ arch() }}-linux/{{ target }}/facter.json
+    sudo chown "$(id -un):$(id -gn)" systems/{{ arch() }}-linux/{{ target }}/facter.json
+    git add --intent-to-add systems/{{ arch() }}-linux/{{ target }}/facter.json
+
 # ── secrets ─────────────────────────────────────────────────────────
 
 # Edit the encrypted secrets file
