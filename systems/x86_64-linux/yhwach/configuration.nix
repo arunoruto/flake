@@ -13,6 +13,20 @@
   # RDNA 4 wants the freshest amdgpu/mesa stack, not the default LTS kernel.
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
+  # HDMI 2.1 Fixed Rate Link. The open driver gained FRL in 7.2 but ships it
+  # behind DC_FRL_MASK (1 << 10) so that VRR and ALLM could settle first;
+  # upstream plans to flip the default in 7.4. 0x2 is the stock mask
+  # (DC_MULTI_MON_PP_MCLK_SWITCH), so 0x402 is "stock plus FRL".
+  #
+  # The parameter is spelled dcfeaturemask, not dc_feature_mask; the kernel
+  # silently logs "unknown parameter ... ignored" for the latter.
+  #
+  # This is what lets the TV hang off the card's own HDMI port at 4K120
+  # instead of going out over DisplayPort through a protocol converter. The
+  # converter route works but costs a DSC-compressed link and a PCON whose
+  # FRL training fails often enough to black-screen the machine at boot.
+  boot.kernelParams = [ "amdgpu.dcfeaturemask=0x402" ];
+
   # Steam machine: boot straight into Gaming Mode, with GNOME one
   # "Switch to Desktop" away (see modules/steamos and docs/steamos/).
   steamos = {
@@ -49,14 +63,17 @@
         "--prefer-vk-device"
         "1002:7590"
 
-        # The TV's *preferred* EDID mode is 4K60, so gamescope settles there
-        # even though the driver also offers 3840x2160@120 (and @100). Ask for
-        # it explicitly. 4K120 is a 1188 MHz pixel clock, over twice what
-        # HDMI 2.0's 600 MHz TMDS ceiling carries, so amdgpu drives it as
-        # YCbCr 4:2:0 (594 MHz) — which this TV advertises for exactly these
-        # modes. Chroma subsampling costs nothing in games or video and softens
-        # small text a little. An unavailable mode falls back to the preferred
-        # one rather than failing, so this cannot black-screen the box.
+        # 4K120 has to be asked for; the TV's preferred EDID mode is 4K60.
+        #
+        # Measured on the native HDMI link rather than assumed: 3840x2160@120
+        # at a 1188 MHz pixel clock, RGB 12-bit BT2020, uncompressed, carried
+        # by HDMI 2.1 FRL (see boot.kernelParams above). No DSC, and no
+        # protocol converter in the path.
+        #
+        # Careful with --nested-refresh: it is the *game* refresh rate, not the
+        # output mode. Setting it to 60 leaves the CRTC at 120. gamescope has
+        # no flag or convar for output refresh on the DRM backend, so the mode
+        # cannot be pinned from here at all.
         "--output-width"
         "3840"
         "--output-height"
