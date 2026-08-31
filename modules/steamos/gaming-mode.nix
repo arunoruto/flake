@@ -198,6 +198,28 @@ let
   steamos-gamescope-session = pkgs.writeShellScriptBin "steamos-gamescope-session" ''
     set -eu
 
+    # Put this session's output in the journal, whoever started it.
+    #
+    # Whatever launches the session hands it a console, so by default
+    # everything it prints — gamescope's mode selection, its errors, a
+    # compositor's death rattle — lands on whichever display owns fbcon.
+    # That is the wrong place twice over: invisible unless something is
+    # plugged into the GPU holding the framebuffer console (not necessarily
+    # the one being rendered on), and unreachable over SSH, so a session that
+    # fails to start leaves a black screen and no way to ask why. In the
+    # journal it is `journalctl -t steamos-session` from anywhere.
+    #
+    # The greetd launcher wraps whatever session it resolves, desktops
+    # included, and sets this variable to say so; SDDM runs the .desktop file
+    # directly and does not, which is why this has to live here rather than
+    # only on that path. systemd-cat execs rather than forks, so the process
+    # tree its parent sees is unchanged either way.
+    if [ -z "''${STEAMOS_SESSION_JOURNAL:-}" ]; then
+      export STEAMOS_SESSION_JOURNAL=1
+      exec ${lib.getExe' pkgs.systemd "systemd-cat"} \
+        --identifier=steamos-session -- "$0" "$@"
+    fi
+
     # /run/wrappers/bin first so the cap_sys_nice gamescope wins when
     # steamos.realtime.enable put one there, then the ambient PATH so the
     # wrapper `programs.gamescope` installs (it carries that module's

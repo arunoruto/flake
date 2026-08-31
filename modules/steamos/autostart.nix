@@ -84,6 +84,13 @@ let
     #
     # systemd-cat execs the session rather than forking it, so greetd still
     # sees exactly one child and its session bookkeeping is unchanged.
+    #
+    # This wraps *whatever* session was resolved, desktops included, which is
+    # why it stays here rather than moving wholly into the Gaming Mode script.
+    # That script does the same for itself when something else starts it (the
+    # SDDM path), so tell it the output is already going to the journal and it
+    # should not wrap a second time.
+    export STEAMOS_SESSION_JOURNAL=1
     eval "exec ${lib.getExe' pkgs.systemd "systemd-cat"} --identifier=steamos-session -- $exec_line"
   '';
 in
