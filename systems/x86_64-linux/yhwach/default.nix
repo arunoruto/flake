@@ -6,7 +6,6 @@
     # nixos-hardware's common/gpu/amd (see modules/nixos/system/amd/gpu.nix)
 
     ./configuration.nix
-    ./display.nix
     ./disk.nix
     ./hardware-configuration.nix
   ];
