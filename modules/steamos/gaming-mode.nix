@@ -117,11 +117,14 @@ let
   # placeholder is substituted at session start, once the display is known.
   mangoappPresets =
     let
-      sizing = "font_scale=@fontScale@" + alpha;
-      denseSizing = "font_scale=@denseScale@" + alpha;
+      sizing = "font_scale=@fontScale@" + alpha + gpuPin;
+      denseSizing = "font_scale=@denseScale@" + alpha + gpuPin;
       alpha = lib.optionalString (
         cfg.mangoapp.backgroundAlpha != null
       ) "\nbackground_alpha=${toString cfg.mangoapp.backgroundAlpha}";
+      # MangoHud picks a GPU on its own otherwise, which on a two-GPU box
+      # need not be the one gamescope renders with.
+      gpuPin = lib.optionalString (cfg.mangoapp.pciDev != null) "\npci_dev=${cfg.mangoapp.pciDev}";
     in
     pkgs.writeText "steamos-mangoapp-presets.conf" ''
       [preset 0]

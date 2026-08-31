@@ -58,6 +58,12 @@
     # chose the iGPU it opened i915's node, which has no connected output,
     # failed to create a backend, and greetd hit its restart limit with a
     # black screen. Pin the discrete card by PCI ID.
+
+    # Two GPUs here, and MangoHud chooses one for itself: the journal shows it
+    # probing the 8700K's UHD 630 at 0000:00:02.0 for throttle state. Point it
+    # at the card the games actually run on, the same one gamescope is pinned
+    # to below.
+    mangoapp.pciDev = "0000:03:00.0";
     gamescope = {
       args = [
         "--prefer-vk-device"

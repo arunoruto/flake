@@ -187,6 +187,24 @@ in
           `null` leaves MangoHud's own default alone.
         '';
       };
+
+      pciDev = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+        example = "0000:03:00.0";
+        description = ''
+          PCI address of the GPU the overlay should report on, written
+          `domain:bus:device.function` as `lspci -D` prints it (MangoHud's
+          `pci_dev`).
+
+          Only meaningful on a machine with more than one GPU. MangoHud
+          enumerates every GPU it finds and picks one itself, which need not
+          be the one gamescope is rendering with — a desktop with an unused
+          integrated GPU can end up with an overlay reporting that chip's
+          load and temperature while the games run on the discrete card.
+          `null` leaves the choice to MangoHud.
+        '';
+      };
     };
 
     realtime.enable = lib.mkOption {
