@@ -69,23 +69,30 @@
         "--prefer-vk-device"
         "1002:7590"
 
-        # 4K120 has to be asked for; the TV's preferred EDID mode is 4K60.
+        # Nothing about the mode is pinned here on purpose: no --output-width,
+        # no --output-height, no --nested-refresh. All three are the arguments
+        # to init_drm(), and setting *any* of them takes the first branch of
+        # its selection chain, which is what kept the output on 4K120 no matter
+        # what Steam's display settings asked for:
         #
-        # Measured on the native HDMI link rather than assumed: 3840x2160@120
-        # at a 1188 MHz pixel clock, RGB 12-bit BT2020, uncompressed, carried
-        # by HDMI 2.1 FRL (see boot.kernelParams above). No DSC, and no
-        # protocol converter in the path.
+        #     if ( preferred_width || preferred_height || preferred_refresh )
+        #         mode = find_mode( conn, preferred_width, preferred_height, ... );
+        #     if ( !mode && screen type is EXTERNAL )
+        #         if ( get_saved_mode( description, mode_info ) )   // <- we want this
+        #             mode = find_mode( conn, mode_info.width, ... );
+        #     if ( !mode )
+        #         mode = find_mode( conn, 0, 0, 0 );                // EDID preferred
         #
-        # Careful with --nested-refresh: it is the *game* refresh rate, not the
-        # output mode. Setting it to 60 leaves the CRTC at 120. gamescope has
-        # no flag or convar for output refresh on the DRM backend, so the mode
-        # cannot be pinned from here at all.
-        "--output-width"
-        "3840"
-        "--output-height"
-        "2160"
-        "--nested-refresh"
-        "120"
+        # Leaving them all unset reaches the second branch, which restores
+        # whatever was last chosen from GAMESCOPE_MODE_SAVE_FILE (the session
+        # script sets that path). So the display settings become the thing
+        # that decides the mode, and the choice survives a restart.
+        #
+        # Two consequences worth knowing. The mode on a fresh profile is the
+        # TV's EDID preferred one, 4K60, until something is picked. And with
+        # no game open steamcompmgr drives the refresh to rates.back(), the
+        # fastest available at the current resolution, so the saved refresh
+        # only really holds while a game is running.
       ];
 
       # gamescope only builds a dynamic refresh-rate list for *internal*
