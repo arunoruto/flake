@@ -59,8 +59,19 @@ in
           }
         ];
 
-        # Fan curves, power limits and profiles (daemon + GUI)
-        services.lact.enable = lib.mkDefault true;
+        # LACT tunes the GPU: fan curves, power limits, clocks. The nixpkgs
+        # module installs its GTK front-end alongside the daemon
+        # (environment.systemPackages = [ cfg.package ]), so defaulting it on
+        # for every AMD GPU hands a headless box a desktop app it can never
+        # open — kuchiki is a NAS whose GPU is switched off in the BIOS and
+        # was getting one. Default it on where someone sits at the machine.
+        #
+        # Not gated on gui.enable: that only defaults true from the desktop
+        # tag, so it would drop laptops that plainly do have a screen. A
+        # headless host wanting the daemon for fan control can still say so.
+        services.lact.enable = lib.mkDefault (
+          config.lib.tags.hasTag "desktop" || config.lib.tags.hasTag "laptop"
+        );
 
         environment.systemPackages = with pkgs; [
           amdgpu_top
