@@ -3,6 +3,7 @@
   stdenvNoCC,
   mdbook,
   docs-devix-reference,
+  docs-steamos-reference,
 }:
 stdenvNoCC.mkDerivation {
   pname = "flake-docs";
@@ -18,11 +19,13 @@ stdenvNoCC.mkDerivation {
   buildPhase = ''
     runHook preBuild
 
-    # docs/devix/reference is generated from the option descriptions in
-    # modules/devix, so it is not part of the source tree (see .gitignore).
-    # `just docs` drops the same files in place for local previews.
-    mkdir -p docs/devix/reference
+    # docs/devix/reference and docs/steamos/reference are generated from the
+    # option descriptions in their modules, so they are not part of the source
+    # tree (see .gitignore). `just docs` drops the same files in place for
+    # local previews.
+    mkdir -p docs/devix/reference docs/steamos/reference
     cp ${docs-devix-reference}/*.md docs/devix/reference/
+    cp ${docs-steamos-reference}/*.md docs/steamos/reference/
 
     cd docs && mdbook build --dest-dir $out
 

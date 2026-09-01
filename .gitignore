@@ -26,6 +26,7 @@ devenv.local.yaml
 # pre-commit
 .pre-commit-config.yaml
 
-# devix option reference, generated from modules/devix by
-# packages/docs/devix-reference.nix (`just docs` / `nix build .#docs`)
+# option references, generated from their modules by
+# packages/docs/*-reference.nix (`just docs` / `nix build .#docs`)
 docs/devix/reference/
+docs/steamos/reference/

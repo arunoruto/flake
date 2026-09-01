@@ -12,6 +12,7 @@
 - [steamos](./steamos/README.md)
   - [How it works](./steamos/how-it-works.md)
   - [Options](./steamos/options.md)
+  - [Option reference](./steamos/reference/options.md)
   - [Hardware setup & tuning](./steamos/hardware-and-tuning.md)
 - [devix](./devix/README.md)
   - [Concepts](./devix/concepts.md)

@@ -8,6 +8,7 @@ pkgs.lib.makeScope pkgs.newScope (
     dpcpp-prop = self.callPackage ./dpcpp/proprietary4.nix { };
     docs = self.callPackage ./docs/package.nix { };
     docs-devix-reference = self.callPackage ./docs/devix-reference.nix { };
+    docs-steamos-reference = self.callPackage ./docs/steamos-reference.nix { };
     gemini-cli-custom = self.callPackage ./gemini-cli/package.nix { };
     trmnl = self.callPackage ./trmnl/package.nix { };
 
