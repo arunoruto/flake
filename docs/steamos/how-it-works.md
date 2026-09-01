@@ -59,10 +59,10 @@ of gamescope's Xwayland servers, whatever the login path called the session.
 fifo, and seeds the mangoapp config — the reason a plain `env`-and-`args`
 option pair could not express this session.
 
-**The performance overlay's config path** is one place this module knowingly
-diverges from Valve. The 0–4 levels in Gaming Mode are MangoHud's built-in
-presets (1 fps-only, 2 the Deck-style horizontal bar, 3 adds temps and clocks,
-4 full); Steam selects one by writing `preset=N` into
+**The performance overlay** is one place this module knowingly diverges from
+Valve, in two halves.
+
+The config file: Steam selects a level 0–4 by writing `preset=N` into
 `~/.local/share/Steam/config/mangohud.conf` and then running
 `mangohudctl toggle reload_config`, which makes mangoapp re-parse its config.
 Valve's script points `MANGOHUD_CONFIGFILE` at a fresh `mktemp` instead, so
@@ -70,9 +70,20 @@ mangoapp ends up watching a file Steam never writes and every level looks the
 same. This module points it at the file Steam actually writes, and seeds it
 only when absent so an existing level survives.
 
+The presets: the module defines what each level *contains* itself, through
+`MANGOHUD_PRESETSFILE` — MangoHud's built-ins minus the Deck's battery
+readouts, sized for the connected display at session start
+(`steamos.mangoapp.fontScale`). The presets file is the only place sizing can
+live: Steam rewrites the config file on every level change, and
+`MANGOHUD_CONFIG` makes MangoHud apply the preset twice — every element drawn
+double. The dense levels get their own, narrower scale, computed so the widest
+table row still fits the display.
+
 ## The login loop
 
-With `steamos.autoStart`, there is no display manager and no greeter. greetd's
+With `steamos.autoStart` on the default greetd path, there is no display
+manager and no greeter (`loginManager = "sddm"` swaps this whole section for
+SDDM autologin — see `sddm.nix` and the switching notes below). greetd's
 `default_session` is used kiosk-style: it runs the `steamos-session` launcher
 directly as `steamos.user`, and whenever the session ends — Steam shut down,
 desktop logged out, compositor crashed — greetd simply runs it again.
@@ -106,6 +117,11 @@ journalctl -t steamos-session
 `systemd-cat` execs the session rather than forking it, so greetd still sees
 one child and its bookkeeping is unchanged.
 
+The Gaming Mode script also wraps *itself* the same way when nothing else has
+(guarded by `STEAMOS_SESSION_JOURNAL`, which the greetd launcher sets to
+prevent double-wrapping) — SDDM runs the `.desktop` file directly, and without
+this its sessions logged nowhere at all.
+
 ### Making the session look like a session
 
 Occupying greetd's *greeter* slot is what buys the respawn loop, and it is
@@ -133,6 +149,19 @@ always the fallback**: rebooting, logging out of the desktop, or a crashed
 session all land back in Steam. This mirrors SteamOS.
 
 ## Session switching
+
+The mechanism depends on `steamos.loginManager`. What follows describes the
+default greetd path; on the SDDM path the work is SteamOS Manager's — Steam
+calls its `SessionManagement1` D-Bus interface, the manager writes an SDDM
+autologin drop-in naming the target session and stops
+`graphical-session.target`, and SDDM's `Relogin` starts whatever the drop-in
+named. Since gamescope is a plain child of `sddm-helper` rather than a session
+unit, the Gaming Mode script parks a stand-in `gamescope-session.service` in
+that target whose stop shuts Steam down cleanly — without it, stopping the
+target would do nothing and "Switch to Desktop" hung forever. The
+`steamos-session-select` script still exists on that path, delegating to
+`steamosctl`, so the desktop's "Return to Gaming Mode" entry works the same
+either way.
 
 SteamOS exposes switching through a `steamos-session-select` executable, and
 the Steam client hardcodes calls to it (historically with Valve's KDE session
@@ -181,7 +210,9 @@ On the desktop, a **Return to Gaming Mode** launcher entry (the same script,
   Steam as separate systemd user units wired together by a ready socket. The
   simpler shape costs the session's D-Bus/systemd integration
   (`gamescope-session.target`, the stats socket other tools consume) but keeps
-  the module to one script.
+  the module to one script. The SDDM path papers over the one consumer that
+  matters — SteamOS Manager reads and stops `gamescope-session.service` — with
+  a stand-in unit, not a real split.
 - Valve's deeper integration (steamos-manager D-Bus API, updater, power
   button daemon, per-device quirks) is out of scope; use Jovian if you need
   it.

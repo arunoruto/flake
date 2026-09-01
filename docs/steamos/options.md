@@ -3,6 +3,9 @@
 All options live under `steamos.*`. Anything not listed here is configured
 through upstream nixpkgs options (`programs.steam.*`, `programs.gamescope.*`).
 
+This page is the curated tour; the [option reference](./reference/options.md)
+is the complete listing, generated from the module so it cannot drift.
+
 ## Core
 
 ### `steamos.enable`
@@ -92,9 +95,30 @@ default scales it automatically against the tallest connected output (about
 1.8x at 1440p, 2.7x at 2160p), which keeps it roughly Deck-sized. Set a number
 to pin it, or `1` for MangoHud's own sizing.
 
-It is applied through `MANGOHUD_CONFIG` rather than the config file, because
-Steam rewrites that file on every level change; `read_cfg` is included so the
-file — and with it Steam's preset — is still read.
+The sizing is applied through `MANGOHUD_PRESETSFILE` — the module defines all
+five overlay levels itself and bakes the scale into them — because the two
+obvious routes both fail: Steam rewrites the config file on every level
+change, and `MANGOHUD_CONFIG` makes MangoHud apply the preset twice, drawing
+every element double. Levels 2–4 additionally get a *narrower* scale than
+level 1 where needed, computed so the widest table row still fits the display;
+at full scale on a 4K screen the dense levels would run off both edges.
+
+### `steamos.mangoapp.pciDev`
+
+Type `null or str`, default `null`, example `"0000:03:00.0"`. PCI address of
+the GPU the overlay reports on (MangoHud's `pci_dev`, written as `lspci -D`
+prints it).
+
+Only meaningful on a machine with more than one GPU: MangoHud enumerates every
+GPU and picks one itself, which need not be the one gamescope renders with — a
+desktop with an idle iGPU can get an overlay reporting that chip's load while
+the games run on the discrete card. `null` leaves the choice to MangoHud.
+
+### `steamos.mangoapp.package`
+
+The mangohud package that supplies `mangoapp`. It talks to gamescope over X
+atoms and a message queue, so when `programs.gamescope.package` is overridden
+to a much newer gamescope, override this to match.
 
 ### `steamos.mangoapp.backgroundAlpha`
 
