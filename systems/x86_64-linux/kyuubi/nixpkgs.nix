@@ -7,5 +7,5 @@
   # configuration.nix. Pinned to the exact version on purpose: a nixpkgs bump
   # makes evaluation fail again, which forces a fresh look instead of silently
   # carrying the exception forward.
-  permittedInsecurePackages = [ "broadcom-sta-6.30.223.271-59-7.1.5" ];
+  permittedInsecurePackages = [ "broadcom-sta-6.30.223.271-59-7.2.2" ];
 }
