@@ -1,7 +1,8 @@
-{ inputs, ... }:
+{ ... }:
 {
   imports = [
-    (inputs.nixos-hardware.outPath + "/common/cpu/intel/coffee-lake")
+    # CPU/iGPU tuning (coffee-lake) is derived from facter.json — see
+    # systems/hardware-profiles.nix.
     ./configuration.nix
     ./disk.nix
     ./hardware-configuration.nix

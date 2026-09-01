@@ -34,11 +34,15 @@ let
   # Module list for a NixOS host.
   nixosModules =
     arch: hostname:
+    let
+      reportPath = ./${arch}/${hostname}/facter.json;
+      hasReport = lib.pathExists reportPath;
+    in
     [
       self.nixosModules.default
       {
         networking.hostName = lib.mkForce hostname;
-        facter.reportPath = lib.mkIf (lib.pathExists ./${arch}/${hostname}/facter.json) ./${arch}/${hostname}/facter.json;
+        facter.reportPath = lib.mkIf hasReport reportPath;
         theming = {
           inherit scheme image;
         };
@@ -46,6 +50,13 @@ let
       ./${arch}/${hostname}
       ../homes/nixos.nix
     ]
+    # Hardware tuning mapped from the report onto nixos-hardware's common/
+    # profiles — see ./hardware-profiles.nix for why this cannot be a module.
+    ++ lib.optional hasReport (
+      import ./hardware-profiles.nix { inherit lib inputs; } (
+        builtins.fromJSON (builtins.readFile reportPath)
+      )
+    )
     ++ (with inputs; [
       nixos-facter-modules.nixosModules.facter
       home-manager.nixosModules.home-manager
