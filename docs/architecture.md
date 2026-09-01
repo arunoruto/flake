@@ -14,7 +14,7 @@ and where to start when adding something new.
 | `modules/darwin/` | nix-darwin modules (homebrew, services, system, users). |
 | `modules/home-manager/` | Home Manager modules — the largest tree, see [background vs foreground](#background-vs-foreground). |
 | `modules/devix/` | Development-environment *mechanism*: a registry of languages, addons, LSPs, and formatters consumed by editors (helix, zed, opencode). Exposed as `homeModules.devix` and `devenvModules.*`. See [devix](#devix). |
-| `modules/steamos/` | Steam-machine *mechanism*: boot into Steam's Gaming Mode with a switchable Desktop Mode, without Jovian. Exposed as `nixosModules.steamos`, split-ready like devix. See [steamos](./steamos/README.md). |
+| `steamos/` | Steam-machine *mechanism* as its own in-repo flake: boot into Steam's Gaming Mode with a switchable Desktop Mode, without Jovian. Consumed as a relative-path input (`inputs.nixpkgs.follows`), re-exported as `nixosModules.steamos`; carries its own packages and docs. See [steamos](./steamos/README.md). |
 | `homes/<user>/` | Per-user Home Manager entry points, auto-discovered for standalone `homeConfigurations`. SSH public keys live in `homes/<user>/keys/`. |
 | `lib/` | Small helper library layered onto `nixpkgs.lib` (directory listing, tag predicate, `eachSystem`). |
 | `overlays/` | Nixpkgs overlays: custom packages, modifications, `pkgs.unstable`, … |
@@ -147,7 +147,7 @@ Options defined by this flake (as opposed to upstream NixOS/HM options):
 | `desktop-environment.enable` | `modules/nixos/desktop/` | Desktop environment stack |
 | `hosts.{desktop,laptop,workstation,development}.enable` | `modules/home-manager/imports.nix` | HM-side mirror of the tags |
 | `devix.*` | `modules/devix/` | Development environments — see the [devix](./devix/README.md) section |
-| `steamos.*` | `modules/steamos/` | Steam-machine mode — see the [steamos](./steamos/README.md) section |
+| `steamos.*` | `steamos/modules/nixos/` | Steam-machine mode — see the [steamos](./steamos/README.md) section |
 | `foreground.enable` | `modules/home-manager/foreground/` | GUI-facing home config |
 | `theming.{enable,scheme,image}` | `modules/home-manager/theming/`, `modules/nixos/system/theming.nix` | Stylix scheme/wallpaper |
 | `rssh.enable`, `yubikey.enable`, `cachix.enable`, `latex.enable` | `modules/nixos/**` | Feature toggles for individual services |

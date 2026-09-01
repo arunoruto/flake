@@ -9,7 +9,7 @@
 # desktop session) lives with the consumer; see modules/nixos/programs/gaming/
 # for this flake's adapter.
 #
-# Documentation: docs/steamos/ (README, how-it-works, options).
+# Documentation: ../../docs (README, how-it-works, options).
 {
   config,
   lib,

@@ -11,7 +11,13 @@ stdenvNoCC.mkDerivation {
 
   src = lib.fileset.toSource {
     root = ./../..;
-    fileset = lib.fileset.maybeMissing ./../../docs;
+    # docs/steamos is a symlink into steamos/docs (the pages belong to the
+    # in-repo steamos flake); both sides have to be in the source for it to
+    # resolve inside the sandbox.
+    fileset = lib.fileset.unions [
+      (lib.fileset.maybeMissing ./../../docs)
+      (lib.fileset.maybeMissing ./../../steamos/docs)
+    ];
   };
 
   nativeBuildInputs = [ mdbook ];

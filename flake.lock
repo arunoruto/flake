@@ -1391,6 +1391,7 @@
         "nixpkgs-update": "nixpkgs-update",
         "nur": "nur",
         "sops-nix": "sops-nix",
+        "steamos": "steamos",
         "stump-fork": "stump-fork",
         "stylix": "stylix",
         "ucodenix": "ucodenix",
@@ -1509,6 +1510,22 @@
         "repo": "nixpkgs",
         "type": "github"
       }
+    },
+    "steamos": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "path": "./steamos",
+        "type": "path"
+      },
+      "original": {
+        "path": "./steamos",
+        "type": "path"
+      },
+      "parent": []
     },
     "stump-fork": {
       "inputs": {

@@ -1,6 +1,6 @@
 # Generated steamos documentation: the option reference, built from the
-# option descriptions in modules/steamos exactly as ./devix-reference.nix does
-# for devix — so the two cannot drift from their modules the way hand-written
+# option descriptions in modules/nixos exactly as the parent repo's
+# packages/docs/devix-reference.nix does for devix — so the two cannot drift from their modules the way hand-written
 # pages do.
 #
 # One difference in technique: devix evaluates against a shim declaring the
@@ -22,7 +22,7 @@ let
 
   evaluated = lib.evalModules {
     modules = [
-      ../../modules/steamos
+      ../modules/nixos
       { _module.check = false; }
     ];
     specialArgs = { inherit pkgs; };

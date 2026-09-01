@@ -27,6 +27,11 @@ devenv.local.yaml
 .pre-commit-config.yaml
 
 # option references, generated from their modules by
-# packages/docs/*-reference.nix (`just docs` / `nix build .#docs`)
+# packages/docs/devix-reference.nix and steamos/packages/docs-reference.nix
+# (`just docs` / `nix build .#docs`)
 docs/devix/reference/
-docs/steamos/reference/
+steamos/docs/reference/
+
+# The in-repo steamos flake is consumed with inputs.nixpkgs.follows, so its
+# own lock never affects this repo; standalone experiments may generate one.
+steamos/flake.lock

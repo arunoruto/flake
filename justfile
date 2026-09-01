@@ -59,9 +59,9 @@ docs-reference:
     install -m644 "$out"/*.md docs/devix/reference/
     echo "regenerated docs/devix/reference from modules/devix"
     out=$(nix build --no-link --print-out-paths .#docs-steamos-reference)
-    mkdir -p docs/steamos/reference
-    install -m644 "$out"/*.md docs/steamos/reference/
-    echo "regenerated docs/steamos/reference from modules/steamos"
+    mkdir -p steamos/docs/reference
+    install -m644 "$out"/*.md steamos/docs/reference/
+    echo "regenerated steamos/docs/reference from steamos/modules/nixos"
 
 # Serve the mdBook docs locally with live reload
 docs: docs-reference

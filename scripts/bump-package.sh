@@ -35,9 +35,13 @@ if [[ "$INPUT_PATH" == *"packages/custom/"* ]]; then
     ATTR_PATH="custom.$PACKAGE"
 elif [[ "$INPUT_PATH" == *"packages/top-level/"* ]]; then
     ATTR_PATH="$PACKAGE"
+elif [[ "$INPUT_PATH" == *"steamos/packages/deckyPlugins/"* ]]; then
+    ATTR_PATH="deckyPlugins.$PACKAGE"
+elif [[ "$INPUT_PATH" == *"steamos/packages/"* ]]; then
+    ATTR_PATH="$PACKAGE"
 else
     echo "Error: Unrecognized package location in path: $INPUT_PATH"
-    echo "Path must contain 'packages/custom/' or 'packages/top-level/'"
+    echo "Path must contain 'packages/custom/', 'packages/top-level/' or 'steamos/packages/'"
     exit 1
 fi
 

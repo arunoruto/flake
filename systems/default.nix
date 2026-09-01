@@ -49,6 +49,10 @@ let
     ++ (with inputs; [
       nixos-facter-modules.nixosModules.facter
       home-manager.nixosModules.home-manager
+      # The Steam-machine module, from the in-repo steamos flake. Inert until
+      # a host sets steamos.enable; the policy glue lives in
+      # modules/nixos/programs/gaming/steamos.nix.
+      steamos.nixosModules.default
     ]);
 
   # Module list for a nix-darwin host. Stylix is configured directly by the

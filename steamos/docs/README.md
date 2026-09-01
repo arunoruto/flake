@@ -1,6 +1,6 @@
 # steamos
 
-`modules/steamos/` turns a NixOS machine into a Steam machine: it boots
+The steamos flake turns a NixOS machine into a Steam machine: it boots
 straight into Steam's **Gaming Mode** (the gamescope-driven Deck UI), and the
 "Switch to Desktop" button in Steam's power menu drops you into a regular
 desktop session — with an icon there to return to Gaming Mode, just like
@@ -15,17 +15,21 @@ switcher, and a `greetd` login loop — and is aimed at ordinary PCs used as
 living-room machines. Nothing here is fetched from Valve: the session is a
 ~40-line script built from upstream nixpkgs' gamescope and Steam.
 
-## Split-ready
+## Its own flake
 
-Like [devix](../devix/README.md), this tree is mechanism only and written to
-be usable outside this flake (and eventually to move into its own repository,
-`steamos.nix`):
+This tree is mechanism only, and it is already structured as the standalone
+project it will eventually become: a flake at `steamos/` in the parent
+repository, exposing `nixosModules.default`, `overlays.default` (which
+provides `pkgs.steamos-manager`, `pkgs.decky-loader` and `pkgs.deckyPlugins`)
+and its packages. The parent consumes it as a relative-path input with
+`inputs.nixpkgs.follows`, so graduating to its own repository is a URL change
+for consumers.
 
-- it only touches plain `pkgs`, plain `lib`, and upstream NixOS options — no
-  repo overlays (`pkgs.unstable`), no extended `lib`, no tag system;
-- it is exported as `nixosModules.steamos`;
+- the module only touches plain `pkgs`, plain `lib`, and upstream NixOS
+  options — no parent-repo overlays (`pkgs.unstable`), no extended `lib`, no
+  tag system;
 - all policy (which host, which user, which desktop session) stays with the
-  consumer. In this repo that is the adapter
+  consumer. In the parent repo that is the adapter
   `modules/nixos/programs/gaming/steamos.nix`, which defaults
   `steamos.user` to `users.primaryUser` and turns the display manager off
   when the module owns the login path.

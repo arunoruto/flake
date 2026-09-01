@@ -3,6 +3,13 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
+    # In-repo flake, incubating until it moves to its own repository; with
+    # nixpkgs following ours, its own lock file never matters here (and is
+    # not committed). Splitting it out later is only a URL change.
+    steamos = {
+      url = "path:./steamos";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     home-manager = {
       url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -128,7 +135,7 @@
             kodi
             home-assistant
             custom-packages
-            decky-plugins
+            steamos
           ])
           ++ (with inputs; [ nur.overlays.default ]);
         config = {
@@ -152,8 +159,8 @@
       inherit lib;
       nixosModules = {
         default = import ./modules/nixos;
-        # Reusable Steam-machine module (split-ready, see docs/steamos/).
-        steamos = import ./modules/steamos;
+        # Re-exported from the in-repo steamos flake (see steamos/README.md).
+        steamos = inputs.steamos.nixosModules.default;
       };
       darwinModules.default = import ./modules/darwin;
       homeModules = {
