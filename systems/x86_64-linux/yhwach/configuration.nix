@@ -15,26 +15,31 @@
 
   # RX 9060 XT (RDNA 4)
   hosts.amd.gpu.enable = true;
-  # RDNA 4 wants the freshest amdgpu/mesa stack, not the default LTS kernel.
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot = {
+    # RDNA 4 wants the freshest amdgpu/mesa stack, not the default LTS kernel.
+    kernelPackages = pkgs.linuxPackages_latest;
 
-  # HDMI 2.1 Fixed Rate Link. The open driver gained FRL in 7.2 but ships it
-  # behind DC_FRL_MASK (1 << 10) so that VRR and ALLM could settle first;
-  # upstream intends to flip the default in 7.4. 0x2 is the stock mask
-  # (DC_MULTI_MON_PP_MCLK_SWITCH), so 0x402 is "stock plus FRL".
-  #
-  # The parameter is spelled dcfeaturemask, not dc_feature_mask; the kernel
-  # silently logs "unknown parameter ... ignored" for the latter and carries
-  # on with the default, which reads as the feature simply not working.
-  #
-  # This is what lets the TV hang off the card's own HDMI port at 4K120
-  # instead of going out over DisplayPort through a protocol converter. The
-  # converter route works but costs a DSC-compressed link and a PCON whose
-  # FRL training fails often enough to black-screen the machine at boot.
-  #
-  # Gated on the kernel version so it disappears by itself once the default
-  # flips; the warning below is the reminder to delete this block outright.
-  boot.kernelParams = lib.optional (lib.versionOlder config.boot.kernelPackages.kernel.version "7.4") "amdgpu.dcfeaturemask=0x402";
+    # Enable systemd-boot selection
+    loader.timeout = 10;
+
+    # HDMI 2.1 Fixed Rate Link. The open driver gained FRL in 7.2 but ships it
+    # behind DC_FRL_MASK (1 << 10) so that VRR and ALLM could settle first;
+    # upstream intends to flip the default in 7.4. 0x2 is the stock mask
+    # (DC_MULTI_MON_PP_MCLK_SWITCH), so 0x402 is "stock plus FRL".
+    #
+    # The parameter is spelled dcfeaturemask, not dc_feature_mask; the kernel
+    # silently logs "unknown parameter ... ignored" for the latter and carries
+    # on with the default, which reads as the feature simply not working.
+    #
+    # This is what lets the TV hang off the card's own HDMI port at 4K120
+    # instead of going out over DisplayPort through a protocol converter. The
+    # converter route works but costs a DSC-compressed link and a PCON whose
+    # FRL training fails often enough to black-screen the machine at boot.
+    #
+    # Gated on the kernel version so it disappears by itself once the default
+    # flips; the warning below is the reminder to delete this block outright.
+    kernelParams = lib.optional (lib.versionOlder config.boot.kernelPackages.kernel.version "7.4") "amdgpu.dcfeaturemask=0x402";
+  };
 
   warnings = lib.optional (lib.versionAtLeast config.boot.kernelPackages.kernel.version "7.4") ''
     yhwach: kernel ${config.boot.kernelPackages.kernel.version} enables HDMI 2.1
@@ -144,9 +149,6 @@
   # Re-enable once /etc/secureboot holds keys, then enroll in firmware
   # (sbctl enroll-keys -m) — see docs/iso.md.
   # secureboot.enable = true;
-
-  # Enable systemd-boot selection
-  boot.loader.timeout = 10;
 
   # Set system time
   time.hardwareClockInLocalTime = true;

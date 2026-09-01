@@ -27,10 +27,37 @@ in
       nixos-hardware-amd.config
 
       {
-        # ROCm OpenCL when the hardware report confirms an AMD GPU. The
-        # upstream option installs the runtime and ICD (rocmPackages.clr);
-        # nothing needs to be added to hardware.graphics manually.
-        hardware.amdgpu.opencl.enable = config.facter.detected.graphics.amd.enable;
+        # ROCm OpenCL, defaulted from the hardware report rather than from
+        # this module's own toggle. The two can disagree: a host may enable
+        # AMD GPU support without the report agreeing there is an AMD GPU —
+        # kuchiki asks for it and has an ASPEED BMC chip — and a host with a
+        # real card may simply have no report yet. mkDefault so either case
+        # can be settled locally instead of erroring on a conflict.
+        hardware.amdgpu.opencl.enable = lib.mkDefault config.facter.detected.graphics.amd.enable;
+
+        # ...and say so when they disagree, because the failure is otherwise
+        # invisible: yhwach ran without OpenCL from the rebuild that dropped
+        # its stale report until someone happened to look.
+        warnings = lib.optional (!config.facter.detected.graphics.amd.enable) ''
+          hosts.amd.gpu.enable is set, but the hardware report does not list
+          an AMD GPU, so ROCm/OpenCL is left off. Either the host has no
+          facter report yet (`just facter`), or it genuinely has no AMD GPU
+          and hosts.amd.gpu.enable is the thing to drop. To settle it by hand,
+          set hardware.amdgpu.opencl.enable explicitly.
+        '';
+
+        # The note above the import is only true while that file stays a bare
+        # `config`. Fail the build rather than silently dropping the rest.
+        assertions = [
+          {
+            assertion = builtins.attrNames nixos-hardware-amd == [ "config" ];
+            message =
+              "nixos-hardware common/gpu/amd now exposes "
+              + builtins.concatStringsSep ", " (builtins.attrNames nixos-hardware-amd)
+              + "; this module consumes only its `config`, so anything else is "
+              + "being dropped. See the note in modules/nixos/system/amd/gpu.nix.";
+          }
+        ];
 
         # Fan curves, power limits and profiles (daemon + GUI)
         services.lact.enable = lib.mkDefault true;
