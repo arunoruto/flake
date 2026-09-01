@@ -229,7 +229,7 @@ let
     # args/env) is preferred over the bare package — which is appended last
     # only as a guaranteed fallback. mangohud supplies `mangoapp`, which
     # gamescope spawns by name.
-    export PATH="/run/wrappers/bin:$PATH:${config.programs.gamescope.package}/bin:${pkgs.mangohud}/bin"
+    export PATH="/run/wrappers/bin:$PATH:${config.programs.gamescope.package}/bin:${cfg.mangoapp.package}/bin"
 
     ${exports}
 

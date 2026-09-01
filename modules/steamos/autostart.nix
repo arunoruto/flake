@@ -7,7 +7,7 @@
 # The launcher does what a display manager would do — resolve a session's
 # .desktop file, export the session identity variables, exec its command —
 # picking Gaming Mode unless a one-shot selection was left behind by
-# `steamos-session-select` (see ./session.nix). Rebooting or logging out of
+# `steamos-session-select` (see ./session-select.nix). Rebooting or logging out of
 # the desktop therefore always lands back in Gaming Mode, like SteamOS.
 {
   config,

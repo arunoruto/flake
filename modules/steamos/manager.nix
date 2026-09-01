@@ -95,7 +95,11 @@ in
       };
     })
 
-    (lib.mkIf (enabled && config.steamos.desktopSession != null) {
+    # The user != null guard matters: the manager can be enabled without
+    # autoStart (for the performance controls alone), and only autoStart
+    # asserts that steamos.user is set — without the guard this block would
+    # die on `users.${null}` instead of simply not seeding any state.
+    (lib.mkIf (enabled && config.steamos.desktopSession != null && config.steamos.user != null) {
       # `C` copies only when the file is absent, so a session later chosen
       # over D-Bus (SetDefaultDesktopSession) is not overwritten on boot.
       systemd.user.tmpfiles.users.${config.steamos.user}.rules = [

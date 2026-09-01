@@ -205,6 +205,15 @@ in
           `null` leaves the choice to MangoHud.
         '';
       };
+
+      package = lib.mkPackageOption pkgs "mangohud" {
+        extraDescription = ''
+          Supplies the `mangoapp` binary gamescope spawns for the overlay.
+          mangoapp talks to gamescope over X atoms and a message queue, so
+          when {option}`programs.gamescope.package` is overridden to a much
+          newer gamescope, override this to match.
+        '';
+      };
     };
 
     realtime.enable = lib.mkOption {
