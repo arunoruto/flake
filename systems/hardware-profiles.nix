@@ -62,6 +62,10 @@ let
     "166" = "comet-lake";
     "151" = "alder-lake";
     "154" = "alder-lake";
+    # 0xBE: intel-family.h calls it ATOM_GRACEMONT (né Alder Lake-N) — the
+    # E-core-only N-series parts, Twin Lake refreshes included (sado's N150).
+    # Same Gen12 iGPU as Alder Lake proper, so the same profile fits.
+    "190" = "alder-lake";
     "183" = "raptor-lake";
     "186" = "raptor-lake";
     "191" = "raptor-lake";
