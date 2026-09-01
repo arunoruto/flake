@@ -26,8 +26,13 @@
     services = {
       ucodenix = {
         enable = lib.mkDefault true;
-        cpuModelId = lib.mkDefault config.facter.reportPath;
-        # cpuModelId = lib.mkDefault "auto";
+        # Narrow the microcode set to this CPU by handing ucodenix the
+        # hardware report, which is where it reads the model ID from. Left
+        # undefined when there is no report, so its own "auto" default applies
+        # and every available binary is processed instead — facter.reportPath
+        # is null in that case, and passing null through fails the build with
+        # "cannot coerce null to a string" rather than falling back.
+        cpuModelId = lib.mkIf (config.facter.reportPath != null) (lib.mkDefault config.facter.reportPath);
       };
     };
 
