@@ -38,11 +38,18 @@ let
   hasIntelGpu = builtins.elem "i915" gpuDrivers || builtins.elem "xe" gpuDrivers;
 
   # cpuid model → nixos-hardware generation directory, for family 6. Model
-  # numbers follow the kernel's arch/x86/include/asm/intel-family.h; only
-  # client parts are listed, since the iGPU gate above already reduces server
-  # parts to the microcode-only path. Note 0x9E (158) strictly covers Kaby
-  # Lake desktop as well as Coffee Lake — same core, same Gen9.5 graphics —
-  # and the coffee-lake profile is correct for both.
+  # numbers follow the kernel's arch/x86/include/asm/intel-family.h — the
+  # authoritative registry, since drivers key real quirks off it. To add a
+  # machine: the report stores the model in decimal, the header is hex, so
+  #
+  #   printf '0x%02X\n' $(jq .hardware.cpu[0].model <host>/facter.json)
+  #
+  # and grep the header for the result. The header→directory step stays a
+  # judgment call (the header names the core, the directory is chosen by
+  # iGPU generation): 0x9E (158) is INTEL_KABYLAKE yet covers Coffee Lake —
+  # same core, same Gen9.5 graphics, coffee-lake profile correct for both.
+  # Only client parts are listed; the iGPU gate above already reduces server
+  # parts to the microcode-only path.
   intelGenerations = {
     "42" = "sandy-bridge";
     "60" = "haswell";
