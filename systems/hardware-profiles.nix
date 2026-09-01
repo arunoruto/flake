@@ -70,9 +70,30 @@ let
   intelGen = intelGenerations.${toString model} or null;
 
   # NVMe is the one storage class the report identifies unambiguously (by
-  # driver). SATA SSDs are indistinguishable from spinning disks here, so
-  # they still warrant a manual common/pc/ssd import.
+  # driver). A SATA SSD is *undetectable*: the disk entries carry no
+  # rotational flag or feature list at all (checked against every report in
+  # this fleet — kenpachi's SATA flash module reads identically to a spinning
+  # Toshiba), so a host with only SATA SSDs still warrants a manual
+  # common/pc/ssd import until nixos-facter learns to record
+  # /sys/block/*/queue/rotational.
   hasNvme = lib.any (disk: (disk.driver or "") == "nvme") (report.hardware.disk or [ ]);
+
+  # SMBIOS chassis types that mean "runs on a battery, lives on a lap":
+  # Portable (8), Laptop (9), Notebook (10), Sub Notebook (14), Tablet (30),
+  # Convertible (31), Detachable (32). The report stores chassis as an object
+  # on some machines and a one-element list on others, hence the toList.
+  laptopChassisTypes = [
+    8
+    9
+    10
+    14
+    30
+    31
+    32
+  ];
+  isLaptop = lib.any (chassis: builtins.elem (chassis.chassis_type.value or 0) laptopChassisTypes) (
+    lib.toList (report.smbios.chassis or [ ])
+  );
 
   profiles =
     lib.optionals (vendor == "GenuineIntel" && family == 6) (
@@ -87,7 +108,11 @@ let
       # pstate.nix imports the plain cpu/amd microcode module itself.
       if family >= 25 then [ "cpu/amd/pstate.nix" ] else [ "cpu/amd" ]
     )
-    ++ lib.optional hasNvme "pc/ssd";
+    ++ lib.optional hasNvme "pc/ssd"
+    # TLP power management, unless something already claimed the job:
+    # pc/laptop's tlp.enable is a mkDefault gated on power-profiles-daemon
+    # being off, so a desktop-tagged host running PPD sees a no-op.
+    ++ lib.optional isLaptop "pc/laptop";
 in
 {
   imports = map (profile: "${common}/${profile}") profiles;
