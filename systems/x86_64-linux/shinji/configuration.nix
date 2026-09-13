@@ -71,9 +71,6 @@ in
       "rw"
     ];
   };
-  systemd.tmpfiles.rules = [
-    "d ${target-folder} 0775 mirza media -"
-  ];
   users.groups.media = {
     gid = 420;
     members = [ config.users.primaryUser ];

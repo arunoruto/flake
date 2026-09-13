@@ -20,7 +20,23 @@
       cfg = config.bosflix;
       # completedPath = "/media/86336459-5d8c-448e-93c3-f3e17c00d3b9" + "/complete";
       completedPath = builtins.toString (cfg.drivePath + "/complete");
+      drivePath = builtins.toString cfg.drivePath;
       incompletedPath = builtins.toString (cfg.drivePath + "/incomplete");
+      mediaGroup = "media";
+      # The per-consumer folders that are synced out to the *arr hosts; see
+      # modules/nixos/services/media/syncthing/folders.nix.
+      syncedFolders = [
+        "mirza-music"
+        "mirza-shows"
+        "mirza-movies"
+      ];
+      # Everything on the drive is shared between the downloaders, syncthing and
+      # the *arrs, so it all gets the same setgid + group-writable treatment.
+      sharedPaths = [
+        completedPath
+        incompletedPath
+      ]
+      ++ map (name: "${completedPath}/${name}") syncedFolders;
     in
     lib.mkIf cfg.enable {
       services = {
@@ -92,12 +108,50 @@
       systemd =
         let
           cfg = config.services.sabnzbd;
+          syncthingCfg = config.services.syncthing;
         in
         {
           services.sabnzbd.serviceConfig.ExecStart =
             # lib.mkForce "${lib.getBin cfg.package}/bin/sabnzbd -d -f ${"/var/lib/${cfg.stateDir}/sabnzbd.ini"} --inet_exposure 5 --disable-file-log --console";
             lib.mkForce
               "${lib.getBin cfg.package}/bin/sabnzbd -d -f ${"/var/lib/${cfg.stateDir}/sabnzbd.ini"} -s 0.0.0.0:8082 --inet_exposure 5";
+
+          # The drive is an autofs mount (`x-systemd.automount`) and
+          # systemd-tmpfiles refuses to traverse autofs mount points: at boot it
+          # logs "Detected autofs mount point '<drivePath>' ... Skipping" for
+          # every rule below it, so these directories were never actually created
+          # or fixed up. They ended up root-umask 2755, which locks out the rest
+          # of the `media` group — sabnzbd above all. Do it from a unit that
+          # pulls the mount in itself instead.
+          services.bosflix-dirs = {
+            description = "Create bosflix download directories";
+            wantedBy = [ "multi-user.target" ];
+            before =
+              lib.optional config.services.sabnzbd.enable "sabnzbd.service"
+              ++ lib.optional config.services.qbittorrent.enable "qbittorrent.service"
+              ++ lib.optional config.services.syncthing.enable "syncthing.service";
+            unitConfig.RequiresMountsFor = [
+              completedPath
+              incompletedPath
+            ];
+            serviceConfig = {
+              Type = "oneshot";
+              RemainAfterExit = true;
+            };
+            path = [ pkgs.coreutils ];
+            # setgid so anything created underneath inherits the `media` group,
+            # group-writable so every member of that group (sabnzbd, qbittorrent,
+            # syncthing, the *arrs) can write into the shared folders. Those
+            # services all run with UMask=0002, which keeps the group-write bit
+            # on the directories they create in turn.
+            script = ''
+              install -d -o ${config.users.primaryUser} -g ${mediaGroup} -m 0775 ${lib.escapeShellArg drivePath}
+              install -d -o root -g ${mediaGroup} -m 2775 ${lib.escapeShellArgs sharedPaths}
+            ''
+            + lib.optionalString config.services.syncthing.enable ''
+              install -d -o ${syncthingCfg.user} -g ${syncthingCfg.group} -m 0755 ${lib.escapeShellArg "${completedPath}/.stfolder"}
+            '';
+          };
 
           tmpfiles.settings = {
             "sabnzbd" = {
@@ -117,44 +171,9 @@
               #   group = cfg.group;
               # };
             };
-            "drive" = {
-              "${completedPath}".d = {
-                mode = "2775";
-                user = "root";
-                group = "media";
-              };
-              "${completedPath}/mirza-music".d = {
-                mode = "2775";
-                user = "root";
-                group = "media";
-              };
-              "${completedPath}/mirza-shows".d = {
-                mode = "2775";
-                user = "root";
-                group = "media";
-              };
-              "${completedPath}/mirza-movies".d = {
-                mode = "2775";
-                user = "root";
-                group = "media";
-              };
-              "${completedPath}/.stfolder".d =
-                let
-                  syncthingCfg = config.services.syncthing;
-                in
-                {
-                  mode = "0755";
-                  inherit (syncthingCfg) user;
-                  inherit (syncthingCfg) group;
-                };
-              "${incompletedPath}".Z = {
-                mode = "0777";
-                user = "root";
-                group = "root";
-              };
-            };
           };
         };
+
       # lib.mkForce "${lib.getBin cfg.package}/bin/sabnzbd -d -f ${"/var/lib/${cfg.stateDir}/sabnzbd.ini"} --inet_exposure 5 --console";
       # lib.mkForce "${lib.getBin cfg.package}/bin/sabnzbd -d -f ${"/var/lib/${cfg.stateDir}/sabnzbd.ini"} --inet_exposure 5";
 
