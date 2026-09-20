@@ -25,6 +25,23 @@
       default = "/var/lib";
       description = "Directory to store media data";
     };
+    libraryDirs = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
+      example = [
+        "/mnt/storage/media/movies"
+        "/mnt/storage/media/shows"
+      ];
+      description = ''
+        Library roots shared between the media services. Each is kept owned by
+        the `media` group and setgid, so that everything created underneath
+        inherits the group instead of the creating service's private one.
+
+        Without this a folder imported by radarr ends up `radarr:radarr` and the
+        other services (bazarr writing subtitles, jellyfin and plex managing
+        artwork) are left with only `other` permissions on it.
+      '';
+    };
     openFirewall = lib.mkEnableOption "Open all firewall ports of media services";
   };
 
@@ -50,6 +67,17 @@
           config.users.primaryUser
         ];
       };
+
+      # The setgid bit is what makes this stick: new subdirectories inherit both
+      # the `media` group and the bit itself, so the guarantee propagates down
+      # the library without a recursive pass on every boot.
+      systemd.tmpfiles.settings."10-media-libraries" = lib.genAttrs cfg.libraryDirs (_: {
+        d = {
+          user = config.users.primaryUser;
+          group = config.users.groups.media.name;
+          mode = "2775";
+        };
+      });
 
       media.external-drives.enable = lib.mkDefault false;
     };

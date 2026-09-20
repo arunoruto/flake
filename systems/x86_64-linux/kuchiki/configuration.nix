@@ -54,10 +54,18 @@
     };
     traefik.enable = true;
     homepage-dashboard.enable = true;
+    # bazarr only logs what a subtitle sync is doing at DEBUG level.
+    bazarr.environment.DYNACONF_GENERAL__DEBUG = false;
     media = {
       enable = true;
       services = true;
       dataDir = "/mnt/storage/appdata";
+      libraryDirs = [
+        "/mnt/storage/media/movies"
+        "/mnt/storage/media/shows"
+        "/mnt/storage/media/music"
+        "/mnt/storage/media/books"
+      ];
       openFirewall = true;
     };
     syncthing.enable = true;
