@@ -39,10 +39,6 @@
     };
     nixos-hardware.url = "github:nixos/nixos-hardware";
     colmena.url = "github:zhaofengli/colmena";
-    nixai = {
-      url = "github:olafkfreund/nix-ai-help";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
-    };
     cpu-microcodes = {
       # url = "github:platomav/CPUMicrocodes/ec5200961ecdf78cf00e55d73902683e835edefd";
       url = "github:platomav/CPUMicrocodes";
