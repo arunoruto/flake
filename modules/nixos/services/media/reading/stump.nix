@@ -22,6 +22,8 @@
         openFirewall = lib.mkDefault false;
 
         environment = {
+          ENABLE_KOREADER_SYNC = "true";
+          STUMP_VERBOSITY = "1";
           STUMP_OIDC_ENABLED = "true";
           STUMP_OIDC_ISSUER_URL = "https://id.arnaut.me";
           STUMP_OIDC_SCOPES = "openid,email,profile";
