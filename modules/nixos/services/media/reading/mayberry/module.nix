@@ -4,10 +4,6 @@
   pkgs,
   ...
 }:
-
-let
-  cfg = config.services.mayberry;
-in
 {
   options.services.mayberry = {
     enable = lib.mkEnableOption "Mayberry federated EPUB library daemon";
@@ -57,69 +53,96 @@ in
       default = "mayberry";
       description = "Group under which the Mayberry daemon runs.";
     };
+
+    environment = lib.mkOption {
+      type = lib.types.attrsOf lib.types.str;
+      default = { };
+      example = {
+        MAYBERRY_LOG_LEVEL = "debug";
+      };
+      description = "Additional environment variables to pass to the Mayberry daemon.";
+    };
+
+    environmentFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      example = "/var/lib/mayberry/secrets.env";
+      description = "File containing environment variables (e.g. for secret tokens or credentials) to pass to the daemon.";
+    };
   };
 
-  config = lib.mkIf cfg.enable {
-    systemd.services.mayberry = {
-      description = "Mayberry Branch Daemon";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network-online.target" ];
-      wants = [ "network-online.target" ];
+  config =
+    let
+      cfg = config.services.mayberry;
+    in
+    lib.mkIf cfg.enable {
+      systemd.services.mayberry = {
+        description = "Mayberry Branch Daemon";
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network-online.target" ];
+        wants = [ "network-online.target" ];
 
-      serviceConfig = {
-        ExecStart = lib.escapeShellArgs (
-          [
-            "${cfg.package}/bin/mayberry"
-            "--daemon"
-            "-port"
-            (toString cfg.port)
-            "-server"
-            cfg.serverUrl
-            "-hub"
-            cfg.hubUrl
-          ]
-          ++ lib.optionals (cfg.libraryPath != "") [
-            "-library"
-            cfg.libraryPath
-          ]
-          ++ lib.optionals (cfg.branchName != "") [
-            "-name"
-            cfg.branchName
-          ]
-        );
-        Restart = "on-failure";
-        RestartSec = "5s";
-        User = cfg.user;
-        Group = cfg.group;
+        environment = lib.mkMerge [
+          { "HOME" = "%S/mayberry"; }
+          cfg.environment
+        ];
 
-        # This tells systemd to automatically create /var/lib/mayberry with correct permissions
-        StateDirectory = "mayberry";
-        WorkingDirectory = "%S/mayberry";
+        serviceConfig = lib.mkMerge [
+          {
+            ExecStart = lib.escapeShellArgs (
+              [
+                "${cfg.package}/bin/mayberry"
+                "--daemon"
+                "-port"
+                (toString cfg.port)
+                "-server"
+                cfg.serverUrl
+                "-hub"
+                cfg.hubUrl
+              ]
+              ++ lib.optionals (cfg.libraryPath != "") [
+                "-library"
+                cfg.libraryPath
+              ]
+              ++ lib.optionals (cfg.branchName != "") [
+                "-name"
+                cfg.branchName
+              ]
+            );
+            Restart = "on-failure";
+            RestartSec = "5s";
+            User = cfg.user;
+            Group = cfg.group;
 
-        # Mayberry writes branch.json to ~/.mayberry/. By setting HOME to the StateDirectory,
-        # it neatly contains the config inside /var/lib/mayberry/.mayberry/ without touching real user homes.
-        Environment = "HOME=%S/mayberry";
+            # This tells systemd to automatically create /var/lib/mayberry with correct permissions
+            StateDirectory = "mayberry";
+            WorkingDirectory = "%S/mayberry";
 
-        # Security hardening
-        ProtectSystem = "strict";
-        ProtectHome = "read-only";
-        PrivateTmp = true;
-        NoNewPrivileges = true;
+            # Securely load environment files if specified (supports secrets)
+            EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
+
+            # Security hardening
+            ProtectSystem = "strict";
+            ProtectHome = "read-only";
+            PrivateTmp = true;
+            NoNewPrivileges = true;
+            SystemCallArchitectures = "native";
+          }
+        ];
+      };
+
+      # Create the system user and group automatically
+      users.users = lib.mkIf (cfg.user == "mayberry") {
+        mayberry = {
+          isSystemUser = true;
+          group = cfg.group;
+          description = "Mayberry daemon user";
+          home = "/var/lib/mayberry";
+        };
+      };
+
+      users.groups = lib.mkIf (cfg.group == "mayberry") {
+        mayberry = { };
       };
     };
-
-    # Create the system user and group automatically
-    users.users = lib.mkIf (cfg.user == "mayberry") {
-      mayberry = {
-        isSystemUser = true;
-        inherit (cfg) group;
-        description = "Mayberry daemon user";
-        home = "/var/lib/mayberry";
-      };
-    };
-
-    users.groups = lib.mkIf (cfg.group == "mayberry") {
-      mayberry = { };
-    };
-  };
 }
