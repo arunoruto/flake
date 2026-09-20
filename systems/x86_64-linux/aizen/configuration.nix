@@ -4,9 +4,17 @@
 
   system.tags = [ "server" ];
 
-  nix.settings = {
-    max-jobs = 1;
-    cores = 0;
+  nix = {
+    settings = {
+      max-jobs = 1;
+      # 2-core netcup VM: cores = 0 meant "all of them", so a single build could
+      # take the whole box out from under cloudflared. Leave one core free.
+      cores = 1;
+      max-substitution-jobs = 2;
+      http-connections = 8;
+    };
+    daemonCPUSchedPolicy = "idle";
+    daemonIOSchedClass = "idle";
   };
 
   fwupd.enable = false;
