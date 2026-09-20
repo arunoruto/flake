@@ -91,6 +91,7 @@
           "/mnt/storage"
           "/mnt/storage/media"
         ];
+        GPU_COLLECTOR = "amd_sysfs";
       };
       openFirewall = true;
     };
