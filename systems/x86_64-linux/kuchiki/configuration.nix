@@ -24,10 +24,14 @@
   networking.hostId = "7923f829";
 
   services = {
-    tailscale.tsidp = {
-      enable = false;
-      port = 41443;
-      localPort = 41080;
+    tailscale = {
+      # The lab LAN kuchiki sits on: 129.217.143.128-.191, gateway .190.
+      advertiseRoutes = [ "129.217.143.128/26" ];
+      tsidp = {
+        enable = false;
+        port = 41443;
+        localPort = 41080;
+      };
     };
     cloudflared = {
       enable = true;

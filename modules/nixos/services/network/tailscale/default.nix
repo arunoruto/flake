@@ -16,6 +16,17 @@
       default = null;
       description = "Tailnet name for Tailscale.";
     };
+
+    advertiseRoutes = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
+      example = [ "192.168.1.0/24" ];
+      description = ''
+        Physical subnets this host makes reachable from the tailnet.
+        Routes still have to be approved in the admin console before
+        peers will use them.
+      '';
+    };
   };
 
   config =
@@ -47,9 +58,15 @@
               "--exit-node-allow-lan-access"
             ]
         );
-        extraSetFlags = lib.optionals (config.lib.tags.hasTag "server") [
-          "--advertise-exit-node"
-        ];
+        extraSetFlags =
+          lib.optionals (config.lib.tags.hasTag "server") [
+            "--advertise-exit-node"
+          ]
+          # `set` replaces the whole route list, so this is also what
+          # retracts stale app-connector routes on activation.
+          ++ lib.optional (
+            cfg.advertiseRoutes != [ ]
+          ) "--advertise-routes=${lib.concatStringsSep "," cfg.advertiseRoutes}";
         permitCertUid = if config.services.traefik.enable then "traefik" else null;
       };
 
