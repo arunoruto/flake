@@ -17,7 +17,6 @@
       enable = true;
       gpu.enable = true;
     };
-    intel.gpu.enable = true;
     # nvidia.enable = true;
     zfs.enable = true;
   };
