@@ -39,6 +39,16 @@
     });
     networkmanager = {
       unmanaged = map (name: "interface-name:${name}") config.networking.bridges.br0.interfaces;
+      # wlo1 and br0 both sit on the LAN subnet. NetworkManager gives wifi a route
+      # metric of 600, which beats the 1009 dhcpcd assigns br0, so the host answered
+      # br0's own bridge members (the incus VMs) out over the wifi -- an asymmetric
+      # path the AP does not hairpin, leaving host <-> VM traffic dead. Push wifi
+      # below br0 so the wired bridge wins and the path stays symmetric.
+      settings."connection-wifi-lowprio" = {
+        match-device = "type:wifi";
+        "ipv4.route-metric" = 2000;
+        "ipv6.route-metric" = 2000;
+      };
     };
   };
   virtualisation.incus = {
@@ -126,6 +136,11 @@
       localPort = 41080;
     };
     stump.enable = true;
+    mayberry = {
+      enable = true;
+      libraryPath = "/mnt/flash/books";
+      branchName = "cryo-${config.networking.hostName}";
+    };
     bindery.enable = true;
     # komga.enable = true;
     # immich = {
