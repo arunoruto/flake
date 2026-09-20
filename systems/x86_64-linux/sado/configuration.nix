@@ -2,10 +2,26 @@
 {
   users.primaryUser = "mirza";
 
-  nix.settings = {
-    max-jobs = 1;
-    cores = 2;
+  nix = {
+    settings = {
+      max-jobs = 1;
+      cores = 2;
+      # cores/max-jobs only govern *builds*. A switch that is mostly cache hits
+      # spends its time decompressing NARs instead, and the defaults (16 and 25)
+      # will saturate all four cores while max-jobs sits at 1 doing nothing.
+      max-substitution-jobs = 4;
+      http-connections = 8;
+    };
+    # cores= is advisory: it sets $NIX_BUILD_CORES, but nproc inside the sandbox
+    # still reports 4, so ninja/cargo/go builds ignore it. These two propagate to
+    # the build processes and make them yield to anything interactive.
+    daemonCPUSchedPolicy = "idle";
+    daemonIOSchedClass = "idle";
   };
+
+  # Hard ceiling for the builds that ignore $NIX_BUILD_CORES anyway: builders are
+  # forked from the daemon, so they land in this unit's cgroup.
+  systemd.services.nix-daemon.serviceConfig.CPUQuota = "200%";
 
   system.tags = [
     "nas"
