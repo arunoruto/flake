@@ -28,6 +28,23 @@ switch target=host:
 home user=env_var("USER"):
     nh home switch . -c {{ user }}
 
+# ── inspect ─────────────────────────────────────────────────────────
+
+# seenix.dev draws a closure one pixel per byte, but nothing built here is in a
+# public cache, so it cannot fetch a system by name -- hand it the JSON instead.
+# Paths no cache it can reach holds come out hatched in grey. Name several roots
+# to put them on one map, e.g. the running system against one nh just built.
+
+# Write a closure as path-info JSON and open seenix.dev to drop it on
+seenix *roots="/run/current-system":
+    #!/usr/bin/env bash
+    set -euo pipefail
+    read -ra roots <<< "{{ roots }}"
+    out="${TMPDIR:-/tmp}/seenix-$(basename "$(readlink -f "${roots[0]}")").json"
+    nix path-info --recursive --json --json-format 1 "${roots[@]}" > "$out"
+    echo "wrote $out -- drop it on the path-info JSON lane"
+    ( xdg-open https://seenix.dev/ || open https://seenix.dev/ ) >/dev/null 2>&1 || true
+
 # ── fleet (colmena; available on management-tagged hosts) ───────────
 
 # Deploy hosts with colmena, e.g. `just deploy --on madara`
