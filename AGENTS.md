@@ -43,6 +43,7 @@ Custom packages live under `legacyPackages`: `nix build .#<pkg>` (top-level) or 
 ## Conventions (not hook-enforced)
 
 - **Platform checks go through `hostPlatform`**: write `stdenv.hostPlatform.isLinux` / `.isDarwin` / `.isx86_64` — the bare `stdenv.isLinux` forms are deprecated in nixpkgs and emit evaluation warnings. The tree was swept clean of them (2026-08); don't reintroduce one.
+- **`grep` is ripgrep in interactive shells** on these machines. When giving the user commands to run by hand, use rg-compatible syntax: alternation (`"foo|bar"`) works without any flag, and GNU grep flags mean different things (`-E` is ripgrep's `--encoding` and will error). Plain GNU grep semantics only apply in non-interactive contexts (scripts, hooks, CI).
 
 ## Architecture
 
