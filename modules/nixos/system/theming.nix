@@ -45,6 +45,12 @@
       targets = {
         # lightdm.enable = true;
         qt.enable = false;
+        # The system-level target overlays gtksourceview{,4,5} with an extra
+        # postFixup, which changes their hashes and forces local rebuilds of
+        # the whole chain (libspelling, gnome-calculator, papers, sushi, ...).
+        # The home-manager target already drops the same stylix.xml into
+        # ~/.local/share/gtksourceview-*/styles, so nothing is lost.
+        gtksourceview.enable = false;
       };
     };
   };
