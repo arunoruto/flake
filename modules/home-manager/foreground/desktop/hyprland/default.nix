@@ -103,8 +103,8 @@ in
             };
 
             input = {
-              kb_layout = config.keyboard.layout;
-              kb_variant = config.keyboard.variant;
+              kb_layout = config.home.keyboard.layout;
+              kb_variant = config.home.keyboard.variant;
 
               follow_mouse = 1;
               sensitivity = 0; # -1.0 - 1.0, 0 means no modification.

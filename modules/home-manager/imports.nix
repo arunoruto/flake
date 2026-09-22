@@ -52,7 +52,8 @@ in
         development.enable = lib.mkDefault (hasTag "development");
       };
       # hostname = lib.mkDefault osConfig.networking.hostName;
-      keyboard = {
+      # home-manager's own keyboard options, mirrored from the system's XKB.
+      home.keyboard = {
         layout = lib.mkDefault osConfig.services.xserver.xkb.layout;
         variant = lib.mkDefault osConfig.services.xserver.xkb.variant;
       };

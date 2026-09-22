@@ -14,7 +14,6 @@
     ./terminal
 
     ./avatar.nix
-    ./input.nix
   ];
 
   options.foreground.enable = lib.mkEnableOption "PC config";
