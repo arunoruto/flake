@@ -35,13 +35,17 @@ the module — home-manager only defaults to Lua from stateVersion 26.05 on.
 
 Everything lands in `modules/home-manager/foreground/desktop/hyprland/`:
 
-| File         | What it owns                                        |
-| ------------ | --------------------------------------------------- |
-| `default.nix`| compositor settings, session plumbing, must-haves    |
-| `binds.nix`  | every keybind, plus the `resize` submap              |
-| `lock.nix`   | hyprlock                                            |
-| `idle.nix`   | hypridle                                            |
-| `paper.nix`  | hyprpaper (stylix drives the wallpaper)              |
+| File         | What it owns                                        | Applies when                          |
+| ------------ | --------------------------------------------------- | ------------------------------------- |
+| `default.nix`| compositor settings, session plumbing, must-haves    | `wayland.windowManager.hyprland.enable` |
+| `binds.nix`  | every keybind, plus the `resize` submap              | `wayland.windowManager.hyprland.enable` |
+| `lock.nix`   | hyprlock                                            | `programs.hyprlock.enable`            |
+| `idle.nix`   | hypridle                                            | `services.hypridle.enable`            |
+| `paper.nix`  | hyprpaper (stylix drives the wallpaper)              | `services.hyprpaper.enable`           |
+
+There are no custom toggles: each file attaches to home-manager's own switch,
+and `default.nix` turns those on. To drop a piece on one host, turn its
+upstream switch off (e.g. `services.hypridle.enable = false;`).
 
 ## Binds
 
@@ -90,7 +94,7 @@ hyprctl repl                      # interactive Lua against the live compositor
 
 ### Current bindings
 
-`SUPER` throughout (`hypr.binds.modifier`).
+`SUPER` throughout (the `mod` binding at the top of `binds.nix`).
 
 | Keys                        | Action                                  |
 | --------------------------- | --------------------------------------- |
@@ -189,6 +193,6 @@ without it, unlocking silently falls back to `su`), **hypridle**,
 `hyprpicker` and `brightnessctl` on `PATH`.
 
 Not enabled, but packaged if you want them: `waybar` (a config already exists
-in `bars/waybar`, gated behind `bars.waybar.enable`), the quickshell-based
+in `bars/waybar` and applies whenever `programs.waybar.enable` is on), the quickshell-based
 shells `caelestia-shell` / `noctalia-shell` / `dms`, `hyprpanel`,
 `hyprlauncher`, `hyprsunset`, `hyprshell`, `cliphist`, `wlogout`.

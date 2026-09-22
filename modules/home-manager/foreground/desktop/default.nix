@@ -19,12 +19,9 @@
   options.desktop.enable = lib.mkEnableOption "Enable desktop config";
 
   config = lib.mkIf config.desktop.enable {
-    gnome.enable = lib.mkDefault true;
-    # hyprland follows the NixOS toggle (see hyprland/default.nix), the same
-    # way niri does -- a host that has no Hyprland session has no reason to
-    # carry its config, services and packages.
-    wayland.windowManager.sway.enable = lib.mkDefault false;
-    xdg.portal.enable = lib.mkDefault true;
+    # GNOME, Hyprland, sway and niri each follow their NixOS session toggle
+    # from inside their own directory -- a host without the session has no
+    # reason to carry its config, services and packages.
 
     home.packages =
       (with pkgs; [

@@ -2,25 +2,35 @@
   lib,
   pkgs,
   config,
+  osConfig ? null,
   ...
 }:
+let
+  # GNOME's home config follows the GNOME session, the same way the
+  # compositors follow theirs. Standalone home-manager has no system to ask
+  # and keeps the old "any Linux desktop" default.
+  hasGnome =
+    if osConfig != null then
+      osConfig.services.desktopManager.gnome.enable or false
+    else
+      config.desktop.enable;
+in
 {
   imports = [
-    ./dconf.nix
-    ./theming.nix
+    ./dconf.nix # gated on the same session test
   ];
 
-  options.gnome.enable = lib.mkEnableOption "Enable custom GNOME config";
-
-  config = lib.mkIf config.gnome.enable {
-    gnome = {
-      dconf.enable = lib.mkDefault true;
-      theming.enable = lib.mkDefault true;
+  config = lib.mkIf hasGnome {
+    gtk = {
+      enable = true;
+      gtk4.theme = lib.mkDefault null;
     };
 
-    dconf.enable = lib.mkForce config.gnome.dconf.enable;
-
+    # The session that brings portal backends is the one that turns portals
+    # on; a blanket default elsewhere left hosts without GNOME enabled but
+    # with no backend, which home-manager rejects.
     xdg.portal = {
+      enable = lib.mkDefault true;
       extraPortals = with pkgs; [
         xdg-desktop-portal-gtk
         xdg-desktop-portal-gnome

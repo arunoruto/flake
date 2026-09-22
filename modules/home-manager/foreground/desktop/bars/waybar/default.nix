@@ -1,22 +1,18 @@
+# This flake's bar layout, applied whenever home-manager's own
+# `programs.waybar.enable` is on -- there is no separate switch for it.
 {
   lib,
   config,
   ...
 }:
 {
-  imports = [
-  ];
-
-  options.bars.waybar.enable = lib.mkEnableOption "Enable waybar config";
-
-  config = lib.mkIf config.bars.waybar.enable {
+  config = lib.mkIf config.programs.waybar.enable {
     # stylix.targets.waybar = {
     #   enableLeftBackColors = true;
     #   enableCenterBackColors = true;
     #   enableRightBackColors = true;
     # };
     programs.waybar = {
-      enable = lib.mkDefault true;
       settings = {
         mainBar = {
           layer = "top";
@@ -102,8 +98,9 @@
               #"focused" = "";
               "default" = "";
             };
-            on-scroll-up = "hyprctl dispatch workspace e+1";
-            on-scroll-down = "hyprctl dispatch workspace e-1";
+            # Hyprland >= 0.55: `hyprctl dispatch` takes a Lua expression.
+            on-scroll-up = "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })'";
+            on-scroll-down = "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })'";
           };
 
           pulseaudio = {

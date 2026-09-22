@@ -32,8 +32,9 @@
         enable = lib.mkDefault true;
         main = "ghostty";
       };
-      # Bars are enabled per compositor through `bars.*` (desktop/bars/), not
-      # here: GNOME draws its own panel, so installing them on every Linux GUI
-      # host only carried binaries with nothing to run them.
+      # Bars are opt-in through their own `programs.<name>.enable`
+      # (desktop/bars/), not defaulted here: GNOME draws its own panel, so
+      # installing them on every Linux GUI host only carried binaries with
+      # nothing to run them.
     };
 }

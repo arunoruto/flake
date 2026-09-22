@@ -3,6 +3,8 @@
   config,
   ...
 }:
+# hypridle settings, applied whenever home-manager's `services.hypridle` is on
+# (hyprland/default.nix turns it on).
 let
   # hypridle is its own project and still reads hyprlang -- only the
   # compositor moved to Lua. What did change is `hyprctl dispatch`, which now
@@ -10,11 +12,8 @@ let
   dpms = action: "hyprctl dispatch 'hl.dsp.dpms({ action = \"${action}\" })'";
 in
 {
-  options.hypr.idle.enable = lib.mkEnableOption "Configure hypridle";
-
-  config = lib.mkIf config.hypr.idle.enable {
+  config = lib.mkIf config.services.hypridle.enable {
     services.hypridle = {
-      enable = true;
       settings = {
         general = {
           after_sleep_cmd = dpms "enable";

@@ -1,3 +1,5 @@
+# hyprlock settings, applied whenever home-manager's `programs.hyprlock` is on
+# (hyprland/default.nix turns it on; the lock keybind lives in binds.nix).
 {
   config,
   pkgs,
@@ -9,11 +11,8 @@ let
   font = config.stylix.fonts.monospace.name;
 in
 {
-  options.hypr.lock.enable = lib.mkEnableOption "Custom hyprlock";
-
-  config = lib.mkIf config.hypr.lock.enable {
+  config = lib.mkIf config.programs.hyprlock.enable {
     programs.hyprlock = {
-      enable = true;
       package = pkg;
       settings = {
         general = {
@@ -87,19 +86,5 @@ in
         ];
       };
     };
-
-    # Locking goes through logind so that `loginctl lock-session` and the idle
-    # timeout in idle.nix end up on the same path (hypridle runs `lock_cmd`).
-    wayland.windowManager.hyprland.settings.bind = [
-      {
-        _args = [
-          # Not SHIFT+L: that is "move window right" in binds.nix, and binds on
-          # the same key all fire, in order.
-          "${config.hypr.binds.modifier} + ALT + L"
-          (lib.generators.mkLuaInline ''hl.dsp.exec_cmd("loginctl lock-session")'')
-          { description = "Lock session"; }
-        ];
-      }
-    ];
   };
 }

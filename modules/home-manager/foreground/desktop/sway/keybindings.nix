@@ -36,9 +36,7 @@ let
   ws0 = "number 10";
 in
 {
-  options.sway.keybindings.enable = lib.mkEnableOption "Custom sway keybindings";
-
-  config = lib.mkIf config.sway.keybindings.enable {
+  config = lib.mkIf config.wayland.windowManager.sway.enable {
     wayland.windowManager.sway = {
       config = rec {
         defaultWorkspace = "workspace ${ws1}";
@@ -102,8 +100,8 @@ in
           "${modifier}+r" = "mode resize";
 
           # Brightness
-          "XF86MonBrightnessDown" = "exec light -U 5";
-          "XF86MonBrightnessUp" = "exec light -A 5";
+          "XF86MonBrightnessDown" = "exec ${lib.getExe pkgs.brightnessctl} set 5%-";
+          "XF86MonBrightnessUp" = "exec ${lib.getExe pkgs.brightnessctl} set 5%+";
 
           # Volume
           "XF86AudioRaiseVolume" = "exec 'wpctl set-volume @DEFAULT_SINK@ 5%+ -l 1.0'";

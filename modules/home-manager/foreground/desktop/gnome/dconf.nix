@@ -1,12 +1,22 @@
+# GNOME's dconf settings; same session test as default.nix.
 {
   lib,
   config,
+  osConfig ? null,
   ...
 }:
+let
+  # GNOME's home config follows the GNOME session, the same way the
+  # compositors follow theirs. Standalone home-manager has no system to ask
+  # and keeps the old "any Linux desktop" default.
+  hasGnome =
+    if osConfig != null then
+      osConfig.services.desktopManager.gnome.enable or false
+    else
+      config.desktop.enable;
+in
 {
-  options.gnome.dconf.enable = lib.mkEnableOption "Configure GNOME thorugh custom dconf";
-
-  config = lib.mkIf config.gnome.dconf.enable {
+  config = lib.mkIf hasGnome {
     dconf.settings = {
       # "org/gnome/shell" = { };
       # Time zone settings

@@ -17,8 +17,8 @@
   ...
 }:
 let
-  cfg = config.hypr.binds;
-  mod = cfg.modifier;
+  # The modifier every window-management bind hangs off.
+  mod = "SUPER";
 
   inherit (lib.generators) mkLuaInline;
 
@@ -91,18 +91,7 @@ let
   ) (lib.range 1 10);
 in
 {
-  options.hypr.binds = {
-    enable = lib.mkEnableOption "Custom hyprland keybindings";
-
-    modifier = lib.mkOption {
-      type = lib.types.str;
-      default = "SUPER";
-      example = "ALT";
-      description = "Modifier every window-management bind hangs off.";
-    };
-  };
-
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf config.wayland.windowManager.hyprland.enable {
     wayland.windowManager.hyprland = {
       settings.bind = [
         # Launching
@@ -204,7 +193,13 @@ in
       ]
       ++ focusBinds
       ++ moveBinds
-      ++ workspaceBinds;
+      ++ workspaceBinds
+      # Through logind, so this and hypridle's timeout share one path
+      # (hypridle runs `lock_cmd`). Not SHIFT+L: that is "move window right"
+      # above, and binds on the same key all fire, in order.
+      ++ lib.optional config.programs.hyprlock.enable (
+        bind "${mod} + ALT + L" (exec "loginctl lock-session") { description = "Lock session"; }
+      );
 
       # A submap is a second keymap: everything inside it is only live while
       # the submap is active, and `onDispatch = "reset"` would drop back out

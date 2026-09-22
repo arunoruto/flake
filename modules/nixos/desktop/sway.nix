@@ -85,8 +85,9 @@ in
       ];
     };
 
-    # If you are on a laptop, you can set up brightness and volume function keys as follows:
-    programs.light.enable = true;
+    # Brightness keys on laptops. (`programs.light` is gone from nixpkgs --
+    # the package was unmaintained; the keybindings use brightnessctl.)
+    hardware.acpilight.enable = lib.mkDefault true;
 
     # Disable fringerprint login
     # https://discourse.nixos.org/t/swaylock-wont-unlock/27275/3

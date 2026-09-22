@@ -1,9 +1,12 @@
+# Bars and shells. Each directory attaches this flake's layout to
+# home-manager's own `programs.<name>.enable`; none of them is on by default
+# (GNOME draws its own panel), so a compositor module or host turns on the
+# one it uses.
 {
   config,
   pkgs,
   lib,
   ...
-  # }@args:
 }:
 {
   imports = [
@@ -11,27 +14,13 @@
     ./waybar
   ];
 
-  # config = lib.mkIf (args ? nixosConfig) {
-  config = lib.mkIf config.foreground.enable {
-    bars = {
-      eww.enable = lib.mkDefault false;
-      waybar.enable = lib.mkDefault false;
-    };
-
-    programs = {
-      quickshell = {
-        # Opt-in: it is a whole desktop shell, and with `configs` empty there
-        # is nothing for it to load anyway.
-        enable = lib.mkDefault false;
-        package = lib.mkDefault pkgs.unstable.quickshell;
-        activeConfig = lib.mkDefault "caelestia";
-        # config-name = lib.mkDefault "caelestia";
-        # graphical-session.target, not hyprland-session.target: under uwsm the
-        # latter does not exist (see hyprland/default.nix).
-        systemd.target = lib.mkDefault config.wayland.systemd.target;
-
-        # caelestia.enable = lib.mkDefault true;
-      };
+  config = lib.mkIf config.programs.quickshell.enable {
+    programs.quickshell = {
+      package = lib.mkDefault pkgs.unstable.quickshell;
+      activeConfig = lib.mkDefault "caelestia";
+      # graphical-session.target, not hyprland-session.target: under uwsm the
+      # latter does not exist (see hyprland/default.nix).
+      systemd.target = lib.mkDefault config.wayland.systemd.target;
     };
   };
 }

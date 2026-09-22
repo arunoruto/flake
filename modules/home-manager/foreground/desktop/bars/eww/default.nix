@@ -1,3 +1,5 @@
+# This flake's eww widgets, applied whenever home-manager's own
+# `programs.eww.enable` is on -- there is no separate switch for them.
 {
   config,
   lib,
@@ -5,16 +7,13 @@
   ...
 }:
 {
-  options.bars.eww.enable = lib.mkEnableOption "Enable eww bar";
+  config = lib.mkIf config.programs.eww.enable {
+    programs.eww.package = lib.mkDefault pkgs.unstable.eww;
 
-  config = lib.mkIf config.bars.eww.enable {
-    programs.eww = {
-      enable = lib.mkDefault true;
-      package = pkgs.unstable.eww;
-      # enableZshIntegration = true;
-      # configDir = "~/.config/eww";
-      # configDir = config.home.homeDirectory + "/.config/eww";
-      configDir = ./config;
-    };
+    # home-manager dropped `programs.eww.configDir` for single-file
+    # `yuckConfig`/`scssConfig`, which cannot carry eww.scss's
+    # `@import "./palette.scss"` or scripts/. Link the directory the way
+    # configDir used to.
+    xdg.configFile."eww".source = ./config;
   };
 }

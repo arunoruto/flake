@@ -42,13 +42,6 @@ in
     { wayland.windowManager.hyprland.enable = lib.mkDefault hasHyprland; }
 
     (lib.mkIf cfg.enable {
-      hypr = {
-        binds.enable = lib.mkDefault true;
-        idle.enable = lib.mkDefault true;
-        lock.enable = lib.mkDefault true;
-        paper.enable = lib.mkDefault true;
-      };
-
       wayland.windowManager.hyprland = {
         # Hyprland and xdph come from the NixOS module. Installing a second
         # copy here is how you end up running two builds against one portal.
@@ -204,7 +197,12 @@ in
         }
       ];
 
-      programs.wofi.enable = true;
+      # idle.nix, lock.nix and paper.nix configure these against the same
+      # switches, so turning one off here is all it takes.
+      programs = {
+        wofi.enable = true;
+        hyprlock.enable = lib.mkDefault true;
+      };
 
       # Upstream's "must-have" list: an authentication agent and a notification
       # daemon. Without the latter, apps that wait on org.freedesktop.
@@ -215,6 +213,8 @@ in
       services = {
         hyprpolkitagent.enable = lib.mkDefault true;
         mako.enable = lib.mkDefault true;
+        hypridle.enable = lib.mkDefault true;
+        hyprpaper.enable = lib.mkDefault true;
       };
 
       home.packages = with pkgs; [
