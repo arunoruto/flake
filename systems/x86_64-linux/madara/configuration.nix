@@ -225,6 +225,8 @@
   };
   environment.systemPackages = with pkgs; [
     signal-desktop
+    # Linux desktop app, on trial here before it goes to the other hosts
+    claude-desktop
   ];
   networking = {
     nameservers = [
