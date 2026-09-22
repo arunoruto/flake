@@ -5,13 +5,13 @@
   ...
 }:
 {
-  options.keyboard.eurkey.enable =
-    lib.mkEnableOption "Install EurKey keyboard layout system-wide"
+  options.programs.eurkey.enable =
+    lib.mkEnableOption "the EurKey keyboard layout, installed system-wide"
     // {
       default = true;
     };
 
-  config = lib.mkIf config.keyboard.eurkey.enable {
+  config = lib.mkIf config.programs.eurkey.enable {
     # Copy EurKey files to system-wide keyboard layouts directory
     # macOS requires actual files, not symlinks
     system.activationScripts.postActivation.text = lib.mkAfter ''
