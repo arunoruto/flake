@@ -1,3 +1,4 @@
+# Mopidy's extensions, whenever `services.mopidy` is on.
 {
   config,
   lib,
@@ -5,17 +6,10 @@
   ...
 }:
 {
-  options = {
-    mopidy.enable = lib.mkEnableOption "Enable mopidy";
-  };
-
-  config = lib.mkIf config.mopidy.enable {
-    services.mopidy = {
-      enable = true;
-      extensionPackages = with pkgs; [
-        mopidy-mpd
-        mopidy-ytmusic
-      ];
-    };
+  config = lib.mkIf config.services.mopidy.enable {
+    services.mopidy.extensionPackages = with pkgs; [
+      mopidy-mpd
+      mopidy-ytmusic
+    ];
   };
 }

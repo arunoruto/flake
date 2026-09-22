@@ -6,11 +6,10 @@
 }:
 {
   imports = [ ./lichess.nix ];
-  options.gaming.chess.enable = lib.mkEnableOption "Enable chess games.";
-
-  config = lib.mkIf config.gaming.chess.enable {
+  # Our lichess-bot account, engine and token, whenever
+  # `services.lichess-bot` (./lichess.nix) is on.
+  config = lib.mkIf config.services.lichess-bot.enable {
     services.lichess-bot = {
-      enable = true;
       package = pkgs.unstable.lichess-bot;
       settings = {
         url = "https://lichess.org/";

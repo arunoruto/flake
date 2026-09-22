@@ -9,7 +9,7 @@
 
   # imports = [ "${inputs.nixpkgs-unstable.outPath}/nixos/modules/hardware/fw-fanctrl.nix" ];
   colmena.deployment.allowLocalDeployment = lib.mkDefault true;
-  gaming.chess.enable = lib.mkDefault true;
+  services.lichess-bot.enable = lib.mkDefault true;
 
   system.tags = [
     "laptop"
