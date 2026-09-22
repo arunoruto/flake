@@ -18,7 +18,6 @@
   ];
 
   config = {
-    nix-utils.enable = true;
     programs.ssh.enable = true;
 
     home = {

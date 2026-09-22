@@ -1,5 +1,6 @@
 {
   lib,
+  pkgs,
   config,
   ...
 }:
@@ -8,9 +9,7 @@
     ./libreoffice.nix
   ];
 
-  options.documents.enable = lib.mkEnableOption "Enable document apps";
-
-  config = lib.mkIf config.documents.enable {
+  config = lib.mkIf (config.foreground.enable && pkgs.stdenv.hostPlatform.isLinux) {
     programs = {
       libreoffice.enable = lib.mkDefault true;
       onlyoffice.enable = lib.mkDefault false;

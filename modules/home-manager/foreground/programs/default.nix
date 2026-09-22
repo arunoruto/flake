@@ -15,9 +15,7 @@
     ./vscode.nix
   ];
 
-  options.pc.programs.enable = lib.mkEnableOption "Enable GUI programs";
-
-  config = lib.mkIf config.pc.programs.enable {
+  config = lib.mkIf (config.foreground.enable && pkgs.stdenv.hostPlatform.isLinux) {
     # programs.steam.geProton.enable = lib.mkDefault false;
 
     programs = {

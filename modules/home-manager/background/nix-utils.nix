@@ -37,11 +37,7 @@ let
   );
 in
 {
-  options = {
-    nix-utils.enable = lib.mkEnableOption "Helpful nix utils";
-  };
-
-  config = lib.mkIf config.nix-utils.enable {
+  config = {
     nix = {
       package = lib.mkDefault pkgs.nix;
       settings = {
