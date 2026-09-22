@@ -10,7 +10,6 @@
     ./darwin-targets.nix
     ./fonts.nix
     ./icons.nix
-    ./monitors.nix
     ./pc.nix
     ./stylix.nix # Asserts stylix is configured at system level
   ];

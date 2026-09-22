@@ -1,6 +1,5 @@
 {
   lib,
-  config,
   ...
 }:
 {
@@ -8,16 +7,11 @@
     ./browsers
     ./gaming
     ./matlab
-    ./gui-packages.nix
   ];
 
-  # Host-facing toggle for GUI applications (browsers, Steam, GUI packages).
-  # Named `gui` to avoid colliding with upstream `programs.*`.
-  options.gui.enable = lib.mkEnableOption "GUI applications (browsers, Steam, ...)";
-
-  config = lib.mkIf config.gui.enable {
-    programs.packages.enable = lib.mkDefault true;
-
-    browsers.enable = lib.mkDefault true;
-  };
+  # Host-facing switch for a graphical user session: home-manager maps it
+  # onto `foreground.enable` (modules/home-manager/imports.nix), which is what
+  # installs the GUI applications. Named `gui` to avoid colliding with
+  # upstream `programs.*`.
+  options.gui.enable = lib.mkEnableOption "GUI applications for the primary user";
 }
