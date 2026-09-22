@@ -150,10 +150,15 @@ Options defined by this flake (as opposed to upstream NixOS/HM options):
 | `facter.hardwareProfiles` | `systems/hardware-profiles.nix` | Read-only: which nixos-hardware `common/` profiles this host's facter report selected |
 | `foreground.enable` | `modules/home-manager/foreground/` | GUI-facing home config |
 | `theming.{enable,scheme,image}` | `modules/home-manager/theming/`, `modules/nixos/system/theming.nix` | Stylix scheme/wallpaper |
-| `rssh.enable`, `yubikey.enable`, `cachix.enable`, `latex.enable` | `modules/nixos/**` | Feature toggles for individual services |
+| `security.yubikey.*`, `programs.{latex,cachix}.enable`, `services.bosflix.*` | `modules/nixos/**` | Individual features, under the upstream namespace they belong to |
 
 NAS behaviour follows the `nas` tag, and the TPM2 stack is driven by the
 upstream `security.tpm2.enable` (this flake just layers PKCS11/tooling on top).
 
-New custom options should be namespaced (or documented here) so they stay
-distinguishable from upstream options.
+A new option belongs under the upstream namespace it configures
+(`programs.*`, `services.*`, `security.*`, ...). Where upstream already has a
+switch for the thing, there is no new option at all: the module keys its
+settings on that switch (`lib.mkIf config.services.printing.enable`, and so
+on) and hosts set the upstream option. Only host-shaped questions -- which
+human, which tags, is there a GUI -- stay at the root, and those are the rows
+above.
