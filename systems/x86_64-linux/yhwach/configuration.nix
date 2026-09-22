@@ -140,9 +140,9 @@
     package32 = pkgs.unstable.pkgsi686Linux.gamescope-wsi;
   };
 
-  # NOTE: currently inert — yubikey.enable came from the workstation tag,
-  # which is off; set yubikey.enable = true if this box should keep it.
-  yubikey.signing = "giyu";
+  # NOTE: currently inert — security.yubikey.enable came from the workstation
+  # tag, which is off; set it to true if this box should keep it.
+  security.yubikey.signing = "giyu";
   # netbird.enable = true;
 
   # Lanzaboote secure boot: deferred until the PKI bundle is in place.

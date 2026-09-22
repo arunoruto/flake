@@ -64,7 +64,7 @@
       package = config.boot.kernelPackages.nvidiaPackages.legacy_580;
     };
   };
-  yubikey.signing = "sanemi";
+  security.yubikey.signing = "sanemi";
   # services.github-runners.YASF.enable = true;
 
   programs = {

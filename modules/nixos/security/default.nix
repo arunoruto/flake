@@ -13,14 +13,14 @@
     ./yubikey
   ];
 
-  rssh.enable = lib.mkDefault (!config.yubikey.enable && config.services.openssh.enable);
+  rssh.enable = lib.mkDefault (!config.security.yubikey.enable && config.services.openssh.enable);
   secrets.enable = lib.mkDefault true;
-  yubikey = {
-    enable = lib.mkOptionDefault false;
-    identifiers = { };
-  };
-
   security = {
+    yubikey = {
+      enable = lib.mkOptionDefault false;
+      identifiers = { };
+    };
+
     polkit.enable = true;
     sudo.package =
       if (config.lib.tags.hasTag "desktop") then

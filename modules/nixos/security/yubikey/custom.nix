@@ -14,7 +14,9 @@ let
   yubikey-up =
     let
       yubikeyIds = lib.concatStringsSep " " (
-        lib.mapAttrsToList (name: id: "[${name}]=\"${builtins.toString id}\"") config.yubikey.identifiers
+        lib.mapAttrsToList (
+          name: id: "[${name}]=\"${builtins.toString id}\""
+        ) config.security.yubikey.identifiers
       );
     in
     pkgs.writeShellApplication {
@@ -62,9 +64,10 @@ let
   };
 in
 {
-  options.yubikey.custom.enable = lib.mkEnableOption "Custom yubikey scripts for plugin in/out";
+  options.security.yubikey.custom.enable =
+    lib.mkEnableOption "Custom yubikey scripts for plugin in/out";
 
-  config = lib.mkIf config.yubikey.custom.enable {
+  config = lib.mkIf config.security.yubikey.custom.enable {
     environment.systemPackages = [
       yubikey-up
       yubikey-down

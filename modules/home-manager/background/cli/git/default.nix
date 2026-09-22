@@ -87,8 +87,8 @@ in
         };
       }
       // lib.optionalAttrs (osConfig != null) {
-        # commit.gpgsign = osConfig.yubikey.enable;
-        # user.signingkey = "${config.home.homeDirectory}/.ssh/id_${osConfig.yubikey.signing}_sign.pub";
+        # commit.gpgsign = osConfig.security.yubikey.enable;
+        # user.signingkey = "${config.home.homeDirectory}/.ssh/id_${osConfig.security.yubikey.signing}_sign.pub";
         # gpg.format = "ssh";
       };
 

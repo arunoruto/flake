@@ -18,7 +18,7 @@ in
     ./touch-detect.nix
   ];
 
-  options.yubikey = {
+  options.security.yubikey = {
     enable = lib.mkEnableOption "Enable yubikey support";
     signing = lib.mkOption {
       default = "tengen";
@@ -39,8 +39,8 @@ in
     };
   };
 
-  config = lib.mkIf config.yubikey.enable {
-    yubikey.custom.enable = lib.mkDefault false;
+  config = lib.mkIf config.security.yubikey.enable {
+    security.yubikey.custom.enable = lib.mkDefault false;
 
     environment.systemPackages = with pkgs; [
       age-plugin-yubikey
