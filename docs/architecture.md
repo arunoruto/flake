@@ -144,7 +144,6 @@ Options defined by this flake (as opposed to upstream NixOS/HM options):
 | `users.users.<u>.isAdmin` | `modules/nixos/users/` | wheel + virtualisation groups |
 | `homes.users` / `homes.enable` | `homes/nixos.nix` | Which users get home-manager |
 | `gui.enable` | `modules/nixos/programs/` | "This host has GUI applications" (feeds `foreground.enable`) |
-| `desktop-environment.enable` | `modules/nixos/desktop/` | Desktop environment stack |
 | `hosts.{desktop,laptop,workstation,development}.enable` | `modules/home-manager/imports.nix` | HM-side mirror of the tags |
 | `devix.*` | `modules/devix/` | Development environments — see the [devix](./devix/README.md) section |
 | `steamos.*` | `steamos/modules/nixos/` | Steam-machine mode — see the [steamos](./steamos/README.md) section |

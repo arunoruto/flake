@@ -1,3 +1,5 @@
+# XDG portals and wl-clipboard for `desktop`-tagged hosts. Kept apart from
+# ./default.nix so these list definitions stay last in the merge order.
 {
   pkgs,
   lib,
@@ -5,9 +7,7 @@
   ...
 }:
 {
-  options.wayland.enable = lib.mkEnableOption "Setup wayland";
-
-  config = lib.mkIf config.wayland.enable {
+  config = lib.mkIf (config.lib.tags.hasTag "desktop") {
     xdg = {
       portal = {
         enable = true;

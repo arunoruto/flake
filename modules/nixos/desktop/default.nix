@@ -1,3 +1,7 @@
+# What a `desktop`-tagged host gets: GDM and GNOME by default, the X server
+# with this flake's XKB layout, and the XDG portals (./wayland.nix). The
+# other sessions (hyprland.nix, sway.nix, niri.nix, kodi.nix) switch on with
+# their own upstream toggles.
 {
   config,
   lib,
@@ -7,51 +11,32 @@
 {
   imports = [
     ./dm
-
     ./gnome.nix
     ./hyprland.nix
     ./kodi.nix
     ./sway.nix
     ./niri.nix
-
-    ./wayland.nix
+    ./wayland.nix # portals + wl-clipboard
   ];
 
-  options.desktop-environment.enable = lib.mkEnableOption "Enable desktop environment and window manager support";
+  config = lib.mkIf (config.lib.tags.hasTag "desktop") {
+    services = {
+      displayManager.gdm.enable = lib.mkDefault true;
+      desktopManager.gnome.enable = lib.mkDefault true;
 
-  config = lib.mkIf config.desktop-environment.enable {
-    # DEs
-    services.desktopManager = {
-      gnome.enable = lib.mkDefault true;
-      cosmic.enable = lib.mkDefault false;
-      plasma6.enable = lib.mkDefault false;
-    };
-
-    # WMs
-    programs = {
-      sway.enable = lib.mkDefault false;
-      hyprland.enable = lib.mkDefault false;
-    };
-
-    # Compositor
-    wayland.enable = lib.mkDefault true;
-
-    services.xserver = {
-      desktopManager = {
-        kodi.enable = lib.mkDefault false;
+      xserver = {
+        enable = true;
+        xkb = {
+          layout = "de";
+          variant = "us";
+          # layout = "us";
+          # variant = "altgr-intl";
+        };
+        excludePackages = with pkgs; [
+          xterm
+        ];
+        exportConfiguration = true;
       };
-
-      enable = true;
-      xkb = {
-        layout = "de";
-        variant = "us";
-        # layout = "us";
-        # variant = "altgr-intl";
-      };
-      excludePackages = with pkgs; [
-        xterm
-      ];
-      exportConfiguration = true;
     };
   };
 }

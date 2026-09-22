@@ -16,10 +16,10 @@
 
     (lib.mkIf (config.steamos.enable && config.steamos.autoStart) {
       # steamos owns the login path with greetd (aliased to
-      # display-manager.service), so the desktop tag's display manager must
-      # stay out of the way. The desktop environment itself stays enabled —
-      # it is what Desktop Mode switches to.
-      display-manager.enable = false;
+      # display-manager.service), so GDM, which the desktop tag turns on by
+      # default, must stay out of the way. The desktop environment itself
+      # stays enabled — it is what Desktop Mode switches to.
+      services.displayManager.gdm.enable = false;
     })
   ];
 }

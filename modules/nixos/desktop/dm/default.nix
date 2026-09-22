@@ -1,22 +1,6 @@
 {
-  config,
-  lib,
-  ...
-}:
-{
   imports = [
-    ./gdm.nix
-    ./lightdm.nix
+    ./gdm.nix # applies whenever services.displayManager.gdm is on
+    ./lightdm.nix # applies whenever services.xserver.displayManager.lightdm is on
   ];
-
-  options = {
-    display-manager.enable = lib.mkEnableOption "Enable display manager support";
-  };
-
-  config = lib.mkIf config.display-manager.enable {
-    services = {
-      displayManager.gdm.enable = lib.mkDefault true;
-      xserver.displayManager.lightdm.enable = lib.mkDefault false;
-    };
-  };
 }
