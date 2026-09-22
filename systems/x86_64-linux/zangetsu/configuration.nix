@@ -12,9 +12,6 @@
     "gaming"
   ];
 
-  # Eanble fingerprint for framework laptop
-  fingerprint.enable = false;
-
   # LaTeX is opt-in per host (no longer part of the desktop tag)
   programs.latex.enable = true;
 
