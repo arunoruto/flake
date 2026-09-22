@@ -1,157 +1,227 @@
+# Hyprland >= 0.55 is configured in Lua, not hyprlang: the config file is
+# `hypr/hyprland.lua` and every setting is a call into the `hl` table.
+# home-manager renders `settings.<name>` as `hl.<name>(<args>)`, so:
+#
+#   settings.config     = { ... }                 ->  hl.config({ ... })
+#   settings.monitor    = [ { ... } ]             ->  hl.monitor({ ... }) per entry
+#   settings.<n>._args  = [ a b ]                 ->  hl.<n>(a, b)
+#   settings.<n>._var   = "x"                     ->  local <n> = "x"
+#   mkLuaInline "expr"                            ->  raw Lua, unquoted
+#
+# https://wiki.hypr.land/Configuring/Core/
 {
-  pkgs,
-  lib,
   config,
+  lib,
+  pkgs,
+  osConfig ? null,
   ...
 }:
+let
+  cfg = config.wayland.windowManager.hyprland;
+
+  # The NixOS module is what makes a *session* exist: the wayland session entry
+  # for the display manager, the cap_sys_nice wrapper, the portal and (with
+  # uwsm) the session units. Following it here means a host opts in exactly
+  # once, with `programs.hyprland.enable`, the same way niri does.
+  hasHyprland =
+    pkgs.stdenv.hostPlatform.isLinux
+    && osConfig != null
+    && (osConfig.programs.hyprland.enable or false);
+
+  uwsm = osConfig != null && (osConfig.programs.hyprland.withUWSM or false);
+in
 {
   imports = [
     ./binds.nix
     ./idle.nix
     ./lock.nix
     ./paper.nix
-    ./plugins
   ];
 
-  # config =
-  #   let
-  #     cfg = config.wayland.windowManager.hyprland;
-  #   in
-  #   lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
-  config =
-    let
-      cfg = config.wayland.windowManager.hyprland;
-    in
-    lib.mkIf cfg.enable {
+  config = lib.mkMerge [
+    { wayland.windowManager.hyprland.enable = lib.mkDefault hasHyprland; }
+
+    (lib.mkIf cfg.enable {
       hypr = {
-        binds.enable = true;
-        idle.enable = true;
-        lock.enable = true;
-        # panel.enable = true;
-        paper.enable = true;
-        plugins.enable = true;
+        binds.enable = lib.mkDefault true;
+        idle.enable = lib.mkDefault true;
+        lock.enable = lib.mkDefault true;
+        paper.enable = lib.mkDefault true;
       };
+
       wayland.windowManager.hyprland = {
-        # package = pkgs.unstable.hyprland;
+        # Hyprland and xdph come from the NixOS module. Installing a second
+        # copy here is how you end up running two builds against one portal.
+        package = null;
+        portalPackage = null;
+
+        # home-manager only defaults to Lua from home.stateVersion 26.05 on,
+        # and ours is pinned at 23.05 (an install-time fact, never bumped), so
+        # the modern renderer has to be asked for by name.
         configType = "lua";
+
+        # uwsm owns graphical-session.target; hyprland-session.target would
+        # race it. Without uwsm, flip this back on.
+        systemd.enable = !uwsm;
+
         settings = {
-          # monitor = ",preferred,auto,1.175";
-          monitor = lib.mkDefault ",preferred,auto,1";
+          # Fallback rule for any monitor without one of its own. Hosts
+          # override it with explicit rules -- see docs/hyprland.md.
+          monitor = lib.mkDefault [
+            {
+              output = "";
+              mode = "preferred";
+              position = "auto";
+              scale = "auto";
+            }
+          ];
 
-          general = {
-            # See https://wiki.hyprland.org/Configuring/Variables/ for more
+          config = {
+            general = {
+              gaps_in = 3;
+              gaps_out = 5;
+              border_size = 2;
+              layout = "dwindle";
+              # https://wiki.hypr.land/Configuring/Extra/Tearing/
+              allow_tearing = false;
+            };
 
-            gaps_in = 3;
-            gaps_out = 5;
-            border_size = 2;
-            # "col.active_border" = "rgba(33ccffee) rgba(00ff99ee) 45deg";
-            # "col.inactive_border" = "rgba(595959aa)";
+            decoration = {
+              rounding = 10;
 
-            layout = lib.mkDefault "dwindle";
+              blur = {
+                enabled = true;
+                size = 3;
+                passes = 1;
+                vibrancy = 0.1696;
+              };
 
-            # Please see https://wiki.hyprland.org/Configuring/Tearing/ before you turn this on
-            allow_tearing = false;
+              shadow = {
+                enabled = true;
+                range = 4;
+                render_power = 3;
+              };
+            };
+
+            animations.enabled = true;
+
+            dwindle = {
+              preserve_split = true;
+            };
+
+            input = {
+              kb_layout = config.keyboard.layout;
+              kb_variant = config.keyboard.variant;
+
+              follow_mouse = 1;
+              sensitivity = 0; # -1.0 - 1.0, 0 means no modification.
+
+              touchpad.natural_scroll = true;
+            };
+
+            # XWayland clients render blurry on fractional scales otherwise.
+            xwayland.force_zero_scaling = true;
+
+            ecosystem = {
+              no_update_news = true;
+              no_donation_nag = true;
+            };
           };
 
-          decoration = {
-            # See https://wiki.hyprland.org/Configuring/Variables/ for more
-            rounding = 10;
+          # `curve` is one of home-manager's importantPrefixes, so these are
+          # emitted before the animations that name them.
+          curve = [
+            {
+              _args = [
+                "myBezier"
+                {
+                  type = "bezier";
+                  points = [
+                    [
+                      0.05
+                      0.9
+                    ]
+                    [
+                      0.1
+                      1.05
+                    ]
+                  ];
+                }
+              ];
+            }
+          ];
 
-            blur = {
+          animation = [
+            {
+              leaf = "windows";
               enabled = true;
-              size = 3;
-              passes = 1;
-
-              vibrancy = 0.1696;
-            };
-
-            shadow = {
+              speed = 7;
+              bezier = "myBezier";
+            }
+            {
+              leaf = "windowsOut";
               enabled = true;
-              range = 4;
-              render_power = 3;
-            };
-            # "col.shadow" = "rgba(1a1a1aee)";
-          };
-
-          animations = {
-            enabled = true;
-
-            # Some default animations, see https://wiki.hyprland.org/Configuring/Animations/ for more
-
-            bezier = "myBezier, 0.05, 0.9, 0.1, 1.05";
-
-            animation = [
-              "windows, 1, 7, myBezier"
-              "windowsOut, 1, 7, default, popin 80%"
-              "border, 1, 10, default"
-              "borderangle, 1, 8, default"
-              "fade, 1, 7, default"
-              "workspaces, 1, 6, default"
-            ];
-          };
-
-          input = {
-            kb_layout = config.keyboard.layout;
-            kb_variant = config.keyboard.variant;
-            kb_model = "";
-            kb_options = "";
-            kb_rules = "";
-
-            follow_mouse = 1;
-
-            touchpad = {
-              natural_scroll = true;
-            };
-
-            sensitivity = 0; # -1.0 - 1.0, 0 means no modification.
-          };
-
-          exec = [
-            # "${lib.getExe config.programs.eww.package} open bar"
-            "killall .waybar-wrapped && ${lib.getExe config.programs.waybar.package}"
+              speed = 7;
+              bezier = "default";
+              style = "popin 80%";
+            }
+            {
+              leaf = "border";
+              enabled = true;
+              speed = 10;
+              bezier = "default";
+            }
+            {
+              leaf = "fade";
+              enabled = true;
+              speed = 7;
+              bezier = "default";
+            }
+            {
+              leaf = "workspaces";
+              enabled = true;
+              speed = 6;
+              bezier = "default";
+            }
           ];
-
-          exec-once = [
-            # "ags"
-            # "ags --config \${FLAKE}/home-manager/pc/desktop/bars/ags/config/config.js"
-            # "waybar"
-            # ''mpvpaper -o "no-audio --loop-playlist --video-aspect-override=3:2" '*' $HOME/Videos/TBATE_AnimDesktop_Vol08.mp4''
-            # ''mpvpaper -o "no-audio --loop-playlist panscan=1.0 '*' $HOME/Videos/TBATE_AnimDesktop_Vol08.mp4''
-            "wl-paste -t text --watch clipman store --no-persist"
-          ];
-
-          workspace = [
-            "1, defautName:0"
-            "2, defautName:1"
-            "3, defautName:2"
-            "4, defautName:3"
-            "5, defautName:4"
-            "6, defautName:5"
-            "7, defautName:6"
-            "8, defautName:7"
-            "9, defautName:8"
-            "10,defautName:9"
-          ];
-
-          debug.disable_logs = false;
         };
-        xwayland = {
-          enable = true;
-        };
-        extraConfig = ''
-          xwayland {
-            force_zero_scaling = true
-          }
-        '';
       };
 
-      programs.wofi.enable = pkgs.stdenv.hostPlatform.isLinux;
+      # uwsm starts the compositor from a systemd unit rather than a login
+      # shell, so home-manager's session variables have to be handed over.
+      # https://wiki.hypr.land/Useful-Utilities/uwsm/
+      xdg.configFile = lib.mkMerge [
+        (lib.mkIf uwsm {
+          "uwsm/env".source = "${config.home.sessionVariablesPackage}/etc/profile.d/hm-session-vars.sh";
+        })
+        # home-manager only writes this when it owns the Hyprland package; with
+        # the NixOS module the Lua stubs live in the system profile instead.
+        {
+          "hypr/.luarc.json".text = builtins.toJSON {
+            workspace.library = [ "/run/current-system/sw/share/hypr/stubs" ];
+            diagnostics.globals = [ "hl" ];
+          };
+        }
+      ];
 
-      xdg.portal.extraPortals = with pkgs; [ xdg-desktop-portal-hyprland ];
+      programs.wofi.enable = true;
+
+      # Upstream's "must-have" list: an authentication agent and a notification
+      # daemon. Without the latter, apps that wait on org.freedesktop.
+      # Notifications (Discord is the classic) just hang. mako is D-Bus
+      # activated rather than a unit, so a GNOME session on the same host
+      # simply keeps owning the bus name and mako never starts there.
+      # https://wiki.hypr.land/Useful-Utilities/Must-have/
+      services = {
+        hyprpolkitagent.enable = lib.mkDefault true;
+        mako.enable = lib.mkDefault true;
+      };
 
       home.packages = with pkgs; [
-        unstable.hyprpicker
-        #   mpvpaper
+        brightnessctl # the function-key binds use it
+        hyprpicker
+        hyprshot
       ];
-    };
+    })
+  ];
 }

@@ -3,6 +3,12 @@
   config,
   ...
 }:
+let
+  # hypridle is its own project and still reads hyprlang -- only the
+  # compositor moved to Lua. What did change is `hyprctl dispatch`, which now
+  # takes a Lua expression instead of a dispatcher name.
+  dpms = action: "hyprctl dispatch 'hl.dsp.dpms({ action = \"${action}\" })'";
+in
 {
   options.hypr.idle.enable = lib.mkEnableOption "Configure hypridle";
 
@@ -11,42 +17,33 @@
       enable = true;
       settings = {
         general = {
-          after_sleep_cmd = "hyprctl dispatch dpms on";
+          after_sleep_cmd = dpms "enable";
           ignore_dbus_inhibit = false;
-          lock_cmd = "hyprlock";
+          # pidof guard: without it a second lock instance stacks on the first.
+          lock_cmd = "pidof hyprlock || hyprlock";
         };
 
         listener = [
           {
             timeout = 900;
-            on-timeout = "hyprlock";
+            on-timeout = "loginctl lock-session";
           }
           {
             timeout = 1200;
-            on-timeout = "hyprctl dispatch dpms off";
-            on-resume = "hyprctl dispatch dpms on";
+            on-timeout = dpms "disable";
+            on-resume = dpms "enable";
           }
         ];
       };
-      # NOTE: 25.11
-      # systemdTarget = "hyprland-session.target";
     };
 
+    # The service binds to graphical-session.target, which a GNOME session on
+    # the same host activates too -- and there is no hyprctl to talk to there.
     systemd.user.services.hypridle = {
       Unit.ConditionEnvironment = lib.mkForce [
         "WAYLAND_DISPLAY"
         "XDG_CURRENT_DESKTOP=Hyprland"
       ];
     };
-    # let
-    #   session = "hyprland-session.target";
-    # in
-    # {
-    #   Install.WantedBy = lib.mkForce [ session ];
-    #   Unit = {
-    #     After = lib.mkForce [ session ];
-    #     PartOf = lib.mkForce [ session ];
-    #   };
-    # };
   };
 }

@@ -27,7 +27,9 @@ in
         package = lib.mkDefault pkgs.unstable.quickshell;
         activeConfig = lib.mkDefault "caelestia";
         # config-name = lib.mkDefault "caelestia";
-        systemd.target = lib.mkDefault "hyprland-session.target";
+        # graphical-session.target, not hyprland-session.target: under uwsm the
+        # latter does not exist (see hyprland/default.nix).
+        systemd.target = lib.mkDefault config.wayland.systemd.target;
 
         # caelestia.enable = lib.mkDefault true;
       };

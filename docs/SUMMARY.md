@@ -24,6 +24,7 @@
   - [Options: languages](./devix/reference/languages.md)
   - [Options: addons](./devix/reference/addons.md)
   - [Options: registries](./devix/reference/registries.md)
+- [Hyprland](./hyprland.md)
 - [Daily Usage](./daily-usage.md)
 - [Workflows & Automation](./workflows.md)
 - [Networking](./networking/README.md)

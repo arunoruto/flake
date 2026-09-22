@@ -88,9 +88,18 @@ in
       };
     };
 
+    # Locking goes through logind so that `loginctl lock-session` and the idle
+    # timeout in idle.nix end up on the same path (hypridle runs `lock_cmd`).
     wayland.windowManager.hyprland.settings.bind = [
-      "SHIFT ALT, L, exec, ${pkg}/bin/hyprlock"
-      # "$mod SHIFT, L, exec, ${pkg}"
+      {
+        _args = [
+          # Not SHIFT+L: that is "move window right" in binds.nix, and binds on
+          # the same key all fire, in order.
+          "${config.hypr.binds.modifier} + ALT + L"
+          (lib.generators.mkLuaInline ''hl.dsp.exec_cmd("loginctl lock-session")'')
+          { description = "Lock session"; }
+        ];
+      }
     ];
   };
 }

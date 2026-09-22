@@ -1,55 +1,29 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }:
 {
   config = lib.mkIf config.programs.hyprland.enable {
-    #environment.systemPackages = with pkgs; [
-    #  dbus   # make dbus-update-activation-environment available in the path
-    #  dbus-sway-environment
-    #  configure-gtk
-    #  grim # screenshot functionality
-    #  slurp # screenshot functionality
-    #  wl-clipboard # wl-copy and wl-paste for copy/paste from stdin / stdout
-    #  mako # notification system developed by swaywm maintainer
-    #  wdisplays # tool to configure displays
-    #];
+    programs.hyprland = {
+      xwayland.enable = true;
 
-    #services.dbus.enable = true;
-    #xdg.portal = {
-    #  enable = true;
-    #  wlr.enable = true;
-    #  # gtk portal needed to make gtk apps happy
-    #  #extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-    #};
-
-    programs = {
-      # Enable hyprland and xwayland
-      hyprland = {
-        # package = pkgs.unstable.hyprland;
-        xwayland.enable = true;
-      };
+      # uwsm wraps the compositor in real systemd units (graphical-session
+      # target, XDG autostart, ordered shutdown) and registers its own
+      # "Hyprland (uwsm-managed)" session entry. home-manager's competing
+      # hyprland-session.target is switched off to match -- see
+      # modules/home-manager/foreground/desktop/hyprland/default.nix.
+      withUWSM = lib.mkDefault true;
     };
 
-    # If you are on a laptop, you can set up brightness and volume function keys as follows:
+    # hyprlock authenticates through PAM. Without a stack of its own it falls
+    # back to `su` and cannot unlock the session at all; the NixOS hyprlock
+    # module is not used here because home-manager owns the hyprlock config.
+    # (fprintAuth defaults to services.fprintd.enable, so a host with a
+    # fingerprint reader picks that up on its own.)
+    security.pam.services.hyprlock = { };
+
+    # Brightness and volume function keys on laptops.
     hardware.acpilight.enable = lib.mkDefault true;
-
-    environment.systemPackages = with pkgs; [
-      hyprpaper
-      hyprlock
-    ];
-
-    # security.pam.services.hyprlock.text = ''
-    #   #
-    #   # PAM configuration file for the swaylock screen locker. By default, it includes
-    #   # the 'login' configuration file (see /etc/pam.d/login)
-    #   #
-
-    #   auth            sufficient      pam_unix.so try_first_pass likeauth nullok
-    #   auth            sufficient      ${pkgs.fprintd}/lib/security/pam_fprintd.so
-    #   auth            include         login
-    # '';
   };
 }

@@ -46,14 +46,17 @@
                 selected = cfg.${monitor.serial};
               in
               if selected.enable then
-                (builtins.concatStringsSep "," [
-                  selected.connector
-                  "preferred"
-                  "auto"
-                  (builtins.toString (selected.hyprScale or selected.rate))
-                ])
+                {
+                  output = selected.connector;
+                  mode = "preferred";
+                  position = "auto";
+                  scale = selected.hyprScale or selected.rate;
+                }
               else
-                ""
+                {
+                  output = selected.connector;
+                  disabled = true;
+                }
             ) osConfig.facter.report.hardware.monitor;
           };
         };
