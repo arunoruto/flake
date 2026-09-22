@@ -20,10 +20,18 @@
 
     dconf.enable = lib.mkForce config.gnome.dconf.enable;
 
-    xdg.portal.extraPortals = with pkgs; [
-      xdg-desktop-portal-gtk
-      xdg-desktop-portal-gnome
-    ];
+    xdg.portal = {
+      extraPortals = with pkgs; [
+        xdg-desktop-portal-gtk
+        xdg-desktop-portal-gnome
+      ];
+      # Which backend serves which interface under GNOME
+      # (gnome-portals.conf: gnome, then gtk) -- the same package the NixOS
+      # gnome module uses. Without it home-manager warns that portal loading is
+      # unconfigured; the hyprland module used to mask that by always shipping
+      # its own hyprland-portals.conf, which never applied to a GNOME session.
+      configPackages = lib.mkDefault [ pkgs.gnome-session ];
+    };
 
     home.packages =
       with pkgs.gnomeExtensions;
