@@ -5,11 +5,8 @@
   ...
 }:
 {
-  options = {
-    drives.enable = lib.mkEnableOption "Utilities for managing drives";
-  };
-
-  config = lib.mkIf config.drives.enable {
+  # Disk tooling for `nas`-tagged hosts.
+  config = lib.mkIf (config.lib.tags.hasTag "nas") {
     environment.systemPackages = with pkgs; [
       dool
       fatrace

@@ -15,8 +15,7 @@
     ./typst.nix
   ];
 
-  cachix.enable = lib.mkDefault false;
-  programs.typst.enable = config.latex.enable;
+  programs.typst.enable = config.programs.latex.enable;
 
   environment.enableAllTerminfo = true;
 }

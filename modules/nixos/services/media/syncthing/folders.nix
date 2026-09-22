@@ -11,9 +11,9 @@ in
     # https://docs.syncthing.net/users/config.html
     services.syncthing.settings = lib.mkMerge [
       # SOURCE: shinji (bosflix) — shares out to sado and kuchiki
-      (lib.mkIf config.bosflix.enable (
+      (lib.mkIf config.services.bosflix.enable (
         let
-          drivePath = builtins.toString config.bosflix.drivePath;
+          drivePath = builtins.toString config.services.bosflix.drivePath;
         in
         {
           devices.sado = {

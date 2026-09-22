@@ -5,7 +5,7 @@
   ...
 }:
 {
-  options.bosflix = {
+  options.services.bosflix = {
     enable = lib.mkEnableOption "Enable bosflix services";
 
     drivePath = lib.mkOption {
@@ -17,7 +17,7 @@
 
   config =
     let
-      cfg = config.bosflix;
+      cfg = config.services.bosflix;
       # completedPath = "/media/86336459-5d8c-448e-93c3-f3e17c00d3b9" + "/complete";
       completedPath = builtins.toString (cfg.drivePath + "/complete");
       drivePath = builtins.toString cfg.drivePath;

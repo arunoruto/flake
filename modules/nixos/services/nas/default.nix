@@ -16,7 +16,6 @@
 
   # NAS config follows the `nas` tag rather than a separate enable option.
   config = lib.mkIf (config.lib.tags.hasTag "nas") {
-    drives.enable = lib.mkDefault true;
     services.samba.enable = lib.mkDefault true;
   };
 }

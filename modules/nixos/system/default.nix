@@ -26,7 +26,6 @@
   ];
 
   config = {
-    nix-utils.enable = lib.mkDefault true;
 
     environment.systemPackages = with pkgs; [
       lsof

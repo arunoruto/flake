@@ -79,6 +79,5 @@
         };
       });
 
-      media.external-drives.enable = lib.mkDefault false;
     };
 }

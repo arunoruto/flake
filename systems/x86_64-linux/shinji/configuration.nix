@@ -17,14 +17,14 @@ in
   };
   boot.kernelPackages = pkgs.linuxPackages;
   hosts.intel.enable = true;
-  bosflix = {
-    enable = true;
-    drivePath = /media/downloads;
-  };
   # tpm.enable = true;
-  media.external-drives.enable = true;
 
   services = {
+    bosflix = {
+      enable = true;
+      drivePath = /media/downloads;
+    };
+    devmon.enable = true; # automount external drives
     xserver.desktopManager.kodi.enable = true;
     home-assistant.enable = false;
     zigbee2mqtt = {

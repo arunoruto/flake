@@ -5,11 +5,10 @@
 }:
 {
 
-  options.media.external-drives.enable = lib.mkEnableOption "Mount external drives automagically";
-
-  config = lib.mkIf config.media.external-drives.enable {
+  # Automatic mounting of external drives, whenever `services.devmon` is on
+  # (devmon turns on udisks2 by itself).
+  config = lib.mkIf config.services.devmon.enable {
     services = {
-      devmon.enable = true;
       udisks2.enable = true;
       udev.extraRules = ''
         # UDISKS_FILESYSTEM_SHARED

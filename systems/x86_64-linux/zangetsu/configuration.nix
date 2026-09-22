@@ -16,7 +16,7 @@
   fingerprint.enable = false;
 
   # LaTeX is opt-in per host (no longer part of the desktop tag)
-  latex.enable = true;
+  programs.latex.enable = true;
 
   hosts.intel.enable = true;
 

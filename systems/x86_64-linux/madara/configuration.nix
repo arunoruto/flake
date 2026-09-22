@@ -43,7 +43,6 @@
   # };
 
   # LaTeX is opt-in per host (no longer part of the desktop tag)
-  latex.enable = true;
   system.tags = [
     "desktop"
     "workstation"
@@ -69,6 +68,7 @@
   # services.github-runners.YASF.enable = true;
 
   programs = {
+    latex.enable = true;
     # distrobox.enable = true;
     matlab = {
       enable = true;

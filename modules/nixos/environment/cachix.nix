@@ -2,20 +2,19 @@
   pkgs,
   lib,
   config,
-  username,
   ...
 }:
 {
-  options.cachix.enable = lib.mkEnableOption "Use cachix to manage nix caches for packages";
+  options.programs.cachix.enable = lib.mkEnableOption "cachix, to manage nix caches for packages";
 
-  config = lib.mkIf config.cachix.enable {
+  config = lib.mkIf config.programs.cachix.enable {
     environment.systemPackages = with pkgs; [
       cachix
     ];
 
     nix.settings.trusted-users = [
       "root"
-      username
+      config.users.primaryUser
     ];
   };
 }

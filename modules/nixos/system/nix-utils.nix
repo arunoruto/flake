@@ -9,11 +9,7 @@ let
   primaryUserName = config.users.primaryUser;
 in
 {
-  options = {
-    nix-utils.enable = lib.mkEnableOption "Enable nix-utils";
-  };
-
-  config = lib.mkIf config.nix-utils.enable {
+  config = {
     environment = {
       systemPackages =
         with pkgs;
