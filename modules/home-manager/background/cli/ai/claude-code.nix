@@ -7,8 +7,8 @@
 {
   config = lib.mkIf config.programs.claude-code.enable {
     programs.claude-code = {
-      # package = pkgs.unstable.claude-code;
-      package = pkgs.custom.claude-code;
+      package = pkgs.unstable.claude-code;
+      # package = pkgs.custom.claude-code;
       # settings = {
       #   general = {
       #     previewFeatures = true;
