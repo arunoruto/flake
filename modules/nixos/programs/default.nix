@@ -6,6 +6,7 @@
   imports = [
     ./browsers
     ./gaming
+    ./gnupg.nix
     ./matlab
   ];
 
@@ -14,4 +15,7 @@
   # installs the GUI applications. Named `gui` to avoid colliding with
   # upstream `programs.*`.
   options.gui.enable = lib.mkEnableOption "GUI applications for the primary user";
+
+  # mtr needs a capability wrapper, which only the NixOS module sets up.
+  config.programs.mtr.enable = lib.mkDefault true;
 }

@@ -9,10 +9,8 @@ let
 in
 {
   imports = [
-    ./environment.nix
+    ./environment.nix # user session variables
   ];
-
-  environment.enable = true;
 
   # Allow unfree software
   # nixpkgs.config.allowUnfree = true;
