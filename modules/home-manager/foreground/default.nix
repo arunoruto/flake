@@ -32,11 +32,8 @@
         enable = lib.mkDefault true;
         main = "ghostty";
       };
-
-      programs = {
-        autorandr.enable = lib.mkDefault default;
-        eww.enable = lib.mkDefault default;
-        waybar.enable = lib.mkDefault default;
-      };
+      # Bars are enabled per compositor through `bars.*` (desktop/bars/), not
+      # here: GNOME draws its own panel, so installing them on every Linux GUI
+      # host only carried binaries with nothing to run them.
     };
 }

@@ -9,7 +9,7 @@
 
   config = lib.mkIf config.bars.eww.enable {
     programs.eww = {
-      # enable = true;
+      enable = lib.mkDefault true;
       package = pkgs.unstable.eww;
       # enableZshIntegration = true;
       # configDir = "~/.config/eww";

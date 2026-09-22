@@ -5,9 +5,6 @@
   ...
   # }@args:
 }:
-let
-  isLinux = pkgs.stdenv.hostPlatform.isLinux;
-in
 {
   imports = [
     ./eww
@@ -23,7 +20,9 @@ in
 
     programs = {
       quickshell = {
-        enable = lib.mkDefault isLinux; # Quickshell only works on Linux
+        # Opt-in: it is a whole desktop shell, and with `configs` empty there
+        # is nothing for it to load anyway.
+        enable = lib.mkDefault false;
         package = lib.mkDefault pkgs.unstable.quickshell;
         activeConfig = lib.mkDefault "caelestia";
         # config-name = lib.mkDefault "caelestia";

@@ -33,6 +33,17 @@
       ];
     }
 
+    # Stylix enables its KDE target whether or not Plasma exists: it installs
+    # a look-and-feel package, runs plasma-apply-lookandfeel on every
+    # activation and prepends a kdeglobals dir to XDG_CONFIG_DIRS. Tie it to
+    # the Plasma session when there is a system to ask. (Qt apps are themed by
+    # the separate qt target either way.)
+    (lib.mkIf (osConfig != null) {
+      stylix.targets.kde.enable = lib.mkDefault (
+        osConfig.services.desktopManager.plasma6.enable or false
+      );
+    })
+
     # Standalone home-manager only: map the theming options onto stylix the
     # same way the NixOS system module does. Under NixOS/Darwin these come
     # from the system, so we must not set them here (osConfig != null).

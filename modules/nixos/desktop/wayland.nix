@@ -11,10 +11,10 @@
     xdg = {
       portal = {
         enable = true;
-        # Hyprland ships its own portal (xdph, pulled in by the NixOS module)
-        # and the two fight over the screencast interface, so the wlroots
-        # portal is only for the other wlr compositors (sway).
-        wlr.enable = lib.mkDefault (!config.programs.hyprland.enable);
+        # The wlroots portal is for sway. GNOME and niri use the gnome portal
+        # and Hyprland ships its own (xdph) that would fight it over
+        # screencasting, so it follows sway instead of defaulting on.
+        wlr.enable = lib.mkDefault config.programs.sway.enable;
         # `xdg.portal.wlr.enable` adds xdg-desktop-portal-wlr by itself.
         extraPortals =
           with pkgs;

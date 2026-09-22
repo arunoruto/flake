@@ -16,7 +16,7 @@
     #   enableRightBackColors = true;
     # };
     programs.waybar = {
-      # enable = true;
+      enable = lib.mkDefault true;
       settings = {
         mainBar = {
           layer = "top";
