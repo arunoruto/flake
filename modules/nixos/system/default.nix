@@ -27,7 +27,6 @@
 
   config = {
     nix-utils.enable = lib.mkDefault true;
-    secureboot.enable = lib.mkDefault false;
 
     environment.systemPackages = with pkgs; [
       lsof

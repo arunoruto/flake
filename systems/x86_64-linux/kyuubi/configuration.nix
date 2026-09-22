@@ -25,14 +25,10 @@ in
   ];
 
   gui.enable = true; # Enable GUI programs (browsers, etc.)
-  printing.enable = true;
-  scanning.enable = true;
   system.tags = [ "workstation" ];
 
   # Define your hostname.
   # networking.hostName = lib.mkForce "kyuubi";
-
-  nfs.enable = true;
 
   # Disable Autosuspend for USB Bluetooth dongles
   boot = {
@@ -42,8 +38,12 @@ in
     '';
   };
 
-  # Enable SSH Daemon
   services = {
+    printing.enable = true;
+    ipp-usb.enable = true; # driverless scanning; turns on SANE too
+    nfs.server.enable = true;
+
+    # Enable SSH Daemon
     # openssh = {
     #   enable = true;
     #   # require public key authentication for better security

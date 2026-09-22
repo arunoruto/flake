@@ -17,8 +17,6 @@
     daemonIOSchedClass = "idle";
   };
 
-  fwupd.enable = false;
-
   swapDevices = [
     {
       device = "/var/lib/swapfile";
@@ -27,6 +25,7 @@
   ];
 
   services = {
+    fwupd.enable = false;
     cloudflared = {
       enable = true;
       defaultDomain = "arnaut.me";

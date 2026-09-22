@@ -1,23 +1,16 @@
+# Brother drivers, applied whenever `services.printing` (CUPS) is on.
 {
-  pkgs,
   config,
   lib,
+  pkgs,
   ...
 }:
 {
-  options = {
-    printing.enable = lib.mkEnableOption "Enable printing support";
-  };
-
-  config = lib.mkIf config.printing.enable {
-    # Enable the printing service
-    services.printing = {
-      enable = true;
-      drivers = with pkgs; [
-        brlaser
-        brgenml1lpr
-        brgenml1cupswrapper
-      ];
-    };
+  config = lib.mkIf config.services.printing.enable {
+    services.printing.drivers = with pkgs; [
+      brlaser
+      brgenml1lpr
+      brgenml1cupswrapper
+    ];
   };
 }

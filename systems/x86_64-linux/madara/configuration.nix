@@ -42,8 +42,6 @@
   #   cudaCapabilities = [ "6.1" ];
   # };
 
-  printing.enable = true;
-  scanning.enable = true;
   # LaTeX is opt-in per host (no longer part of the desktop tag)
   latex.enable = true;
   system.tags = [
@@ -69,7 +67,6 @@
   };
   yubikey.signing = "sanemi";
   # services.github-runners.YASF.enable = true;
-  nfs.enable = true;
 
   programs = {
     # distrobox.enable = true;
@@ -84,6 +81,9 @@
   };
   # virtualisation.incus.enable = true;
   services = {
+    printing.enable = true;
+    ipp-usb.enable = true; # driverless scanning; turns on SANE too
+    nfs.server.enable = true;
     ai.enable = false;
     open-webui.enable = lib.mkForce false;
     ollama = {

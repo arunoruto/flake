@@ -5,14 +5,13 @@
     ./fwupd.nix
     ./input
     ./printing.nix
-    ./scanning.nix
-    ./ssd.nix
   ];
 
-  fwupd.enable = lib.mkDefault true;
-  printing.enable = lib.mkDefault false;
-  scanning.enable = lib.mkDefault false;
-
-  drive-optimizations.enable = lib.mkDefault true;
-  # ssd.enable = lib.mkDefault true;
+  # On for every host unless it opts out; printing.nix and fwupd.nix add
+  # their settings whenever the upstream service is on. (Scanning needs no
+  # module: services.ipp-usb turns on SANE and the airscan backend itself.)
+  services = {
+    fwupd.enable = lib.mkDefault true;
+    fstrim.enable = lib.mkDefault true;
+  };
 }

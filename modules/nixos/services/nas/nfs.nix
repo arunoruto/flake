@@ -1,14 +1,13 @@
+# Fixed NFSv3 ports and the matching firewall holes, whenever the NFS server
+# is on. (Server only: nothing here configures NFS client mounts.)
 {
   config,
   lib,
   ...
 }:
 {
-  options.nfs.enable = lib.mkEnableOption "NFS Settings for Server and Client";
-
-  config = lib.mkIf config.nfs.enable {
+  config = lib.mkIf config.services.nfs.server.enable {
     services.nfs.server = {
-      enable = true;
       # fixed rpc.statd port; for firewall
       lockdPort = 4001;
       mountdPort = 4002;

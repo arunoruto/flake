@@ -37,7 +37,7 @@ The generic `installer.nix` module:
 - Provides an `autoinstall` systemd oneshot (triggers when `autoinstall` is in
   `/proc/cmdline`); it refreshes an existing `facter.json` automatically, but
   never introduces one on hosts that do not carry a report
-- For lanzaboote hosts (`secureboot.enable`): ships `sbctl` plus a `create-sb-keys`
+- For lanzaboote hosts (`boot.lanzaboote.enable`): ships `sbctl` plus a `create-sb-keys`
   helper, and the install steps grow a secure-boot-keys step — restore the
   previous machine's PKI bundle to `/mnt/etc/secureboot`, or create fresh keys
   (which the firmware only accepts after re-enrollment: setup mode, then

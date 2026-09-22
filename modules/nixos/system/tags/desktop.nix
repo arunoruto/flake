@@ -13,6 +13,6 @@
 
     # Enable features for desktop systems
     # (LaTeX is deliberately NOT tag-driven: hosts opt in via `latex.enable`.)
-    upgrades.enable = lib.mkDefault true;
+    system.autoUpgrade.enable = lib.mkDefault true;
   };
 }

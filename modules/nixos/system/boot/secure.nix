@@ -1,3 +1,6 @@
+# Lanzaboote secure boot, applied whenever `boot.lanzaboote.enable` is on:
+# replaces systemd-boot and uses the PKI bundle under /etc/secureboot (see
+# docs/iso.md for enrolling keys).
 {
   inputs,
   config,
@@ -10,18 +13,11 @@
     inputs.lanzaboote.nixosModules.lanzaboote
   ];
 
-  options = {
-    secureboot.enable = lib.mkEnableOption "Enable lanzaboote for secure booting the system";
-  };
-
-  config = lib.mkIf config.secureboot.enable {
+  config = lib.mkIf config.boot.lanzaboote.enable {
     environment.systemPackages = [ pkgs.sbctl ];
     boot = {
       loader.systemd-boot.enable = lib.mkForce false;
-      lanzaboote = {
-        enable = true;
-        pkiBundle = "/etc/secureboot";
-      };
+      lanzaboote.pkiBundle = "/etc/secureboot";
     };
   };
 }

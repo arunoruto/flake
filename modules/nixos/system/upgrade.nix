@@ -1,14 +1,13 @@
+# How this flake upgrades itself, whenever `system.autoUpgrade` is on (the
+# desktop tag turns it on).
 {
   config,
   lib,
   ...
 }:
 {
-  options.upgrades.enable = lib.mkEnableOption "Automated upgrades of the flake-based system";
-
-  config = lib.mkIf config.upgrades.enable {
+  config = lib.mkIf config.system.autoUpgrade.enable {
     system.autoUpgrade = {
-      enable = true;
       dates = "04:00";
       randomizedDelaySec = "15min";
       # Follow the repo's main branch (with its committed flake.lock, validated

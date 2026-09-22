@@ -1,17 +1,12 @@
+# Also offer LVFS testing firmware, whenever fwupd is on (the default, set in
+# ./default.nix).
 {
   config,
   lib,
   ...
 }:
 {
-  options = {
-    fwupd.enable = lib.mkEnableOption "Firmware update manager";
-  };
-
-  config = lib.mkIf config.fwupd.enable {
-    services.fwupd = {
-      enable = true;
-      extraRemotes = [ "lvfs-testing" ];
-    };
+  config = lib.mkIf config.services.fwupd.enable {
+    services.fwupd.extraRemotes = [ "lvfs-testing" ];
   };
 }

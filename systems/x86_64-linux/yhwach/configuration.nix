@@ -148,7 +148,7 @@
   # Lanzaboote secure boot: deferred until the PKI bundle is in place.
   # Re-enable once /etc/secureboot holds keys, then enroll in firmware
   # (sbctl enroll-keys -m) — see docs/iso.md.
-  # secureboot.enable = true;
+  # boot.lanzaboote.enable = true;
 
   # Set system time
   time.hardwareClockInLocalTime = true;
