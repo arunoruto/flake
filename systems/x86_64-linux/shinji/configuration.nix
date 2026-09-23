@@ -37,6 +37,26 @@ in
     };
     cloudflared.enable = true;
     traefik.enable = true;
+    # Websocket rather than the SSH method the other hosts use: the hub sits on
+    # the work network and this host is behind NAT on the personal tailnet, so
+    # it has to dial out. Nothing listens here and the firewall stays shut.
+    beszel.agent = {
+      enable = true;
+      package = pkgs.unstable.beszel;
+      environment = {
+        LOG_LEVEL = "info";
+        HUB_URL = "https://infra.bv.e-technik.tu-dortmund.de";
+        # Identifies us to the hub; still required in websocket mode.
+        KEY_FILE = config.sops.secrets."tokens/beszel-marvin".path;
+        # Keyed by device, not by the mount path: /media/downloads is nofail
+        # plus x-systemd.automount, and a path here becomes a RequiresMountsFor
+        # that would hold the agent down whenever the drive is unplugged.
+        EXTRA_FILESYSTEMS = "sdb1";
+      };
+      # EnvironmentFile, not TOKEN_FILE: systemd reads it as root, so the token
+      # can stay 0400 instead of the 0444 the agent-read KEY_FILE needs.
+      environmentFile = config.sops.templates."beszel-agent.env".path;
+    };
     plex = {
       enable = true;
       accelerationDevices = [ "/dev/dri/renderD128" ];
@@ -74,5 +94,14 @@ in
   users.groups.media = {
     gid = 420;
     members = [ config.users.primaryUser ];
+  };
+
+  sops = {
+    # The hub's public key; the agent process reads this one itself.
+    secrets."tokens/beszel-marvin".mode = "0444";
+    secrets."tokens/beszel-ws" = { };
+    templates."beszel-agent.env".content = ''
+      TOKEN=${config.sops.placeholder."tokens/beszel-ws"}
+    '';
   };
 }

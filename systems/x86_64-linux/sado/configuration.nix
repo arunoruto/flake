@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 {
   users.primaryUser = "mirza";
 
@@ -180,6 +185,29 @@
       enable = false;
       settings.api.endpoint = "https://scrutiny.bv.e-technik.tu-dortmund.de";
     };
+    # Websocket rather than the SSH method the other hosts use: the hub sits on
+    # the work network and this host is behind NAT on the personal tailnet, so
+    # it has to dial out. Nothing listens here and the firewall stays shut.
+    beszel.agent = {
+      enable = true;
+      package = pkgs.unstable.beszel;
+      environment = {
+        LOG_LEVEL = "info";
+        HUB_URL = "https://infra.bv.e-technik.tu-dortmund.de";
+        # Identifies us to the hub; still required in websocket mode.
+        KEY_FILE = config.sops.secrets."tokens/beszel-marvin".path;
+        # Per dataset: the parent /mnt/flash holds 256K itself, so it would
+        # report ~0% however full the pool actually gets.
+        EXTRA_FILESYSTEMS = lib.strings.concatStringsSep "," [
+          "/mnt/flash/appdata"
+          "/mnt/flash/music"
+          "/mnt/flash/downloads"
+        ];
+      };
+      # EnvironmentFile, not TOKEN_FILE: systemd reads it as root, so the token
+      # can stay 0400 instead of the 0444 the agent-read KEY_FILE needs.
+      environmentFile = config.sops.templates."beszel-agent.env".path;
+    };
     traefik.enable = true;
     syncthing.enable = true;
 
@@ -215,5 +243,14 @@
     };
     tlp.enable = true;
     power-profiles-daemon.enable = false;
+  };
+
+  sops = {
+    # The hub's public key; the agent process reads this one itself.
+    secrets."tokens/beszel-marvin".mode = "0444";
+    secrets."tokens/beszel-ws" = { };
+    templates."beszel-agent.env".content = ''
+      TOKEN=${config.sops.placeholder."tokens/beszel-ws"}
+    '';
   };
 }
