@@ -14,8 +14,9 @@ let
   # Collector names must match `isValidCollectorSource` in upstream's agent/gpu.go.
   # macmon and powermetrics are macOS-only and omitted here.
   gpuCollectors = {
-    # reads sysfs directly, needs no package or device access
+    # read sysfs directly, need no package or device access
     "amd_sysfs" = { };
+    "intel_sysfs" = { };
     "intel_gpu_top" = {
       package = lib.getBin pkgs.intel-gpu-tools;
       deviceAllow = [ "char-drm rw" ];

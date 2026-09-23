@@ -52,6 +52,33 @@ in
         # plus x-systemd.automount, and a path here becomes a RequiresMountsFor
         # that would hold the agent down whenever the drive is unplugged.
         EXTRA_FILESYSTEMS = "sdb1";
+        # videoDrivers here is modesetting, so the module's driver-derived
+        # default lands on the empty list and the agent falls back to its own
+        # auto-detection, which turns up nothing. Named explicitly: intel_sysfs
+        # is the cheaper collector, but on this gen9 UHD 630 i915 sysfs exposes
+        # frequency only - engine/*/ carries no busy counters - so utilisation
+        # has to come off the PMU, which is intel_gpu_top.
+        GPU_COLLECTOR = [ "intel_gpu_top" ];
+        # Pins the ATA pass-through type for the two non-NVMe disks. Both were
+        # failing the agent's periodic scan - sdb with "smartctl failed ...
+        # exit status 2", sda with "no valid SMART data found" - while a manual
+        # `smartctl -d sat` returns the full attribute table for either. Note
+        # the scans that failed were the ones that ran against idle disks, and
+        # a scan taken while they were awake succeeded without this setting, so
+        # standby is the likelier culprit and this is belt-and-braces: it costs
+        # nothing and stops the agent falling back to the plain scsi type it
+        # reports for sda. Merged with the agent's own scan rather than
+        # replacing it, so nvme0n1 stays untouched. sda is SMART-only on
+        # purpose: its ext4 partition is mounted nowhere, and an
+        # EXTRA_FILESYSTEMS entry for an unmounted device is dropped as an
+        # invalid filesystem.
+        SMART_DEVICES = lib.concatStringsSep "," [
+          "/dev/sda:sat"
+          "/dev/sdb:sat"
+        ];
+        # Service health next to the hardware; the module wires up the D-Bus
+        # policy the agent needs to call ListUnits.
+        SKIP_SYSTEMD = false;
       };
       # EnvironmentFile, not TOKEN_FILE: systemd reads it as root, so the token
       # can stay 0400 instead of the 0444 the agent-read KEY_FILE needs.
