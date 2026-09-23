@@ -203,6 +203,13 @@
           "/mnt/flash/music"
           "/mnt/flash/downloads"
         ];
+        # Same as on shinji: videoDrivers is modesetting, so the module's
+        # driver-derived default lands on the empty list and the agent's own
+        # auto-detection finds nothing. The N150's gen12 iGPU runs on i915,
+        # which exposes no per-engine busy counters in sysfs - that is an xe
+        # driver feature - so intel_sysfs would report frequency alone and
+        # utilisation has to come off the PMU.
+        GPU_COLLECTOR = [ "intel_gpu_top" ];
       };
       # EnvironmentFile, not TOKEN_FILE: systemd reads it as root, so the token
       # can stay 0400 instead of the 0444 the agent-read KEY_FILE needs.
