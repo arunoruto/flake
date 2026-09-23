@@ -139,8 +139,8 @@
     };
     beszel.agent = {
       enable = true;
-      # package = pkgs.unstable.beszel;
-      package = pkgs.custom.beszel;
+      package = pkgs.unstable.beszel;
+      # package = pkgs.custom.beszel;
       environment = {
         # LOG_LEVEL = "debug";
         LOG_LEVEL = "info";

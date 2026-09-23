@@ -166,7 +166,7 @@ in
           };
           SKIP_SYSTEMD = lib.mkOption {
             type = lib.types.bool;
-            default = true;
+            default = false;
             description = ''
               Whether to disable systemd service monitoring.
               Enabling this option will skip systemd tracking and its setup in NixOS.
