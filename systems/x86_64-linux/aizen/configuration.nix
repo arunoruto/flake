@@ -162,11 +162,24 @@
 
   sops = {
     # The hub's public key; the agent process reads this one itself.
-    secrets."tokens/beszel-marvin".mode = "0444";
-    secrets."tokens/beszel-ws" = { };
-    templates."beszel-agent.env".content = ''
-      TOKEN=${config.sops.placeholder."tokens/beszel-ws"}
-    '';
+    secrets."tokens/beszel-marvin" = {
+      mode = "0444";
+      restartUnits = [ "beszel-agent.service" ];
+    };
+    # This host's own system token, not the shared beszel-ws one: a token is
+    # bound to the first fingerprint that presents it, so a second host on the
+    # same token is refused with "fingerprint mismatch" once the registration
+    # window has closed.
+    secrets."tokens/beszel-aizen".restartUnits = [ "beszel-agent.service" ];
+    templates."beszel-agent.env" = {
+      # Rotating a token changes only this file's contents, not the unit, so
+      # without restartUnits systemd leaves the agent running on the old value
+      # and the switch looks like it did nothing.
+      restartUnits = [ "beszel-agent.service" ];
+      content = ''
+        TOKEN=${config.sops.placeholder."tokens/beszel-aizen"}
+      '';
+    };
   };
 
   # systems.tags = [
