@@ -1,4 +1,8 @@
-{ config, ... }:
+{
+  config,
+  pkgs,
+  ...
+}:
 {
   users.primaryUser = "mirza";
 
@@ -26,6 +30,28 @@
 
   services = {
     fwupd.enable = false;
+    # Websocket rather than the SSH method the work-side hosts use: the hub
+    # cannot reach this VPS, so the agent dials out. Nothing listens here
+    # either way - tailscale0 is already a trusted interface, and openFirewall
+    # would put 45876 on the public netcup side for no gain.
+    beszel.agent = {
+      enable = true;
+      package = pkgs.unstable.beszel;
+      environment = {
+        LOG_LEVEL = "info";
+        HUB_URL = "https://infra.bv.e-technik.tu-dortmund.de";
+        # Identifies us to the hub; still required in websocket mode.
+        KEY_FILE = config.sops.secrets."tokens/beszel-marvin".path;
+        # Two cores and a virtio framebuffer: there is no collector to find, so
+        # skip the probe outright instead of letting auto-detection hunt. No
+        # smartmon either - SMART on a virtual /dev/vda reports nothing, and it
+        # would hand a public-facing box CAP_SYS_RAWIO and CAP_SYS_ADMIN.
+        SKIP_GPU = true;
+      };
+      # EnvironmentFile, not TOKEN_FILE: systemd reads it as root, so the token
+      # can stay 0400 instead of the 0444 the agent-read KEY_FILE needs.
+      environmentFile = config.sops.templates."beszel-agent.env".path;
+    };
     cloudflared = {
       enable = true;
       defaultDomain = "arnaut.me";
@@ -132,6 +158,15 @@
       };
     };
     whoami.enable = true;
+  };
+
+  sops = {
+    # The hub's public key; the agent process reads this one itself.
+    secrets."tokens/beszel-marvin".mode = "0444";
+    secrets."tokens/beszel-ws" = { };
+    templates."beszel-agent.env".content = ''
+      TOKEN=${config.sops.placeholder."tokens/beszel-ws"}
+    '';
   };
 
   # systems.tags = [
