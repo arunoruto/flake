@@ -84,7 +84,6 @@
       package = pkgs.unstable.beszel;
       environment = {
         LOG_LEVEL = "info";
-        GPU = "true";
         KEY_FILE = config.sops.secrets."tokens/beszel-marvin".path;
         EXTRA_FILESYSTEMS = lib.strings.concatStringsSep "," [
           "nvme0n1p1"
@@ -93,6 +92,7 @@
         ];
         GPU_COLLECTOR = "amd_sysfs";
       };
+      smartmon.enable = true;
       openFirewall = true;
     };
     samba.directories = {

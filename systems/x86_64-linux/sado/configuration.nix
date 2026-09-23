@@ -207,6 +207,7 @@
       # EnvironmentFile, not TOKEN_FILE: systemd reads it as root, so the token
       # can stay 0400 instead of the 0444 the agent-read KEY_FILE needs.
       environmentFile = config.sops.templates."beszel-agent.env".path;
+      smartmon.enable = true;
     };
     traefik.enable = true;
     syncthing.enable = true;

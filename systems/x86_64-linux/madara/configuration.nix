@@ -157,11 +157,13 @@
       #   # "sda2"
       # ];
       # extraPath = [ (lib.getBin config.boot.kernelPackages.nvidiaPackages.stable) ];
-      smartmontools = true;
-      # deviceAllow = [
-      #   "/dev/sda"
-      #   "/dev/nvme0"
-      # ];
+      smartmon = {
+        enable = true;
+        # deviceAllow = [
+        #   "/dev/sda"
+        #   "/dev/nvme0"
+        # ];
+      };
       openFirewall = true;
     };
     xrdp = {
@@ -218,9 +220,6 @@
       suspend.enable = false;
       hibernate.enable = false;
       hybrid-sleep.enable = false;
-    };
-    services.beszel-agent.serviceConfig = {
-      PrivateDevices = lib.mkForce false;
     };
   };
   environment.systemPackages = with pkgs; [
