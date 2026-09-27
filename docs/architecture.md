@@ -147,7 +147,7 @@ Options defined by this flake (as opposed to upstream NixOS/HM options):
 | `hosts.{desktop,laptop,workstation,development}.enable` | `modules/home-manager/imports.nix` | HM-side mirror of the tags |
 | `devix.*` | `modules/devix/` | Development environments — see the [devix](./devix/README.md) section |
 | `steamos.*` | `steamos/modules/nixos/` | Steam-machine mode — see the [steamos](./steamos/README.md) section |
-| `facter.hardwareProfiles` | `systems/hardware-profiles.nix` | Read-only: which nixos-hardware `common/` profiles this host's facter report selected |
+| `hardware.facter.hardwareProfiles` | `systems/hardware-profiles.nix` | Read-only: which nixos-hardware `common/` profiles this host's facter report selected |
 | `foreground.enable` | `modules/home-manager/foreground/` | GUI-facing home config |
 | `theming.{enable,scheme,image}` | `modules/home-manager/theming/`, `modules/nixos/system/theming.nix` | Stylix scheme/wallpaper |
 | `security.yubikey.*`, `programs.{latex,cachix}.enable`, `services.bosflix.*` | `modules/nixos/**` | Individual features, under the upstream namespace they belong to |

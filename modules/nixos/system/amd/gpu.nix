@@ -33,12 +33,12 @@ in
         # kuchiki asks for it and has an ASPEED BMC chip — and a host with a
         # real card may simply have no report yet. mkDefault so either case
         # can be settled locally instead of erroring on a conflict.
-        hardware.amdgpu.opencl.enable = lib.mkDefault config.facter.detected.graphics.amd.enable;
+        hardware.amdgpu.opencl.enable = lib.mkDefault config.hardware.facter.detected.graphics.amd.enable;
 
         # ...and say so when they disagree, because the failure is otherwise
         # invisible: yhwach ran without OpenCL from the rebuild that dropped
         # its stale report until someone happened to look.
-        warnings = lib.optional (!config.facter.detected.graphics.amd.enable) ''
+        warnings = lib.optional (!config.hardware.facter.detected.graphics.amd.enable) ''
           hosts.amd.gpu.enable is set, but the hardware report does not list
           an AMD GPU, so ROCm/OpenCL is left off. Either the host has no
           facter report yet (`just facter`), or it genuinely has no AMD GPU

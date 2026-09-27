@@ -9,12 +9,14 @@ with it.
 
 ## nixos-facter: describe the hardware as data
 
-[nixos-facter](https://github.com/numtide/nixos-facter) is the modern take on
+[nixos-facter](https://github.com/nix-community/nixos-facter) is the modern take on
 `nixos-generate-config`'s hardware detection. Instead of generating a Nix file
 once and letting it rot, it writes a JSON *report* of everything it probes —
-CPU, GPU, buses, network interfaces, bluetooth, disks — and the companion
-[nixos-facter-modules](https://github.com/numtide/nixos-facter-modules)
-interpret that report at evaluation time.
+CPU, GPU, buses, network interfaces, bluetooth, disks — and the facter
+modules (formerly the separate
+[nixos-facter-modules](https://github.com/nix-community/nixos-facter-modules),
+now upstreamed into nixpkgs as `hardware.facter.*`) interpret that report at
+evaluation time.
 
 Why bother, when `hardware-configuration.nix` exists?
 
@@ -38,9 +40,8 @@ sudo nix run \
 Then wire it in:
 
 ```nix
-# outside this repo:
-imports = [ inputs.nixos-facter-modules.nixosModules.facter ];
-facter.reportPath = ./facter.json;
+# outside this repo — the module ships with nixpkgs, nothing to import:
+hardware.facter.reportPath = ./facter.json;
 ```
 
 In this repo, just drop `facter.json` into `systems/<arch>/<host>/` — it is

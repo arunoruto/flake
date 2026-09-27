@@ -12,9 +12,9 @@
 # several nixos-hardware profiles carry nested `imports` (a CPU generation
 # pulls in its iGPU stack), and imports cannot depend on `config` — so the
 # report is read as a plain file and the profile list is computed statically.
-# `config.facter.hardwareProfiles` records what was chosen, for inspection:
+# `config.hardware.facter.hardwareProfiles` records what was chosen, for inspection:
 #
-#   nix eval .#nixosConfigurations.<host>.config.facter.hardwareProfiles
+#   nix eval .#nixosConfigurations.<host>.config.hardware.facter.hardwareProfiles
 #
 # The mapping is deliberately conservative: an unrecognised CPU gets microcode
 # handling and nothing else, and anything opinionated (NVIDIA driver flavour,
@@ -128,7 +128,7 @@ in
 {
   imports = map (profile: "${common}/${profile}") profiles;
 
-  options.facter.hardwareProfiles = lib.mkOption {
+  options.hardware.facter.hardwareProfiles = lib.mkOption {
     type = lib.types.listOf lib.types.str;
     default = profiles;
     defaultText = lib.literalMD "hardware dependent";

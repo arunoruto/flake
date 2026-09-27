@@ -31,4 +31,4 @@ to add a host or user.
 - [Devenv](https://devenv.sh/) — reproducible dev environments
 - [SOPS-nix](https://github.com/Mic92/sops-nix) — secrets management
 - [Lanzaboote](https://github.com/nix-community/lanzaboote) — Secure Boot
-- [nixos-facter](https://github.com/numtide/nixos-facter) — hardware reports
+- [nixos-facter](https://github.com/nix-community/nixos-facter) — hardware reports

@@ -27,7 +27,7 @@
         }
         // lib.optionalAttrs (pkgs.stdenv.hostPlatform.isLinux && (osConfig != null)) {
           package =
-            if osConfig.facter.detected.graphics.amd.enable then
+            if osConfig.hardware.facter.detected.graphics.amd.enable then
               pkgs.btop-rocm
             else
               pkgs.btop.override {

@@ -109,7 +109,7 @@ facter target=host:
       --option experimental-features "nix-command flakes" \
       --option extra-substituters https://numtide.cachix.org \
       --option extra-trusted-public-keys numtide.cachix.org-1:2ps1kLBUWjxIneOy1Ik6cQjb41X0iXVXeHigGmycPPE= \
-      github:numtide/nixos-facter -- -o systems/{{ arch() }}-linux/{{ target }}/facter.json
+      github:nix-community/nixos-facter -- -o systems/{{ arch() }}-linux/{{ target }}/facter.json
     sudo chown "$(id -un):$(id -gn)" systems/{{ arch() }}-linux/{{ target }}/facter.json
     git add --intent-to-add systems/{{ arch() }}-linux/{{ target }}/facter.json
 

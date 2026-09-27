@@ -48,10 +48,6 @@
       url = "github:e-tho/ucodenix";
       inputs.cpu-microcodes.follows = "cpu-microcodes";
     };
-    nixos-facter-modules = {
-      url = "github:numtide/nixos-facter-modules";
-      # inputs.nixpkgs.follows = "nixpkgs-unstable";
-    };
     lanzaboote = {
       url = "github:nix-community/lanzaboote/v0.4.2";
       inputs.nixpkgs.follows = "nixpkgs-unstable";

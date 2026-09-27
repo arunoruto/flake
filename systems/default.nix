@@ -42,7 +42,7 @@ let
       self.nixosModules.default
       {
         networking.hostName = lib.mkForce hostname;
-        facter.reportPath = lib.mkIf hasReport reportPath;
+        hardware.facter.reportPath = lib.mkIf hasReport reportPath;
         theming = {
           inherit scheme image;
         };
@@ -57,8 +57,9 @@ let
         builtins.fromJSON (builtins.readFile reportPath)
       )
     )
+    # The facter modules themselves ship in nixpkgs (hardware.facter.*) and
+    # are in its default module list, so nothing needs importing for them.
     ++ (with inputs; [
-      nixos-facter-modules.nixosModules.facter
       home-manager.nixosModules.home-manager
       # The Steam-machine module, from the in-repo steamos flake. Inert until
       # a host sets steamos.enable; the policy glue lives in

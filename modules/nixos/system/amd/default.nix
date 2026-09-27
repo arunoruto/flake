@@ -19,7 +19,7 @@
 
   config = lib.mkIf config.hosts.amd.enable {
     hosts.amd = {
-      gpu.enable = lib.mkDefault config.facter.detected.graphics.amd.enable;
+      gpu.enable = lib.mkDefault config.hardware.facter.detected.graphics.amd.enable;
       rocm.enable = lib.mkDefault false;
     };
 
@@ -29,10 +29,12 @@
         # Narrow the microcode set to this CPU by handing ucodenix the
         # hardware report, which is where it reads the model ID from. Left
         # undefined when there is no report, so its own "auto" default applies
-        # and every available binary is processed instead — facter.reportPath
+        # and every available binary is processed instead — hardware.facter.reportPath
         # is null in that case, and passing null through fails the build with
         # "cannot coerce null to a string" rather than falling back.
-        cpuModelId = lib.mkIf (config.facter.reportPath != null) (lib.mkDefault config.facter.reportPath);
+        cpuModelId = lib.mkIf (config.hardware.facter.reportPath != null) (
+          lib.mkDefault config.hardware.facter.reportPath
+        );
       };
     };
 
