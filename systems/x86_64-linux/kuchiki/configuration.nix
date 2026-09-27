@@ -92,7 +92,19 @@
         ];
         GPU_COLLECTOR = "amd_sysfs";
       };
-      smartmon.enable = true;
+      smartmon = {
+        enable = true;
+        # Whole devices, not partitions: smartctl reads SMART from the disk, and
+        # for NVMe from the controller. Listing any device turns DeviceAllow into
+        # an allow-list, which is what exercises the /dev/zfs entry.
+        deviceAllow = [
+          "/dev/sda"
+          "/dev/sdb"
+          "/dev/sdc"
+          "/dev/nvme0"
+          "/dev/nvme1"
+        ];
+      };
       openFirewall = true;
     };
     samba.directories = {
