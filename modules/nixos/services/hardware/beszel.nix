@@ -63,22 +63,14 @@ let
   gpuNeedsCapabilities = collectorAttrs "capabilities" != [ ];
 
   # Any explicit DeviceAllow turns DevicePolicy=auto into an allow-list, so the GPU
-  # devices are omitted when smartmon relies on full /dev access.
-  baseDeviceAllow =
+  # and zfs devices are omitted when smartmon relies on full /dev access.
+  deviceAllowList =
     lib.optionals (cfg.smartmon.enable && cfg.smartmon.deviceAllow != [ ]) (
       map (device: "${device} r") cfg.smartmon.deviceAllow
     )
     ++ lib.optionals (!cfg.smartmon.enable || cfg.smartmon.deviceAllow != [ ]) (
-      collectorAttrs "deviceAllow"
+      collectorAttrs "deviceAllow" ++ lib.optionals zfsEnabled [ "/dev/zfs rw" ]
     );
-
-  # Same allow-list trap seen from the ZFS side: libzfs drives everything through
-  # the /dev/zfs ioctl device, which DevicePolicy=auto grants for free but an
-  # allow-list does not. Only named once something else already built the list -
-  # naming it on an otherwise empty list would itself switch the policy over and
-  # lock the agent out of every other device.
-  deviceAllowList =
-    baseDeviceAllow ++ lib.optionals (zfsEnabled && baseDeviceAllow != [ ]) [ "/dev/zfs rw" ];
 
   serviceCapabilities =
     lib.optionals cfg.smartmon.enable [
@@ -190,7 +182,7 @@ in
             default =
               lib.optionals (hasVideoDriver "nvidia") [ "nvidia-smi" ]
               ++ lib.optionals (hasVideoDriver "amdgpu") [ "amd_sysfs" ]
-              ++ lib.optionals (hasVideoDriver "intel") [ "intel_gpu_top" ];
+              ++ lib.optionals (hasVideoDriver "intel") [ "intel_sysfs" ];
             defaultText = lib.literalMD ''
               derived from {option}`services.xserver.videoDrivers`
             '';
@@ -202,7 +194,9 @@ in
               GPU collectors to use, in priority order. Overrides the agent's
               auto-detection; the packages needed by the selected collectors are added
               to the service path. If empty, the agent auto-detects available
-              collectors. `rocm-smi` is deprecated upstream in favour of `amd_sysfs`.
+              collectors. `rocm-smi` is deprecated upstream in favour of `amd_sysfs`,
+              and `intel_gpu_top` is not used on the xe driver, where `intel_sysfs` is
+              preferred.
 
               Access to GPU device nodes is only granted for the collectors listed
               here, so a collector provided through
@@ -344,8 +338,9 @@ in
         # stays diffable against upstream - SMART works regardless, because
         # ambient capabilities survive NoNewPrivileges.
         NoNewPrivileges = !cfg.smartmon.enable;
-        PrivateDevices = !cfg.smartmon.enable && !gpuNeedsDevices && !zfsEnabled;
+        PrivateDevices = !cfg.smartmon.enable && !gpuNeedsDevices;
         PrivateTmp = true;
+        # zfs commands fail inside a user namespace since zfs 2.2, see syncoid.nix
         PrivateUsers =
           !cfg.smartmon.enable && !cfg.environment.SKIP_SYSTEMD && !gpuNeedsCapabilities && !zfsEnabled;
         ProtectClock = true;
