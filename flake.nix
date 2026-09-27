@@ -19,7 +19,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";
-    mac-app-util.url = "github:hraban/mac-app-util";
+    mac-app-util = {
+      url = "github:hraban/mac-app-util";
+      # SBCL < 2.6.8 cannot map its heap on macOS 27 ("failed to allocate
+      # 1048576 bytes at 0x300100000"); 26.05 ships 2.6.4.
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
     stylix = {
       # url = "github:nix-community/stylix";
       url = "github:nix-community/stylix/release-26.05";
