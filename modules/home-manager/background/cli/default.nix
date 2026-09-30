@@ -20,6 +20,7 @@
     ./fzf.nix
     ./misc.nix
     ./serpl.nix
+    ./superfile
     ./yazi.nix
     ./zellij.nix
   ];
@@ -30,7 +31,8 @@
       atuin.enable = lib.mkDefault true;
       herdr.enable = lib.mkDefault true;
       serpl.enable = lib.mkDefault false;
-      yazi.enable = lib.mkDefault true;
+      superfile.enable = lib.mkDefault true;
+      yazi.enable = lib.mkDefault false;
       zellij.enable = lib.mkDefault false;
     };
   };
