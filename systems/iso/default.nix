@@ -8,6 +8,7 @@ let
   # nixosConfigurations.iso-<host> and packages.x86_64-linux.iso-<host>.
   hosts = [
     "shinji"
+    "mayuri"
     "kenpachi"
     "yhwach"
   ];

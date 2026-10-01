@@ -1,0 +1,54 @@
+{ inputs, lib, ... }:
+{
+  imports = [ inputs.disko.nixosModules.disko ];
+
+  # Same layout as shinji, on the NVMe. Mounted by partlabel, so the SATA SSD
+  # next to it (unmanaged here) cannot be mistaken for it.
+  disko.devices = {
+    disk.nvme = {
+      device = lib.mkDefault "/dev/nvme0n1";
+      type = "disk";
+      content = {
+        type = "gpt";
+        partitions = {
+          boot = {
+            name = "BIOS boot partition";
+            size = "1M";
+            type = "EF02";
+          };
+          esp = {
+            name = "EFI system partition";
+            size = "512M";
+            type = "EF00";
+            content = {
+              type = "filesystem";
+              format = "vfat";
+              mountpoint = "/boot";
+            };
+          };
+          root = {
+            name = "root";
+            size = "100%";
+            content = {
+              type = "btrfs";
+              extraArgs = [ "-f" ];
+              subvolumes = {
+                "@root" = {
+                  mountpoint = "/";
+                  mountOptions = [ "compress=zstd" ];
+                };
+                "@nix" = {
+                  mountpoint = "/nix";
+                  mountOptions = [
+                    "compress=zstd"
+                    "noatime"
+                  ];
+                };
+              };
+            };
+          };
+        };
+      };
+    };
+  };
+}

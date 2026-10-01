@@ -13,12 +13,19 @@ let
 
   # Where the embedded flake keeps this host's hardware report. A stale report
   # is actively harmful (it force-loads drivers for hardware that is gone), so
-  # the installer can regenerate it in place.
+  # the installer regenerates it in place at boot (see facter-report below).
   facterReport = "/etc/nixos/flake/systems/${pkgs.stdenv.hostPlatform.system}/${hostname}/facter.json";
+  # Where the fresh report is left on the installed system, since the live
+  # copy of the flake is gone after the reboot. Pull it back into the repo from
+  # there.
+  savedReport = "/etc/nixos/facter.json";
 
   # Peek at the target host's config: a lanzaboote host needs its PKI bundle
   # in place before nixos-install runs the bootloader step, or it fails.
   targetConfig = self.nixosConfigurations.${hostname}.config;
+  # Hosts without a facter.json keep their hand-written hardware config; the
+  # installer never introduces a report on them.
+  hasReport = targetConfig.hardware.facter.reportPath != null;
   secureBoot = targetConfig.boot.lanzaboote.enable or false;
   pkiBundle = lib.optionalString secureBoot (toString targetConfig.boot.lanzaboote.pkiBundle);
 
@@ -88,9 +95,6 @@ in
     let
       steps = [
         "Partition:  sudo disko --mode disko --flake /etc/nixos/flake#${hostname}"
-        ''
-          Hardware:   sudo nixos-facter -o ${facterReport}
-             (create/refresh the hardware report; a stale one breaks the install)''
       ]
       ++ lib.optionals secureBoot [
         ''
@@ -100,11 +104,17 @@ in
       ]
       ++ [
         "Install:    sudo nixos-install --flake /etc/nixos/flake#${hostname} --root /mnt"
-        "Reboot:     sudo reboot"
-      ];
+      ]
+      ++ lib.optionals hasReport [
+        ''
+          Save:       sudo install -Dm644 ${facterReport} /mnt${savedReport}
+             (then commit it: scp ${hostname}:${savedReport} systems/${pkgs.stdenv.hostPlatform.system}/${hostname}/)''
+      ]
+      ++ [ "Reboot:     sudo reboot" ];
     in
     ''
       === ${hostname} Installer ===
+      ${lib.optionalString hasReport "Hardware report regenerated at boot: systemctl status facter-report"}
       ${lib.concatStringsSep "\n" (lib.imap1 (i: step: "${toString i}. ${step}") steps)}
 
       Resuming after a reboot? Step 1 REFORMATS — remount instead:
@@ -114,14 +124,35 @@ in
       ===================
     '';
 
+  # Refresh (never introduce) the hardware report as soon as the ISO is up, so
+  # neither install path can run against the report of another machine. Only
+  # the live copy of the flake is touched; the ISO itself stays as built.
+  systemd.services.facter-report = lib.mkIf hasReport {
+    description = "Regenerate the ${hostname} hardware report on this machine";
+    wantedBy = [ "multi-user.target" ];
+    # Probe only after udev has seen every device.
+    wants = [ "systemd-udev-settle.service" ];
+    after = [ "systemd-udev-settle.service" ];
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+    };
+    path = [ pkgs.nixos-facter ];
+    script = ''
+      nixos-facter -o ${facterReport}
+      echo "Hardware report written to ${facterReport}"
+    '';
+  };
+
   systemd.services.autoinstall = {
     description = "Autoinstall NixOS ${hostname} from embedded flake";
     wantedBy = [ "multi-user.target" ];
-    after = [ "network.target" ];
+    # Requires, not Wants: better no install than one against a stale report.
+    requires = lib.optional hasReport "facter-report.service";
+    after = [ "network.target" ] ++ lib.optional hasReport "facter-report.service";
     serviceConfig.Type = "oneshot";
     path = [
       disko-pkg
-      pkgs.nixos-facter
       pkgs.nixos-install-tools
       pkgs.coreutils
       pkgs.util-linux
@@ -130,18 +161,15 @@ in
       if grep -q 'autoinstall' /proc/cmdline; then
         echo "==> Autoinstall triggered: partitioning disk..."
         disko --mode disko --flake /etc/nixos/flake#${hostname}
-        # Refresh (never introduce) the hardware report: a stale one loads
-        # drivers for hardware that is gone, which fails the initrd build.
-        if [ -e ${facterReport} ]; then
-          echo "==> Refreshing hardware report..."
-          nixos-facter -o ${facterReport}
-        fi
         ${lib.optionalString secureBoot ''
           echo "==> Setting up secure boot keys..."
           ${create-sb-keys}/bin/create-sb-keys
         ''}echo "==> Installing NixOS..."
         nixos-install --flake /etc/nixos/flake#${hostname} --root /mnt --no-root-passwd
-        echo "==> Done! Rebooting in 5s..."
+        ${lib.optionalString hasReport ''
+          echo "==> Saving hardware report to ${savedReport}..."
+          install -Dm644 ${facterReport} /mnt${savedReport}
+        ''}echo "==> Done! Rebooting in 5s..."
         sleep 5
         reboot -f
       fi

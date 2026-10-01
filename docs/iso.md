@@ -30,13 +30,13 @@ The generic `installer.nix` module:
 - Sets `isoImage.edition` = hostname (distinguishable filenames like `nixos-shinji-25.11-x86_64-linux.iso`)
 - Embeds the flake source at `/nixos-flake` → copied to `/etc/nixos/flake` at boot
 - Includes `disko` and `nixos-facter` in the live Nix store
-- Prints MOTD instructions referencing the hostname, including a step to
-  create/refresh the host's `facter.json` in the embedded flake — a stale
-  report force-loads drivers for hardware that is gone and fails the initrd
-  build
+- Regenerates the host's `facter.json` in the embedded flake at boot
+  (`facter-report.service`) — a stale report force-loads drivers for hardware
+  that is gone and fails the initrd build. It only refreshes a report the host
+  already carries; hosts without one keep their `hardware-configuration.nix`
+- Prints MOTD instructions referencing the hostname
 - Provides an `autoinstall` systemd oneshot (triggers when `autoinstall` is in
-  `/proc/cmdline`); it refreshes an existing `facter.json` automatically, but
-  never introduces one on hosts that do not carry a report
+  `/proc/cmdline`); it runs only after `facter-report` succeeded
 - For lanzaboote hosts (`boot.lanzaboote.enable`): ships `sbctl` plus a `create-sb-keys`
   helper, and the install steps grow a secure-boot-keys step — restore the
   previous machine's PKI bundle to `/mnt/etc/secureboot`, or create fresh keys
@@ -55,7 +55,19 @@ The generic `installer.nix` module:
 ```bash
 sudo disko --mode disko --flake /etc/nixos/flake#<hostname>
 sudo nixos-install --flake /etc/nixos/flake#<hostname> --root /mnt
+sudo install -Dm644 /etc/nixos/flake/systems/x86_64-linux/<hostname>/facter.json /mnt/etc/nixos/facter.json
 sudo reboot
+```
+
+### Getting the hardware report back into the repo
+
+The regenerated report lives in the live system's copy of the flake, which is
+gone after the reboot — so it is saved to `/etc/nixos/facter.json` on the
+installed system (the MOTD's "Save" step; autoinstall does it on its own).
+Pull it back and commit it, or the next rebuild uses the old report again:
+
+```bash
+scp <hostname>:/etc/nixos/facter.json systems/x86_64-linux/<hostname>/
 ```
 
 ### Autoinstall
@@ -89,7 +101,11 @@ The target host must:
 
 - Use **disko** for disk partitioning (`disk.nix` importing `inputs.disko.nixosModules.disko`)
 - Have `fileSystems` in `hardware-configuration.nix` **commented out** — disko generates them declaratively
-- Include the block device kernel module in `boot.initrd.availableKernelModules` (e.g. `"nvme"`, `"ahci"`, `"sd_mod"`)
+- Either carry a `facter.json` (initrd modules come from the report; it may
+  start as a copy from identical hardware, the installer regenerates it — see
+  mayuri, which has no `hardware-configuration.nix` at all), or include the
+  block device kernel module in `boot.initrd.availableKernelModules` (e.g.
+  `"nvme"`, `"ahci"`, `"sd_mod"`)
 
 ## How it works
 
