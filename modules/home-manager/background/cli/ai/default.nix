@@ -41,7 +41,7 @@
       ];
     })
     (lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
-      home.packages = with pkgs; [ apfel-llm ];
+      home.packages = [ pkgs.custom.apfel-llm ];
     })
     {
       programs = {

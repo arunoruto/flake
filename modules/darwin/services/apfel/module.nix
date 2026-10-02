@@ -12,7 +12,7 @@ in
   options.services.apfel = {
     enable = lib.mkEnableOption "apfel, the local Apple Intelligence LLM server";
 
-    package = lib.mkPackageOption pkgs "apfel-llm" { };
+    package = lib.mkPackageOption pkgs.custom "apfel-llm" { pkgsText = "pkgs.custom"; };
 
     host = lib.mkOption {
       type = lib.types.str;

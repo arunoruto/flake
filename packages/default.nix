@@ -68,10 +68,18 @@ pkgs.lib.makeScope pkgs.newScope (
   // {
     custom = pkgs.lib.makeScope pkgs.newScope (
       self-custom:
-      (pkgs.lib.packagesFromDirectoryRecursive {
-        inherit (self-custom) callPackage newScope;
-        directory = ./custom;
-      })
+      let
+        customPackages = pkgs.lib.packagesFromDirectoryRecursive {
+          inherit (self-custom) callPackage newScope;
+          directory = ./custom;
+        };
+      in
+      customPackages
+      // {
+        # Follows nixpkgs' opencode (version, src, node_modules), not the
+        # pinned custom/opencode that callPackage would pick in this scope.
+        opencode-desktop = customPackages.opencode-desktop.override { inherit (pkgs) opencode; };
+      }
     );
   }
 )
