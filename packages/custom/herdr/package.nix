@@ -68,11 +68,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--custom-dep"
-      "zigDeps"
-    ];
+  passthru = {
+    # Pushed to arunoruto.cachix.org by cachix-sync.
+    cachix = true;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--custom-dep"
+        "zigDeps"
+      ];
+    };
   };
 
   meta = {
