@@ -9,7 +9,7 @@
 
   config = lib.mkIf config.services.explo.enable {
     services.explo = {
-      package = lib.mkDefault pkgs.explo;
+      package = lib.mkDefault pkgs.custom.explo;
       extraPackages = [
         (pkgs.python3.withPackages (ps: [ ps.ytmusicapi ]))
       ];

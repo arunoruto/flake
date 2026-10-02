@@ -9,15 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "explo";
-  version = "1.1.2";
+  version = "1.2.0";
 
+  strictDeps = true;
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "LumePart";
     repo = "Explo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7FIDRNZn+Yh2c/oLU3Ggb4A9y+5q3vv17eVLmGR2Zeo=";
+    hash = "sha256-T0EYPiidK/qUaCCKePDT8KIbMnu3j7Z3ADmgtuhUb/o=";
   };
 
   webui = buildNpmPackage {
@@ -70,19 +71,26 @@ buildGoModule (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--subpackage"
-      "webui"
-    ];
+  passthru = {
+    # Pushed to arunoruto.cachix.org by cachix-sync.
+    cachix = true;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "webui"
+      ];
+    };
   };
 
   meta = {
     description = "Spotify's \"Discover Weekly\" for self-hosted music systems";
     homepage = "https://github.com/LumePart/Explo/";
-    changelog = "https://github.com/${finalAttrs.src.owner}/${finalAttrs.src.repo}/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/LumePart/Explo/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ lilacious ];
+    maintainers = with lib.maintainers; [
+      lilacious
+      arunoruto
+    ];
     mainProgram = "explo";
   };
 })
