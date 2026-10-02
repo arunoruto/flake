@@ -6,8 +6,13 @@ set -euo pipefail
 
 missing=0
 
+# Diff the whole index, not per file: rename detection needs both sides in
+# view, and a pathspec on the new path alone makes a moved package (say
+# top-level/ -> custom/) look newly added.
+added="$(git diff --cached --name-only --diff-filter=A -M)"
+
 for file in "$@"; do
-    if ! git diff --cached --name-only --diff-filter=A -- "$file" | grep -qx "$file"; then
+    if ! grep -qxF "$file" <<<"$added"; then
         continue
     fi
 
