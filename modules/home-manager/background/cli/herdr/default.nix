@@ -10,7 +10,6 @@
     # Drop at home-manager 26.11 — upstream ships modules/programs/herdr.nix.
     ./upstream.nix
     ./module.nix
-    ./theme.nix
   ];
 
   config = {

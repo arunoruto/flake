@@ -6,7 +6,6 @@
 }:
 {
   imports = [
-    ./theme.nix
   ];
 
   programs.opencode = {
@@ -21,9 +20,6 @@
     };
     package = pkgs.unstable.opencode;
     # package = pkgs.custom.opencode;
-    tui = {
-      theme = "stylix";
-    };
     settings = {
       permission = {
         todowrite = "allow";

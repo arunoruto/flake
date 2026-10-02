@@ -11,7 +11,7 @@
     ./fonts.nix
     ./icons.nix
     ./pc.nix
-    ./stylix.nix # Asserts stylix is configured at system level
+    ./stylix # Asserts stylix is configured at system level
   ];
 
   options.theming = {

@@ -53,6 +53,15 @@ in
       '';
     };
 
+    themes = lib.mkOption {
+      type = lib.types.attrsOf (lib.types.either lib.types.path jsonFormat.type);
+      default = { };
+      description = ''
+        Pi themes written to ~/.pi/agent/themes/<name>.json. Select one with
+        `settings.theme = "<name>"`. A path is linked as-is.
+      '';
+    };
+
     tau = {
       enable = lib.mkEnableOption "Tau mirror backend service for pi";
 
@@ -192,6 +201,16 @@ in
         if lib.isPath cfg.rules then { source = cfg.rules; } else { text = cfg.rules; }
       );
     }
+    // lib.mapAttrs' (
+      name: theme:
+      lib.nameValuePair ".pi/agent/themes/${name}.json" {
+        source =
+          if lib.isPath theme || lib.isString theme then
+            theme
+          else
+            jsonFormat.generate "pi-theme-${name}.json" theme;
+      }
+    ) cfg.themes
     // lib.mapAttrs' (
       name: path:
       let

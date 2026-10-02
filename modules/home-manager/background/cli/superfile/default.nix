@@ -12,7 +12,6 @@ let
 in
 {
   imports = [
-    ./theme.nix
   ];
 
   config = lib.mkIf cfg.enable {

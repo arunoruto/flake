@@ -6,7 +6,6 @@
 {
   imports = [
     ./module.nix
-    ./theme.nix
   ];
 
   programs.pi = {
@@ -21,7 +20,6 @@
     settings = {
       thinking = "medium";
       transport = "auto";
-      theme = "stylix";
       npmCommand = [
         "${pkgs.nodejs}/bin/npm"
         "--prefix"
