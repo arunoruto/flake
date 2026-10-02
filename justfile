@@ -65,6 +65,32 @@ update *inputs:
 bump pkg *flags:
     ./scripts/bump-package.sh {{ pkg }} {{ flags }}
 
+# ── cachix ──────────────────────────────────────────────────────────
+
+# Build and push every passthru.cachix package to arunoruto.cachix.org
+# (needs CACHIX_AUTH_TOKEN; `-n` builds and reports without pushing)
+cachix-sync *flags:
+    nix run .#cachix-sync -- {{ flags }}
+
+# NAR size (MB, uncompressed) a package would add to the 5 GB cache: its
+# closure minus what cache.nixos.org already serves. Cachix stores it
+# compressed, typically 3-4x smaller. e.g. `just cachix-size custom.explo`
+cachix-size pkg:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    out=$(nix build --no-link --print-out-paths ".#{{ pkg }}")
+    mapfile -t missing < <(
+      for p in $(nix path-info --recursive $out); do
+        nix path-info --store https://cache.nixos.org "$p" &>/dev/null || echo "$p"
+      done
+    )
+    if ((${#missing[@]} == 0)); then
+      echo "{{ pkg }}: everything is on cache.nixos.org already, 0 MB"
+      exit 0
+    fi
+    nix path-info --json --json-format 1 "${missing[@]}" \
+      | jq -r --arg n "${#missing[@]}" '"{{ pkg }}: \($n) path(s), \([.[].narSize] | add / 1e5 | floor / 10) MB uncompressed"'
+
 # ── docs ────────────────────────────────────────────────────────────
 
 # Regenerate the devix option reference into docs/devix/reference (gitignored)

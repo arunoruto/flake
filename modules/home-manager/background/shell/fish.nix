@@ -18,6 +18,9 @@
         # Disable greeting
         set fish_greeting
 
+        # Same as zsh: lets `just cachix-sync` push without a cachix login
+        set -gx CACHIX_AUTH_TOKEN (cat ${config.sops.secrets."tokens/cachix".path})
+
         # set -gx GH_AUTH_TOKEN $(${lib.getExe config.programs.gh.package} auth token)
         # bind \ck 'fg'
 

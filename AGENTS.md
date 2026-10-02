@@ -100,6 +100,8 @@ Options were renamed from `development.*` to `devix.*` (and `autoConfigureEditor
 
 `packages/default.nix` builds a `makeScope`: `top-level/` is auto-discovered via `packagesFromDirectoryRecursive`, `custom/` is namespaced under `pkgs.custom`, plus `python3Packages/`, `kodiPackages/`, and `home-assistant-custom-components/` scopes layered onto their nixpkgs counterparts. Overlays in `overlays/` expose these as `pkgs.<name>` / `pkgs.custom.<name>` and provide `pkgs.unstable`.
 
+`top-level/` is for packages not in nixpkgs yet; once one lands in nixpkgs-unstable it moves to `custom/` (otherwise it shadows the upstream package). `legacyPackages` and `pkgs.custom` are both built against nixpkgs-unstable, so they share store paths. Packages opt into the public Cachix cache with `passthru.cachix = true;` (free licenses and source builds only; see `docs/cachix.md`, `just cachix-sync`).
+
 ### Adding a host / user
 
 See `docs/architecture.md` for the step-by-step; the short version: create the auto-discovered directory, set `users.primaryUser` + `system.tags`, add the age key to `secrets/.sops.yaml` and `just secrets-rekey`.

@@ -273,6 +273,12 @@
             src = ./.;
             hooks = ciHooks // lintHooks;
           };
+          ownPackages = import ./packages pkgs-system;
+          cachix = import ./packages/cachix-sync.nix {
+            pkgs = pkgs-system;
+            inherit ownPackages;
+            cacheName = "arunoruto";
+          };
         in
         {
           devShells =
@@ -286,6 +292,7 @@
                 buildInputs =
                   (with pkgs-system; [
                     just
+                    jq # just cachix-size
                     statix
                     deadnix
                     nixfmt-tree
@@ -293,7 +300,15 @@
                   ++ gitHooksLocal.enabledPackages;
               };
             };
-          legacyPackages = import ./packages pkgs-system;
+          legacyPackages = ownPackages // {
+            # The passthru.cachix-flagged subset, flattened (custom.explo ->
+            # custom-explo); what `nix run .#cachix-sync` pushes.
+            cachixPackages = cachix.packages;
+          };
+          apps.cachix-sync = {
+            type = "app";
+            program = lib.getExe cachix.sync;
+          };
           # ISO images are x86_64-linux only; expose their checksums as packages
           # so `nix build .#iso-<host>` works there.
           packages = lib.optionalAttrs (system == "x86_64-linux") (
@@ -317,16 +332,15 @@
       "https://cache.nixos-cuda.org"
       "https://colmena.cachix.org"
       # "https://helix.cachix.org"
-      "http://madara.king-little.ts.net:5000"
-      "http://kuchiki.sparrow-yo.ts.net:5000"
+      # Our own packages; filled by `nix run .#cachix-sync`.
+      "https://arunoruto.cachix.org"
     ];
     extra-trusted-public-keys = [
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       "cache.nixos-cuda.org:74DUi4Ye579gUqzH4ziL9IyiJBlDpMRn9MBN8oNan9M="
       "colmena.cachix.org-1:7BzpDnjjH8ki2CT3f6GdOk7QAzPOl+1t3LvTLXqYcSg="
       # "helix.cachix.org-1:ejp9KQpR1FBI2onstMQ34yogDm4OgU2ru6lIwPvuCVs="
-      "madara:ZyOQZ0jEn5G9qInb25sEz3LwRmJwBFkhji83xwyLWpk="
-      "kuchiki:jrqnrTt/N/YbmQ13eU97X03e/HVCKso30z4Z/zBXGSo="
+      "arunoruto.cachix.org-1:GQVw1YDtjt0+ElmQifxEI52a0pRVe9/gdcNEr8v8G14="
     ];
   };
 }
