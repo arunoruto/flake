@@ -16,6 +16,7 @@
     ./astral.nix
     ./fastfetch.nix
     ./tmux
+    ./tuios
     ./editorconfig.nix
     ./fzf.nix
     ./misc.nix
@@ -32,6 +33,7 @@
       herdr.enable = lib.mkDefault true;
       serpl.enable = lib.mkDefault false;
       superfile.enable = lib.mkDefault true;
+      tuios.enable = lib.mkDefault true;
       yazi.enable = lib.mkDefault false;
       zellij.enable = lib.mkDefault false;
     };
