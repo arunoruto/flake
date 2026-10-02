@@ -34,8 +34,13 @@ in
       };
     };
 
-    # Define a user account
-    users.extraUsers.${kodi-user}.isNormalUser = true;
+    # Define a user account. It shares the primary user's password: autologin
+    # means it is rarely typed, but with immutable users an undeclared password
+    # would lock the account (e.g. for xrdp logins).
+    users.extraUsers.${kodi-user} = {
+      isNormalUser = true;
+      inherit (config.users.users.${config.users.primaryUser}) hashedPasswordFile;
+    };
 
     networking.firewall = {
       allowedTCPPorts = [ 8080 ];

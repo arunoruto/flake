@@ -20,13 +20,14 @@ let
     )
   );
 
-  # Does secrets.yaml have a `passwords.<primaryUserName>` entry? sops-nix
-  # fails activation outright if a declared secret's path doesn't exist in
-  # the file, so the hashed-password wiring below only applies when it does.
-  # Only the top-level *keys* of an ENC[]-valued sops file are cleartext, so
-  # this scans the raw YAML text for the `passwords:` block specifically
-  # (other sections, e.g. `ssh_keys:`, reuse the same usernames as keys).
+  # Does secrets.yaml have a `passwords.<name>` entry? sops-nix fails
+  # activation outright if a declared secret's path doesn't exist in the file,
+  # so the hashed-password wiring below only applies when it does. Only the
+  # top-level *keys* of an ENC[]-valued sops file are cleartext, so this scans
+  # the raw YAML text for the `passwords:` block specifically (other sections,
+  # e.g. `ssh_keys:`, reuse the same usernames as keys).
   hasPasswordSecret =
+    name:
     let
       lines = lib.splitString "\n" (builtins.readFile ../../../secrets/secrets.yaml);
       isTopLevelKey = line: line != "" && !(lib.hasPrefix " " line) && !(lib.hasPrefix "\t" line);
@@ -39,7 +40,7 @@ let
             inSection = line == "passwords:";
             found = false;
           }
-        else if acc.inSection && lib.hasPrefix "    ${primaryUserName}:" line then
+        else if acc.inSection && lib.hasPrefix "    ${name}:" line then
           {
             inherit (acc) inSection;
             found = true;
@@ -51,6 +52,18 @@ let
       inSection = false;
       found = false;
     } lines).found;
+
+  primaryHasPassword = hasPasswordSecret primaryUserName;
+
+  # root gets its own `passwords.root` when there is one, and falls back to
+  # the primary user's password otherwise.
+  rootPasswordSecret =
+    if hasPasswordSecret "root" then
+      "passwords/root"
+    else if primaryHasPassword then
+      "passwords/${primaryUserName}"
+    else
+      null;
 in
 {
   imports = [
@@ -86,34 +99,51 @@ in
       }
     ];
 
-    # SOPS secret for the primary user's login password — only declared when
-    # secrets.yaml actually has one, see hasPasswordSecret above.
-    sops.secrets = lib.mkIf hasPasswordSecret {
-      "passwords/${primaryUserName}".neededForUsers = true;
-    };
+    # SOPS secrets for the login passwords — only declared when secrets.yaml
+    # actually has them, see hasPasswordSecret above.
+    sops.secrets = lib.mkMerge [
+      (lib.mkIf primaryHasPassword { "passwords/${primaryUserName}".neededForUsers = true; })
+      (lib.mkIf (rootPasswordSecret != null) { ${rootPasswordSecret}.neededForUsers = true; })
+    ];
 
-    # Base user configuration for the primary user
-    users.users.${primaryUserName} = {
-      isNormalUser = true;
-      group = "users";
-      shell = config.home-manager.users.${primaryUserName}.programs.${shell}.package;
-      description = "${primaryUserName}";
-      extraGroups = [
-        "dialout"
-        "networkmanager"
-        "scanner"
-        "lp"
-        "pipewire"
-        "audio"
-        "video"
-        "render"
-        "input"
-        "uinput"
-        "tss" # tss group has access to TPM devices
-      ];
-    }
-    // lib.optionalAttrs hasPasswordSecret {
-      hashedPasswordFile = config.sops.secrets."passwords/${primaryUserName}".path;
+    users = {
+      # With the password in sops, the config is the source of truth for it.
+      # Mutable users only apply a password when the account is first created,
+      # so a host installed before its sops key was added would keep a locked
+      # password forever. Imperatively set passwords (passwd) and users
+      # (useradd) are reset/removed on activation from here on; a host that
+      # needs them sets this back to true.
+      mutableUsers = lib.mkDefault (!primaryHasPassword);
+
+      users = {
+        root = lib.mkIf (rootPasswordSecret != null) {
+          hashedPasswordFile = config.sops.secrets.${rootPasswordSecret}.path;
+        };
+
+        # Base user configuration for the primary user
+        ${primaryUserName} = {
+          isNormalUser = true;
+          group = "users";
+          shell = config.home-manager.users.${primaryUserName}.programs.${shell}.package;
+          description = "${primaryUserName}";
+          extraGroups = [
+            "dialout"
+            "networkmanager"
+            "scanner"
+            "lp"
+            "pipewire"
+            "audio"
+            "video"
+            "render"
+            "input"
+            "uinput"
+            "tss" # tss group has access to TPM devices
+          ];
+        }
+        // lib.optionalAttrs primaryHasPassword {
+          hashedPasswordFile = config.sops.secrets."passwords/${primaryUserName}".path;
+        };
+      };
     };
 
     # Enable fish
