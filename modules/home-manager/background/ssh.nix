@@ -50,6 +50,15 @@ in
           User = "mar";
           PubkeyAuthentication = "no";
         };
+        marvin-knot = {
+          Host = "marvin-knot";
+          HostName = "marvin.king-little.ts.net";
+          Port = 2222;
+          User = "git";
+          IdentityFile = "~/.ssh/id_ed25519";
+          IdentitiesOnly = "yes";
+          # PubkeyAuthentication = "no";
+        };
       };
     };
 
