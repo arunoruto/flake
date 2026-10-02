@@ -59,8 +59,12 @@ rec {
   # Custom packages in versioned namespace
   # These packages are available under pkgs.custom.*
   # Use this for packages where you want control over using custom vs upstream versions
+  # Built against unstable, not the host's nixpkgs: custom/ tracks versions
+  # ahead of nixpkgs, and this keeps pkgs.custom.<pkg> on hosts the same store
+  # path as `nix build .#custom.<pkg>` (legacyPackages), which is what
+  # cachix-sync pushes.
   custom-packages = final: prev: {
-    inherit ((import ../packages prev)) custom;
+    inherit ((import ../packages final.unstable)) custom;
   };
 
   # This one contains whatever you want to overlay
