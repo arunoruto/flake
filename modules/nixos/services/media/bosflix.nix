@@ -103,6 +103,10 @@
         # transmission = {
         #   enable = true;
         # };
+
+        # What the nightly clamdscan sweeps when a host turns it on: everything
+        # that leaves the box via syncthing, both users' folders alike.
+        clamav.scanner.scanDirectories = lib.mkDefault [ completedPath ];
       };
 
       systemd =
@@ -111,46 +115,54 @@
           syncthingCfg = config.services.syncthing;
         in
         {
-          services.sabnzbd.serviceConfig.ExecStart =
-            # lib.mkForce "${lib.getBin cfg.package}/bin/sabnzbd -d -f ${"/var/lib/${cfg.stateDir}/sabnzbd.ini"} --inet_exposure 5 --disable-file-log --console";
-            lib.mkForce
-              "${lib.getBin cfg.package}/bin/sabnzbd -d -f ${"/var/lib/${cfg.stateDir}/sabnzbd.ini"} -s 0.0.0.0:8082 --inet_exposure 5";
-
-          # The drive is an autofs mount (`x-systemd.automount`) and
-          # systemd-tmpfiles refuses to traverse autofs mount points: at boot it
-          # logs "Detected autofs mount point '<drivePath>' ... Skipping" for
-          # every rule below it, so these directories were never actually created
-          # or fixed up. They ended up root-umask 2755, which locks out the rest
-          # of the `media` group — sabnzbd above all. Do it from a unit that
-          # pulls the mount in itself instead.
-          services.bosflix-dirs = {
-            description = "Create bosflix download directories";
-            wantedBy = [ "multi-user.target" ];
-            before =
-              lib.optional config.services.sabnzbd.enable "sabnzbd.service"
-              ++ lib.optional config.services.qbittorrent.enable "qbittorrent.service"
-              ++ lib.optional config.services.syncthing.enable "syncthing.service";
-            unitConfig.RequiresMountsFor = [
-              completedPath
-              incompletedPath
-            ];
-            serviceConfig = {
-              Type = "oneshot";
-              RemainAfterExit = true;
+          # Same autofs story as bosflix-dirs below: pull the drive in (or fail
+          # the run if it is unplugged) instead of scanning an empty mountpoint.
+          services = {
+            clamdscan = lib.mkIf config.services.clamav.scanner.enable {
+              unitConfig.RequiresMountsFor = [ completedPath ];
             };
-            path = [ pkgs.coreutils ];
-            # setgid so anything created underneath inherits the `media` group,
-            # group-writable so every member of that group (sabnzbd, qbittorrent,
-            # syncthing, the *arrs) can write into the shared folders. Those
-            # services all run with UMask=0002, which keeps the group-write bit
-            # on the directories they create in turn.
-            script = ''
-              install -d -o ${config.users.primaryUser} -g ${mediaGroup} -m 0775 ${lib.escapeShellArg drivePath}
-              install -d -o root -g ${mediaGroup} -m 2775 ${lib.escapeShellArgs sharedPaths}
-            ''
-            + lib.optionalString config.services.syncthing.enable ''
-              install -d -o ${syncthingCfg.user} -g ${syncthingCfg.group} -m 0755 ${lib.escapeShellArg "${completedPath}/.stfolder"}
-            '';
+
+            sabnzbd.serviceConfig.ExecStart =
+              # lib.mkForce "${lib.getBin cfg.package}/bin/sabnzbd -d -f ${"/var/lib/${cfg.stateDir}/sabnzbd.ini"} --inet_exposure 5 --disable-file-log --console";
+              lib.mkForce
+                "${lib.getBin cfg.package}/bin/sabnzbd -d -f ${"/var/lib/${cfg.stateDir}/sabnzbd.ini"} -s 0.0.0.0:8082 --inet_exposure 5";
+
+            # The drive is an autofs mount (`x-systemd.automount`) and
+            # systemd-tmpfiles refuses to traverse autofs mount points: at boot it
+            # logs "Detected autofs mount point '<drivePath>' ... Skipping" for
+            # every rule below it, so these directories were never actually created
+            # or fixed up. They ended up root-umask 2755, which locks out the rest
+            # of the `media` group — sabnzbd above all. Do it from a unit that
+            # pulls the mount in itself instead.
+            bosflix-dirs = {
+              description = "Create bosflix download directories";
+              wantedBy = [ "multi-user.target" ];
+              before =
+                lib.optional config.services.sabnzbd.enable "sabnzbd.service"
+                ++ lib.optional config.services.qbittorrent.enable "qbittorrent.service"
+                ++ lib.optional config.services.syncthing.enable "syncthing.service";
+              unitConfig.RequiresMountsFor = [
+                completedPath
+                incompletedPath
+              ];
+              serviceConfig = {
+                Type = "oneshot";
+                RemainAfterExit = true;
+              };
+              path = [ pkgs.coreutils ];
+              # setgid so anything created underneath inherits the `media` group,
+              # group-writable so every member of that group (sabnzbd, qbittorrent,
+              # syncthing, the *arrs) can write into the shared folders. Those
+              # services all run with UMask=0002, which keeps the group-write bit
+              # on the directories they create in turn.
+              script = ''
+                install -d -o ${config.users.primaryUser} -g ${mediaGroup} -m 0775 ${lib.escapeShellArg drivePath}
+                install -d -o root -g ${mediaGroup} -m 2775 ${lib.escapeShellArgs sharedPaths}
+              ''
+              + lib.optionalString config.services.syncthing.enable ''
+                install -d -o ${syncthingCfg.user} -g ${syncthingCfg.group} -m 0755 ${lib.escapeShellArg "${completedPath}/.stfolder"}
+              '';
+            };
           };
 
           tmpfiles.settings = {

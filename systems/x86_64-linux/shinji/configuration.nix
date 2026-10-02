@@ -101,6 +101,14 @@ in
     #   enable = true;
     #   ip = "100.105.115.20";
     # };
+    # Scan-only for now: a nightly clamdscan of what the downloaders hand to
+    # syncthing (directories come from bosflix). A hit exits non-zero, so the
+    # failed unit surfaces in beszel's systemd view.
+    clamav = {
+      daemon.enable = true;
+      updater.enable = true;
+      scanner.enable = true;
+    };
     qbittorrent.enable = true;
     sabnzbd.enable = true;
     suwayomi-server.enable = false;
