@@ -12,23 +12,18 @@
 name: Steamix VM tests
 on:
   workflow_dispatch:
+  # Only Steamix's own changes run this, so unrelated work in the repository
+  # never produces a Steamix notification. That includes this workflow: its
+  # canonical copy is under steamix/, so editing it is a Steamix change.
+  # The trade-off, chosen on purpose: a nixpkgs bump that breaks Steamix
+  # shows up on the next Steamix change, or a manual run, not the same night.
   push:
     paths:
       - "steamix/**"
-      - "flake.lock"
-      - ".github/workflows/steamix.yaml"
-  # The nightly lockfile bump is pushed with GITHUB_TOKEN, and pushes made
-  # with that token do not trigger other workflows. Follow it explicitly, so
-  # a nixpkgs bump that breaks Steamix shows up the same night instead of on
-  # the next Steamix change.
-  workflow_run:
-    workflows: ["Update Lockfile"]
-    types: [completed]
 
 jobs:
   vm-test:
     name: ${{ matrix.test }} (${{ matrix.channel.name }})
-    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     timeout-minutes: 45
     strategy:
@@ -36,7 +31,7 @@ jobs:
       # channels have already disagreed about greetd's PAM stack.
       fail-fast: false
       matrix:
-        test: [greetd, sddm, decky-loader]
+        test: [greetd, sddm, steamos-manager, decky-loader]
         # The tests are the Steamix flake's own `checks`. Its nixpkgs input
         # is pinned to one this repository locks, so a run is reproducible
         # and matches what the hosts get: `--inputs-from .` makes the
