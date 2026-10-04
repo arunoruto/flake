@@ -23,7 +23,7 @@ jobs:
   check-flake:
     name: Check Flake
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
     needs: [check-lock]
     # strategy:
     #   fail-fast: false
