@@ -14,12 +14,25 @@ let
   # apply it to every host in the shared module tree — its mkDefaults would
   # e.g. pull mesa onto headless servers — because imports cannot be
   # conditional on config. Caveat of the technique: only the file's `config`
-  # is consumed; if upstream ever adds `imports` or `options` to it, revisit.
-  nixos-hardware-amd = import (inputs.nixos-hardware.outPath + "/common/gpu/amd") {
-    inherit config lib pkgs;
-  };
+  # is consumed, and anything upstream adds next to it has to be handled by
+  # hand (see knownImports and the assertion below).
+  amdDir = inputs.nixos-hardware.outPath + "/common/gpu/amd";
+  nixos-hardware-amd = import amdDir { inherit config lib pkgs; };
+
+  # The one thing upstream's file imports besides its own config, as of
+  # nixos-hardware 0953bb1a (2026-10-02, PR #1992): typed options for the
+  # amdgpu.dcdebugmask kernel parameter (hardware.amdgpu.dcDebugMask.*). It is
+  # pure option declarations plus a mkIf on them, so importing it for every
+  # host costs nothing and keeps the option available regardless of the
+  # toggle — options cannot be gated anyway. Older pins do not have the file,
+  # hence the existence check; `inputs` is a specialArg, so this is safe to
+  # use from `imports`.
+  dcDebugMask = amdDir + "/dc-debug-mask.nix";
+  knownImports = lib.optional (builtins.pathExists dcDebugMask) dcDebugMask;
 in
 {
+  imports = knownImports;
+
   options.hosts.amd.gpu.enable = lib.mkEnableOption "Setup AMD GPU";
 
   config = lib.mkIf cfg.enable (
@@ -46,16 +59,31 @@ in
           set hardware.amdgpu.opencl.enable explicitly.
         '';
 
-        # The note above the import is only true while that file stays a bare
-        # `config`. Fail the build rather than silently dropping the rest.
+        # The import-as-function trick only sees what it is told to look at:
+        # the file's `config`, plus the imports mirrored in knownImports. Fail
+        # the build when upstream grows anything else rather than silently
+        # dropping it. Paths are compared as strings because upstream's
+        # `./dc-debug-mask.nix` is a path while ours is built from outPath.
         assertions = [
           {
-            assertion = builtins.attrNames nixos-hardware-amd == [ "config" ];
+            assertion =
+              lib.all (
+                name:
+                lib.elem name [
+                  "config"
+                  "imports"
+                ]
+              ) (builtins.attrNames nixos-hardware-amd)
+              && map toString (nixos-hardware-amd.imports or [ ]) == map toString knownImports;
             message =
               "nixos-hardware common/gpu/amd now exposes "
               + builtins.concatStringsSep ", " (builtins.attrNames nixos-hardware-amd)
-              + "; this module consumes only its `config`, so anything else is "
-              + "being dropped. See the note in modules/nixos/system/amd/gpu.nix.";
+              + (lib.optionalString (nixos-hardware-amd ? imports) (
+                " with imports " + builtins.concatStringsSep ", " (map toString nixos-hardware-amd.imports)
+              ))
+              + "; this module consumes its `config` and the imports listed in "
+              + "knownImports, so anything else is being dropped. See the note in "
+              + "modules/nixos/system/amd/gpu.nix.";
           }
         ];
 
