@@ -60,9 +60,75 @@ jobs:
           # Hands the runner's /dev/kvm to the Nix daemon; without it the
           # test driver falls back to emulation and takes many times longer.
           kvm: true
+      - name: Pull from the Steamix cache
+        uses: cachix/cachix-action@v17
+        with:
+          name: steamix
+          # Tests never push: only the cache job below does, and only what
+          # passed them.
+          skipPush: true
       - name: Run ${{ matrix.test }} against ${{ matrix.channel.name }}
         run: >-
           nix build -L --no-write-lock-file
           --inputs-from .
           --override-input nixpkgs ${{ matrix.channel.input }}
           ./steamix#checks.x86_64-linux.${{ matrix.test }}
+
+  # Fill steamix.cachix.org with what a Steamix machine would otherwise
+  # compile itself: the steamix flake's `cache` set (SteamOS Manager, Decky
+  # Loader, the 32-bit gamescope WSI layer), built against the same pinned
+  # nixpkgs revisions as the tests, so those are exactly the store paths a
+  # machine on those revisions asks for. Runs on main only, after every test
+  # passed. Pushes only those outputs and their runtime closures (cachix
+  # skips what cache.nixos.org has), never build-only paths such as fetched
+  # sources, and pins each so the free tier's garbage collection keeps them.
+  cache:
+    name: cache (${{ matrix.channel.name }})
+    needs: vm-test
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        channel:
+          - { name: stable, input: nixpkgs }
+          - { name: unstable, input: nixpkgs-unstable }
+    env:
+      # A repository secret holding a Cachix auth token with write access to
+      # the steamix cache. Without it the job builds and skips the push.
+      CACHIX_AUTH_TOKEN: ${{ secrets.STEAMIX_CACHIX_AUTH_TOKEN }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@main
+        with:
+          logger: pretty
+      - name: Set up Cachix
+        uses: cachix/cachix-action@v17
+        with:
+          name: steamix
+          authToken: ${{ secrets.STEAMIX_CACHIX_AUTH_TOKEN }}
+          # Pushed explicitly below, so that build-only paths stay out.
+          skipPush: true
+      - name: Build the cached set against ${{ matrix.channel.name }}
+        run: |
+          pin="--no-write-lock-file --inputs-from . --override-input nixpkgs ${{ matrix.channel.input }}"
+          : > outputs
+          for attr in $(nix eval --raw $pin ./steamix#cache --apply 'c: toString (builtins.attrNames c)'); do
+            path=$(nix build -L --no-link --print-out-paths $pin "./steamix#cache.$attr")
+            echo "$attr $path" | tee -a outputs
+          done
+      - name: Push and pin
+        if: env.CACHIX_AUTH_TOKEN != ''
+        run: |
+          while read -r attr path; do
+            cachix push steamix "$path"
+            cachix pin steamix "$attr-${{ matrix.channel.name }}" "$path" --keep-revisions 3
+          done < outputs
+      - name: No token, nothing pushed
+        if: env.CACHIX_AUTH_TOKEN == ''
+        run: echo "::notice::STEAMIX_CACHIX_AUTH_TOKEN is not set; built the cached set but pushed nothing."
