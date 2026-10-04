@@ -132,13 +132,18 @@ with the `decky-loader` and `steamos-manager` packages and the
 `buildDeckyPlugin` helper. It removes the `pkgs.decky-loader or null` dance
 from the module and gives everyone else the fixes.
 
-### A VM test
+### VM tests
 
-gamescope has a headless backend and the login loop does not need real Steam.
-A NixOS test that boots, confirms the loop started the `steam` session, runs
-`steamos-session-select` and lands in the desktop session would be the first
-CI the project has beyond evaluation — which matters, because this module is
-exactly where "evaluates" and "builds" diverge.
+Started (2026-10-04): the `greetd` and `decky-loader` tests boot the module
+in a VM and drive it end to end, against both nixpkgs channels, in CI. See
+[Testing](./testing.md). They found two bugs on their first run that the host
+using the module never showed.
+
+Still to cover: the SDDM path with SteamOS Manager (`SessionManagement1`
+switching), and the updater and rollback once they exist. A test that runs
+the real gamescope would need a Vulkan device with a DRM render node inside
+the VM, which today means virtio-gpu with Venus and a host GPU — out of reach
+for sandboxed builds.
 
 ## The GUI
 

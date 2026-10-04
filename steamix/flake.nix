@@ -47,6 +47,10 @@
         }
       );
 
+      # VM tests (see tests/default.nix). x86_64-linux only: Gaming Mode is
+      # Steam, and Steam is x86_64.
+      checks.x86_64-linux = import ./tests { pkgs = nixpkgs.legacyPackages.x86_64-linux; };
+
       # Room to grow, reserved rather than stubbed: Gaming Mode is a system
       # concern, but per-user pieces (Decky plugin settings, per-game
       # environment) would land here as homeModules.default.

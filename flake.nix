@@ -300,11 +300,27 @@
                   ++ gitHooksLocal.enabledPackages;
               };
             };
-          legacyPackages = ownPackages // {
-            # The passthru.cachix-flagged subset, flattened (custom.explo ->
-            # custom-explo); what `nix run .#cachix-sync` pushes.
-            cachixPackages = cachix.packages;
-          };
+          legacyPackages =
+            ownPackages
+            // {
+              # The passthru.cachix-flagged subset, flattened (custom.explo ->
+              # custom-explo); what `nix run .#cachix-sync` pushes.
+              cachixPackages = cachix.packages;
+            }
+            // lib.optionalAttrs (system == "x86_64-linux") {
+              # Steamix's VM tests, for the Steamix workflow:
+              # `nix build .#steamix-tests.stable.greetd`. Against both
+              # nixpkgs this flake has: `stable` is what the hosts run,
+              # `unstable` is what Steamix's own flake follows, and the two
+              # have already disagreed about greetd's PAM stack. Kept out of
+              # `checks` on purpose, so `nix flake check` does not boot VMs,
+              # and out of ownPackages, so the cachix walker never evaluates
+              # them.
+              steamix-tests = {
+                stable = import ./steamix/tests { pkgs = inputs.nixpkgs.legacyPackages.${system}; };
+                unstable = import ./steamix/tests { pkgs = inputs.nixpkgs-unstable.legacyPackages.${system}; };
+              };
+            };
           apps.cachix-sync = {
             type = "app";
             program = lib.getExe cachix.sync;

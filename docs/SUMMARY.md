@@ -15,6 +15,7 @@
   - [Options](./steamix/options.md)
   - [Option reference](./steamix/reference/options.md)
   - [Hardware setup & tuning](./steamix/hardware-and-tuning.md)
+  - [Testing](./steamix/testing.md)
   - [Roadmap](./steamix/roadmap.md)
 - [devix](./devix/README.md)
   - [Concepts](./devix/concepts.md)

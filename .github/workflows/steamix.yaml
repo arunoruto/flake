@@ -1,0 +1,45 @@
+name: Steamix VM tests
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "steamix/**"
+      - "flake.lock"
+      - ".github/workflows/steamix.yaml"
+  # The nightly lockfile bump is pushed with GITHUB_TOKEN, and pushes made
+  # with that token do not trigger other workflows. Follow it explicitly, so
+  # a nixpkgs bump that breaks Steamix shows up the same night instead of on
+  # the next Steamix change.
+  workflow_run:
+    workflows: ["Update Lockfile"]
+    types: [completed]
+
+jobs:
+  vm-test:
+    name: ${{ matrix.test }} (${{ matrix.channel }})
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      # One failing test or channel must not hide the others: the two
+      # channels have already disagreed about greetd's PAM stack.
+      fail-fast: false
+      matrix:
+        test: [greetd, decky-loader]
+        # stable: the nixpkgs the hosts run; unstable: what Steamix's own
+        # flake follows. See steamix-tests in flake.nix.
+        channel: [stable, unstable]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@main
+        with:
+          logger: pretty
+          # Hands the runner's /dev/kvm to the Nix daemon; without it the
+          # test driver falls back to emulation and takes many times longer.
+          kvm: true
+      - name: Run ${{ matrix.test }} against ${{ matrix.channel }}
+        run: nix build -L --accept-flake-config .#steamix-tests.${{ matrix.channel }}.${{ matrix.test }}
