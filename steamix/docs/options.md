@@ -258,7 +258,9 @@ that when `.cef-enable-remote-debugging` exists in its data directory at
 startup. Without it the loader starts, serves happily on port 1337, and is
 simply never visible in Gaming Mode.
 
-So the module creates that file in `steamix.user`'s Steam directory. **Steam
+So the module creates that file in `steamix.user`'s Steam directory, through
+that user's own tmpfiles instance at login, so every directory it creates on
+the way belongs to the user. **Steam
 has to be restarted afterwards** — switching the configuration is not enough,
 since Steam only reads the flag when it launches.
 

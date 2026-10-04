@@ -20,7 +20,6 @@ let
   # makes Steam open it has to live in the *Steam* user's home — not the
   # unprivileged account plugins run as.
   steamUser = config.steamix.user;
-  steamHome = config.users.users.${steamUser}.home;
 
   # Plugins that need extra Python modules get them through the loader's own
   # interpreter, which the package exposes for exactly this.
@@ -123,6 +122,29 @@ in
       users.groups.decky = { };
     })
 
+    (lib.mkIf (enabled && steamUser != null) {
+      # Decky reaches into Steam's UI over the CEF debugger that
+      # steamwebhelper opens on 127.0.0.1:8080, and Steam only opens it when
+      # this file exists at startup. Without it the loader runs, serves on
+      # 1337 and is simply never visible in Gaming Mode — which is the whole
+      # symptom. Steam has to be restarted after it appears.
+      #
+      # Created by the user's own tmpfiles instance, at login and before the
+      # session starts, rather than by the system one. On a fresh install
+      # none of ~/.local/share/Steam exists yet, and the system instance
+      # creates missing parents as root: it made a root-owned ~/.local, then
+      # refused to write the flag through it ("unsafe path transition"), so
+      # Decky never appeared, and Steam's own first-run install into
+      # ~/.local/share/Steam had nowhere to write either. Run as the user,
+      # every directory it creates is the user's.
+      #
+      # Note this does mean an unauthenticated debugger into the Steam
+      # client, bound to loopback, for as long as Decky is enabled.
+      systemd.user.tmpfiles.users.${steamUser}.rules = [
+        "f %h/.local/share/Steam/.cef-enable-remote-debugging 0644 - - -"
+      ];
+    })
+
     (lib.mkIf enabled {
       systemd.tmpfiles.settings."10-decky-loader" = {
         "${cfg.stateDir}".d = {
@@ -132,20 +154,6 @@ in
         "${cfg.stateDir}/plugins".d = {
           inherit (cfg) user;
           mode = "0755";
-        };
-      }
-      // lib.optionalAttrs (steamUser != null) {
-        # Decky reaches into Steam's UI over the CEF debugger that
-        # steamwebhelper opens on 127.0.0.1:8080, and Steam only opens it when
-        # this file exists at startup. Without it the loader runs, serves on
-        # 1337 and is simply never visible in Gaming Mode — which is the whole
-        # symptom. Steam has to be restarted after it appears.
-        #
-        # Note this does mean an unauthenticated debugger into the Steam
-        # client, bound to loopback, for as long as Decky is enabled.
-        "${steamHome}/.local/share/Steam/.cef-enable-remote-debugging".f = {
-          user = steamUser;
-          mode = "0644";
         };
       }
       // lib.listToAttrs (
