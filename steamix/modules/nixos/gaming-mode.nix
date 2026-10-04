@@ -358,15 +358,27 @@ let
       # wrote into its temp drop-in. The unit name is load-bearing: the
       # manager also reads gamescope-session.service to answer "which mode
       # am I in".
-      ${pkgs.systemd}/bin/systemctl --user reset-failed gamescope-session.service 2>/dev/null || true
-      ${pkgs.systemd}/bin/systemctl --user stop gamescope-session.service 2>/dev/null || true
-      ${pkgs.systemd}/bin/systemd-run --user --collect --quiet \
-        --unit=gamescope-session.service \
-        --property=RemainAfterExit=yes \
-        --property=PartOf=graphical-session.target \
-        --property=Wants=graphical-session.target \
-        --property=ExecStop='${lib.getExe' config.programs.steam.package "steam"} -shutdown' \
-        ${pkgs.coreutils}/bin/true || true
+      #
+      # A stand-in that is still active is kept, never replaced. One is left
+      # behind whenever a Gaming Mode session dies without the target being
+      # stopped (gamescope crashed, Steam was killed), and nothing in it
+      # belongs to the dead session: its stop shuts down whichever Steam is
+      # running. Replacing it was a restart loop. Stopping the old unit left
+      # graphical-session.target with nothing wanting it, systemd stopped the
+      # target as unneeded (StopWhenUnneeded), and that stop took the new
+      # stand-in down with it through PartOf, shutting the new Steam down
+      # within a fraction of a second. SDDM relogged, and the same race
+      # repeated twice a second until a reboot.
+      if ! ${pkgs.systemd}/bin/systemctl --user is-active --quiet gamescope-session.service; then
+        ${pkgs.systemd}/bin/systemctl --user reset-failed gamescope-session.service 2>/dev/null || true
+        ${pkgs.systemd}/bin/systemd-run --user --collect --quiet \
+          --unit=gamescope-session.service \
+          --property=RemainAfterExit=yes \
+          --property=PartOf=graphical-session.target \
+          --property=Wants=graphical-session.target \
+          --property=ExecStop='${lib.getExe' config.programs.steam.package "steam"} -shutdown' \
+          ${pkgs.coreutils}/bin/true || true
+      fi
     ''}
 
     # Steam opens a file descriptor per shader cache entry, among other things.
