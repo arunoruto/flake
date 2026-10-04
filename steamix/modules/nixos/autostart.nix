@@ -120,11 +120,19 @@ in
     # itself once it holds the DRM device, which a desktop compositor does
     # not do.
     #
-    # pam_env runs well before pam_systemd in the stack, so setting the two
-    # variables there means the session is created correctly rather than
-    # corrected afterwards.
+    # Setting the two variables with pam_env ahead of pam_systemd means the
+    # session is created correctly rather than corrected afterwards.
+    #
+    # The rule goes first in the session stack rather than after a named one,
+    # because nixpkgs has shipped two shapes of greetd's stack: up to 26.05
+    # the default rules inline (env, unix, ..., systemd), from 26.11 on a
+    # single `include login` with pam_systemd inside the included stack.
+    # Anchoring on the inline `env` rule broke evaluation on the second shape;
+    # every rule either shape generates sits at 10000 or above
+    # (utils.pam.autoOrderRules), and nothing here needs to run after the
+    # base pam_env, which reads only /etc/pam/environment.
     security.pam.services.greetd.rules.session.steamix-session-identity = {
-      order = config.security.pam.services.greetd.rules.session.env.order + 1;
+      order = 10000;
       control = "optional";
       modulePath = "${pkgs.linux-pam}/lib/security/pam_env.so";
       args = [
