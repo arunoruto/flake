@@ -3,11 +3,10 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
-    # In-repo flake, incubating until it moves to its own repository; with
-    # nixpkgs following ours, its own lock file never matters here (and is
-    # not committed). Splitting it out later is only a URL change.
+    # Steam-machine module (github.com/arunoruto/steamix). For local work on
+    # it, `just switch-with steamix <checkout>` builds against a checkout.
     steamix = {
-      url = "path:./steamix";
+      url = "github:arunoruto/steamix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     home-manager = {
@@ -156,8 +155,6 @@
       inherit lib;
       nixosModules = {
         default = import ./modules/nixos;
-        # Re-exported from the in-repo Steamix flake (see steamix/README.md).
-        steamix = inputs.steamix.nixosModules.default;
       };
       darwinModules.default = import ./modules/darwin;
       homeModules = {

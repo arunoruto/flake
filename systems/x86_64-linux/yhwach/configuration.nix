@@ -53,7 +53,7 @@
   '';
 
   # Steam machine: boot straight into Gaming Mode, with GNOME one
-  # "Switch to Desktop" away (see steamix/modules/nixos and docs/steamix/).
+  # "Switch to Desktop" away (see https://arunoruto.github.io/steamix/).
   steamix = {
     enable = true;
     desktopSession = "gnome";
@@ -130,7 +130,7 @@
   # The overlay-close symptom this was chasing (game stops being drawn and
   # stops taking input until Steam is forced to re-assert focus) turned out to
   # be the session, not the compositor: Gaming Mode needs a second Xwayland
-  # server for games. steamix/modules/nixos now sets that up, so this pin is likely
+  # server for games. Steamix now sets that up, so this pin is likely
   # unnecessary — drop it back to the release gamescope and retest.
   programs.gamescope.package = pkgs.unstable.gamescope;
   # The WSI Vulkan layer talks a versioned protocol to gamescope; keep it on

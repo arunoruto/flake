@@ -13,6 +13,11 @@ default:
 switch target=host:
     nh os switch . -H {{ target }}
 
+# Switch with a flake input pointed at a local checkout, e.g. `just switch-with steamix ~/Projects/steamix`
+[linux]
+switch-with input checkout target=host:
+    nh os switch . -H {{ target }} -- --override-input {{ input }} "path:$(realpath {{ checkout }})"
+
 # Build this host's config and make it the boot default (activate on reboot)
 [linux]
 boot target=host:
@@ -101,10 +106,6 @@ docs-reference:
     mkdir -p docs/devix/reference
     install -m644 "$out"/*.md docs/devix/reference/
     echo "regenerated docs/devix/reference from modules/devix"
-    out=$(nix build --no-link --print-out-paths .#docs-steamix-reference)
-    mkdir -p steamix/docs/reference
-    install -m644 "$out"/*.md steamix/docs/reference/
-    echo "regenerated steamix/docs/reference from steamix/modules/nixos"
 
 # Serve the mdBook docs locally with live reload
 docs: docs-reference

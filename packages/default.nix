@@ -8,7 +8,6 @@ pkgs.lib.makeScope pkgs.newScope (
     dpcpp-prop = self.callPackage ./dpcpp/proprietary4.nix { };
     docs = self.callPackage ./docs/package.nix { };
     docs-devix-reference = self.callPackage ./docs/devix-reference.nix { };
-    docs-steamix-reference = self.callPackage ../steamix/packages/docs-reference.nix { };
     gemini-cli-custom = self.callPackage ./gemini-cli/package.nix { };
     trmnl = self.callPackage ./trmnl/package.nix { };
 
@@ -25,10 +24,6 @@ pkgs.lib.makeScope pkgs.newScope (
     inherit (self) callPackage newScope;
     directory = ./top-level;
   })
-  # Monorepo glue: the Steamix flake's packages, re-exported so
-  # `nix build .#steamos-manager` and `just bump steamix/packages/...` keep
-  # working through legacyPackages. Dies when steamix moves to its own repo.
-  // (import ../steamix/packages { inherit pkgs; })
   // {
     python3Packages = pkgs.lib.makeScope pkgs.newScope (
       self-p:

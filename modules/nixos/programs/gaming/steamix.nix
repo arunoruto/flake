@@ -1,6 +1,7 @@
-# Adapter for the Steamix flake (steamix/, consumed as an input and wired
-# into every host by systems/default.nix): the mechanism lives there with no
-# dependency on this flake; the glue to our conventions lives here.
+# Adapter for Steamix (github.com/arunoruto/steamix, consumed as the
+# `steamix` input and wired into every host by systems/default.nix): the
+# mechanism lives there with no dependency on this flake; the glue to our
+# conventions lives here.
 {
   config,
   lib,

@@ -61,7 +61,7 @@ let
     # are in its default module list, so nothing needs importing for them.
     ++ (with inputs; [
       home-manager.nixosModules.home-manager
-      # The Steam-machine module, from the in-repo Steamix flake. Inert until
+      # The Steam-machine module, from the steamix input (github.com/arunoruto/steamix). Inert until
       # a host sets steamix.enable; the policy glue lives in
       # modules/nixos/programs/gaming/steamix.nix.
       steamix.nixosModules.default

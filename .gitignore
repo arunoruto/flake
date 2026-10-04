@@ -26,12 +26,6 @@ devenv.local.yaml
 # pre-commit
 .pre-commit-config.yaml
 
-# option references, generated from their modules by
-# packages/docs/devix-reference.nix and steamix/packages/docs-reference.nix
-# (`just docs` / `nix build .#docs`)
+# option reference, generated from its module by
+# packages/docs/devix-reference.nix (`just docs` / `nix build .#docs`)
 docs/devix/reference/
-steamix/docs/reference/
-
-# The in-repo Steamix flake is consumed with inputs.nixpkgs.follows, so its
-# own lock never affects this repo; standalone experiments may generate one.
-steamix/flake.lock

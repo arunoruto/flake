@@ -1414,14 +1414,18 @@
         ]
       },
       "locked": {
-        "path": "./steamix",
-        "type": "path"
+        "lastModified": 1791128082,
+        "narHash": "sha256-UIXmQHUQLZ7yCQzhNkqdk9S6BaTIbfs1gnVXIw8z1aM=",
+        "owner": "arunoruto",
+        "repo": "steamix",
+        "rev": "6747e2f0bd20dffa25b59ef4526a16833f437227",
+        "type": "github"
       },
       "original": {
-        "path": "./steamix",
-        "type": "path"
-      },
-      "parent": []
+        "owner": "arunoruto",
+        "repo": "steamix",
+        "type": "github"
+      }
     },
     "stump-fork": {
       "inputs": {
