@@ -62,9 +62,11 @@ A/B slot fallback, built from generations.
 
 ### A binary cache
 
-Handhelds should never compile gamescope, steamos-manager or Decky. The
-project wants its own Cachix cache and a CI job that builds every package
-against nixpkgs-unstable, so a fresh install is a download, not a build.
+Done (2026-10-04): [steamix.cachix.org](https://steamix.cachix.org), filled
+by CI after the VM tests pass and enabled on every Steamix machine by
+`steamix.binaryCache.enable`. See [Binary cache](./binary-cache.md). Hits
+are limited to machines on the nixpkgs revisions CI builds against until
+Steamix has its own repository and builds against the channel heads.
 
 ### An installer that creates the user's repository
 

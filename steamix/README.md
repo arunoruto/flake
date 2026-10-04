@@ -9,6 +9,7 @@ Start with [docs/README.md](./docs/README.md); [docs/how-it-works.md](./docs/how
 explains the moving parts, [docs/options.md](./docs/options.md) is the curated
 option tour, `docs/reference/` is generated from the module itself, and
 [docs/roadmap.md](./docs/roadmap.md) is where the project is headed.
+Prebuilt packages come from [steamix.cachix.org](./docs/binary-cache.md).
 
 ## Layout
 

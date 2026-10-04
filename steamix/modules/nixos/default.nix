@@ -231,6 +231,25 @@ in
       '';
     };
 
+    binaryCache.enable = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = ''
+        Download Steamix's own packages from its binary cache,
+        `steamix.cachix.org`, instead of compiling them: SteamOS Manager,
+        Decky Loader and the 32-bit gamescope WSI layer, which
+        `cache.nixos.org` does not carry. Adds the cache and its public key
+        to {option}`nix.settings`, next to whatever is already there.
+
+        On by default because it asks for no trust beyond what importing
+        this module already does: the module runs as root, and the cache is
+        signed with a key pinned here. It only helps when the machine's
+        nixpkgs is a revision Steamix's CI built against; otherwise Nix
+        builds locally, as it would without the cache. Turn it off to build
+        everything yourself.
+      '';
+    };
+
     tweaks.enable = lib.mkOption {
       type = lib.types.bool;
       default = true;
@@ -306,6 +325,13 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    # The same cache and key as flake.nix's nixConfig, which Nix only honours
+    # when Steamix's own flake is what is being built. Keep them in step.
+    nix.settings = lib.mkIf (cfg.binaryCache.enable && config.nix.enable) {
+      substituters = [ "https://steamix.cachix.org" ];
+      trusted-public-keys = [ "steamix.cachix.org-1:RDiQCw/nTZL8BuFm4uZrKEnkCU0xJ+w7zwQ+IQBXan0=" ];
+    };
+
     assertions = [
       {
         assertion = cfg.autoStart -> cfg.user != null;

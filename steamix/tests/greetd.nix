@@ -99,6 +99,14 @@
           machine.succeed(f"test -e {shlex.quote(env['GAMESCOPE_MODE_SAVE_FILE'])}")
           machine.succeed(f"test -e {shlex.quote(env['GAMESCOPE_LIMITER_FILE'])}")
 
+      with subtest("the Steamix binary cache is configured, next to cache.nixos.org"):
+          conf = machine.succeed("cat /etc/nix/nix.conf")
+          substituters = next(l for l in conf.splitlines() if l.startswith("substituters ="))
+          keys = next(l for l in conf.splitlines() if l.startswith("trusted-public-keys ="))
+          assert "https://steamix.cachix.org" in substituters, substituters
+          assert "https://cache.nixos.org" in substituters, substituters
+          assert "steamix.cachix.org-1:" in keys, keys
+
       with subtest("the session logs to the journal"):
           machine.wait_until_succeeds(
               "journalctl -t steamix-session --no-pager | grep -q 'gamescope stub: running'"

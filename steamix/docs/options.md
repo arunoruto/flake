@@ -186,6 +186,16 @@ steamix.gamescope.wsi = {
 };
 ```
 
+## `steamix.binaryCache.enable`
+
+Type `bool`, default `true`. Downloads SteamOS Manager, Decky Loader and the
+32-bit gamescope WSI layer from `steamix.cachix.org` instead of compiling
+them, by adding the cache and its key to `nix.settings` next to
+`cache.nixos.org`. No trust beyond what importing the module already asks
+for: the module runs as root and the key is pinned. It helps only when the
+machine's nixpkgs matches a revision CI built against; see
+[Binary cache](./binary-cache.md).
+
 ## `steamix.tweaks.enable`
 
 Type `bool`, default `true`. SteamOS' opinionated system tuning, minus

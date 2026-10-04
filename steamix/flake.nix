@@ -13,6 +13,18 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
   };
 
+  # Steamix's binary cache, for anything built from this flake directly
+  # (`nix build`, the VM tests). Nix ignores a flake's nixConfig when the flake
+  # is an input, so machines importing the module get the same cache from
+  # the `steamix.binaryCache.enable` option instead. The URL and key are
+  # repeated in modules/nixos/default.nix; keep them in step.
+  nixConfig = {
+    extra-substituters = [ "https://steamix.cachix.org" ];
+    extra-trusted-public-keys = [
+      "steamix.cachix.org-1:RDiQCw/nTZL8BuFm4uZrKEnkCU0xJ+w7zwQ+IQBXan0="
+    ];
+  };
+
   outputs =
     { self, nixpkgs }:
     let
@@ -50,6 +62,26 @@
       # VM tests (see tests/default.nix). x86_64-linux only: Gaming Mode is
       # Steam, and Steam is x86_64.
       checks.x86_64-linux = import ./tests { pkgs = nixpkgs.legacyPackages.x86_64-linux; };
+
+      # What CI pushes to steamix.cachix.org: what a Steamix machine would
+      # otherwise compile itself, because cache.nixos.org does not have it.
+      # The two daemons nixpkgs does not package, and the 32-bit gamescope
+      # WSI layer, which the module installs by default (`wsi.package32`) and
+      # Hydra does not build. The Decky plugins are left out: they are
+      # release downloads, so caching them saves nothing.
+      #
+      # A cache only helps a machine that asks for the exact store path, so
+      # CI builds this against the nixpkgs revisions it is pinned to; see
+      # docs/binary-cache.md.
+      legacyPackages.x86_64-linux.cache =
+        let
+          pkgs = nixpkgs.legacyPackages.x86_64-linux;
+          steamixPackages = import ./packages { inherit pkgs; };
+        in
+        {
+          inherit (steamixPackages) steamos-manager decky-loader;
+          gamescope-wsi-32 = pkgs.pkgsi686Linux.gamescope-wsi;
+        };
 
       # Room to grow, reserved rather than stubbed: Gaming Mode is a system
       # concern, but per-user pieces (Decky plugin settings, per-game
