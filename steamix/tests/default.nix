@@ -1,8 +1,12 @@
-# Steamix VM tests, run with the NixOS test driver:
+# Steamix VM tests, run with the NixOS test driver. From steamix/:
 #
-#   nix build .#checks.x86_64-linux.greetd          # from steamix/
-#   nix build .#steamix-tests.stable.greetd         # from the parent flake
-#   nix build .#steamix-tests.unstable.greetd       # ...against nixpkgs-unstable
+#   nix build -L .#checks.x86_64-linux.greetd
+#
+# From the repository root, pinned to the nixpkgs the parent flake locks
+# (what CI does; use nixpkgs-unstable for the other channel):
+#
+#   nix build -L --no-write-lock-file --inputs-from . \
+#     --override-input nixpkgs nixpkgs ./steamix#checks.x86_64-linux.greetd
 #
 # Add `.driverInteractive` and run `result/bin/nixos-test-driver` to poke at
 # a test VM by hand.
@@ -18,5 +22,6 @@ let
 in
 {
   greetd = runTest ./greetd.nix;
+  sddm = runTest ./sddm.nix;
   decky-loader = runTest ./decky-loader.nix;
 }

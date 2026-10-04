@@ -8,38 +8,49 @@ in `tests/`, one file per test.
 | Test | What it covers |
 |------|----------------|
 | `greetd` | The default login path end to end. Boot lands in Gaming Mode; the gamescope command line and Steam's environment match the options; the session logs to the journal; the performance-overlay presets are generated; "Switch to Desktop" lands in the configured desktop session as a logind `class=user`, `type=wayland` session with its identity in the systemd user manager; "Return to Gaming Mode" goes back; a killed gamescope falls back to Gaming Mode. |
+| `sddm` | The SteamOS-shaped login path. SDDM autologin lands in Gaming Mode; both SteamOS Manager daemons run and publish `SessionManagement1`; the session's stand-in unit is active and the configured desktop is the manager's default; "Switch to Desktop" and "Return to Gaming Mode" go through the manager (temporary autologin drop-in, `graphical-session.target` stopped, Steam shut down cleanly); a killed gamescope falls back to Gaming Mode; a temporary session left behind does not survive a reboot. |
 | `decky-loader` | The loader serves on port 1337; declared plugins are linked from the store and load (frontend-only ones as passive); backend plugins run as the unprivileged user; the CEF flag lands in the Steam user's home with every directory on the way owned by that user; a store-installed plugin coexists with declared ones; a declared plugin removed through the UI is back after a reboot. |
 
 ## Running them
 
-From the parent repository, against either nixpkgs it pins:
-
-```sh
-nix build -L .#steamix-tests.stable.greetd        # the nixpkgs the hosts run
-nix build -L .#steamix-tests.unstable.greetd      # what Steamix's own flake follows
-```
-
-From `steamix/` on its own, against its `nixos-unstable` input:
+The tests are the Steamix flake's own `checks`. From `steamix/`, against its
+`nixos-unstable` input:
 
 ```sh
 nix build -L .#checks.x86_64-linux.greetd
 ```
 
-Both need `/dev/kvm`; without it the driver falls back to emulation and is
-many times slower. A test VM boots in about 15 seconds and each test script
-runs in about 20, so the cost of a run is almost entirely building the VM's
-closure the first time.
+From the repository root, pinned to a nixpkgs the parent flake locks, which
+is what CI does. `--inputs-from .` makes the parent's locked inputs
+resolvable by name, so the override needs no revision:
+
+```sh
+nix build -L --no-write-lock-file --inputs-from . \
+  --override-input nixpkgs nixpkgs ./steamix#checks.x86_64-linux.greetd
+
+# the channel Steamix's own flake follows
+nix build -L --no-write-lock-file --inputs-from . \
+  --override-input nixpkgs nixpkgs-unstable ./steamix#checks.x86_64-linux.greetd
+```
+
+Nothing about the tests lives in the parent flake. When Steamix moves to its
+own repository it commits its own lock file and the override goes away.
+
+All of them need `/dev/kvm`; without it the driver falls back to emulation
+and is many times slower. A test VM boots in about 15 seconds and each test
+script runs in 20 to 45, so the cost of a run is almost entirely building the
+VM's closure the first time.
 
 To poke at a test machine by hand, build `.driverInteractive` and run the
 driver; `start_all()` boots the VMs and every `machine.*` call from the test
 script works at the prompt:
 
 ```sh
-nix build .#steamix-tests.stable.greetd.driverInteractive
+nix build ./steamix#checks.x86_64-linux.greetd.driverInteractive --no-write-lock-file
 ./result/bin/nixos-test-driver
 ```
 
-The Steamix workflow (`.github/workflows/steamix.yaml`) runs both tests
+The Steamix workflow (`.github/workflows/steamix.yaml`) runs every test
 against both channels on every change under `steamix/`, on every lock file
 change, and after each nightly lock update.
 
@@ -67,8 +78,8 @@ hardware.
 
 ## What they have caught
 
-Both bugs below were found by these tests on their first run, and neither
-showed up on the host that uses the module:
+Every bug below was found by these tests on their first run, and none of
+them showed up on the host that uses the module:
 
 - **greetd's PAM stack changed shape on nixpkgs-unstable.** From 26.11 it is
   a single `include login`, and the identity rule was ordered after an inline
@@ -79,3 +90,9 @@ showed up on the host that uses the module:
   write through it, so Decky never appeared, and Steam's own first-run
   install into `~/.local/share/Steam` had nowhere to write. The host's Steam
   had created those directories long before Decky was enabled.
+- **SteamOS Manager's user daemon crash-looped on a fresh install.** The
+  module seeds its state file with the desktop session, but the seed lacked
+  `default_login_mode`, which the 26.4.1 daemon requires, so the daemon
+  exited at startup and took `SessionManagement1`, and with it "Switch to
+  Desktop", along. The host's daemon had written its own state file before
+  the seed existed, and the seed never overwrites one.

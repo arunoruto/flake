@@ -22,7 +22,8 @@
 # equivalent of pressing a button on screen.
 { pkgs, lib }:
 let
-  stateDir = "/tmp/steamix-test";
+  # Under /var/lib so it survives the reboots some tests do.
+  stateDir = "/var/lib/steamix-test";
 
   # The packages nixpkgs does not have (Decky, its plugins, SteamOS Manager),
   # built against the same nixpkgs as the test.
@@ -120,6 +121,10 @@ let
   # identity the launcher gave it and the logind session it ended up in —
   # the part real desktops are picky about — and runs the "Return to Gaming
   # Mode" action when asked.
+  #
+  # Like GNOME's and Plasma's shells it ties itself to the user's
+  # graphical-session.target, because that is how SteamOS Manager ends a
+  # session: it stops the target and expects the desktop to go with it.
   desktopScript = pkgs.writeShellScriptBin "fake-desktop" ''
     set -u
     dir=${stateDir}
@@ -129,6 +134,20 @@ let
     env | sort > "$dir/desktop-env"
     loginctl show-session "''${XDG_SESSION_ID:-}" -p Type -p Class -p Active \
       > "$dir/desktop-session" 2>&1 || true
+
+    # A stand-in for the desktop's shell unit: part of graphical-session.target,
+    # and stopping it ends this session. A unit left over from an earlier
+    # desktop session is cleared first; its ExecStop only kills a process that
+    # is still a fake-desktop.
+    systemctl --user stop fake-desktop-shell.service 2>/dev/null || true
+    systemctl --user reset-failed fake-desktop-shell.service 2>/dev/null || true
+    systemd-run --user --collect --quiet --unit=fake-desktop-shell.service \
+      --property=RemainAfterExit=yes \
+      --property=PartOf=graphical-session.target \
+      --property=Wants=graphical-session.target \
+      --property=ExecStop="${pkgs.runtimeShell} -c 'grep -qx fake-desktop /proc/$$/comm && kill $$'" \
+      ${pkgs.coreutils}/bin/true || echo "could not bind to graphical-session.target" >&2
+
     touch "$dir/desktop-running"
 
     while :; do
@@ -168,6 +187,8 @@ in
 
       users.users.alice = {
         isNormalUser = true;
+        # Pinned: test scripts address her runtime directory and bus by uid.
+        uid = 1000;
         description = "Alice, holding the controller";
       };
 

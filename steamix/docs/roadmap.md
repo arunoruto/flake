@@ -134,13 +134,12 @@ from the module and gives everyone else the fixes.
 
 ### VM tests
 
-Started (2026-10-04): the `greetd` and `decky-loader` tests boot the module
-in a VM and drive it end to end, against both nixpkgs channels, in CI. See
-[Testing](./testing.md). They found two bugs on their first run that the host
-using the module never showed.
+Started (2026-10-04): the `greetd`, `sddm` and `decky-loader` tests boot the
+module in a VM and drive it end to end, against both nixpkgs channels, in CI.
+See [Testing](./testing.md). They found three bugs on their first runs that
+the host using the module never showed.
 
-Still to cover: the SDDM path with SteamOS Manager (`SessionManagement1`
-switching), and the updater and rollback once they exist. A test that runs
+Still to cover: the updater and rollback once they exist. A test that runs
 the real gamescope would need a Vulkan device with a DRM render node inside
 the VM, which today means virtio-gpu with Venus and a host GPU — out of reach
 for sandboxed builds.

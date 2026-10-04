@@ -16,7 +16,7 @@ on:
 
 jobs:
   vm-test:
-    name: ${{ matrix.test }} (${{ matrix.channel }})
+    name: ${{ matrix.test }} (${{ matrix.channel.name }})
     if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     timeout-minutes: 45
@@ -25,10 +25,17 @@ jobs:
       # channels have already disagreed about greetd's PAM stack.
       fail-fast: false
       matrix:
-        test: [greetd, decky-loader]
-        # stable: the nixpkgs the hosts run; unstable: what Steamix's own
-        # flake follows. See steamix-tests in flake.nix.
-        channel: [stable, unstable]
+        test: [greetd, sddm, decky-loader]
+        # The tests are the Steamix flake's own `checks`. Its nixpkgs input
+        # is pinned to one this repository locks, so a run is reproducible
+        # and matches what the hosts get: `--inputs-from .` makes the
+        # parent's locked inputs resolvable by name, and --override-input
+        # points Steamix's nixpkgs at one of them.
+        #   stable:   the nixpkgs the hosts run
+        #   unstable: the channel Steamix's own flake follows
+        channel:
+          - { name: stable, input: nixpkgs }
+          - { name: unstable, input: nixpkgs-unstable }
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -41,5 +48,9 @@ jobs:
           # Hands the runner's /dev/kvm to the Nix daemon; without it the
           # test driver falls back to emulation and takes many times longer.
           kvm: true
-      - name: Run ${{ matrix.test }} against ${{ matrix.channel }}
-        run: nix build -L --accept-flake-config .#steamix-tests.${{ matrix.channel }}.${{ matrix.test }}
+      - name: Run ${{ matrix.test }} against ${{ matrix.channel.name }}
+        run: >-
+          nix build -L --no-write-lock-file
+          --inputs-from .
+          --override-input nixpkgs ${{ matrix.channel.input }}
+          ./steamix#checks.x86_64-linux.${{ matrix.test }}
