@@ -74,6 +74,9 @@
           machine.wait_until_succeeds("pgrep -u decky", timeout=30)
 
       with subtest("the CEF debugging flag is in the Steam user's home"):
+          # The lingering user manager first: asking it for a unit before it
+          # runs is an error rather than a wait.
+          machine.wait_for_unit("user@1000.service")
           machine.wait_for_unit("default.target", user="alice")
           machine.succeed("test -f ${home}/.local/share/Steam/.cef-enable-remote-debugging")
           # The directories leading to it have to stay the user's, or a

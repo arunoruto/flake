@@ -66,6 +66,9 @@ in
     start_all()
     for m in [ally, desktop]:
         m.wait_for_unit("steamos-manager.service")
+        # The lingering user manager first: asking it for a unit before it
+        # runs is an error rather than a wait, which a slow CI runner hit.
+        m.wait_for_unit("user@1000.service")
         m.wait_for_unit("default.target", user="alice")
 
     with subtest("the VM really presents a ROG Ally's DMI identity"):
