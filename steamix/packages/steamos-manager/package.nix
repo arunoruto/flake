@@ -1,6 +1,7 @@
 # SteamOS Manager: the system daemon Steam talks to for OS-level features.
 #
-# Built unpatched, unlike Jovian's derivation. Theirs carries a patch rewiring
+# Built without patch files, unlike Jovian's derivation; postPatch only
+# rewrites FHS paths to the store. Theirs carries a patch rewiring
 # the daemon to Steam Deck firmware tools (BIOS and dock updaters, Jupiter
 # hardware support), which drags in four Deck-only packages to serve hardware a
 # desktop does not have. Upstream's own design makes that unnecessary: the
@@ -66,6 +67,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # constant; a substitution does the job without carrying a patch file.
     substituteInPlace steamos-manager/src/session.rs \
       --replace-fail '/usr/lib/sddm/sddm.conf.d' '/etc/sddm.conf.d'
+
+    # The daemon reads its vendor data from /usr/share/steamos-manager: the
+    # platform file, the per-device configs that turn on TDP, GPU and
+    # performance-profile controls for handhelds (matched by DMI), and the
+    # vendor config directories. postInstall puts them in the store, so
+    # without this every device lookup failed ("Failed to scan device
+    # configs") and no handheld was ever recognised. --replace-fail so an
+    # upstream move breaks the build instead of silently losing them; the
+    # /etc/steamos-manager override path is left alone on purpose.
+    for f in hardware.rs platform.rs daemon/root.rs daemon/user.rs; do
+      substituteInPlace "steamos-manager/src/$f" \
+        --replace-fail '/usr/share/steamos-manager' "$out/share/steamos-manager"
+    done
   '';
 
   # Mirrors upstream's Makefile install target, minus the pieces that only make

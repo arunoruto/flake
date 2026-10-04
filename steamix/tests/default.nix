@@ -23,5 +23,6 @@ in
 {
   greetd = runTest ./greetd.nix;
   sddm = runTest ./sddm.nix;
+  steamos-manager = runTest ./steamos-manager.nix;
   decky-loader = runTest ./decky-loader.nix;
 }

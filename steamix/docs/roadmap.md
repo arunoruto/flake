@@ -97,6 +97,12 @@ nixpkgs has `services.handheld-daemon` with its TDP adjustor and UI. A
 to `steamix.decky-loader.plugins`, and handles the power button covers the
 ROG Ally, Legion Go and Ayaneo crowd — Bazzite's core audience.
 
+The groundwork is in: SteamOS Manager recognises the handhelds it ships
+device configs for (ROG Ally, Legion Go, MSI Claw, AYANEO, GPD and others,
+matched by DMI), which is what unlocks its TDP, GPU and performance-profile
+controls. The `steamos-manager` VM test checks it with a ROG Ally's DMI
+identity.
+
 ### Mods as Steam compatibility tools
 
 The clean home for modding software such as ModEngine3 for FromSoftware

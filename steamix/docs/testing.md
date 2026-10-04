@@ -9,6 +9,7 @@ in `tests/`, one file per test.
 |------|----------------|
 | `greetd` | The default login path end to end. Boot lands in Gaming Mode; the gamescope command line and Steam's environment match the options; the session logs to the journal; the performance-overlay presets are generated; "Switch to Desktop" lands in the configured desktop session as a logind `class=user`, `type=wayland` session with its identity in the systemd user manager; "Return to Gaming Mode" goes back; a killed gamescope falls back to Gaming Mode. |
 | `sddm` | The SteamOS-shaped login path. SDDM autologin lands in Gaming Mode; both SteamOS Manager daemons run and publish `SessionManagement1`; the session's stand-in unit is active and the configured desktop is the manager's default; "Switch to Desktop" and "Return to Gaming Mode" go through the manager (temporary autologin drop-in, `graphical-session.target` stopped, Steam shut down cleanly); a killed gamescope falls back to Gaming Mode and stays there; a temporary session left behind does not survive a reboot. |
+| `steamos-manager` | SteamOS Manager finds the data it ships. A VM presenting a ROG Ally's DMI identity is recognised as one from the device configs; a VM with QEMU's own identity is `unknown` without an error, like a desktop PC; none of the Deck-only interfaces (factory reset, fan control, BIOS and dock updates, storage) appear on a PC; and nothing fails to read under `/usr/share/steamos-manager`. |
 | `decky-loader` | The loader serves on port 1337; declared plugins are linked from the store and load (frontend-only ones as passive); backend plugins run as the unprivileged user; the CEF flag lands in the Steam user's home with every directory on the way owned by that user; a store-installed plugin coexists with declared ones; a declared plugin removed through the UI is back after a reboot. |
 
 ## Running them
@@ -50,13 +51,14 @@ nix build ./steamix#checks.x86_64-linux.greetd.driverInteractive --no-write-lock
 ./result/bin/nixos-test-driver
 ```
 
-The Steamix workflow runs every test
-against both channels on every change under `steamix/`, on every lock file
-change, and after each nightly lock update. Its canonical copy is
-`steamix/.github/workflows/steamix.yaml`. GitHub only loads regular files
-from the repository's root `.github/workflows` and does not follow symlinks
-there, so the root file is a byte-for-byte copy, and the workflow's first
-step fails if the two differ.
+The Steamix workflow runs every test against both channels, and only for
+pushes that change something under `steamix/`, so unrelated work in the
+repository never runs it; it can also be started by hand. A nixpkgs bump that
+breaks Steamix therefore shows up on the next Steamix change or manual run.
+The workflow's canonical copy is `steamix/.github/workflows/steamix.yaml`.
+GitHub only loads regular files from the repository's root
+`.github/workflows` and does not follow symlinks there, so the root file is a
+byte-for-byte copy, and the workflow's first step fails if the two differ.
 
 ## What is real and what is not
 
@@ -100,6 +102,11 @@ the host that uses the module:
   exited at startup and took `SessionManagement1`, and with it "Switch to
   Desktop", along. The host's daemon had written its own state file before
   the seed existed, and the seed never overwrites one.
+- **SteamOS Manager never recognised a handheld.** It reads its platform
+  file and device configs from `/usr/share/steamos-manager`, and the package
+  installed them into its store path, so every device lookup failed and the
+  TDP, GPU and performance-profile controls the device configs describe
+  never appeared. The package now points the daemon at its own data.
 - **A crash in Gaming Mode on the SDDM path became a restart loop.** The
   next session replaced the stand-in unit the dead one had left. Stopping
   the old unit left `graphical-session.target` unneeded, systemd stopped it,
