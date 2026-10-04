@@ -19,11 +19,17 @@ let
   # With no state file the manager's "Switch to Desktop" falls back to
   # plasma.desktop, which only exists on Valve's image; SDDM then cannot
   # find the session and drops back into Gaming Mode. Seed the state with
-  # the configured desktop session instead. Only desktop_session is set:
-  # the remaining fields carry usable serde defaults, and the login-mode
-  # enum serializes differently from what its TOML name suggests.
+  # the configured desktop session instead.
+  #
+  # default_login_mode is required: SessionManagerState has no serde default
+  # for it, and a seed without it made the user daemon exit at startup with
+  # "missing field `default_login_mode`" and crash-loop, taking
+  # SessionManagement1 (and "Switch to Desktop") with it. The value is the
+  # serde form of the enum, its variant name ("Game"), not the snake_case
+  # form strum uses for steamosctl ("game").
   seedState = pkgs.writeText "steamos-manager-state.toml" ''
     [session_manager]
+    default_login_mode = "Game"
     desktop_session = "${config.steamix.desktopSession}.desktop"
   '';
 in
