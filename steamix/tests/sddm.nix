@@ -110,7 +110,9 @@
           assert "Type=wayland" in session, session
           assert "Class=user" in session, session
           machine.wait_until_succeeds(
-              "systemctl --user -M alice@ is-active fake-desktop-shell.service", timeout=30
+              "systemctl --user -M alice@ list-units 'fake-desktop-shell-*'"
+              " --state=active --no-legend | grep -q .",
+              timeout=30,
           )
 
       with subtest("Return to Gaming Mode goes through the manager"):
@@ -124,6 +126,12 @@
           wait_for_starts("steam", 3)
           machine.wait_until_succeeds(gamescope, timeout=60)
           assert starts("desktop") == 1, "a crash landed in the desktop"
+          # ...and stays there. A session that comes back only to be shut
+          # down again is a restart loop, which on the SDDM path a race
+          # between stand-in units once caused, twice a second.
+          machine.sleep(10)
+          assert starts("steam") == 3, f"Gaming Mode restarted {starts('steam') - 3} more times"
+          machine.succeed(gamescope)
 
       with subtest("a stale switch cannot pin the machine after a reboot"):
           # The vendor failsafe: a temporary session left behind is cleared
@@ -142,5 +150,7 @@
           wait_for_starts("steam", 4)
           machine.wait_until_succeeds(gamescope, timeout=60)
           assert starts("desktop") == 1, "the stale temporary session was honoured"
+          machine.sleep(5)
+          assert starts("steam") == 4, "Gaming Mode restarted after the reboot"
     '';
 }

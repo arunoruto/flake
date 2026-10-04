@@ -37,10 +37,16 @@ let
     dir=${stateDir}
 
     # `steam -shutdown` is how the switcher ends Gaming Mode: ask the running
-    # instance to exit, as the real client does over its IPC pipe.
+    # instance to exit, as the real client does over its IPC pipe. A signal
+    # to that process rather than a request file, so a request made while
+    # the machine powers off cannot linger and stop the next boot's Steam.
+    # The comm check keeps a stale pid file from hitting anything else.
     if [ "''${1:-}" = "-shutdown" ]; then
       echo "shutdown requested" >> "$dir/steam.log"
-      touch "$dir/steam-shutdown"
+      pid=$(cat "$dir/steam.pid" 2>/dev/null || true)
+      if [ -n "$pid" ] && [ "$(cat "/proc/$pid/comm" 2>/dev/null)" = steam ]; then
+        kill -TERM "$pid"
+      fi
       exit 0
     fi
 
@@ -50,13 +56,15 @@ let
     env | sort > "$dir/steam-env"
     echo "start $starts: $*" >> "$dir/steam.log"
     touch "$dir/steam-running"
+    echo "$$" > "$dir/steam.pid"
+    trap 'rm -f "$dir/steam-running"; echo "exit after shutdown" >> "$dir/steam.log"; exit 0' TERM
 
     # Real Steam dies with the X server gamescope gave it. Without this, a
     # killed gamescope would leave the stub behind, answering the commands
     # meant for the next session's Steam.
     compositor=$PPID
 
-    while [ ! -e "$dir/steam-shutdown" ]; do
+    while :; do
       if ! kill -0 "$compositor" 2>/dev/null; then
         rm -f "$dir/steam-running"
         echo "compositor gone, exiting" >> "$dir/steam.log"
@@ -72,9 +80,6 @@ let
       fi
       sleep 0.5
     done
-
-    rm -f "$dir/steam-shutdown" "$dir/steam-running"
-    echo "exit after shutdown" >> "$dir/steam.log"
   '';
 
   # programs.steam wraps its package with `.override` (extra libraries and
@@ -136,12 +141,12 @@ let
       > "$dir/desktop-session" 2>&1 || true
 
     # A stand-in for the desktop's shell unit: part of graphical-session.target,
-    # and stopping it ends this session. A unit left over from an earlier
-    # desktop session is cleared first; its ExecStop only kills a process that
-    # is still a fake-desktop.
-    systemctl --user stop fake-desktop-shell.service 2>/dev/null || true
-    systemctl --user reset-failed fake-desktop-shell.service 2>/dev/null || true
-    systemd-run --user --collect --quiet --unit=fake-desktop-shell.service \
+    # and stopping it ends this session. One unit per desktop process, and
+    # units from earlier desktops are left alone rather than stopped: stopping
+    # one can leave the target unneeded, and its stop would take this new unit
+    # down too (the race the Gaming Mode stand-in had). An old unit's ExecStop
+    # only kills a process that is still a fake-desktop, so it is harmless.
+    systemd-run --user --collect --quiet --unit="fake-desktop-shell-$$.service" \
       --property=RemainAfterExit=yes \
       --property=PartOf=graphical-session.target \
       --property=Wants=graphical-session.target \

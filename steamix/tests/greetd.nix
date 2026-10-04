@@ -147,5 +147,11 @@
           wait_for_starts("steam", 3)
           machine.wait_until_succeeds(gamescope, timeout=60)
           assert starts("desktop") == 1, "a crash landed in the desktop"
+          # ...and stays there. A session that comes back only to be shut
+          # down again is a restart loop, which on the SDDM path a race
+          # between stand-in units once caused, twice a second.
+          machine.sleep(10)
+          assert starts("steam") == 3, f"Gaming Mode restarted {starts('steam') - 3} more times"
+          machine.succeed(gamescope)
     '';
 }

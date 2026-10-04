@@ -8,7 +8,7 @@ in `tests/`, one file per test.
 | Test | What it covers |
 |------|----------------|
 | `greetd` | The default login path end to end. Boot lands in Gaming Mode; the gamescope command line and Steam's environment match the options; the session logs to the journal; the performance-overlay presets are generated; "Switch to Desktop" lands in the configured desktop session as a logind `class=user`, `type=wayland` session with its identity in the systemd user manager; "Return to Gaming Mode" goes back; a killed gamescope falls back to Gaming Mode. |
-| `sddm` | The SteamOS-shaped login path. SDDM autologin lands in Gaming Mode; both SteamOS Manager daemons run and publish `SessionManagement1`; the session's stand-in unit is active and the configured desktop is the manager's default; "Switch to Desktop" and "Return to Gaming Mode" go through the manager (temporary autologin drop-in, `graphical-session.target` stopped, Steam shut down cleanly); a killed gamescope falls back to Gaming Mode; a temporary session left behind does not survive a reboot. |
+| `sddm` | The SteamOS-shaped login path. SDDM autologin lands in Gaming Mode; both SteamOS Manager daemons run and publish `SessionManagement1`; the session's stand-in unit is active and the configured desktop is the manager's default; "Switch to Desktop" and "Return to Gaming Mode" go through the manager (temporary autologin drop-in, `graphical-session.target` stopped, Steam shut down cleanly); a killed gamescope falls back to Gaming Mode and stays there; a temporary session left behind does not survive a reboot. |
 | `decky-loader` | The loader serves on port 1337; declared plugins are linked from the store and load (frontend-only ones as passive); backend plugins run as the unprivileged user; the CEF flag lands in the Steam user's home with every directory on the way owned by that user; a store-installed plugin coexists with declared ones; a declared plugin removed through the UI is back after a reboot. |
 
 ## Running them
@@ -82,8 +82,8 @@ hardware.
 
 ## What they have caught
 
-Every bug below was found by these tests on their first run, and none of
-them showed up on the host that uses the module:
+Every bug below was found by these tests, and none of them showed up on
+the host that uses the module:
 
 - **greetd's PAM stack changed shape on nixpkgs-unstable.** From 26.11 it is
   a single `include login`, and the identity rule was ordered after an inline
@@ -100,3 +100,11 @@ them showed up on the host that uses the module:
   exited at startup and took `SessionManagement1`, and with it "Switch to
   Desktop", along. The host's daemon had written its own state file before
   the seed existed, and the seed never overwrites one.
+- **A crash in Gaming Mode on the SDDM path became a restart loop.** The
+  next session replaced the stand-in unit the dead one had left. Stopping
+  the old unit left `graphical-session.target` unneeded, systemd stopped it,
+  and that stop took the new stand-in, and so the new Steam, down within a
+  fraction of a second. SDDM relogged and the race repeated about twice a
+  second, 117 times in the minute CI watched, until a reboot. It is timing
+  dependent and only one CI run in several hit it, which is why both login
+  tests now also check that the recovered session stays up.
