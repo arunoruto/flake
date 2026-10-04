@@ -195,6 +195,84 @@ function that takes a report path and returns the profile list, built from
 that mapping table. Propose it as a function first; the option form can
 follow if the profiles are ever flattened.
 
+## ARM devices
+
+NixOS runs on aarch64 as well as it runs on x86_64, and the hardware is
+arriving: Snapdragon handhelds (AYN Odin and Thor, Retroid Pocket, AYANEO
+Pocket), and Valve's own ARM64 Steam client, built for the Steam Frame.
+Steamix assumes x86_64 today only because Steam does.
+
+### Prior art: Armada OS
+
+[Armada OS](https://github.com/armada-os/armada) gets Gaming Mode running on
+Snapdragon handhelds. It is a Fedora bootc image with device support from
+ROCKNIX, created in mid-2026 and calling itself prototype software. Its
+approach is the one to copy:
+
+- **Steam is native, not emulated.** It runs Valve's ARM64 client, the
+  `steamdeck_publicbeta` `linuxarm64` channel, with Valve's ARM64 Steam
+  runtime. The image pre-bootstraps both offline and launches the ARM64
+  binary directly; there is no 32-bit client anywhere
+  ([steam-bootstrap](https://github.com/armada-os/armada/tree/main/packages/steam-bootstrap)).
+- **Windows games use Valve's ARM64 Proton**, served through Steam, with
+  Wine ARM64EC and FEX inside it. A CachyOS ARM64 Proton is the fallback.
+- **FEX only runs x86 Linux code:** native x86 games and helpers that only
+  exist as x86 binaries. It runs on the official FEX Arch root filesystem,
+  with thunks for Vulkan, GL and Wayland, and per-game FEX profiles. An x86
+  build of Mesa's Turnip driver is overlaid into that root filesystem.
+  Box64 is not used.
+- **The session is the shape Steamix's SDDM path already has:** SDDM
+  autologin with relogin, the `holo.conf` marker so SteamOS Manager owns
+  switching, `steamosctl` behind `steamos-session-select`, and the
+  `gamescope-wayland` alias. Steam runs with the same
+  `-gamepadui -steamos3 -steampal -steamdeck` flags.
+- **The hard part is the hardware:** a mainline kernel with Snapdragon
+  patches and 4K pages, Mesa with Turnip patches for the Adreno GPUs, about
+  25 gamescope patches for EDID-less panels and the msm display driver, and
+  Valve's Steam Frame patch series for SteamOS Manager, which teaches it
+  devfreq GPUs and devices without DMI data.
+
+### What Steamix would need
+
+1. **A FEX module.** nixpkgs packages `fex` for aarch64 but has no NixOS
+   module: no binfmt registration for x86 and x86_64, no FEXServer, no root
+   filesystem. A `programs.fex` with `boot.binfmt.registrations`, a pinned
+   root filesystem image and thunk configuration is useful far beyond
+   Steamix, so it belongs upstream in nixpkgs, and it is the right first
+   step.
+2. **An aarch64 Steam.** nixpkgs' `steam` is x86-only. An ARM64 path would
+   fetch Valve's `linuxarm64` client manifest and the ARM64 runtime and run
+   them in an FHS environment, the way the x86 package runs its bootstrap.
+3. **Device support stays outside Steamix.** Kernel, Mesa and gamescope
+   patches for a given SoC are hardware enablement, which belongs in
+   nixos-hardware profiles or the consumer's configuration. Steamix only
+   needs its package options to accept the patched builds, which they
+   already do.
+4. **SteamOS Manager with the Steam Frame patches**, so TDP and GPU controls
+   work on devices that are not x86 PCs.
+5. **Decky runs natively.** Armada runs Decky's x86 PyInstaller binary
+   under FEX. Steamix builds Decky from source as a Python package, so it
+   should build for aarch64 as it is, with no emulation in the loop.
+6. **VM tests on aarch64.** The tests are architecture-neutral apart from
+   their x86 assumptions about Steam; with the stubs they could run on an
+   aarch64 builder, which needs a runner with KVM.
+
+### Blockers
+
+- **Nothing stable to pin.** The ARM64 client lives on a public-beta
+  channel with no stable URL or version. Armada pins a manifest and
+  pre-bootstraps it; a Nix package would have to do the same and accept
+  that Valve can withdraw a version.
+- **Valve's FEX tooling assumes an FHS layout.** Steam's FEX compatibility
+  tool hardcodes paths such as `/usr/share/guestos/fex-mesa`, which an FHS
+  environment or a bind mount has to provide.
+- **Page size.** FEX needs 4K pages, which rules out Asahi's default 16K
+  kernel without a micro-VM such as `muvm`.
+
+This is a direction for after the console pieces, not before. The FEX
+module can start any time and stands on its own. "The same module on an ARM
+handheld" would make a strong closing slide.
+
 ## Order of work
 
 1. **The update button with rollback**, **the facter-driven GPU pin**, and
@@ -205,4 +283,6 @@ follow if the profiles are ever flattened.
 3. **The GUI**, as a Decky plugin.
 4. Handhelds, launchers, emulation, streaming — the breadth that makes the
    project worth switching to.
-5. Upstreaming and the VM test, throughout, whenever a piece stabilises.
+5. Upstreaming and the VM tests, throughout, whenever a piece stabilises.
+6. **ARM**, starting with a FEX module for nixpkgs, once the console pieces
+   stand.
