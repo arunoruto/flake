@@ -157,7 +157,7 @@
       nixosModules = {
         default = import ./modules/nixos;
         # Re-exported from the in-repo Steamix flake (see steamix/README.md).
-        steamix = inputs.SteamixosModules.default;
+        steamix = inputs.steamix.nixosModules.default;
       };
       darwinModules.default = import ./modules/darwin;
       homeModules = {
