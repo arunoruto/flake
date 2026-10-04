@@ -59,12 +59,12 @@ let
     )
     # The facter modules themselves ship in nixpkgs (hardware.facter.*) and
     # are in its default module list, so nothing needs importing for them.
+    # Steamix (github.com/arunoruto/steamix) is not in this list on purpose:
+    # a host that wants it imports inputs.steamix.nixosModules.default itself
+    # (yhwach does), and modules/nixos/programs/gaming/steamix.nix adds our
+    # policy wherever it is imported.
     ++ (with inputs; [
       home-manager.nixosModules.home-manager
-      # The Steam-machine module, from the steamix input (github.com/arunoruto/steamix). Inert until
-      # a host sets steamix.enable; the policy glue lives in
-      # modules/nixos/programs/gaming/steamix.nix.
-      steamix.nixosModules.default
     ]);
 
   # Module list for a nix-darwin host. Stylix is configured directly by the
