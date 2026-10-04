@@ -61,10 +61,10 @@ let
     # are in its default module list, so nothing needs importing for them.
     ++ (with inputs; [
       home-manager.nixosModules.home-manager
-      # The Steam-machine module, from the in-repo steamos flake. Inert until
-      # a host sets steamos.enable; the policy glue lives in
-      # modules/nixos/programs/gaming/steamos.nix.
-      steamos.nixosModules.default
+      # The Steam-machine module, from the in-repo Steamix flake. Inert until
+      # a host sets steamix.enable; the policy glue lives in
+      # modules/nixos/programs/gaming/steamix.nix.
+      steamix.nixosModules.default
     ]);
 
   # Module list for a nix-darwin host. Stylix is configured directly by the

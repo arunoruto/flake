@@ -15,7 +15,7 @@
   ...
 }:
 let
-  cfg = config.steamos;
+  cfg = config.steamix;
 
   gamescopeArgs = [
     # Steam integration: the atoms/XWM protocol Steam drives Gaming Mode with.
@@ -126,7 +126,7 @@ let
       # need not be the one gamescope renders with.
       gpuPin = lib.optionalString (cfg.mangoapp.pciDev != null) "\npci_dev=${cfg.mangoapp.pciDev}";
     in
-    pkgs.writeText "steamos-mangoapp-presets.conf" ''
+    pkgs.writeText "steamix-mangoapp-presets.conf" ''
       [preset 0]
       no_display
 
@@ -198,7 +198,7 @@ let
       hdr
     '';
 
-  steamos-gamescope-session = pkgs.writeShellScriptBin "steamos-gamescope-session" ''
+  steamix-gamescope-session = pkgs.writeShellScriptBin "steamix-gamescope-session" ''
     set -eu
 
     # Put this session's output in the journal, whoever started it.
@@ -210,21 +210,21 @@ let
     # plugged into the GPU holding the framebuffer console (not necessarily
     # the one being rendered on), and unreachable over SSH, so a session that
     # fails to start leaves a black screen and no way to ask why. In the
-    # journal it is `journalctl -t steamos-session` from anywhere.
+    # journal it is `journalctl -t steamix-session` from anywhere.
     #
     # The greetd launcher wraps whatever session it resolves, desktops
     # included, and sets this variable to say so; SDDM runs the .desktop file
     # directly and does not, which is why this has to live here rather than
     # only on that path. systemd-cat execs rather than forks, so the process
     # tree its parent sees is unchanged either way.
-    if [ -z "''${STEAMOS_SESSION_JOURNAL:-}" ]; then
-      export STEAMOS_SESSION_JOURNAL=1
+    if [ -z "''${STEAMIX_SESSION_JOURNAL:-}" ]; then
+      export STEAMIX_SESSION_JOURNAL=1
       exec ${lib.getExe' pkgs.systemd "systemd-cat"} \
-        --identifier=steamos-session -- "$0" "$@"
+        --identifier=steamix-session -- "$0" "$@"
     fi
 
     # /run/wrappers/bin first so the cap_sys_nice gamescope wins when
-    # steamos.realtime.enable put one there, then the ambient PATH so the
+    # steamix.realtime.enable put one there, then the ambient PATH so the
     # wrapper `programs.gamescope` installs (it carries that module's
     # args/env) is preferred over the bare package — which is appended last
     # only as a guaranteed fallback. mangohud supplies `mangoapp`, which
@@ -333,7 +333,7 @@ let
           ''
       }
       mangohud_dir="''${XDG_CONFIG_HOME:-$HOME/.config}/MangoHud"
-      export MANGOHUD_PRESETSFILE="$mangohud_dir/steamos-presets.conf"
+      export MANGOHUD_PRESETSFILE="$mangohud_dir/steamix-presets.conf"
       ${pkgs.coreutils}/bin/mkdir -p "$mangohud_dir"
       ${pkgs.gnused}/bin/sed \
         -e "s|@fontScale@|$font_scale|g" \
@@ -380,7 +380,7 @@ let
     [Desktop Entry]
     Name=Steam
     Comment=Steam Gaming Mode (gamescope)
-    Exec=${lib.getExe steamos-gamescope-session}
+    Exec=${lib.getExe steamix-gamescope-session}
     Type=Application
     DesktopNames=gamescope
   '';
@@ -424,7 +424,7 @@ in
 
     services.displayManager.sessionPackages = [ sessionPackage ];
 
-    environment.systemPackages = [ steamos-gamescope-session ];
+    environment.systemPackages = [ steamix-gamescope-session ];
 
     hardware.graphics = lib.mkIf cfg.gamescope.wsi.enable {
       extraPackages = [ cfg.gamescope.wsi.package ];
@@ -456,7 +456,7 @@ in
     security.polkit.extraConfig =
       lib.mkIf (cfg.user != null && config.networking.networkmanager.enable)
         ''
-          // steamos: let ${cfg.user} configure Wi-Fi from Gaming Mode
+          // steamix: let ${cfg.user} configure Wi-Fi from Gaming Mode
           polkit.addRule(function(action, subject) {
             if (
               action.id.indexOf("org.freedesktop.NetworkManager") == 0 &&

@@ -1,4 +1,4 @@
-# steamos.nix
+# Steamix
 
 Turn a NixOS machine into a Steam machine: boot straight into Steam's
 **Gaming Mode** (the gamescope-driven Deck UI), with "Switch to Desktop" in
@@ -7,13 +7,14 @@ to come back — like SteamOS, without shipping Valve's stack.
 
 Start with [docs/README.md](./docs/README.md); [docs/how-it-works.md](./docs/how-it-works.md)
 explains the moving parts, [docs/options.md](./docs/options.md) is the curated
-option tour, and `docs/reference/` is generated from the module itself.
+option tour, `docs/reference/` is generated from the module itself, and
+[docs/roadmap.md](./docs/roadmap.md) is where the project is headed.
 
 ## Layout
 
 | Path | What |
 |------|------|
-| `modules/nixos/` | The NixOS module: `steamos.*` options, exported as `nixosModules.default` |
+| `modules/nixos/` | The NixOS module: `steamix.*` options, exported as `nixosModules.default` |
 | `packages/` | `steamos-manager`, `decky-loader`, and the `deckyPlugins` scope, exposed via `overlays.default` |
 | `docs/` | mdBook pages (rendered as part of the parent repo's book for now) |
 

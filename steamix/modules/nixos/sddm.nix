@@ -1,6 +1,6 @@
 # Boot into Gaming Mode the way SteamOS does: SDDM autologin, with session
 # switching handled by SteamOS Manager. Selected by
-# steamos.loginManager = "sddm"; see ./autostart.nix for the greetd default.
+# steamix.loginManager = "sddm"; see ./autostart.nix for the greetd default.
 #
 # The appeal over greetd is that nothing has to be corrected afterwards. SDDM
 # registers a logind session of class `user` and type `wayland` on its own, so
@@ -13,7 +13,7 @@
   ...
 }:
 let
-  cfg = config.steamos;
+  cfg = config.steamix;
   enabled = cfg.enable && cfg.autoStart && cfg.loginManager == "sddm";
 in
 {
@@ -44,7 +44,7 @@ in
 
     # SteamOS Manager is what actually performs the switch, by writing an
     # autologin drop-in into /etc/sddm.conf.d and ending the session.
-    steamos.manager.enable = true;
+    steamix.manager.enable = true;
 
     # The daemon only publishes SessionManagement1 — the interface Steam's
     # "Switch to Desktop" calls — when it finds this marker, which is how it
@@ -54,7 +54,7 @@ in
     # file has to be valid and empty of settings.
     environment.etc."sddm.conf.d/holo.conf".text = ''
       # Marker: tells SteamOS Manager it owns session switching on this
-      # machine. Managed by modules/steamos; no settings belong here.
+      # machine. Managed by steamix/modules/nixos; no settings belong here.
     '';
 
     # Vendor failsafe: a stale temporary session config would otherwise pin the
@@ -67,7 +67,7 @@ in
     # Tell the manager which session "Switch to Desktop" means. Steam
     # occasionally overwrites this, so it is reasserted for every session
     # rather than set once.
-    systemd.user.services.steamos-set-desktop-session = lib.mkIf (cfg.desktopSession != null) {
+    systemd.user.services.steamix-set-desktop-session = lib.mkIf (cfg.desktopSession != null) {
       description = "Point SteamOS Manager at the configured desktop session";
       wants = [ "steamos-manager.service" ];
       after = [ "steamos-manager.service" ];

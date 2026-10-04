@@ -1,5 +1,5 @@
 # Boot into Gaming Mode the self-contained way: a greetd session loop instead
-# of a display manager. Selected by steamos.loginManager = "greetd", the
+# of a display manager. Selected by steamix.loginManager = "greetd", the
 # default; see ./sddm.nix for the SteamOS-shaped alternative.
 #
 # greetd's `default_session` is (ab)used kiosk-style: it runs the launcher
@@ -16,13 +16,13 @@
   ...
 }:
 let
-  cfg = config.steamos;
+  cfg = config.steamix;
 
   # Every session registered via services.displayManager.sessionPackages
   # (the steam session, GNOME, Plasma, ...) collected in one directory.
   sessionsDir = "${config.services.displayManager.sessionData.desktops}/share/wayland-sessions";
 
-  steamos-session = pkgs.writeShellScriptBin "steamos-session" ''
+  steamix-session = pkgs.writeShellScriptBin "steamix-session" ''
     set -eu
 
     state_dir="''${XDG_STATE_HOME:-$HOME/.local/state}"
@@ -37,7 +37,7 @@ let
 
     desktop_file="${sessionsDir}/$session.desktop"
     if ! [ -r "$desktop_file" ]; then
-      echo "steamos-session: no wayland session '$session', falling back to Gaming Mode" >&2
+      echo "steamix-session: no wayland session '$session', falling back to Gaming Mode" >&2
       # Do not hot-loop greetd if even the fallback cannot start.
       sleep 2
       session="steam"
@@ -80,7 +80,7 @@ let
     # happens to hold the framebuffer console (not necessarily the one the
     # session renders on), and it is unreachable over SSH, so a session that
     # fails to start leaves a black screen and no way to ask why. In the
-    # journal it is `journalctl -t steamos-session` from anywhere.
+    # journal it is `journalctl -t steamix-session` from anywhere.
     #
     # systemd-cat execs the session rather than forking it, so greetd still
     # sees exactly one child and its session bookkeeping is unchanged.
@@ -90,8 +90,8 @@ let
     # That script does the same for itself when something else starts it (the
     # SDDM path), so tell it the output is already going to the journal and it
     # should not wrap a second time.
-    export STEAMOS_SESSION_JOURNAL=1
-    eval "exec ${lib.getExe' pkgs.systemd "systemd-cat"} --identifier=steamos-session -- $exec_line"
+    export STEAMIX_SESSION_JOURNAL=1
+    eval "exec ${lib.getExe' pkgs.systemd "systemd-cat"} --identifier=steamix-session -- $exec_line"
   '';
 in
 {
@@ -101,7 +101,7 @@ in
       # No initial_session: default_session *is* the autologin, so the loop
       # also covers relogin after "Switch to Desktop" / logout.
       settings.default_session = {
-        command = lib.getExe steamos-session;
+        command = lib.getExe steamix-session;
         inherit (cfg) user;
       };
     };
@@ -123,12 +123,12 @@ in
     # pam_env runs well before pam_systemd in the stack, so setting the two
     # variables there means the session is created correctly rather than
     # corrected afterwards.
-    security.pam.services.greetd.rules.session.steamos-session-identity = {
+    security.pam.services.greetd.rules.session.steamix-session-identity = {
       order = config.security.pam.services.greetd.rules.session.env.order + 1;
       control = "optional";
       modulePath = "${pkgs.linux-pam}/lib/security/pam_env.so";
       args = [
-        "conffile=${pkgs.writeText "steamos-greetd-pam-environment" ''
+        "conffile=${pkgs.writeText "steamix-greetd-pam-environment" ''
           XDG_SESSION_TYPE DEFAULT=wayland OVERRIDE=wayland
           XDG_SESSION_CLASS DEFAULT=user OVERRIDE=user
         ''}"

@@ -53,8 +53,8 @@ rec {
   };
 
   # steamos-manager, decky-loader and pkgs.deckyPlugins.*, from the in-repo
-  # steamos flake — the module's package options default to these.
-  steamos = inputs.steamos.overlays.default;
+  # Steamix flake — the module's package options default to these.
+  steamix = inputs.steamix.overlays.default;
 
   # Custom packages in versioned namespace
   # These packages are available under pkgs.custom.*

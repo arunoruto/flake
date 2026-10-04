@@ -6,8 +6,8 @@
     # In-repo flake, incubating until it moves to its own repository; with
     # nixpkgs following ours, its own lock file never matters here (and is
     # not committed). Splitting it out later is only a URL change.
-    steamos = {
-      url = "path:./steamos";
+    steamix = {
+      url = "path:./steamix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     home-manager = {
@@ -132,7 +132,7 @@
             kodi
             home-assistant
             custom-packages
-            steamos
+            steamix
           ])
           ++ (with inputs; [ nur.overlays.default ]);
         config = {
@@ -156,8 +156,8 @@
       inherit lib;
       nixosModules = {
         default = import ./modules/nixos;
-        # Re-exported from the in-repo steamos flake (see steamos/README.md).
-        steamos = inputs.steamos.nixosModules.default;
+        # Re-exported from the in-repo Steamix flake (see steamix/README.md).
+        steamix = inputs.SteamixosModules.default;
       };
       darwinModules.default = import ./modules/darwin;
       homeModules = {

@@ -1,6 +1,6 @@
-# steamos
+# Steamix
 
-The steamos flake turns a NixOS machine into a Steam machine: it boots
+Steamix turns a NixOS machine into a Steam machine: it boots
 straight into Steam's **Gaming Mode** (the gamescope-driven Deck UI), and the
 "Switch to Desktop" button in Steam's power menu drops you into a regular
 desktop session — with an icon there to return to Gaming Mode, just like
@@ -18,7 +18,7 @@ living-room machines. Nothing here is fetched from Valve: the session is a
 ## Its own flake
 
 This tree is mechanism only, and it is already structured as the standalone
-project it will eventually become: a flake at `steamos/` in the parent
+project it will eventually become: a flake at `steamix/` in the parent
 repository, exposing `nixosModules.default`, `overlays.default` (which
 provides `pkgs.steamos-manager`, `pkgs.decky-loader` and `pkgs.deckyPlugins`)
 and its packages. The parent consumes it as a relative-path input with
@@ -30,8 +30,8 @@ for consumers.
   tag system;
 - all policy (which host, which user, which desktop session) stays with the
   consumer. In the parent repo that is the adapter
-  `modules/nixos/programs/gaming/steamos.nix`, which defaults
-  `steamos.user` to `users.primaryUser` and turns the display manager off
+  `modules/nixos/programs/gaming/Steamix`, which defaults
+  `steamix.user` to `users.primaryUser` and turns the display manager off
   when the module owns the login path.
 
 ## Usage
@@ -42,7 +42,7 @@ In this repo (see `systems/x86_64-linux/yhwach/` for the worked example):
 {
   system.tags = [ "desktop" "gaming" ]; # desktop stack + steam defaults
 
-  steamos = {
+  steamix = {
     enable = true;
     desktopSession = "gnome"; # any installed wayland session name
   };
@@ -56,10 +56,10 @@ From another flake:
   inputs.mar-flake.url = "github:arunoruto/flake";
 
   # in a NixOS configuration:
-  imports = [ inputs.mar-flake.nixosModules.steamos ];
+  imports = [ inputs.mar-flake.nixosModules.steamix ];
 
   config = {
-    steamos = {
+    steamix = {
       enable = true;
       user = "alice";
       desktopSession = "plasma";
@@ -76,7 +76,7 @@ Requirements and expectations:
   family for gamescope — it is what SteamOS runs on.
 - The desktop session must be a **Wayland** session; X11 sessions are out of
   scope.
-- `steamos.autoStart` (the default) logs `steamos.user` in **without a
+- `steamix.autoStart` (the default) logs `steamix.user` in **without a
   password prompt**, console-style — treat the machine like a game console,
   not a multi-user workstation. Screen lockers of the desktop session still
   work once switched.
@@ -86,10 +86,10 @@ Requirements and expectations:
 HDR, VRR and the performance overlay are on by default and need no
 configuration — see [Options](./options.md#display-features). Resolution,
 refresh rate and anything else gamescope takes go through
-`steamos.gamescope.args` (one list element per argv entry):
+`steamix.gamescope.args` (one list element per argv entry):
 
 ```nix
-steamos.gamescope.args = [
+steamix.gamescope.args = [
   "--output-width"
   "3840"
   "--output-height"
@@ -101,4 +101,5 @@ See [How it works](./how-it-works.md) for the mechanism and its failure
 modes, [Options](./options.md) for the reference, and
 [Hardware setup & tuning](./hardware-and-tuning.md) for the checklist that
 makes the machine actually good — nixos-facter, nixos-hardware, gamescope
-display tuning, controllers.
+display tuning, controllers. [Roadmap](./roadmap.md) is where the project is
+headed and why.

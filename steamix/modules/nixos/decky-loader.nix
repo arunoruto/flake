@@ -13,13 +13,13 @@
   ...
 }:
 let
-  cfg = config.steamos.decky-loader;
-  enabled = config.steamos.enable && cfg.enable && cfg.package != null;
+  cfg = config.steamix.decky-loader;
+  enabled = config.steamix.enable && cfg.enable && cfg.package != null;
 
   # Decky injects its UI through Steam's CEF debugger, so the flag file that
   # makes Steam open it has to live in the *Steam* user's home — not the
   # unprivileged account plugins run as.
-  steamUser = config.steamos.user;
+  steamUser = config.steamix.user;
   steamHome = config.users.users.${steamUser}.home;
 
   # Plugins that need extra Python modules get them through the loader's own
@@ -29,7 +29,7 @@ let
   });
 in
 {
-  options.steamos.decky-loader = {
+  options.steamix.decky-loader = {
     enable = lib.mkEnableOption "Decky Loader, the Steam Deck plugin loader";
 
     package = lib.mkOption {
@@ -106,10 +106,10 @@ in
 
   config = lib.mkMerge [
     {
-      warnings = lib.optional (config.steamos.enable && cfg.enable && cfg.package == null) ''
-        steamos.decky-loader.enable is on but no Decky Loader package is
+      warnings = lib.optional (config.steamix.enable && cfg.enable && cfg.package == null) ''
+        steamix.decky-loader.enable is on but no Decky Loader package is
         available, so nothing was configured. nixpkgs does not ship one;
-        set steamos.decky-loader.package or provide pkgs.decky-loader
+        set steamix.decky-loader.package or provide pkgs.decky-loader
         through an overlay.
       '';
     }

@@ -1,10 +1,10 @@
 # Hardware setup & tuning
 
 The module gets you *into* Gaming Mode; how well it runs is decided by the
-hardware configuration around it. Nothing here is steamos-specific machinery —
+hardware configuration around it. Nothing here is Steamix-specific machinery —
 it is the checklist of things worth setting up by hand until someone figures
 out how to automate them. Like the rest of these pages it is written
-split-ready: when `steamos.nix` becomes its own repository, this guide moves
+split-ready: when `Steamix` becomes its own repository, this guide moves
 with it.
 
 ## nixos-facter: describe the hardware as data
@@ -59,7 +59,7 @@ until the report was regenerated.
 collection of per-device and per-component modules — the accumulated "this
 machine needs that kernel parameter" knowledge, packaged. If facter describes
 *what* hardware you have, nixos-hardware fixes *how* it behaves. When the
-steamos repo split happens, a guide like this one definitely belongs in it.
+Steamix repo split happens, a guide like this one definitely belongs in it.
 
 Add the input, then import either a **named machine profile** (best case:
 someone with your exact machine already did the work):
@@ -102,7 +102,7 @@ sensible; being explicit avoids surprises on TVs. One list element per argv
 entry:
 
 ```nix
-steamos.gamescope.args = [
+steamix.gamescope.args = [
   "--output-width"
   "3840"
   "--output-height"
@@ -112,8 +112,8 @@ steamos.gamescope.args = [
 ];
 ```
 
-HDR and VRR are not in that list because `steamos.hdr.enable` and
-`steamos.vrr.enable` are on by default — they pass the gamescope flag *and*
+HDR and VRR are not in that list because `steamix.hdr.enable` and
+`steamix.vrr.enable` are on by default — they pass the gamescope flag *and*
 tell Steam the session supports the feature, which is what puts the toggles in
 Gaming Mode's display settings.
 
@@ -184,7 +184,7 @@ limit.
 Pin it by PCI ID:
 
 ```nix
-steamos.gamescope.args = [
+steamix.gamescope.args = [
   "--prefer-vk-device"
   "1002:7590"   # `lspci -nn | grep -i vga`, or /sys/class/drm/card*/device/{vendor,device}
 ];

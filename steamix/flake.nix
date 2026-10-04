@@ -1,4 +1,4 @@
-# steamos.nix — boot a NixOS machine straight into Steam's Gaming Mode, with a
+# Steamix — boot a NixOS machine straight into Steam's Gaming Mode, with a
 # switchable Desktop Mode, without the full Jovian stack. See docs/.
 #
 # This flake currently lives inside a larger configuration repository, which
@@ -7,7 +7,7 @@
 # The layout is already the standalone one: when the project graduates to its
 # own repository, consumers only swap the input URL.
 {
-  description = "steamos.nix — a SteamOS-like Gaming Mode for NixOS";
+  description = "Steamix — a SteamOS-like Gaming Mode for NixOS";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
@@ -27,7 +27,7 @@
     {
       nixosModules = {
         default = ./modules/nixos;
-        steamos = ./modules/nixos;
+        steamix = ./modules/nixos;
       };
 
       # Adds steamos-manager, decky-loader and the deckyPlugins scope to pkgs —
@@ -38,11 +38,11 @@
       packages = eachSystem (
         system:
         let
-          steamosPackages = import ./packages { pkgs = nixpkgs.legacyPackages.${system}; };
+          steamixPackages = import ./packages { pkgs = nixpkgs.legacyPackages.${system}; };
         in
         {
-          inherit (steamosPackages) steamos-manager decky-loader;
-          inherit (steamosPackages.deckyPlugins) hltb-for-deck protondb-decky;
+          inherit (steamixPackages) steamos-manager decky-loader;
+          inherit (steamixPackages.deckyPlugins) hltb-for-deck protondb-decky;
           docs-reference = nixpkgs.legacyPackages.${system}.callPackage ./packages/docs-reference.nix { };
         }
       );

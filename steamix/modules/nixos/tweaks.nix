@@ -7,7 +7,7 @@
   ...
 }:
 let
-  cfg = config.steamos;
+  cfg = config.steamix;
 in
 {
   config = lib.mkIf (cfg.enable && cfg.tweaks.enable) {

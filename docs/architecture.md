@@ -14,7 +14,7 @@ and where to start when adding something new.
 | `modules/darwin/` | nix-darwin modules (homebrew, services, system, users). |
 | `modules/home-manager/` | Home Manager modules — the largest tree, see [background vs foreground](#background-vs-foreground). |
 | `modules/devix/` | Development-environment *mechanism*: a registry of languages, addons, LSPs, and formatters consumed by editors (helix, zed, opencode). Exposed as `homeModules.devix` and `devenvModules.*`. See [devix](#devix). |
-| `steamos/` | Steam-machine *mechanism* as its own in-repo flake: boot into Steam's Gaming Mode with a switchable Desktop Mode, without Jovian. Consumed as a relative-path input (`inputs.nixpkgs.follows`), re-exported as `nixosModules.steamos`; carries its own packages and docs. See [steamos](./steamos/README.md). |
+| `steamix/` | Steam-machine *mechanism* as its own in-repo flake: boot into Steam's Gaming Mode with a switchable Desktop Mode, without Jovian. Consumed as a relative-path input (`inputs.nixpkgs.follows`), re-exported as `nixosModules.steamix`; carries its own packages and docs. See [Steamix](./steamix/README.md). |
 | `homes/<user>/` | Per-user Home Manager entry points, auto-discovered for standalone `homeConfigurations`. SSH public keys live in `homes/<user>/keys/`. |
 | `lib/` | Small helper library layered onto `nixpkgs.lib` (directory listing, tag predicate, `eachSystem`). |
 | `overlays/` | Nixpkgs overlays: custom packages, modifications, `pkgs.unstable`, … |
@@ -146,7 +146,7 @@ Options defined by this flake (as opposed to upstream NixOS/HM options):
 | `gui.enable` | `modules/nixos/programs/` | "This host has GUI applications" (feeds `foreground.enable`) |
 | `hosts.{desktop,laptop,workstation,development}.enable` | `modules/home-manager/imports.nix` | HM-side mirror of the tags |
 | `devix.*` | `modules/devix/` | Development environments — see the [devix](./devix/README.md) section |
-| `steamos.*` | `steamos/modules/nixos/` | Steam-machine mode — see the [steamos](./steamos/README.md) section |
+| `steamix.*` | `steamix/modules/nixos/` | Steam-machine mode — see the [Steamix](./steamix/README.md) section |
 | `hardware.facter.hardwareProfiles` | `systems/hardware-profiles.nix` | Read-only: which nixos-hardware `common/` profiles this host's facter report selected |
 | `foreground.enable` | `modules/home-manager/foreground/` | GUI-facing home config |
 | `theming.{enable,scheme,image}` | `modules/home-manager/theming/`, `modules/nixos/system/theming.nix` | Stylix scheme/wallpaper |

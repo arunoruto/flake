@@ -7,7 +7,7 @@
   ...
 }:
 let
-  cfg = config.steamos;
+  cfg = config.steamix;
 
   # On the SDDM path the switching is SteamOS Manager's job — it writes the
   # autologin drop-in and ends the session, which is what the Steam client

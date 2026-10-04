@@ -1,6 +1,6 @@
 # Options
 
-All options live under `steamos.*`. Anything not listed here is configured
+All options live under `steamix.*`. Anything not listed here is configured
 through upstream nixpkgs options (`programs.steam.*`, `programs.gamescope.*`).
 
 This page is the curated tour; the [option reference](./reference/options.md)
@@ -8,7 +8,7 @@ is the complete listing, generated from the module so it cannot drift.
 
 ## Core
 
-### `steamos.enable`
+### `steamix.enable`
 
 Type `bool`, default `false`. Master switch. Enables `programs.steam` and
 `programs.gamescope`, and registers this module's own Gaming Mode session.
@@ -17,7 +17,7 @@ It also sets `programs.steam.gamescopeSession.enable = false` — nixpkgs'
 session and this one both register `steam.desktop`, and this one is a superset
 (see [How it works](./how-it-works.md#the-gaming-mode-session)).
 
-### `steamos.user`
+### `steamix.user`
 
 Type `null or str`, default `null`. The user the Gaming Mode session runs as.
 Required when `autoStart` is on — that user is logged in without a password
@@ -25,7 +25,7 @@ prompt.
 
 In this repo the adapter defaults it to `users.primaryUser`.
 
-### `steamos.autoStart`
+### `steamix.autoStart`
 
 Type `bool`, default `true`. Boot straight into Gaming Mode by owning the
 login path with a greetd session loop. Cannot be combined with a regular
@@ -36,7 +36,7 @@ With `autoStart = false` the module only registers the "Steam" session: pick
 it from your own display manager's session chooser; session *switching* (which
 relies on the loop) is not available.
 
-### `steamos.desktopSession`
+### `steamix.desktopSession`
 
 Type `null or str`, default `null`, example `"gnome"`. The Wayland session
 started by "Switch to Desktop" — a name from
@@ -48,7 +48,7 @@ The session itself must be enabled through your normal configuration
 (`services.desktopManager.gnome.enable`, `plasma6.enable`, …) — this option
 only selects it.
 
-### `steamos.steamArgs`
+### `steamix.steamArgs`
 
 Type `list of str`, default
 `[ "-gamepadui" "-steamos3" "-steampal" "-steamdeck" "-pipewire-dmabuf" ]`.
@@ -67,10 +67,10 @@ so they are tied to the flag rather than exposed separately.
 
 | Option | Default | gamescope flag | Steam capability |
 |--------|---------|----------------|------------------|
-| `steamos.hdr.enable` | `true` | `--hdr-enabled` | `STEAM_GAMESCOPE_HDR_SUPPORTED` |
-| `steamos.vrr.enable` | `true` | `--adaptive-sync` | `STEAM_GAMESCOPE_VRR_SUPPORTED` |
-| `steamos.tearing.enable` | `false` | `--immediate-flips` | `STEAM_GAMESCOPE_TEARING_SUPPORTED` |
-| `steamos.mangoapp.enable` | `true` | `--mangoapp` | `STEAM_USE_MANGOAPP` |
+| `steamix.hdr.enable` | `true` | `--hdr-enabled` | `STEAM_GAMESCOPE_HDR_SUPPORTED` |
+| `steamix.vrr.enable` | `true` | `--adaptive-sync` | `STEAM_GAMESCOPE_VRR_SUPPORTED` |
+| `steamix.tearing.enable` | `false` | `--immediate-flips` | `STEAM_GAMESCOPE_TEARING_SUPPORTED` |
+| `steamix.mangoapp.enable` | `true` | `--mangoapp` | `STEAM_USE_MANGOAPP` |
 
 - **HDR** is safe to leave on for SDR displays — gamescope only drives HDR
   when the connected output advertises it. It needs the WSI layer below for
@@ -83,7 +83,7 @@ so they are tied to the flag rather than exposed separately.
   it is not the same thing as running MangoHud on a game yourself.
 
 
-### `steamos.mangoapp.fontScale`
+### `steamix.mangoapp.fontScale`
 
 Type `null or float/int`, default `null`. Multiplier for the performance
 overlay's size — MangoHud's `font_scale`, which scales the panel as well as the
@@ -103,7 +103,7 @@ every element double. Levels 2–4 additionally get a *narrower* scale than
 level 1 where needed, computed so the widest table row still fits the display;
 at full scale on a 4K screen the dense levels would run off both edges.
 
-### `steamos.mangoapp.pciDev`
+### `steamix.mangoapp.pciDev`
 
 Type `null or str`, default `null`, example `"0000:03:00.0"`. PCI address of
 the GPU the overlay reports on (MangoHud's `pci_dev`, written as `lspci -D`
@@ -114,20 +114,20 @@ GPU and picks one itself, which need not be the one gamescope renders with — a
 desktop with an idle iGPU can get an overlay reporting that chip's load while
 the games run on the discrete card. `null` leaves the choice to MangoHud.
 
-### `steamos.mangoapp.package`
+### `steamix.mangoapp.package`
 
 The mangohud package that supplies `mangoapp`. It talks to gamescope over X
 atoms and a message queue, so when `programs.gamescope.package` is overridden
 to a much newer gamescope, override this to match.
 
-### `steamos.mangoapp.backgroundAlpha`
+### `steamix.mangoapp.backgroundAlpha`
 
 Type `null or float/int`, default `0.8`. Opacity of the performance overlay's
 backdrop, from `0` (invisible) to `1` (solid). MangoHud defaults to `0.5`,
 which is legible on a monitor an arm's length away and washes out into the game
 from across a living room. `null` leaves MangoHud's own default alone.
 
-### `steamos.realtime.enable`
+### `steamix.realtime.enable`
 
 Type `bool`, default `false`. Adds `--rt` and gives gamescope `cap_sys_nice`
 through `programs.gamescope.capSysNice`, letting it renice itself for smoother
@@ -140,14 +140,14 @@ reboot, and confirm Gaming Mode still starts before keeping it.
 
 ## gamescope
 
-### `steamos.gamescope.args`
+### `steamix.gamescope.args`
 
 Type `list of str`, default `[ ]`. Extra arguments appended to the gamescope
 command line, after the ones derived from the options above. One list element
 per argv entry:
 
 ```nix
-steamos.gamescope.args = [
+steamix.gamescope.args = [
   "--output-width"
   "3840"
   "--output-height"
@@ -157,12 +157,12 @@ steamos.gamescope.args = [
 ];
 ```
 
-### `steamos.gamescope.env`
+### `steamix.gamescope.env`
 
 Type `attrs of str`, default `{ }`. Extra environment for the session,
 exported last so it overrides the module's own defaults.
 
-### `steamos.gamescope.wsi.enable`
+### `steamix.gamescope.wsi.enable`
 
 Type `bool`, default `true`. Installs the gamescope WSI Vulkan layer
 (`VK_LAYER_FROG_gamescope_wsi`) into `hardware.graphics.extraPackages` and
@@ -172,7 +172,7 @@ The layer is how games present *through* gamescope instead of through plain
 Xwayland WSI; it carries frame pacing, the framerate limiter, and HDR
 swapchains. Requires `hardware.graphics.enable32Bit` (asserted).
 
-### `steamos.gamescope.wsi.package` / `.package32`
+### `steamix.gamescope.wsi.package` / `.package32`
 
 Defaulting to `pkgs.gamescope-wsi` and `pkgs.pkgsi686Linux.gamescope-wsi`. The
 layer speaks a versioned protocol to gamescope, so override these to keep it in
@@ -180,13 +180,13 @@ step with a non-default `programs.gamescope.package`:
 
 ```nix
 programs.gamescope.package = pkgs.unstable.gamescope;
-steamos.gamescope.wsi = {
+steamix.gamescope.wsi = {
   package = pkgs.unstable.gamescope-wsi;
   package32 = pkgs.unstable.pkgsi686Linux.gamescope-wsi;
 };
 ```
 
-## `steamos.tweaks.enable`
+## `steamix.tweaks.enable`
 
 Type `bool`, default `true`. SteamOS' opinionated system tuning, minus
 everything specific to Valve's hardware. Every setting below is a `mkDefault`,
@@ -205,8 +205,8 @@ Beyond the session itself:
 
 | Setting | Why |
 |---------|-----|
-| `security.pam.loginLimits` — hard `nice` of `-8` for `steamos.user` | Proton runs some threads at negative niceness. Scoped to the account the session logs in as, not system-wide. |
-| A polkit rule for NetworkManager, when `steamos.user` is set and `networking.networkmanager.enable` is on | Gaming Mode's Wi-Fi settings write *system* connections, which normally needs the `networkmanager` group — impossible to grant mid-setup with only a controller in hand. Scoped to that one user's local, active session; Jovian grants it to everyone in `users`. |
+| `security.pam.loginLimits` — hard `nice` of `-8` for `steamix.user` | Proton runs some threads at negative niceness. Scoped to the account the session logs in as, not system-wide. |
+| A polkit rule for NetworkManager, when `steamix.user` is set and `networking.networkmanager.enable` is on | Gaming Mode's Wi-Fi settings write *system* connections, which normally needs the `networkmanager` group — impossible to grant mid-setup with only a controller in hand. Scoped to that one user's local, active session; Jovian grants it to everyone in `users`. |
 
 Controller access is deliberately **not** handled here. `programs.steam` turns
 on `hardware.steam-hardware`, which installs Valve's `steam-devices` rules —
@@ -216,7 +216,7 @@ rules for every controller Steam supports. A blanket
 the machine, which is more than Valve grants on a Deck. If you have a pad that
 Valve's list misses, add a rule for that device.
 
-## `steamos.decky-loader`
+## `steamix.decky-loader`
 
 [Decky Loader](https://github.com/SteamDeckHomebrew/decky-loader) injects a
 plugin menu into Steam's Gaming Mode UI.
@@ -239,7 +239,7 @@ one in `packages/top-level/decky-loader`, so `pkgs.decky-loader` resolves here;
 elsewhere, supply your own:
 
 ```nix
-steamos.decky-loader = {
+steamix.decky-loader = {
   enable = true;
   package = inputs.somewhere.packages.${pkgs.system}.decky-loader;
   extraPythonPackages = ps: [ ps.hid ];
@@ -258,7 +258,7 @@ that when `.cef-enable-remote-debugging` exists in its data directory at
 startup. Without it the loader starts, serves happily on port 1337, and is
 simply never visible in Gaming Mode.
 
-So the module creates that file in `steamos.user`'s Steam directory. **Steam
+So the module creates that file in `steamix.user`'s Steam directory. **Steam
 has to be restarted afterwards** — switching the configuration is not enough,
 since Steam only reads the flag when it launches.
 
@@ -269,12 +269,12 @@ how Decky works, not something this module adds on top.
 The service also gets `lsof` and `systemctl` on its `PATH` — the loader uses
 the first to find that CEF socket and the second to manage its own unit.
 
-### `steamos.decky-loader.plugins`
+### `steamix.decky-loader.plugins`
 
 Type `list of package`, default `[ ]`. Plugins installed declaratively:
 
 ```nix
-steamos.decky-loader.plugins = with pkgs.deckyPlugins; [
+steamix.decky-loader.plugins = with pkgs.deckyPlugins; [
   hltb-for-deck
   protondb-decky
 ];
@@ -303,7 +303,7 @@ Plugins are packaged in `packages/deckyPlugins/`, built by `buildDeckyPlugin`
 from the prebuilt tarball each plugin publishes per release. Adding one is a
 handful of lines — `pname`, `version`, `owner`, `hash`.
 
-## `steamos.manager`
+## `steamix.manager`
 
 [SteamOS Manager](https://gitlab.steamos.cloud/holo/steamos-manager) is the
 system daemon Steam queries for things it cannot reach itself. Steam probes the
@@ -354,10 +354,10 @@ to reach for it, and the interface specification has no display or resolution
 interface at all — Steam sets the game resolution directly through gamescope's
 `GAMESCOPE_XWAYLAND_MODE_CONTROL` atom, from a list it builds itself.
 
-## `steamos.loginManager`
+## `steamix.loginManager`
 
 Type `enum [ "greetd" "sddm" ]`, default `"greetd"`. Which display manager owns
-the login path when `steamos.autoStart` is on. The difference is not cosmetic.
+the login path when `steamix.autoStart` is on. The difference is not cosmetic.
 
 | | `greetd` | `sddm` |
 |---|---|---|
@@ -374,7 +374,7 @@ so the module corrects it with a `pam_env` rule — a fix that works but that
 upstream never intended.
 
 **sddm** is what SteamOS itself runs, so Valve's software finds the shape it
-expects and nothing needs correcting. It also unlocks `steamos.manager`, which
+expects and nothing needs correcting. It also unlocks `steamix.manager`, which
 this path enables for you: switching goes through the interface Steam prefers,
 rather than through a script emulating it.
 

@@ -6,11 +6,11 @@ Eight pieces, eight files:
 |------|-------|
 | `gaming-mode.nix` | The Gaming Mode session: the gamescope session script, and the system-level bits it depends on. |
 | `session-select.nix` | The `steamos-session-select` switcher Steam calls, plus the "Return to Gaming Mode" desktop entry. |
-| `autostart.nix` | The default login path: a greetd session loop running the `steamos-session` launcher. |
-| `sddm.nix` | The SteamOS-shaped login path: SDDM autologin plus SteamOS Manager, behind `steamos.loginManager = "sddm"`. |
-| `tweaks.nix` | SteamOS' system tuning — zram, earlyoom, a couple of network sysctls — behind `steamos.tweaks.enable`. |
-| `decky-loader.nix` | The Decky plugin loader service, behind `steamos.decky-loader.enable`. |
-| `manager.nix` | The SteamOS Manager daemon, behind `steamos.manager.enable`. |
+| `autostart.nix` | The default login path: a greetd session loop running the `steamix-session` launcher. |
+| `sddm.nix` | The SteamOS-shaped login path: SDDM autologin plus SteamOS Manager, behind `steamix.loginManager = "sddm"`. |
+| `tweaks.nix` | SteamOS' system tuning — zram, earlyoom, a couple of network sysctls — behind `steamix.tweaks.enable`. |
+| `decky-loader.nix` | The Decky plugin loader service, behind `steamix.decky-loader.enable`. |
+| `manager.nix` | The SteamOS Manager daemon, behind `steamix.manager.enable`. |
 | `default.nix` | Options, assertions, warnings. |
 
 ## The Gaming Mode session
@@ -25,7 +25,7 @@ gamescope --steam -- steam -tenfoot
 That is enough to *see* Gaming Mode, but not enough for it to behave, because
 Steam decides at startup what Gaming Mode can do by reading its environment,
 and expects a compositor set up a particular way. So the module ships its own
-session script — `steamos-gamescope-session`, registered as `steam.desktop`,
+session script — `steamix-gamescope-session`, registered as `steam.desktop`,
 the same session name — modelled on Valve's `gamescope-session` with the Steam
 Deck hardware parts removed.
 
@@ -73,7 +73,7 @@ only when absent so an existing level survives.
 The presets: the module defines what each level *contains* itself, through
 `MANGOHUD_PRESETSFILE` — MangoHud's built-ins minus the Deck's battery
 readouts, sized for the connected display at session start
-(`steamos.mangoapp.fontScale`). The presets file is the only place sizing can
+(`steamix.mangoapp.fontScale`). The presets file is the only place sizing can
 live: Steam rewrites the config file on every level change, and
 `MANGOHUD_CONFIG` makes MangoHud apply the preset twice — every element drawn
 double. The dense levels get their own, narrower scale, computed so the widest
@@ -81,11 +81,11 @@ table row still fits the display.
 
 ## The login loop
 
-With `steamos.autoStart` on the default greetd path, there is no display
+With `steamix.autoStart` on the default greetd path, there is no display
 manager and no greeter (`loginManager = "sddm"` swaps this whole section for
 SDDM autologin — see `sddm.nix` and the switching notes below). greetd's
-`default_session` is used kiosk-style: it runs the `steamos-session` launcher
-directly as `steamos.user`, and whenever the session ends — Steam shut down,
+`default_session` is used kiosk-style: it runs the `steamix-session` launcher
+directly as `steamix.user`, and whenever the session ends — Steam shut down,
 desktop logged out, compositor crashed — greetd simply runs it again.
 
 The launcher does the part a display manager would normally do:
@@ -111,14 +111,14 @@ leaves a black screen and no way to ask why. The launcher runs the session
 under `systemd-cat` instead, so it is all in the journal:
 
 ```sh
-journalctl -t steamos-session
+journalctl -t steamix-session
 ```
 
 `systemd-cat` execs the session rather than forking it, so greetd still sees
 one child and its bookkeeping is unchanged.
 
 The Gaming Mode script also wraps *itself* the same way when nothing else has
-(guarded by `STEAMOS_SESSION_JOURNAL`, which the greetd launcher sets to
+(guarded by `STEAMIX_SESSION_JOURNAL`, which the greetd launcher sets to
 prevent double-wrapping) — SDDM runs the `.desktop` file directly, and without
 this its sessions logged nowhere at all.
 
@@ -150,7 +150,7 @@ session all land back in Steam. This mirrors SteamOS.
 
 ## Session switching
 
-The mechanism depends on `steamos.loginManager`. What follows describes the
+The mechanism depends on `steamix.loginManager`. What follows describes the
 default greetd path; on the SDDM path the work is SteamOS Manager's — Steam
 calls its `SessionManagement1` D-Bus interface, the manager writes an SDDM
 autologin drop-in naming the target session and stops
@@ -169,7 +169,7 @@ names, e.g. `steamos-session-select plasma`). The module ships a script with
 that name and contract:
 
 - `gamescope` / `steam` → clear the selection (next login: Gaming Mode);
-- `desktop` / `plasma*` → write `steamos.desktopSession` into the selection
+- `desktop` / `plasma*` → write `steamix.desktopSession` into the selection
   file — whatever KDE flavor Steam asks for, you get *your* desktop;
 - anything else is taken as a literal session name, for scripting.
 
@@ -187,13 +187,13 @@ On the desktop, a **Return to Gaming Mode** launcher entry (the same script,
         │    → writes ~/.local/state/steamos-session-select
         │    → steam -shutdown
         ▼
-   greetd respawns steamos-session
+   greetd respawns steamix-session
         │  reads + deletes the selection file
         ▼
-   Desktop session (steamos.desktopSession)
+   Desktop session (steamix.desktopSession)
         │  "Return to Gaming Mode" (or plain logout / reboot)
         ▼
-   greetd respawns steamos-session → Gaming Mode
+   greetd respawns steamix-session → Gaming Mode
 ```
 
 ## Known limitations

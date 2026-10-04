@@ -3,7 +3,7 @@
   stdenvNoCC,
   mdbook,
   docs-devix-reference,
-  docs-steamos-reference,
+  docs-steamix-reference,
 }:
 stdenvNoCC.mkDerivation {
   pname = "flake-docs";
@@ -11,12 +11,12 @@ stdenvNoCC.mkDerivation {
 
   src = lib.fileset.toSource {
     root = ./../..;
-    # docs/steamos is a symlink into steamos/docs (the pages belong to the
-    # in-repo steamos flake); both sides have to be in the source for it to
+    # docs/steamix is a symlink into steamix/docs (the pages belong to the
+    # in-repo Steamix flake); both sides have to be in the source for it to
     # resolve inside the sandbox.
     fileset = lib.fileset.unions [
       (lib.fileset.maybeMissing ./../../docs)
-      (lib.fileset.maybeMissing ./../../steamos/docs)
+      (lib.fileset.maybeMissing ./../../steamix/docs)
     ];
   };
 
@@ -25,13 +25,13 @@ stdenvNoCC.mkDerivation {
   buildPhase = ''
     runHook preBuild
 
-    # docs/devix/reference and docs/steamos/reference are generated from the
+    # docs/devix/reference and docs/steamix/reference are generated from the
     # option descriptions in their modules, so they are not part of the source
     # tree (see .gitignore). `just docs` drops the same files in place for
     # local previews.
-    mkdir -p docs/devix/reference docs/steamos/reference
+    mkdir -p docs/devix/reference docs/steamix/reference
     cp ${docs-devix-reference}/*.md docs/devix/reference/
-    cp ${docs-steamos-reference}/*.md docs/steamos/reference/
+    cp ${docs-steamix-reference}/*.md docs/steamix/reference/
 
     cd docs && mdbook build --dest-dir $out
 

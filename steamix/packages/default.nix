@@ -1,4 +1,4 @@
-# Everything steamos ships that is not the NixOS module: the two daemons the
+# Everything Steamix ships that is not the NixOS module: the two daemons the
 # module can drive but nixpkgs does not package, and the Decky plugin scope.
 #
 # Takes a plain nixpkgs `pkgs` and returns an attrset shaped like what the
@@ -10,7 +10,7 @@
   decky-loader = pkgs.callPackage ./decky-loader/package.nix { };
 
   # pkgs.deckyPlugins.*: buildDeckyPlugin plus one directory per packaged
-  # plugin, auto-discovered. The steamos module's `decky-loader.plugins`
+  # plugin, auto-discovered. The Steamix module's `decky-loader.plugins`
   # option consumes these, mix-and-matchable with store-installed plugins.
   deckyPlugins = pkgs.lib.makeScope pkgs.newScope (
     self:

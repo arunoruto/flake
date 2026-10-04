@@ -13,8 +13,8 @@
   ...
 }:
 let
-  cfg = config.steamos.manager;
-  enabled = config.steamos.enable && cfg.enable && cfg.package != null;
+  cfg = config.steamix.manager;
+  enabled = config.steamix.enable && cfg.enable && cfg.package != null;
 
   # With no state file the manager's "Switch to Desktop" falls back to
   # plasma.desktop, which only exists on Valve's image; SDDM then cannot
@@ -24,11 +24,11 @@ let
   # enum serializes differently from what its TOML name suggests.
   seedState = pkgs.writeText "steamos-manager-state.toml" ''
     [session_manager]
-    desktop_session = "${config.steamos.desktopSession}.desktop"
+    desktop_session = "${config.steamix.desktopSession}.desktop"
   '';
 in
 {
-  options.steamos.manager = {
+  options.steamix.manager = {
     enable = lib.mkEnableOption "SteamOS Manager, the OS-integration daemon Steam talks to";
 
     package = lib.mkOption {
@@ -48,14 +48,14 @@ in
   config = lib.mkMerge [
     {
       warnings =
-        lib.optional (config.steamos.enable && cfg.enable && cfg.package == null) ''
-          steamos.manager.enable is on but no SteamOS Manager package is
+        lib.optional (config.steamix.enable && cfg.enable && cfg.package == null) ''
+          steamix.manager.enable is on but no SteamOS Manager package is
           available, so nothing was configured. nixpkgs does not ship one; set
-          steamos.manager.package or provide pkgs.steamos-manager through an
+          steamix.manager.package or provide pkgs.steamos-manager through an
           overlay.
         ''
-        ++ lib.optional (enabled && config.steamos.autoStart && config.steamos.loginManager == "greetd") ''
-          steamos.manager.enable is on while steamos.loginManager is
+        ++ lib.optional (enabled && config.steamix.autoStart && config.steamix.loginManager == "greetd") ''
+          steamix.manager.enable is on while steamix.loginManager is
           "greetd", and those two disagree about how sessions are switched.
 
           SteamOS Manager advertises the SessionManagement1 interface,
@@ -67,7 +67,7 @@ in
           "steam". Nothing reads either under greetd, so "Switch to
           Desktop" would drop back into Gaming Mode.
 
-          Either set steamos.loginManager = "sddm", which wires the two up
+          Either set steamix.loginManager = "sddm", which wires the two up
           together, or leave the manager off.
         '';
     }
@@ -97,12 +97,12 @@ in
 
     # The user != null guard matters: the manager can be enabled without
     # autoStart (for the performance controls alone), and only autoStart
-    # asserts that steamos.user is set — without the guard this block would
+    # asserts that steamix.user is set — without the guard this block would
     # die on `users.${null}` instead of simply not seeding any state.
-    (lib.mkIf (enabled && config.steamos.desktopSession != null && config.steamos.user != null) {
+    (lib.mkIf (enabled && config.steamix.desktopSession != null && config.steamix.user != null) {
       # `C` copies only when the file is absent, so a session later chosen
       # over D-Bus (SetDefaultDesktopSession) is not overwritten on boot.
-      systemd.user.tmpfiles.users.${config.steamos.user}.rules = [
+      systemd.user.tmpfiles.users.${config.steamix.user}.rules = [
         "d %h/.config/steamos-manager 0755 - - -"
         "C %h/.config/steamos-manager/state.toml 0644 - - - ${seedState}"
       ];

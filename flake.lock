@@ -1287,7 +1287,7 @@
         "nixpkgs-update": "nixpkgs-update",
         "nur": "nur",
         "sops-nix": "sops-nix",
-        "steamos": "steamos",
+        "steamix": "steamix",
         "stump-fork": "stump-fork",
         "stylix": "stylix",
         "ucodenix": "ucodenix",
@@ -1407,18 +1407,18 @@
         "type": "github"
       }
     },
-    "steamos": {
+    "steamix": {
       "inputs": {
         "nixpkgs": [
           "nixpkgs"
         ]
       },
       "locked": {
-        "path": "./steamos",
+        "path": "./steamix",
         "type": "path"
       },
       "original": {
-        "path": "./steamos",
+        "path": "./steamix",
         "type": "path"
       },
       "parent": []

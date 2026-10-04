@@ -1,4 +1,4 @@
-# steamos.nix — a self-configured Steam-machine module: boot straight into
+# Steamix — a self-configured Steam-machine module: boot straight into
 # Steam's Gaming Mode (gamescope) with an optional Desktop Mode to switch to,
 # without pulling in the full Jovian/steamos-manager stack.
 #
@@ -17,7 +17,7 @@
   ...
 }:
 let
-  cfg = config.steamos;
+  cfg = config.steamix;
 in
 {
   imports = [
@@ -30,7 +30,7 @@ in
     ./sddm.nix
   ];
 
-  options.steamos = {
+  options.steamix = {
     enable = lib.mkEnableOption "the SteamOS-like Gaming Mode experience";
 
     user = lib.mkOption {
@@ -39,7 +39,7 @@ in
       example = "alice";
       description = ''
         The user the Gaming Mode session runs as. Required when
-        {option}`steamos.autoStart` is enabled — the machine logs this user
+        {option}`steamix.autoStart` is enabled — the machine logs this user
         in without a password prompt, console-style.
       '';
     };
@@ -49,7 +49,7 @@ in
       default = true;
       description = ''
         Boot straight into Gaming Mode. This owns the login path — see
-        {option}`steamos.loginManager` for which display manager does it — so
+        {option}`steamix.loginManager` for which display manager does it — so
         it cannot be combined with another one. Disable it to merely register
         the "Steam" session with whatever display manager you already run.
       '';
@@ -63,7 +63,7 @@ in
       default = "greetd";
       description = ''
         Which display manager owns the login path when
-        {option}`steamos.autoStart` is on. Two shapes, and the difference is
+        {option}`steamix.autoStart` is on. Two shapes, and the difference is
         not cosmetic:
 
         `greetd` is self-contained. It needs nothing outside nixpkgs, and
@@ -76,7 +76,7 @@ in
         expects. Sessions come out as class `user`, type `wayland` with no
         correction needed, and switching goes through SteamOS Manager's
         `SessionManagement1` interface — the path the Steam client prefers.
-        It requires {option}`steamos.manager` and therefore a
+        It requires {option}`steamix.manager` and therefore a
         `steamos-manager` package, which nixpkgs does not have; an assertion
         will tell you if it is missing.
       '';
@@ -122,7 +122,7 @@ in
 
         Harmless on SDR displays — gamescope only drives HDR when the
         connected output actually advertises it. Requires the gamescope WSI
-        Vulkan layer ({option}`steamos.gamescope.wsi.enable`) for games to
+        Vulkan layer ({option}`steamix.gamescope.wsi.enable`) for games to
         hand HDR swapchains through.
       '';
     };
@@ -309,39 +309,39 @@ in
     assertions = [
       {
         assertion = cfg.autoStart -> cfg.user != null;
-        message = "steamos.autoStart needs steamos.user to know who to log in as.";
+        message = "steamix.autoStart needs steamix.user to know who to log in as.";
       }
       {
         assertion =
           cfg.desktopSession == null
           || lib.elem cfg.desktopSession config.services.displayManager.sessionData.sessionNames;
         message = ''
-          steamos.desktopSession "${toString cfg.desktopSession}" is not an installed session.
+          steamix.desktopSession "${toString cfg.desktopSession}" is not an installed session.
           Valid session names are:
             ${lib.concatStringsSep "\n  " config.services.displayManager.sessionData.sessionNames}
         '';
       }
       {
         assertion = cfg.gamescope.wsi.enable -> config.hardware.graphics.enable32Bit;
-        message = "steamos.gamescope.wsi.enable needs hardware.graphics.enable32Bit for the 32-bit layer.";
+        message = "steamix.gamescope.wsi.enable needs hardware.graphics.enable32Bit for the 32-bit layer.";
       }
       {
         assertion = (cfg.autoStart && cfg.loginManager == "sddm") -> cfg.manager.package != null;
         message = ''
-          steamos.loginManager = "sddm" needs SteamOS Manager: on that path
+          steamix.loginManager = "sddm" needs SteamOS Manager: on that path
           session switching goes through its SessionManagement1 interface, and
           nothing else can write SDDM's autologin drop-in.
 
           nixpkgs does not package steamos-manager, so set
-          steamos.manager.package, provide pkgs.steamos-manager through an
-          overlay, or use steamos.loginManager = "greetd", which needs nothing
+          steamix.manager.package, provide pkgs.steamos-manager through an
+          overlay, or use steamix.loginManager = "greetd", which needs nothing
           outside nixpkgs.
         '';
       }
     ];
 
     warnings = lib.optional (cfg.autoStart && cfg.desktopSession == null) ''
-      steamos.desktopSession is unset: "Switch to Desktop" in Gaming Mode will
+      steamix.desktopSession is unset: "Switch to Desktop" in Gaming Mode will
       relaunch Gaming Mode. Set it to a session name (e.g. "gnome" or "plasma")
       to get a Desktop Mode.
     '';
