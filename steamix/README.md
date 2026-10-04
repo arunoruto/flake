@@ -16,6 +16,7 @@ option tour, `docs/reference/` is generated from the module itself, and
 |------|------|
 | `modules/nixos/` | The NixOS module: `steamix.*` options, exported as `nixosModules.default` |
 | `packages/` | `steamos-manager`, `decky-loader`, and the `deckyPlugins` scope, exposed via `overlays.default` |
+| `.github/workflows/` | CI, canonical copy; the repository root carries a checked byte-for-byte copy, since GitHub ignores symlinked workflows |
 | `tests/` | NixOS VM tests, exposed as `checks.x86_64-linux.*`; see [docs/testing.md](./docs/testing.md) |
 | `docs/` | mdBook pages (rendered as part of the parent repo's book for now) |
 

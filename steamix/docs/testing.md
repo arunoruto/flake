@@ -50,9 +50,13 @@ nix build ./steamix#checks.x86_64-linux.greetd.driverInteractive --no-write-lock
 ./result/bin/nixos-test-driver
 ```
 
-The Steamix workflow (`.github/workflows/steamix.yaml`) runs every test
+The Steamix workflow runs every test
 against both channels on every change under `steamix/`, on every lock file
-change, and after each nightly lock update.
+change, and after each nightly lock update. Its canonical copy is
+`steamix/.github/workflows/steamix.yaml`. GitHub only loads regular files
+from the repository's root `.github/workflows` and does not follow symlinks
+there, so the root file is a byte-for-byte copy, and the workflow's first
+step fails if the two differ.
 
 ## What is real and what is not
 
