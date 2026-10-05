@@ -15,7 +15,7 @@ just switch                 # build + activate this host (nh os switch)
 just home [user]            # switch a user's home-manager config
 just fmt                    # nix fmt (nixfmt-tree)
 just check                  # nix flake check --accept-flake-config
-just eval-all               # evaluate every nixos/darwin/home config (catches eval errors)
+just eval-all [--workers N] # evaluate every nixos/darwin/home config in parallel (what CI runs)
 just deploy --on <host>     # colmena deploy (management-tagged hosts)
 just bump packages/top-level/<pkg>   # nix-update a custom package
 just docs                   # serve mdBook docs with live reload
@@ -37,8 +37,8 @@ Custom packages live under `legacyPackages`: `nix build .#<pkg>` (top-level) or 
 
 - **Never commit `flake.lock`** — it is bumped only by the scheduled Update Lockfile GitHub action; a pre-commit hook (`scripts/block-lockfile-commit.sh`) rejects local commits touching it.
 - **New `packages/**/package.nix` files must set `__structuredAttrs = true;` and `strictDeps = true;`** (`scripts/check-new-packages.sh`). Existing packages are grandfathered.
-- Formatting (`nixfmt`) is CI-enforced via `nix flake check`. `statix`/`deadnix` run as local commit hooks only and never fail CI.
-- Every configuration must at least evaluate. CI (`.github/workflows/check.yaml`) runs `nix flake check`; `just eval-all` walks every nixos/darwin/home config locally. Nothing *builds* the configurations in CI, so a config that evaluates but fails to build only surfaces on `just switch` / `just deploy`.
+- Formatting (`nixfmt`) is CI-enforced by building `checks.x86_64-linux.pre-commit-check`. `statix`/`deadnix` run as local commit hooks only and never fail CI.
+- Every configuration must at least evaluate. CI (`check.yaml`, and `update.yaml` before committing a lock bump) runs `scripts/eval-all.sh`, which is also `just eval-all`: nix-eval-jobs over every nixos/darwin/home config and the x86_64-linux dev shells, one memory-recycled worker per job. CI does **not** run `nix flake check`; it keeps every host alive in one process (~17 GB heap) and swapped the 16 GB runners into 30-minute timeouts. `just check` still runs it locally. Nothing *builds* the configurations in CI, so a config that evaluates but fails to build only surfaces on `just switch` / `just deploy`.
 
 ## Conventions (not hook-enforced)
 

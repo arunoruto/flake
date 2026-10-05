@@ -169,18 +169,7 @@ clean:
 prune-agents *flags:
     ./scripts/prune-user-agents.sh {{ flags }}
 
-# Evaluate every nixos/darwin/home configuration; prints one drvPath per line
-eval-all:
-    #!/usr/bin/env bash
-    set -uo pipefail
-    names() { nix eval ".#$1" --apply 'cs: builtins.concatStringsSep " " (builtins.attrNames cs)' --raw; }
-    for kind in nixosConfigurations darwinConfigurations; do
-      for h in $(names "$kind"); do
-        drv=$(nix eval ".#$kind.\"$h\".config.system.build.toplevel.drvPath" --raw 2>/dev/null) || drv="EVAL-FAILED"
-        echo "$kind.$h $drv"
-      done
-    done
-    for u in $(names homeConfigurations); do
-      drv=$(nix eval ".#homeConfigurations.\"$u\".activationPackage.drvPath" --raw 2>/dev/null) || drv="EVAL-FAILED"
-      echo "homeConfigurations.$u $drv"
-    done
+# Evaluate every nixos/darwin/home configuration in parallel (same as CI);
+# prints one `<attr> <drvPath>` line per configuration
+eval-all *flags:
+    ./scripts/eval-all.sh {{ flags }}
