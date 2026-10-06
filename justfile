@@ -148,7 +148,42 @@ secrets:
 
 # Re-encrypt secrets after changing recipients in secrets/.sops.yaml
 secrets-rekey:
-    sops updatekeys secrets/secrets.yaml
+    sops --config secrets/.sops.yaml updatekeys secrets/secrets.yaml
+
+# The host's age key is derived from its SSH ed25519 host key — the same key
+# sops-nix decrypts with (sshKeyPaths) — so the host only has to be reachable.
+# `addr` defaults to the hostname; pass e.g. root@10.0.0.5 for a fresh install.
+
+# Register a host as a sops recipient and re-encrypt the secrets for it
+secrets-add-host target addr=target:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    file=secrets/.sops.yaml
+    if grep -q "&{{ target }} " "$file"; then
+      echo "{{ target }} is already a recipient in $file" >&2
+      exit 1
+    fi
+    key=$(ssh-keyscan -t ed25519 "{{ addr }}" 2>/dev/null | ssh-to-age)
+    [[ $key == age1* ]] || { echo "could not derive an age key from {{ addr }}" >&2; exit 1; }
+    # Append the anchor to the end of the `&hosts` list and an alias to the
+    # end of the creation rule's age list (both are the last 6/10-space list
+    # item before the next less-indented line).
+    awk -v host="{{ target }}" -v key="$key" '
+      function flush() {
+        if (section == "hosts") print "      - &" host " " key
+        if (section == "age")   print "          - *" host
+        section = ""
+      }
+      /^  - &hosts / { print; section = "hosts"; next }
+      /^      - age:/ { print; section = "age"; next }
+      section == "hosts" && !/^      - / { flush() }
+      section == "age"   && !/^          - / { flush() }
+      { print }
+      END { flush() }
+    ' "$file" > "$file.tmp"
+    mv "$file.tmp" "$file"
+    echo "added {{ target }} ($key)"
+    sops --config secrets/.sops.yaml updatekeys -y secrets/secrets.yaml
 
 # ── hygiene ─────────────────────────────────────────────────────────
 

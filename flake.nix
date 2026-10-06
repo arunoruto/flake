@@ -292,6 +292,8 @@
                     statix
                     deadnix
                     nixfmt-tree
+                    sops
+                    ssh-to-age
                   ])
                   ++ gitHooksLocal.enabledPackages;
               };
