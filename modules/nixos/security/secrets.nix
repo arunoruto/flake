@@ -47,5 +47,21 @@ in
         };
       };
     };
+
+    # sops-nix creates missing parents of a secret's `path` as root. On a
+    # freshly created user that leaves ~/.ssh and ~/.config root-owned and
+    # home-manager's activation then fails to link into them. Create them as
+    # the user first.
+    system.activationScripts = {
+      primaryUserSecretDirs = {
+        deps = [ "users" ];
+        text = ''
+          install -d -o ${user-conf.name} -g ${user-conf.group} -m 700 ${user-conf.home}/.ssh
+          install -d -o ${user-conf.name} -g ${user-conf.group} -m 755 \
+            ${user-conf.home}/.config ${user-conf.home}/.config/Yubico
+        '';
+      };
+      setupSecrets.deps = [ "primaryUserSecretDirs" ];
+    };
   };
 }
