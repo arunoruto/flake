@@ -11,7 +11,7 @@ let
 in
 {
   config.systemd.tmpfiles.rules =
-    lib.optionals (config.home-manager.users.${primaryUserName}.home.file ? ".face")
+    lib.optionals (config.home-manager.users.${primaryUserName}.home.file or { } ? ".face")
       (
         let
           account-service = pkgs.writeTextFile {

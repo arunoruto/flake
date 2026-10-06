@@ -17,13 +17,14 @@
     })
     (
       let
-        inherit (config.users) primaryUser;
+        # Absent when the primary user has no home-manager (homes.enable = false).
+        btop = config.home-manager.users.${config.users.primaryUser}.programs.btop or { enable = false; };
       in
-      lib.mkIf config.home-manager.users.${primaryUser}.programs.btop.enable {
+      lib.mkIf btop.enable {
         security.wrappers.btop = {
           owner = "root";
           group = "root";
-          source = "${config.home-manager.users.${primaryUser}.programs.btop.package}/bin/btop";
+          source = "${btop.package}/bin/btop";
           capabilities = "cap_perfmon+ep";
         };
       }

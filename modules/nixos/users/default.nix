@@ -1,14 +1,19 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 let
   # Get the primary user name - now required, no fallback
   primaryUserName = config.users.primaryUser;
 
+  # The primary user's home-manager config; empty when the host has none
+  # (homes.enable = false), so every read below needs an `or` fallback.
+  hmUser = config.home-manager.users.${primaryUserName} or { };
+
   # Get shell from home-manager config for primary user
-  shell = config.home-manager.users.${primaryUserName}.shell.main or "bash";
+  shell = hmUser.shell.main or "bash";
 
   # Auto-import sibling user modules (mirza.nix, mar.nix, avatar.nix, ...).
   # mk-user.nix is a helper (takes a username), not a module, so it is excluded.
@@ -124,7 +129,7 @@ in
         ${primaryUserName} = {
           isNormalUser = true;
           group = "users";
-          shell = config.home-manager.users.${primaryUserName}.programs.${shell}.package;
+          shell = hmUser.programs.${shell}.package or pkgs.bashInteractive;
           description = "${primaryUserName}";
           extraGroups = [
             "dialout"
@@ -156,10 +161,10 @@ in
         "/share/xdg-desktop-portal"
         "/share/applications"
       ]
-      ++ lib.optionals config.home-manager.users.${primaryUserName}.programs.zsh.enable [
+      ++ lib.optionals (hmUser.programs.zsh.enable or false) [
         "/share/zsh"
       ]
-      ++ lib.optionals config.home-manager.users.${primaryUserName}.programs.fish.enable [
+      ++ lib.optionals (hmUser.programs.fish.enable or false) [
         "/share/fish"
       ];
     };
