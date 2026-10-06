@@ -35,7 +35,6 @@
     };
     # Nixpkgs
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixpkgs-update.url = "github:nix-community/nixpkgs-update";
     # NixOS
     disko = {
       url = "github:nix-community/disko";
