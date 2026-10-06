@@ -5,9 +5,16 @@
 }:
 let
   primaryUserName = config.users.primaryUser;
-  pubKeys = lib.filesystem.listFilesRecursive (
-    lib.path.append ../../../. "homes/${primaryUserName}/keys"
-  );
+  # mar (work) and mirza (personal) are the same person: on a machine
+  # either of them owns, both of their keys log in as its primary user.
+  samePerson = [
+    "mar"
+    "mirza"
+  ];
+  keyUsers = if lib.elem primaryUserName samePerson then samePerson else [ primaryUserName ];
+  pubKeys = lib.concatMap (
+    user: lib.filesystem.listFilesRecursive (lib.path.append ../../../. "homes/${user}/keys")
+  ) keyUsers;
 in
 
 {
