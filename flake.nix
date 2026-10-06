@@ -41,6 +41,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixos-hardware.url = "github:nixos/nixos-hardware";
+    # Raspberry Pi vendor kernels, prebuilt in nixos-raspberrypi.cachix.org.
+    # Deliberately no nixpkgs.follows: the cache only hits for kernels built
+    # against the flake's own pin.
+    nixos-raspberrypi.url = "github:nvmd/nixos-raspberrypi/main";
     colmena.url = "github:zhaofengli/colmena";
     cpu-microcodes = {
       # url = "github:platomav/CPUMicrocodes/ec5200961ecdf78cf00e55d73902683e835edefd";
