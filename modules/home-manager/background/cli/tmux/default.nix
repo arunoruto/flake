@@ -8,131 +8,163 @@
   imports = [
   ];
 
-  programs.tmux =
-    let
-      cfg = config.programs.tmux;
-    in
-    {
-      enable = true;
-      # package = pkgs.unstable.tmux;
-      clock24 = true;
-      shortcut = "Space";
-      keyMode = "vi";
-      mouse = true;
-      terminal = "tmux-256color";
-      baseIndex = 1;
-      customPaneNavigationAndResize = true;
-      resizeAmount = 5;
-      plugins = with pkgs.tmuxPlugins; [
-        #   {
-        #     plugin = tmuxPlugins.continuum;
-        #     extraConfig = ''
-        #       set -g @continuum-restore 'on'
-        #       set -g @continuum-save-interval '30' # minutes
-        #     '';
-        #   }
-        #   {
-        #     plugin = tmuxPlugins.resurrect;
-        #     extraConfig = ''
-        #       set -g @resurrect-strategy-nvim 'session'
-        #       set -g @resurrect-capture-pane-contents 'on'
-        #     '';
-        #   }
-        # catppuccin
-        {
-          plugin = cpu;
-          extraConfig = ''
-            set -g status-left ""
-            set -g status-right "[#S] |  #{cpu_percentage} |  #{ram_percentage} |  %H:%M "
-            set -g status-right-length 40
+  programs = {
+    tmux =
+      let
+        cfg = config.programs.tmux;
+      in
+      {
+        enable = true;
+        # package = pkgs.unstable.tmux;
+        clock24 = true;
+        shortcut = "Space";
+        keyMode = "vi";
+        mouse = true;
+        terminal = "tmux-256color";
+        baseIndex = 1;
+        customPaneNavigationAndResize = true;
+        resizeAmount = 5;
+        plugins = with pkgs.tmuxPlugins; [
+          #   {
+          #     plugin = tmuxPlugins.continuum;
+          #     extraConfig = ''
+          #       set -g @continuum-restore 'on'
+          #       set -g @continuum-save-interval '30' # minutes
+          #     '';
+          #   }
+          #   {
+          #     plugin = tmuxPlugins.resurrect;
+          #     extraConfig = ''
+          #       set -g @resurrect-strategy-nvim 'session'
+          #       set -g @resurrect-capture-pane-contents 'on'
+          #     '';
+          #   }
+          # catppuccin
+          {
+            plugin = cpu;
+            extraConfig = ''
+              set -g status-left ""
+              set -g status-right "[#S] |  #{cpu_percentage} |  #{ram_percentage} |  %H:%M "
+              set -g status-right-length 40
+            '';
+          }
+          yank
+          vim-tmux-navigator
+        ];
+        extraConfig =
+          let
+            japanese-numbers = false;
+            numbers =
+              if japanese-numbers then
+                "#(echo '#I' | sed 's/0/〇/g;s/1/一/g;s/2/二/g;s/3/三/g;s/4/四/g;s/5/五/g;s/6/六/g;s/7/七/g;s/8/八/g;s/9/九/g')"
+              else
+                "#I";
+          in
+          ''
+            set -s default-terminal "tmux-256color"
+          ''
+          + (lib.optionalString (cfg.terminal == "tmux-256color") ''
+            # https://stackoverflow.com/questions/41783367/tmux-tmux-true-color-is-not-working-properly/41786092#41786092
+            # set-option -sa terminal-overrides ",xterm*:Tc"
+            set -asg terminal-features ",tmux-256color:256:RGB:mouse:cstyle"
+          '')
+          + ''
+
+            # Make TMUX work with yazi
+            set -g allow-passthrough on
+            set -ga update-environment TERM
+            set -ga update-environment TERM_PROGRAM
+
+            # set -g status-right "#{pomodoro_status}"
+
+            # Claude needs this (and maybe other too)
+            set -g focus-events on
+
+            # Move bar to top
+            set-option -g status-position top
+
+            # Renumber windows if one is closed
+            set-option -g renumber-windows on
+
+            # Create some space between bar and rest
+            # setw -g pane-border-status top
+            # setw -g pane-border-format '-'
+
+            # resize like vim
+            # bind -r h resize-pane -L 5
+            # bind -r j resize-pane -D 5
+            # bind -r k resize-pane -U 5
+            # bind -r l resize-pane -R 5
+
+            # maximize pane
+            bind -r m resize-pane -Z
+
+            # reload config
+            bind r source-file ~/.config/tmux/tmux.conf \; display-message "Config reloaded!"
+
+            # Set copy command
+            set -s copy-command 'wl-copy'
+            # select and copy like in vim
+            bind-key -T copy-mode-vi 'v' send -X begin-selection
+            bind-key -T copy-mode-vi 'y' send -X copy-selection
+
+            unbind -T copy-mode-vi MouseDragEnd1Pane
+
+            # move window to the left & right
+            bind-key -r < swap-window -t -1
+            bind-key -r > swap-window -t +1
+
+            # Status bar
+
+            set -g status-style bg=default,fg=black,bright
+
+            set -g window-status-format " ${numbers}:#W "
+            set -g window-status-current-format " ${numbers}:#W "
+
+            # Fix shift+enter for opencode
+            set -g extended-keys on
+            bind S-Enter send-keys "^[[13;2u"
           '';
-        }
-        yank
-        vim-tmux-navigator
-      ];
-      extraConfig =
-        let
-          japanese-numbers = false;
-          numbers =
-            if japanese-numbers then
-              "#(echo '#I' | sed 's/0/〇/g;s/1/一/g;s/2/二/g;s/3/三/g;s/4/四/g;s/5/五/g;s/6/六/g;s/7/七/g;s/8/八/g;s/9/九/g')"
-            else
-              "#I";
-        in
+        # + (
+        #   let
+        #     inherit (config.lib.stylix.colors) withHashtag;
+        #   in
+        #   ''
+        #     set -g @catppuccin_window_status_style "rounded"
+        #     set -ogq @thm_bg "${withHashtag.base00}"
+        #     set -ogq @thm_fg "${withHashtag.base05}"
+        #   ''
+        # );
+      };
+
+    # Auto-attach over SSH, like herdr does (../herdr/module.nix), on hosts
+    # where tmux is the multiplexer — i.e. herdr is off, so the two never race
+    # for the same login. Unlike herdr's join-only attach, `new-session -A`
+    # attaches to the "default" session or creates it. TMUX_NO_AUTO_ATTACH=1
+    # skips it.
+    zsh.initContent = lib.mkIf (config.programs.tmux.enable && !config.programs.herdr.enable) (
+      lib.mkOrder 200 ''
+        # tmux auto-attach
+        if [[ -z "$TMUX_NO_AUTO_ATTACH" && -z "$TMUX" && -n "$SSH_TTY" && -o interactive && "$TERM" != "dumb" ]]; then
+          exec ${lib.getExe config.programs.tmux.package} new-session -A -s default
+        fi
+      ''
+    );
+
+    fish.interactiveShellInit =
+      lib.mkIf (config.programs.tmux.enable && !config.programs.herdr.enable)
         ''
-          set -s default-terminal "tmux-256color"
-        ''
-        + (lib.optionalString (cfg.terminal == "tmux-256color") ''
-          # https://stackoverflow.com/questions/41783367/tmux-tmux-true-color-is-not-working-properly/41786092#41786092
-          # set-option -sa terminal-overrides ",xterm*:Tc"
-          set -asg terminal-features ",tmux-256color:256:RGB:mouse:cstyle"
-        '')
-        + ''
-
-          # Make TMUX work with yazi
-          set -g allow-passthrough on
-          set -ga update-environment TERM
-          set -ga update-environment TERM_PROGRAM
-
-          # set -g status-right "#{pomodoro_status}"
-
-          # Claude needs this (and maybe other too)
-          set -g focus-events on
-
-          # Move bar to top
-          set-option -g status-position top
-
-          # Renumber windows if one is closed
-          set-option -g renumber-windows on
-
-          # Create some space between bar and rest
-          # setw -g pane-border-status top
-          # setw -g pane-border-format '-'
-
-          # resize like vim
-          # bind -r h resize-pane -L 5
-          # bind -r j resize-pane -D 5
-          # bind -r k resize-pane -U 5
-          # bind -r l resize-pane -R 5
-
-          # maximize pane
-          bind -r m resize-pane -Z
-
-          # reload config
-          bind r source-file ~/.config/tmux/tmux.conf \; display-message "Config reloaded!"
-
-          # Set copy command
-          set -s copy-command 'wl-copy'
-          # select and copy like in vim
-          bind-key -T copy-mode-vi 'v' send -X begin-selection
-          bind-key -T copy-mode-vi 'y' send -X copy-selection
-
-          unbind -T copy-mode-vi MouseDragEnd1Pane
-
-          # move window to the left & right
-          bind-key -r < swap-window -t -1
-          bind-key -r > swap-window -t +1
-
-          # Status bar
-
-          set -g status-style bg=default,fg=black,bright
-
-          set -g window-status-format " ${numbers}:#W "
-          set -g window-status-current-format " ${numbers}:#W "
-
-          # Fix shift+enter for opencode
-          set -g extended-keys on
-          bind S-Enter send-keys "^[[13;2u"
+          # tmux auto-attach
+          if not set -q TMUX_NO_AUTO_ATTACH; and not set -q TMUX; and set -q SSH_TTY; and status is-interactive; and test "$TERM" != dumb
+            exec ${lib.getExe config.programs.tmux.package} new-session -A -s default
+          end
         '';
-      # + (
-      #   let
-      #     inherit (config.lib.stylix.colors) withHashtag;
-      #   in
-      #   ''
-      #     set -g @catppuccin_window_status_style "rounded"
-      #     set -ogq @thm_bg "${withHashtag.base00}"
-      #     set -ogq @thm_fg "${withHashtag.base05}"
-      #   ''
-      # );
-    };
+
+    bash.initExtra = lib.mkIf (config.programs.tmux.enable && !config.programs.herdr.enable) ''
+      # tmux auto-attach
+      if [[ -z "$TMUX_NO_AUTO_ATTACH" && -z "$TMUX" && -n "$SSH_TTY" && "$-" == *i* && "$TERM" != "dumb" ]]; then
+        exec ${lib.getExe config.programs.tmux.package} new-session -A -s default
+      fi
+    '';
+  };
 }
