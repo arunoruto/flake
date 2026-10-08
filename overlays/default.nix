@@ -10,9 +10,6 @@ rec {
         inherit (prev) newScope;
         directory = ../packages/top-level;
       }
-      // {
-        fetchMatlab = final.callPackage ../packages/top-level/matlab/fetcher.nix { };
-      }
     else
       { };
 

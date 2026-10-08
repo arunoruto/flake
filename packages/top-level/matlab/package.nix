@@ -1,214 +1,203 @@
 {
   lib,
-  config,
-  stdenvNoCC,
   buildFHSEnv,
-  fetchMatlab,
   makeDesktopItem,
   mpm,
+  symlinkJoin,
+  writeShellScript,
+  writeShellScriptBin,
   release ? "R2025a",
-  update ? 1,
-  hash ? "sha256-uVhTEovwJsVye7DukMhmUhsDmtuuNEQQy71PBniaEbU=",
-  # Toolboxes to install alongside MATLAB, as product name -> hash of its download.
-  products ? { },
+  # Products `matlab-sync` makes sure are installed, besides MATLAB itself.
+  products ? [ ],
   licenseFile ? null,
-  # Downloading with mpm means accepting the MathWorks Software License Agreement.
-  acceptLicense ? config.matlab.acceptLicense or false,
 }:
 
+# MATLAB itself lives in the user's home, installed and extended with mpm like
+# Steam manages its games; this package only provides the FHS environment.
 let
-  version = "${release}U${toString update}";
+  root = ''"''${MATLAB_ROOT:-''${XDG_DATA_HOME:-$HOME/.local/share}/matlab/${release}}"'';
 
-  base = fetchMatlab {
-    inherit
-      release
-      update
-      hash
-      acceptLicense
-      ;
-  };
-  sources = [
-    base
-  ]
-  ++ lib.mapAttrsToList (
-    product: hash:
-    fetchMatlab {
-      inherit
-        release
-        update
-        product
-        hash
-        acceptLicense
-        ;
-    }
-  ) products;
+  env = buildFHSEnv {
+    name = "matlab-env";
 
-  # mpm runs bin/glnxa64/registerWithOS from the fresh install, which needs an FHS system.
-  installEnv = buildFHSEnv {
-    name = "matlab-install-env";
-    targetPkgs = p: [
-      p.pam
-      p.zlib
-    ];
+    # MathWorks' matlab-deps list (R2025a + R2026a, ubuntu24.04), plus the
+    # extras nix-matlab needed over the years. MATLAB and the binaries
+    # `mpm install` runs from a fresh install (registerWithOS) expect an FHS system.
+    targetPkgs =
+      p: with p; [
+        alsa-lib
+        at-spi2-atk
+        at-spi2-core
+        atk
+        cacert
+        cairo
+        cups
+        dbus
+        fontconfig
+        fribidi
+        gdk-pixbuf
+        glib
+        glibcLocales
+        gst_all_1.gst-plugins-base
+        gst_all_1.gstreamer
+        gtk3
+        hidapi
+        libcap
+        libdrm
+        libgbm
+        libglvnd
+        libpsm2
+        libsndfile
+        libtirpc
+        libtool # libltdl
+        libuuid
+        libxcrypt
+        libxcrypt-legacy
+        libxkbcommon
+        mpm
+        ncurses # terminal UI
+        nspr
+        nss
+        numactl
+        pam
+        pango
+        pixman
+        procps
+        rdma-core # libibverbs, librdmacm
+        stdenv.cc.cc.lib # libatomic
+        ucx
+        udev
+        unzip
+        wayland
+        which
+        xkbcomp
+        xkeyboard_config
+        zlib
+
+        libice
+        libsm
+        libx11
+        libxcb
+        libxcomposite
+        libxcursor
+        libxdamage
+        libxext
+        libxfixes
+        libxfont_2
+        libxft
+        libxi
+        libxinerama
+        libxrandr
+        libxrender
+        libxt
+        libxtst
+        libxxf86vm
+
+        # mex
+        gcc
+        gfortran
+        gnumake
+      ];
+
+    profile = ''
+      # The session's LD_LIBRARY_PATH (pipewire-jack, sane, alsa) makes MATLAB
+      # exit silently. The FHS ld.so.conf already covers /run/opengl-driver/lib.
+      unset LD_LIBRARY_PATH
+      # The MathWorks Service Host, which MATLAB installs into ~/.MathWorks at
+      # runtime, ships libraries requiring an executable stack (glibc >= 2.41).
+      export GLIBC_TUNABLES=glibc.rtld.execstack=2
+      # Java GUIs render blank under non-reparenting compositors (niri, sway, ...)
+      export _JAVA_AWT_WM_NONREPARENTING=1
+      ${lib.optionalString (licenseFile != null) ''
+        export MLM_LICENSE_FILE=${toString licenseFile}
+      ''}
+    '';
+
     runScript = "bash";
   };
 
-  unwrapped = stdenvNoCC.mkDerivation {
-    pname = "matlab-unwrapped";
-    inherit version;
+  launcher = writeShellScript "matlab-launcher" ''
+    root=${root}
+    if [ ! -x "$root/bin/matlab" ]; then
+      echo "MATLAB ${release} is not installed in $root; run matlab-sync first." >&2
+      exit 1
+    fi
 
-    __structuredAttrs = true;
-    strictDeps = true;
-
-    dontUnpack = true;
-    dontFixup = true;
-
-    # Only MATLAB's ProductFilesInfo.xml is kept: mpm validates its checksum,
-    # and installs every product it finds in the merged archives anyway.
-    # Files shared between downloads are identical, so the first one wins.
-    installPhase = ''
-      runHook preInstall
-
-      export HOME=$TMPDIR
-      mkdir source
-      cp ${base}/ProductFilesInfo.xml source/
-      for src in ${lib.escapeShellArgs sources}; do
-        cp -rs --update=none --no-preserve=mode "$src/archives" source/
+    # Without a display MATLAB renders its desktop on an invisible Xvfb of its
+    # own, so it looks like nothing happens; fall back to the terminal instead.
+    if [ -z "''${DISPLAY:-}" ] && [ -z "''${WAYLAND_DISPLAY:-}" ]; then
+      mode=
+      for arg in "$@"; do
+        case "''${arg,,}" in
+          -nodesktop | -nodisplay | -batch | -nojvm) mode=1 ;;
+        esac
       done
+      if [ -z "$mode" ]; then
+        echo "No display found, starting MATLAB in the terminal (use ssh -Y for the desktop)." >&2
+        set -- -nodesktop "$@"
+      fi
+    fi
 
-      ${installEnv}/bin/matlab-install-env -c '${lib.getExe mpm} install \
-        --source="$PWD/source" \
-        --destination="$out" \
-        --support-package-destination="$out/SupportPackages" \
-        --products MATLAB ${lib.escapeShellArgs (lib.attrNames products)}'
+    exec "$root/bin/matlab" "$@"
+  '';
 
-      runHook postInstall
-    '';
-  };
+  # Installs MATLAB and every missing product into the root; extra products can
+  # be passed as arguments. Anything else is managed from within MATLAB.
+  sync = writeShellScript "matlab-sync" ''
+    set -euo pipefail
+    root=${root}
+    wanted=(MATLAB ${lib.escapeShellArgs products} "$@")
+
+    # `mpm list` prints product names with spaces instead of underscores.
+    installed=$(mpm list --matlabroot="$root" 2>/dev/null || true)
+    missing=()
+    for product in "''${wanted[@]}"; do
+      if ! grep -qxF -- "''${product//_/ }" <<<"$installed"; then
+        missing+=("$product")
+      fi
+    done
+
+    if [ ''${#missing[@]} -eq 0 ]; then
+      echo "MATLAB ${release} in $root has everything: ''${wanted[*]}"
+    else
+      echo "Installing into $root: ''${missing[*]}"
+      mpm install --release=${release} --destination="$root" --products "''${missing[@]}"
+    fi
+
+    # Let the desktop entry find MATLAB's logo.
+    install -Dm644 "$root/ui/icons/16x16/matlabLogoUI.svg" \
+      "''${XDG_DATA_HOME:-$HOME/.local/share}/icons/hicolor/scalable/apps/matlab.svg"
+  '';
 
   desktopItem = makeDesktopItem {
     name = "matlab";
     desktopName = "MATLAB ${release}";
     exec = "matlab -desktop -useStartupFolderPref %F";
-    icon = "${unwrapped}/ui/icons/16x16/matlabLogoUI.svg";
+    icon = "matlab";
     categories = [
       "Science"
       "Math"
     ];
   };
 in
-buildFHSEnv {
+symlinkJoin {
   pname = "matlab";
-  inherit version;
+  version = release;
 
-  # MathWorks' matlab-deps list (R2025a + R2026a, ubuntu24.04), plus the extras
-  # nix-matlab needed over the years.
-  targetPkgs =
-    p: with p; [
-      alsa-lib
-      at-spi2-atk
-      at-spi2-core
-      atk
-      cacert
-      cairo
-      cups
-      dbus
-      fontconfig
-      fribidi
-      gdk-pixbuf
-      glib
-      glibcLocales
-      gst_all_1.gst-plugins-base
-      gst_all_1.gstreamer
-      gtk3
-      hidapi
-      libcap
-      libdrm
-      libgbm
-      libglvnd
-      libpsm2
-      libsndfile
-      libtirpc
-      libtool # libltdl
-      libuuid
-      libxcrypt
-      libxcrypt-legacy
-      libxkbcommon
-      ncurses # terminal UI
-      nspr
-      nss
-      numactl
-      pam
-      pango
-      pixman
-      procps
-      rdma-core # libibverbs, librdmacm
-      stdenv.cc.cc.lib # libatomic
-      ucx
-      udev
-      unzip
-      wayland
-      which
-      xkbcomp
-      xkeyboard_config
-      zlib
+  paths = [
+    (writeShellScriptBin "matlab" ''exec ${lib.getExe env} ${launcher} "$@"'')
+    (writeShellScriptBin "matlab-sync" ''exec ${lib.getExe env} ${sync} "$@"'')
+    desktopItem
+  ];
 
-      libice
-      libsm
-      libx11
-      libxcb
-      libxcomposite
-      libxcursor
-      libxdamage
-      libxext
-      libxfixes
-      libxfont_2
-      libxft
-      libxi
-      libxinerama
-      libxrandr
-      libxrender
-      libxt
-      libxtst
-      libxxf86vm
-
-      # mex
-      gcc
-      gfortran
-      gnumake
-    ];
-
-  profile = ''
-    # The session's LD_LIBRARY_PATH (pipewire-jack, sane, alsa) makes MATLAB
-    # exit silently. The FHS ld.so.conf already covers /run/opengl-driver/lib.
-    unset LD_LIBRARY_PATH
-    # The MathWorks Service Host, which MATLAB installs into ~/.MathWorks at
-    # runtime, ships libraries requiring an executable stack (glibc >= 2.41).
-    export GLIBC_TUNABLES=glibc.rtld.execstack=2
-    # Java GUIs render blank under non-reparenting compositors (niri, sway, ...)
-    export _JAVA_AWT_WM_NONREPARENTING=1
-    export MW_ALLOW_ANY_CUDA=1
-    ${lib.optionalString (licenseFile != null) ''
-      export MLM_LICENSE_FILE=${toString licenseFile}
-    ''}
-  '';
-
-  runScript = "${unwrapped}/bin/matlab";
-
-  extraInstallCommands = ''
-    mkdir -p $out/share/applications
-    ln -s ${desktopItem}/share/applications/* $out/share/applications/
-  '';
-
-  passthru = { inherit unwrapped sources; };
+  passthru = { inherit env; };
 
   meta = {
-    description = "MATLAB, installed from per-product mpm downloads";
+    description = "MATLAB in an FHS environment, installed per user with mpm";
     homepage = "https://www.mathworks.com/products/matlab.html";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ arunoruto ];
     platforms = [ "x86_64-linux" ];
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "matlab";
   };
 }
