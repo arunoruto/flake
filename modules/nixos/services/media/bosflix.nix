@@ -29,6 +29,8 @@
         "mirza-music"
         "mirza-shows"
         "mirza-movies"
+        "tim-shows"
+        "tim-movies"
       ];
       # Everything on the drive is shared between the downloaders, syncthing and
       # the *arrs, so it all gets the same setgid + group-writable treatment.
