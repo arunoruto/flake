@@ -4,6 +4,7 @@
 
   config = lib.mkIf config.programs.matlab.enable {
     programs.matlab = {
+      acceptLicense = true;
       licenseFile = config.sops.secrets."config/matlab".path;
       products = {
         Symbolic_Math_Toolbox = "sha256-154gIbMXDCpph+YdyMCL5aji5QuK1MOw0WPEFgCCohs=";

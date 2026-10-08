@@ -1,5 +1,6 @@
 {
   lib,
+  config,
   stdenvNoCC,
   mpm,
   cacert,
@@ -14,7 +15,17 @@
   product ? "MATLAB",
   platform ? "glnxa64",
   hash ? lib.fakeHash,
+  acceptLicense ? config.matlab.acceptLicense or false,
 }:
+
+assert lib.assertMsg acceptLicense ''
+  Downloading ${product} with mpm means accepting the MathWorks Software License
+  Agreement. Its text ships as license_agreement.txt in every MATLAB install, see
+  https://www.mathworks.com/matlabcentral/answers/1979884-where-can-i-find-the-mathworks-software-license-agreement
+
+  Accept it by setting `nixpkgs.config.matlab.acceptLicense = true;`, or by
+  passing `acceptLicense = true` to fetchMatlab or matlab.
+'';
 
 stdenvNoCC.mkDerivation {
   name = "matlab-${release}U${toString update}-${product}";

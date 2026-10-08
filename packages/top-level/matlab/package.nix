@@ -1,5 +1,6 @@
 {
   lib,
+  config,
   stdenvNoCC,
   buildFHSEnv,
   fetchMatlab,
@@ -11,12 +12,21 @@
   # Toolboxes to install alongside MATLAB, as product name -> hash of its download.
   products ? { },
   licenseFile ? null,
+  # Downloading with mpm means accepting the MathWorks Software License Agreement.
+  acceptLicense ? config.matlab.acceptLicense or false,
 }:
 
 let
   version = "${release}U${toString update}";
 
-  base = fetchMatlab { inherit release update hash; };
+  base = fetchMatlab {
+    inherit
+      release
+      update
+      hash
+      acceptLicense
+      ;
+  };
   sources = [
     base
   ]
@@ -28,6 +38,7 @@ let
         update
         product
         hash
+        acceptLicense
         ;
     }
   ) products;

@@ -44,6 +44,16 @@ in
       '';
     };
 
+    acceptLicense = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = ''
+        Whether you accept the MathWorks Software License Agreement, which
+        downloading MATLAB with mpm requires. The text ships as
+        license_agreement.txt in every MATLAB install.
+      '';
+    };
+
     licenseFile = lib.mkOption {
       type = with lib.types; nullOr path;
       default = null;
@@ -61,6 +71,7 @@ in
           hash
           products
           licenseFile
+          acceptLicense
           ;
       })
     ];
