@@ -18,15 +18,6 @@
         settings = {
           gui.insecureAdminAccess = true;
           devices = {
-            seireitei = {
-              addresses = [
-                "dynamic"
-                "tcp://seireitei"
-                "tcp://seireitei:22000"
-                "quic://seireitei:22000"
-              ];
-              id = "RPPP5DH-PXMPFAU-3BJJCDK-ULC55I6-YYBYA6Z-PP22QPD-NSMLOQT-45VHGQG";
-            };
             shinji = {
               addresses = [
                 "dynamic"

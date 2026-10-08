@@ -5,12 +5,14 @@
 }:
 let
   sadoDeviceId = "5L6CA45-Q2JJ7WK-RYDURDI-MBRGQPB-VTJEZ7U-6M25S3M-YTXBLRR-IVA6PQY";
+  # Tim's *arr box. Not one of our hosts, so it is only ever a syncthing peer.
+  arrHoiDeviceId = "BAX67OS-4BRORCO-RLKEO5C-GECZD7K-DTLAEI5-DZNF5UN-UP7AFA3-JQ6T6AA";
 in
 {
   config = lib.mkIf config.services.syncthing.enable {
     # https://docs.syncthing.net/users/config.html
     services.syncthing.settings = lib.mkMerge [
-      # SOURCE: shinji (bosflix) — shares out to sado and kuchiki
+      # SOURCE: shinji (bosflix) — shares out to sado, kuchiki and arr-hoi
       (lib.mkIf config.services.bosflix.enable (
         let
           drivePath = builtins.toString config.services.bosflix.drivePath;
@@ -24,6 +26,12 @@ in
               "quic://sado:22000"
             ];
             id = sadoDeviceId;
+          };
+          # Tim's box is not on our tailnet and has no name we can resolve, so
+          # global discovery is the only way to reach it.
+          devices.arr-hoi = {
+            addresses = [ "dynamic" ];
+            id = arrHoiDeviceId;
           };
           folders = {
             "mirza-music" = {
@@ -44,6 +52,39 @@ in
               enable = true;
               path = "${drivePath}/complete/mirza-movies";
               devices = [ "kuchiki" ];
+              ignorePerms = true;
+              order = "oldestFirst";
+            };
+            # Tim's two folders, previously added by hand in the web GUI. They
+            # have to live here: `overrideFolders` defaults to true, so
+            # syncthing-init deletes every folder it does not find in this
+            # list on each activation — which unshared these twice already.
+            #
+            # `id` is pinned because the GUI generates a random folder ID and
+            # the option otherwise defaults to the attribute name. Letting it
+            # default would create a second, empty folder and delete the real
+            # one, re-indexing (and re-pulling) ~75G.
+            #
+            # ignorePerms as for the mirza-* folders, and here it is load
+            # bearing rather than cosmetic: sabnzbd drops the setgid bit when
+            # it chmods its final folder to 0777, so the files underneath end
+            # up sabnzbd:sabnzbd rather than :media. Syncthing can read them
+            # but not chmod them, and a failed metadata write fails the whole
+            # folder — tim-shows had been stuck in an hourly retry loop,
+            # never once reaching "Up to Date".
+            "tim-shows" = {
+              enable = true;
+              id = "my3do-g3d9a";
+              path = "${drivePath}/complete/tim-shows";
+              devices = [ "arr-hoi" ];
+              ignorePerms = true;
+              order = "oldestFirst";
+            };
+            "tim-movies" = {
+              enable = true;
+              id = "inepe-nmldy";
+              path = "${drivePath}/complete/tim-movies";
+              devices = [ "arr-hoi" ];
               ignorePerms = true;
               order = "oldestFirst";
             };
