@@ -135,6 +135,7 @@
       enable = true;
       library = "/mnt/flash/games";
       igdb.enable = true;
+      retroachievements.enable = true;
       # The name that resolves for every client at home, Flatpaks included
       # (they cannot do mDNS). nginx listens on 8080 next to Traefik.
       nginx.virtualHost = "sado.fritz.box";
