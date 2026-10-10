@@ -107,6 +107,10 @@
       enable = true;
       dataDir = "/mnt/flash/appdata";
       openFirewall = true;
+      libraryDirs = [
+        "/mnt/flash/games/roms"
+        "/mnt/flash/games/bios"
+      ];
     };
     cloudflared = {
       enable = true;
@@ -124,6 +128,24 @@
       branchName = "cryo-${config.networking.hostName}";
     };
     bindery.enable = true;
+    # Games live on flash/games: roms/ is the library retrom scans, one
+    # <platform>/<game>/ folder per game. bios/ stays outside it on purpose --
+    # retrom has no notion of BIOS files and would list the folder as a
+    # platform; it is for the clients' emulators, via the games share.
+    retrom = {
+      # Off until a prebuilt retrom-service exists: retrom.cachix.org has
+      # evicted its release builds, and compiling it here is too much for sado.
+      enable = false;
+      settings.contentDirectories = [
+        {
+          path = "/mnt/flash/games/roms";
+          storageType = "MultiFileGame";
+        }
+      ];
+    };
+    # Retrom is the first postgres user here. The stateVersion (23.11) default
+    # would start a fresh cluster on 15, which is EOL in 2027.
+    postgresql.package = pkgs.postgresql_17;
     # komga.enable = true;
     # immich = {
     #   enable = true;
@@ -200,6 +222,9 @@
         };
         downloads = {
           path = "/mnt/flash/downloads";
+        };
+        games = {
+          path = "/mnt/flash/games";
         };
         appdata = {
           path = "/mnt/flash/appdata";
