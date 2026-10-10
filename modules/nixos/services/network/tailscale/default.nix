@@ -45,6 +45,16 @@
         extraUpFlags = lib.optionals (config.lib.tags.hasTag "server") [
           "--advertise-tags=tag:connector"
         ];
+        # WireGuard talks UDP, so this is the port that has to be reachable.
+        # The firewall block below used to put `tailscale-port` in
+        # allowedTCPPorts instead — despite its own comment saying UDP — which
+        # left TCP 41641 open for nothing and UDP 41641 closed. Outbound
+        # traffic still worked (conntrack), so it went unnoticed; what it cost
+        # was inbound reachability, i.e. being the fixed endpoint of a direct
+        # connection when the peer sits behind a NAT that cannot hole-punch.
+        # This option is nixpkgs' own and opens exactly
+        # allowedUDPPorts = [ port ].
+        openFirewall = true;
         # Advertising (exit node, connector, tailscale-SSH) is a server
         # *role*, keyed on the server tag — not on "doesn't have desktop":
         # a laptop or workstation without the desktop tag must never route
@@ -83,8 +93,6 @@
         firewall = {
           # always allow traffic from your Tailscale network
           trustedInterfaces = [ "tailscale0" ];
-          # allow the Tailscale UDP port through the firewall
-          allowedTCPPorts = [ tailscale-port ];
           # https://github.com/tailscale/tailscale/issues/4432#issuecomment-1112819111
           checkReversePath = "loose";
         };
