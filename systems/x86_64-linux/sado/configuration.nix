@@ -25,8 +25,25 @@
   };
 
   # Hard ceiling for the builds that ignore $NIX_BUILD_CORES anyway: builders are
-  # forked from the daemon, so they land in this unit's cgroup.
-  systemd.services.nix-daemon.serviceConfig.CPUQuota = "200%";
+  # forked from the daemon, so they land in this unit's cgroup. Memory too: with
+  # 11 GiB, a quarter of it held by services, a large build used to freeze the
+  # whole box rather than fail. Above MemoryHigh the kernel reclaims from the
+  # builds first; past MemoryMax it OOM-kills inside this cgroup only, so a
+  # too-big build fails and the services keep running.
+  systemd.services.nix-daemon.serviceConfig = {
+    CPUQuota = "200%";
+    MemoryHigh = "5G";
+    MemoryMax = "6G";
+    MemorySwapMax = "2G";
+  };
+
+  # Memory exhaustion here never reached the kernel OOM killer: with no swap the
+  # box thrashed page cache and hung until power-cycled (2026-10-10, a parallel
+  # all-host evaluation). zram gives reclaim somewhere to go, and oomd -- which
+  # was running but watching no slice -- now kills the worst offender in a user
+  # session (where evaluations run) after sustained memory pressure.
+  zramSwap.enable = true;
+  systemd.oomd.enableUserSlices = true;
 
   system.tags = [
     "nas"
