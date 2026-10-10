@@ -132,13 +132,20 @@ iso target:
 # Write a nixos-facter hardware report for a host (defaults to this one)
 [linux]
 facter target=host:
-    sudo nix run \
-      --option experimental-features "nix-command flakes" \
-      --option extra-substituters https://numtide.cachix.org \
-      --option extra-trusted-public-keys numtide.cachix.org-1:2ps1kLBUWjxIneOy1Ik6cQjb41X0iXVXeHigGmycPPE= \
-      github:nix-community/nixos-facter -- -o systems/{{ arch() }}-linux/{{ target }}/facter.json
-    sudo chown "$(id -un):$(id -gn)" systems/{{ arch() }}-linux/{{ target }}/facter.json
-    git add --intent-to-add systems/{{ arch() }}-linux/{{ target }}/facter.json
+    #!/usr/bin/env bash
+    set -euo pipefail
+    # From our own nixpkgs pin, so the binary substitutes from cache.nixos.org
+    # and stays in step with the hardware.facter.* modules, which ship in
+    # nixpkgs too. `nix run github:nix-community/nixos-facter` instead resolves
+    # that flake's branch HEAD -- a +dev build against its own nixpkgs that
+    # neither cache.nixos.org nor numtide.cachix.org carries, so every upstream
+    # push meant building it here. Built as the user, run as root: only the
+    # hardware probing needs the privileges.
+    facter="$(nix build --no-link --print-out-paths --inputs-from . nixpkgs#nixos-facter)"
+    report="systems/{{ arch() }}-linux/{{ target }}/facter.json"
+    sudo "$facter/bin/nixos-facter" -o "$report"
+    sudo chown "$(id -un):$(id -gn)" "$report"
+    git add --intent-to-add "$report"
 
 # ── secrets ─────────────────────────────────────────────────────────
 
