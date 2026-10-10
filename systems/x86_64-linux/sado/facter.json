@@ -27,8 +27,8 @@
     },
     "bluetooth": [
       {
-        "index": 49,
-        "attached_to": 48,
+        "index": 48,
+        "attached_to": 47,
         "class_list": [
           "usb",
           "bluetooth"
@@ -111,95 +111,8 @@
         "module_alias": "usb:v8087p0026d0002dcE0dsc01dp01icE0isc01ip01in00"
       },
       {
-        "index": 51,
-        "attached_to": 48,
-        "class_list": [
-          "usb",
-          "bluetooth"
-        ],
-        "bus_type": {
-          "hex": "0086",
-          "name": "USB",
-          "value": 134
-        },
-        "slot": {
-          "bus": 0,
-          "number": 0
-        },
-        "base_class": {
-          "hex": "0115",
-          "name": "Bluetooth Device",
-          "value": 277
-        },
-        "vendor": {
-          "hex": "0b05",
-          "name": "Realtek",
-          "value": 2821
-        },
-        "device": {
-          "hex": "190e",
-          "name": "ASUS USB-BT500",
-          "value": 6414
-        },
-        "revision": {
-          "hex": "0000",
-          "name": "2.00",
-          "value": 0
-        },
-        "serial": "00E04C239987",
-        "model": "Realtek ASUS USB-BT500",
-        "sysfs_id": "/devices/pci0000:00/0000:00:14.0/usb3/3-1/3-1:1.0",
-        "sysfs_bus_id": "3-1:1.0",
-        "resources": [
-          {
-            "type": "baud",
-            "speed": 12000000,
-            "bits": 0,
-            "stop_bits": 0,
-            "parity": 0,
-            "handshake": 0
-          }
-        ],
-        "detail": {
-          "device_class": {
-            "hex": "00e0",
-            "name": "wireless",
-            "value": 224
-          },
-          "device_subclass": {
-            "hex": "0001",
-            "name": "audio",
-            "value": 1
-          },
-          "device_protocol": 1,
-          "interface_class": {
-            "hex": "00e0",
-            "name": "wireless",
-            "value": 224
-          },
-          "interface_subclass": {
-            "hex": "0001",
-            "name": "audio",
-            "value": 1
-          },
-          "interface_protocol": 1,
-          "interface_number": 0,
-          "interface_alternate_setting": 0
-        },
-        "hotplug": "usb",
-        "driver": "usbfs",
-        "driver_module": "usbcore",
-        "drivers": [
-          "usbfs"
-        ],
-        "driver_modules": [
-          "usbcore"
-        ],
-        "module_alias": "usb:v0B05p190Ed0200dcE0dsc01dp01icE0isc01ip01in00"
-      },
-      {
-        "index": 55,
-        "attached_to": 48,
+        "index": 53,
+        "attached_to": 47,
         "class_list": [
           "usb",
           "bluetooth"
@@ -280,93 +193,6 @@
           "btusb"
         ],
         "module_alias": "usb:v8087p0026d0002dcE0dsc01dp01icE0isc01ip01in01"
-      },
-      {
-        "index": 57,
-        "attached_to": 48,
-        "class_list": [
-          "usb",
-          "bluetooth"
-        ],
-        "bus_type": {
-          "hex": "0086",
-          "name": "USB",
-          "value": 134
-        },
-        "slot": {
-          "bus": 0,
-          "number": 0
-        },
-        "base_class": {
-          "hex": "0115",
-          "name": "Bluetooth Device",
-          "value": 277
-        },
-        "vendor": {
-          "hex": "0b05",
-          "name": "Realtek",
-          "value": 2821
-        },
-        "device": {
-          "hex": "190e",
-          "name": "ASUS USB-BT500",
-          "value": 6414
-        },
-        "revision": {
-          "hex": "0000",
-          "name": "2.00",
-          "value": 0
-        },
-        "serial": "00E04C239987",
-        "model": "Realtek ASUS USB-BT500",
-        "sysfs_id": "/devices/pci0000:00/0000:00:14.0/usb3/3-1/3-1:1.1",
-        "sysfs_bus_id": "3-1:1.1",
-        "resources": [
-          {
-            "type": "baud",
-            "speed": 12000000,
-            "bits": 0,
-            "stop_bits": 0,
-            "parity": 0,
-            "handshake": 0
-          }
-        ],
-        "detail": {
-          "device_class": {
-            "hex": "00e0",
-            "name": "wireless",
-            "value": 224
-          },
-          "device_subclass": {
-            "hex": "0001",
-            "name": "audio",
-            "value": 1
-          },
-          "device_protocol": 1,
-          "interface_class": {
-            "hex": "00e0",
-            "name": "wireless",
-            "value": 224
-          },
-          "interface_subclass": {
-            "hex": "0001",
-            "name": "audio",
-            "value": 1
-          },
-          "interface_protocol": 1,
-          "interface_number": 1,
-          "interface_alternate_setting": 0
-        },
-        "hotplug": "usb",
-        "driver": "usbfs",
-        "driver_module": "usbcore",
-        "drivers": [
-          "usbfs"
-        ],
-        "driver_modules": [
-          "usbcore"
-        ],
-        "module_alias": "usb:v0B05p190Ed0200dcE0dsc01dp01icE0isc01ip01in01"
       }
     ],
     "bridge": [
@@ -1020,7 +846,7 @@
     "disk": [
       {
         "index": 40,
-        "attached_to": 8,
+        "attached_to": 34,
         "class_list": [
           "disk",
           "block_device",
@@ -1062,16 +888,16 @@
           "hex": "5045",
           "value": 20549
         },
-        "serial": "25166K801911",
+        "serial": "25166K802222",
         "model": "WD_BLACK SN7100 2TB",
         "sysfs_id": "/class/block/nvme0n1",
         "sysfs_bus_id": "nvme0",
-        "sysfs_device_link": "/devices/pci0000:00/0000:00:1c.3/0000:03:00.0/nvme/nvme0",
+        "sysfs_device_link": "/devices/pci0000:00/0000:00:1c.6/0000:04:00.0/nvme/nvme0",
         "unix_device_names": [
-          "/dev/disk/by-id/nvme-WD_BLACK_SN7100_2TB_25166K801911",
-          "/dev/disk/by-id/nvme-WD_BLACK_SN7100_2TB_25166K801911_1",
-          "/dev/disk/by-id/nvme-eui.e8238fa6bf530001001b448b4df0662c",
-          "/dev/disk/by-path/pci-0000:03:00.0-nvme-1",
+          "/dev/disk/by-id/nvme-WD_BLACK_SN7100_2TB_25166K802222",
+          "/dev/disk/by-id/nvme-WD_BLACK_SN7100_2TB_25166K802222_1",
+          "/dev/disk/by-id/nvme-eui.e8238fa6bf530001001b448b4df06a05",
+          "/dev/disk/by-path/pci-0000:04:00.0-nvme-1",
           "/dev/nvme0n1"
         ],
         "resources": [
@@ -1101,7 +927,7 @@
       },
       {
         "index": 41,
-        "attached_to": 29,
+        "attached_to": 26,
         "class_list": [
           "disk",
           "block_device",
@@ -1143,16 +969,16 @@
           "hex": "2b00",
           "value": 11008
         },
-        "serial": "24484C516FB6",
+        "serial": "25104EE3F6E8",
         "model": "CT2000P310SSD8",
         "sysfs_id": "/class/block/nvme3n1",
         "sysfs_bus_id": "nvme3",
-        "sysfs_device_link": "/devices/pci0000:00/0000:00:1d.0/0000:05:00.0/nvme/nvme3",
+        "sysfs_device_link": "/devices/pci0000:00/0000:00:1d.3/0000:06:00.0/nvme/nvme3",
         "unix_device_names": [
-          "/dev/disk/by-id/nvme-CT2000P310SSD8_24484C516FB6",
-          "/dev/disk/by-id/nvme-CT2000P310SSD8_24484C516FB6_1",
-          "/dev/disk/by-id/nvme-eui.000000000000000100a075244c516fb6",
-          "/dev/disk/by-path/pci-0000:05:00.0-nvme-1",
+          "/dev/disk/by-id/nvme-CT2000P310SSD8_25104EE3F6E8",
+          "/dev/disk/by-id/nvme-CT2000P310SSD8_25104EE3F6E8_1",
+          "/dev/disk/by-id/nvme-eui.000000000000000100a075254ee3f6e8",
+          "/dev/disk/by-path/pci-0000:06:00.0-nvme-1",
           "/dev/nvme3n1"
         ],
         "resources": [
@@ -1234,46 +1060,6 @@
       },
       {
         "index": 43,
-        "attached_to": 0,
-        "class_list": [
-          "disk",
-          "block_device"
-        ],
-        "base_class": {
-          "hex": "0106",
-          "name": "Mass Storage Device",
-          "value": 262
-        },
-        "sub_class": {
-          "hex": "0000",
-          "name": "Disk",
-          "value": 0
-        },
-        "model": "Disk",
-        "sysfs_id": "/class/block/zd0",
-        "unix_device_names": [
-          "/dev/zd0",
-          "/dev/zvol/flash/incus/virtual-machines/HA-OS.block"
-        ],
-        "resources": [
-          {
-            "type": "disk_geo",
-            "cylinders": 104025,
-            "heads": 16,
-            "sectors": 63,
-            "size": "0x0",
-            "geo_type": "logical"
-          },
-          {
-            "type": "size",
-            "unit": "sectors",
-            "value_1": 104857600,
-            "value_2": 512
-          }
-        ]
-      },
-      {
-        "index": 44,
         "attached_to": 38,
         "class_list": [
           "disk",
@@ -1318,8 +1104,8 @@
         ]
       },
       {
-        "index": 45,
-        "attached_to": 26,
+        "index": 44,
+        "attached_to": 8,
         "class_list": [
           "disk",
           "block_device",
@@ -1333,87 +1119,6 @@
         "slot": {
           "bus": 0,
           "number": 2
-        },
-        "base_class": {
-          "hex": "0106",
-          "name": "Mass Storage Device",
-          "value": 262
-        },
-        "sub_class": {
-          "hex": "0000",
-          "name": "Disk",
-          "value": 0
-        },
-        "vendor": {
-          "hex": "c0a9",
-          "value": 49321
-        },
-        "sub_vendor": {
-          "hex": "c0a9",
-          "value": 49321
-        },
-        "device": {
-          "hex": "5426",
-          "name": "CT2000P310SSD8",
-          "value": 21542
-        },
-        "sub_device": {
-          "hex": "2b00",
-          "value": 11008
-        },
-        "serial": "25104EE3F6E8",
-        "model": "CT2000P310SSD8",
-        "sysfs_id": "/class/block/nvme2n1",
-        "sysfs_bus_id": "nvme2",
-        "sysfs_device_link": "/devices/pci0000:00/0000:00:1d.3/0000:06:00.0/nvme/nvme2",
-        "unix_device_names": [
-          "/dev/disk/by-id/nvme-CT2000P310SSD8_25104EE3F6E8",
-          "/dev/disk/by-id/nvme-CT2000P310SSD8_25104EE3F6E8_1",
-          "/dev/disk/by-id/nvme-eui.000000000000000100a075254ee3f6e8",
-          "/dev/disk/by-path/pci-0000:06:00.0-nvme-1",
-          "/dev/nvme2n1"
-        ],
-        "resources": [
-          {
-            "type": "disk_geo",
-            "cylinders": 1907729,
-            "heads": 64,
-            "sectors": 32,
-            "size": "0x0",
-            "geo_type": "logical"
-          },
-          {
-            "type": "size",
-            "unit": "sectors",
-            "value_1": 3907029168,
-            "value_2": 512
-          }
-        ],
-        "driver": "nvme",
-        "driver_module": "nvme",
-        "drivers": [
-          "nvme"
-        ],
-        "driver_modules": [
-          "nvme"
-        ]
-      },
-      {
-        "index": 46,
-        "attached_to": 34,
-        "class_list": [
-          "disk",
-          "block_device",
-          "nvme"
-        ],
-        "bus_type": {
-          "hex": "0096",
-          "name": "NVME",
-          "value": 150
-        },
-        "slot": {
-          "bus": 0,
-          "number": 1
         },
         "base_class": {
           "hex": "0106",
@@ -1442,16 +1147,97 @@
           "hex": "5045",
           "value": 20549
         },
-        "serial": "25166K802222",
+        "serial": "25166K801911",
         "model": "WD_BLACK SN7100 2TB",
+        "sysfs_id": "/class/block/nvme2n1",
+        "sysfs_bus_id": "nvme2",
+        "sysfs_device_link": "/devices/pci0000:00/0000:00:1c.3/0000:03:00.0/nvme/nvme2",
+        "unix_device_names": [
+          "/dev/disk/by-id/nvme-WD_BLACK_SN7100_2TB_25166K801911",
+          "/dev/disk/by-id/nvme-WD_BLACK_SN7100_2TB_25166K801911_1",
+          "/dev/disk/by-id/nvme-eui.e8238fa6bf530001001b448b4df0662c",
+          "/dev/disk/by-path/pci-0000:03:00.0-nvme-1",
+          "/dev/nvme2n1"
+        ],
+        "resources": [
+          {
+            "type": "disk_geo",
+            "cylinders": 1907729,
+            "heads": 64,
+            "sectors": 32,
+            "size": "0x0",
+            "geo_type": "logical"
+          },
+          {
+            "type": "size",
+            "unit": "sectors",
+            "value_1": 3907029168,
+            "value_2": 512
+          }
+        ],
+        "driver": "nvme",
+        "driver_module": "nvme",
+        "drivers": [
+          "nvme"
+        ],
+        "driver_modules": [
+          "nvme"
+        ]
+      },
+      {
+        "index": 45,
+        "attached_to": 29,
+        "class_list": [
+          "disk",
+          "block_device",
+          "nvme"
+        ],
+        "bus_type": {
+          "hex": "0096",
+          "name": "NVME",
+          "value": 150
+        },
+        "slot": {
+          "bus": 0,
+          "number": 1
+        },
+        "base_class": {
+          "hex": "0106",
+          "name": "Mass Storage Device",
+          "value": 262
+        },
+        "sub_class": {
+          "hex": "0000",
+          "name": "Disk",
+          "value": 0
+        },
+        "vendor": {
+          "hex": "c0a9",
+          "value": 49321
+        },
+        "sub_vendor": {
+          "hex": "c0a9",
+          "value": 49321
+        },
+        "device": {
+          "hex": "5426",
+          "name": "CT2000P310SSD8",
+          "value": 21542
+        },
+        "sub_device": {
+          "hex": "2b00",
+          "value": 11008
+        },
+        "serial": "24484C516FB6",
+        "model": "CT2000P310SSD8",
         "sysfs_id": "/class/block/nvme1n1",
         "sysfs_bus_id": "nvme1",
-        "sysfs_device_link": "/devices/pci0000:00/0000:00:1c.6/0000:04:00.0/nvme/nvme1",
+        "sysfs_device_link": "/devices/pci0000:00/0000:00:1d.0/0000:05:00.0/nvme/nvme1",
         "unix_device_names": [
-          "/dev/disk/by-id/nvme-WD_BLACK_SN7100_2TB_25166K802222",
-          "/dev/disk/by-id/nvme-WD_BLACK_SN7100_2TB_25166K802222_1",
-          "/dev/disk/by-id/nvme-eui.e8238fa6bf530001001b448b4df06a05",
-          "/dev/disk/by-path/pci-0000:04:00.0-nvme-1",
+          "/dev/disk/by-id/nvme-CT2000P310SSD8_24484C516FB6",
+          "/dev/disk/by-id/nvme-CT2000P310SSD8_24484C516FB6_1",
+          "/dev/disk/by-id/nvme-eui.000000000000000100a075244c516fb6",
+          "/dev/disk/by-path/pci-0000:05:00.0-nvme-1",
           "/dev/nvme1n1"
         ],
         "resources": [
@@ -1480,7 +1266,7 @@
         ]
       },
       {
-        "index": 47,
+        "index": 46,
         "attached_to": 38,
         "class_list": [
           "disk",
@@ -1599,7 +1385,7 @@
     ],
     "hub": [
       {
-        "index": 48,
+        "index": 47,
         "attached_to": 36,
         "class_list": [
           "usb",
@@ -1621,7 +1407,7 @@
         },
         "vendor": {
           "hex": "1d6b",
-          "name": "Linux 6.18.37 xhci-hcd",
+          "name": "Linux 6.18.52 xhci-hcd",
           "value": 7531
         },
         "device": {
@@ -1635,7 +1421,7 @@
           "value": 0
         },
         "serial": "0000:00:14.0",
-        "model": "Linux 6.18.37 xhci-hcd xHCI Host Controller",
+        "model": "Linux 6.18.52 xhci-hcd xHCI Host Controller",
         "sysfs_id": "/devices/pci0000:00/0000:00:14.0/usb3/3-0:1.0",
         "sysfs_bus_id": "3-0:1.0",
         "resources": [
@@ -1686,7 +1472,7 @@
         "module_alias": "usb:v1D6Bp0002d0618dc09dsc00dp01ic09isc00ip00in00"
       },
       {
-        "index": 52,
+        "index": 50,
         "attached_to": 36,
         "class_list": [
           "usb",
@@ -1708,7 +1494,7 @@
         },
         "vendor": {
           "hex": "1d6b",
-          "name": "Linux 6.18.37 xhci-hcd",
+          "name": "Linux 6.18.52 xhci-hcd",
           "value": 7531
         },
         "device": {
@@ -1722,7 +1508,7 @@
           "value": 0
         },
         "serial": "0000:00:14.0",
-        "model": "Linux 6.18.37 xhci-hcd xHCI Host Controller",
+        "model": "Linux 6.18.52 xhci-hcd xHCI Host Controller",
         "sysfs_id": "/devices/pci0000:00/0000:00:14.0/usb4/4-0:1.0",
         "sysfs_bus_id": "4-0:1.0",
         "detail": {
@@ -1763,8 +1549,8 @@
         "module_alias": "usb:v1D6Bp0003d0618dc09dsc00dp03ic09isc00ip00in00"
       },
       {
-        "index": 53,
-        "attached_to": 48,
+        "index": 51,
+        "attached_to": 47,
         "class_list": [
           "usb",
           "hub"
@@ -1849,7 +1635,7 @@
         "module_alias": "usb:v05E3p0610d0663dc09dsc00dp01ic09isc00ip00in00"
       },
       {
-        "index": 54,
+        "index": 52,
         "attached_to": 11,
         "class_list": [
           "usb",
@@ -1871,7 +1657,7 @@
         },
         "vendor": {
           "hex": "1d6b",
-          "name": "Linux 6.18.37 xhci-hcd",
+          "name": "Linux 6.18.52 xhci-hcd",
           "value": 7531
         },
         "device": {
@@ -1885,7 +1671,7 @@
           "value": 0
         },
         "serial": "0000:00:0d.0",
-        "model": "Linux 6.18.37 xhci-hcd xHCI Host Controller",
+        "model": "Linux 6.18.52 xhci-hcd xHCI Host Controller",
         "sysfs_id": "/devices/pci0000:00/0000:00:0d.0/usb1/1-0:1.0",
         "sysfs_bus_id": "1-0:1.0",
         "resources": [
@@ -1936,7 +1722,7 @@
         "module_alias": "usb:v1D6Bp0002d0618dc09dsc00dp01ic09isc00ip00in00"
       },
       {
-        "index": 58,
+        "index": 55,
         "attached_to": 11,
         "class_list": [
           "usb",
@@ -1958,7 +1744,7 @@
         },
         "vendor": {
           "hex": "1d6b",
-          "name": "Linux 6.18.37 xhci-hcd",
+          "name": "Linux 6.18.52 xhci-hcd",
           "value": 7531
         },
         "device": {
@@ -1972,7 +1758,7 @@
           "value": 0
         },
         "serial": "0000:00:0d.0",
-        "model": "Linux 6.18.37 xhci-hcd xHCI Host Controller",
+        "model": "Linux 6.18.52 xhci-hcd xHCI Host Controller",
         "sysfs_id": "/devices/pci0000:00/0000:00:0d.0/usb2/2-0:1.0",
         "sysfs_bus_id": "2-0:1.0",
         "detail": {
@@ -2399,6 +2185,69 @@
     ],
     "network_interface": [
       {
+        "index": 56,
+        "attached_to": 0,
+        "class_list": [
+          "network_interface"
+        ],
+        "base_class": {
+          "hex": "0107",
+          "name": "Network Interface",
+          "value": 263
+        },
+        "sub_class": {
+          "hex": "0000",
+          "name": "Loopback",
+          "value": 0
+        },
+        "model": "Loopback network interface",
+        "sysfs_id": "/class/net/lo",
+        "unix_device_names": [
+          "lo"
+        ]
+      },
+      {
+        "index": 57,
+        "attached_to": 15,
+        "class_list": [
+          "network_interface"
+        ],
+        "base_class": {
+          "hex": "0107",
+          "name": "Network Interface",
+          "value": 263
+        },
+        "sub_class": {
+          "hex": "0001",
+          "name": "Ethernet",
+          "value": 1
+        },
+        "model": "Ethernet network interface",
+        "sysfs_id": "/class/net/enp2s0",
+        "sysfs_device_link": "/devices/pci0000:00/0000:00:1c.1/0000:02:00.0",
+        "unix_device_names": [
+          "enp2s0"
+        ],
+        "resources": [
+          {
+            "type": "hwaddr",
+            "address": 55
+          },
+          {
+            "type": "phwaddr",
+            "address": 55
+          }
+        ],
+        "driver": "igc",
+        "driver_module": "igc",
+        "drivers": [
+          "igc"
+        ],
+        "driver_modules": [
+          "igc"
+        ]
+      },
+      {
         "index": 59,
         "attached_to": 19,
         "class_list": [
@@ -2478,69 +2327,6 @@
         ],
         "driver_modules": [
           "iwlwifi"
-        ]
-      },
-      {
-        "index": 64,
-        "attached_to": 15,
-        "class_list": [
-          "network_interface"
-        ],
-        "base_class": {
-          "hex": "0107",
-          "name": "Network Interface",
-          "value": 263
-        },
-        "sub_class": {
-          "hex": "0001",
-          "name": "Ethernet",
-          "value": 1
-        },
-        "model": "Ethernet network interface",
-        "sysfs_id": "/class/net/enp2s0",
-        "sysfs_device_link": "/devices/pci0000:00/0000:00:1c.1/0000:02:00.0",
-        "unix_device_names": [
-          "enp2s0"
-        ],
-        "resources": [
-          {
-            "type": "hwaddr",
-            "address": 55
-          },
-          {
-            "type": "phwaddr",
-            "address": 55
-          }
-        ],
-        "driver": "igc",
-        "driver_module": "igc",
-        "drivers": [
-          "igc"
-        ],
-        "driver_modules": [
-          "igc"
-        ]
-      },
-      {
-        "index": 65,
-        "attached_to": 0,
-        "class_list": [
-          "network_interface"
-        ],
-        "base_class": {
-          "hex": "0107",
-          "name": "Network Interface",
-          "value": 263
-        },
-        "sub_class": {
-          "hex": "0000",
-          "name": "Loopback",
-          "value": 0
-        },
-        "model": "Loopback network interface",
-        "sysfs_id": "/class/net/lo",
-        "unix_device_names": [
-          "lo"
         ]
       }
     ],
@@ -3544,8 +3330,8 @@
     ],
     "usb": [
       {
-        "index": 50,
-        "attached_to": 53,
+        "index": 49,
+        "attached_to": 51,
         "class_list": [
           "usb",
           "unknown"
@@ -3625,19 +3411,19 @@
           "interface_alternate_setting": 0
         },
         "hotplug": "usb",
-        "driver": "usbfs",
-        "driver_module": "usbcore",
+        "driver": "dvb_usb_rtl28xxu",
+        "driver_module": "dvb_usb_rtl28xxu",
         "drivers": [
-          "usbfs"
+          "dvb_usb_rtl28xxu"
         ],
         "driver_modules": [
-          "usbcore"
+          "dvb_usb_rtl28xxu"
         ],
         "module_alias": "usb:v0BDAp2838d0100dc00dsc00dp00icFFiscFFipFFin00"
       },
       {
-        "index": 56,
-        "attached_to": 53,
+        "index": 54,
+        "attached_to": 51,
         "class_list": [
           "usb",
           "unknown"
@@ -3717,14 +3503,6 @@
           "interface_alternate_setting": 0
         },
         "hotplug": "usb",
-        "driver": "usbfs",
-        "driver_module": "usbcore",
-        "drivers": [
-          "usbfs"
-        ],
-        "driver_modules": [
-          "usbcore"
-        ],
         "module_alias": "usb:v0BDAp2838d0100dc00dsc00dp00icFFiscFFipFFin01"
       }
     ],
