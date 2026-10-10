@@ -85,6 +85,11 @@
       flake = false;
     };
     stump-fork.url = "github:arunoruto/stump/metadata-manual-search";
+    # Retrom game library server, until it lands in nixpkgs. Pinned to a release
+    # tag: only tags get pushed to retrom.cachix.org, and only builds against
+    # the flake's own pin can match them -- hence no nixpkgs.follows. Bump by
+    # editing the tag; the lock action never moves it.
+    retrom.url = "github:JMBeresford/retrom/v0.8.4";
   };
 
   outputs =
@@ -340,6 +345,8 @@
       # The Pi's vendor kernel (nixos-raspberrypi), so whichever machine
       # builds the Pi (madara, the MacBook, CI) downloads it.
       "https://nixos-raspberrypi.cachix.org"
+      # Retrom's release builds, so whichever machine builds sado can pull them.
+      "https://retrom.cachix.org"
     ];
     extra-trusted-public-keys = [
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
@@ -348,6 +355,7 @@
       # "helix.cachix.org-1:ejp9KQpR1FBI2onstMQ34yogDm4OgU2ru6lIwPvuCVs="
       "arunoruto.cachix.org-1:GQVw1YDtjt0+ElmQifxEI52a0pRVe9/gdcNEr8v8G14="
       "nixos-raspberrypi.cachix.org-1:4iMO9LXa8BqhU+Rpg6LQKiGa2lsNh/j2oiYLNOQ5sPI="
+      "retrom.cachix.org-1:6fjezFeBSDzHkUvpyLMe58wfi99V4RO8M5Iod4sMxFE="
     ];
   };
 }
