@@ -1,3 +1,6 @@
 {
-  imports = [ ./retrom.nix ];
+  imports = [
+    ./retrom.nix
+    ./romm.nix
+  ];
 }
