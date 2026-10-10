@@ -135,7 +135,7 @@ in
       extensions = with pkgs; [
         # gh-copilot
         # gh-dash
-        (if pkgs ? custom then pkgs.custom.gh-pr-review else null)
+        (if pkgs ? unstable then pkgs.unstable.gh-pr-review else null)
       ];
     };
 
