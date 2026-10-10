@@ -28,6 +28,9 @@ let
     // lib.optionalAttrs cfg.oidc.enable {
       OIDC_CLIENT_ID = "services/romm/client-id";
       OIDC_CLIENT_SECRET = "services/romm/client-secret";
+    }
+    // lib.optionalAttrs cfg.retroachievements.enable {
+      RETROACHIEVEMENTS_API_KEY = "tokens/retroachievments";
     };
 in
 {
@@ -62,6 +65,17 @@ in
         Fetch metadata from IGDB, with the Twitch application credentials read
         from sops (`services/retrom/igdb-client-id` and
         `services/retrom/igdb-client-secret`).
+      '';
+    };
+
+    retroachievements.enable = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = ''
+        Achievements from RetroAchievements, with the web API key read from
+        sops (`tokens/retroachievments`). Each user links their own
+        RetroAchievements account in their RomM profile; their progress is
+        synced on a schedule.
       '';
     };
 
@@ -156,6 +170,10 @@ in
                 service = "http://localhost:${toString httpPort}";
               }
             ];
+      })
+
+      (lib.mkIf cfg.retroachievements.enable {
+        services.romm.extraEnvironment.ENABLE_SCHEDULED_RETROACHIEVEMENTS_PROGRESS_SYNC = "true";
       })
 
       (lib.mkIf cfg.oidc.enable {
