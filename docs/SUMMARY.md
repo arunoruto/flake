@@ -23,6 +23,7 @@
 - [Hyprland](./hyprland.md)
 - [Daily Usage](./daily-usage.md)
 - [Workflows & Automation](./workflows.md)
+- [Incus](./incus.md)
 - [Networking](./networking/README.md)
   - [Cloudflared](./networking/cloudflared.md)
 - [Tips & Resources](./resources.md)
