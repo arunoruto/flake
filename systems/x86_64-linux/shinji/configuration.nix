@@ -112,6 +112,22 @@ in
     qbittorrent.enable = true;
     sabnzbd.enable = true;
     suwayomi-server.enable = false;
+
+    # This host sits on a ~12 Mbit/s upstream, and left uncapped syncthing
+    # takes all of it. That is not just slow, it is self-defeating: the
+    # resulting bufferbloat (RTT measured at 1.7s, ~1.6% loss) was enough to
+    # break tailscaled's long-poll to the coordination server every couple of
+    # minutes, so this host kept being marked offline. Peers that need
+    # endpoint exchange to connect directly — i.e. everyone without a public
+    # IP, such as the arr-hoi box — then never got past a DERP relay, and the
+    # relay was slow enough that large pulls restarted forever: 964 GB
+    # transmitted for a 168 GB folder.
+    #
+    # Capping below line rate keeps the control plane alive, which is what
+    # lets those peers negotiate a direct path at all. In KiB/s despite the
+    # option name (the web UI labels it correctly); 1100 KiB/s is ~9 Mbit/s,
+    # leaving headroom for tailscale, plex and the rest of the house.
+    syncthing.settings.options.maxSendKbps = 1100;
   };
 
   security.pki.certificateFiles = [
