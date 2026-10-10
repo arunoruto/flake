@@ -137,6 +137,7 @@
       # ~30min, staying inside nix-daemon's 6G limit. Every tag bump means
       # another such build.
       enable = true;
+      igdb.enable = true;
       settings.contentDirectories = [
         {
           path = "/mnt/flash/games/roms";
