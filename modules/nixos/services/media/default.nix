@@ -8,6 +8,7 @@
     ./audio
     ./arr
     ./downloaders
+    ./games
     ./players
     ./reading
     ./syncthing
