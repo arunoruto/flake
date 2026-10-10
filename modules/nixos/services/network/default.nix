@@ -13,6 +13,7 @@
     ./ipv64.nix
     ./localsend.nix
     ./netbird.nix
+    ./nginx.nix
     ./traefik.nix
   ];
 
