@@ -128,15 +128,24 @@
       branchName = "cryo-${config.networking.hostName}";
     };
     bindery.enable = true;
-    # Games live on flash/games: roms/ is the library retrom scans, one
-    # <platform>/<game>/ folder per game. bios/ stays outside it on purpose --
-    # retrom has no notion of BIOS files and would list the folder as a
-    # platform; it is for the clients' emulators, via the games share.
+    # Games live on flash/games in the ES-DE layout: roms/<system>/<game file>
+    # and bios/, also shared over samba. RomM manages the library; ES-DE on
+    # the handhelds plays it.
+    romm = {
+      enable = true;
+      library = "/mnt/flash/games";
+      igdb.enable = true;
+      # The name that resolves for every client at home, Flatpaks included
+      # (they cannot do mDNS). nginx listens on 8080 next to Traefik.
+      nginx.virtualHost = "sado.fritz.box";
+    };
+    # Replaced by RomM, which keeps the library in the ES-DE layout instead of
+    # a folder per game. Kept configured in case it comes back.
     retrom = {
       # The media module patches retrom-service, so it is always built here:
       # ~30min, staying inside nix-daemon's 6G limit. Every tag bump means
       # another such build.
-      enable = true;
+      enable = false;
       igdb.enable = true;
       settings.contentDirectories = [
         {
@@ -145,8 +154,8 @@
         }
       ];
     };
-    # Retrom is the first postgres user here. The stateVersion (23.11) default
-    # would start a fresh cluster on 15, which is EOL in 2027.
+    # Retrom, now RomM, brought postgres here. The stateVersion (23.11)
+    # default would have started the cluster on 15, which is EOL in 2027.
     postgresql.package = pkgs.postgresql_17;
     # komga.enable = true;
     # immich = {
