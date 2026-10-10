@@ -133,9 +133,10 @@
     # retrom has no notion of BIOS files and would list the folder as a
     # platform; it is for the clients' emulators, via the games share.
     retrom = {
-      # Off until a prebuilt retrom-service exists: retrom.cachix.org has
-      # evicted its release builds, and compiling it here is too much for sado.
-      enable = false;
+      # The media module patches retrom-service, so it is always built here:
+      # ~30min, staying inside nix-daemon's 6G limit. Every tag bump means
+      # another such build.
+      enable = true;
       settings.contentDirectories = [
         {
           path = "/mnt/flash/games/roms";
