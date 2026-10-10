@@ -2,16 +2,46 @@
   lib,
   config,
   inputs,
+  pkgs,
   ...
 }:
 let
   cfg = config.services.retrom;
   igdbSecret = name: "services/retrom/igdb-${name}";
+
+  # The flake's build with the fixes from the nixpkgs init PR
+  # (NixOS/nixpkgs#516038); drop this once the service comes from nixpkgs.
+  retrom-service =
+    inputs.retrom.packages.${pkgs.stdenv.hostPlatform.system}.retrom-service.overrideAttrs
+      (old: {
+        # Upstream enables openssl-sys/vendored. The compiled-in copy embeds its
+        # compiler command line, which kept gcc in the runtime closure (~300M).
+        env = old.env or { } // {
+          OPENSSL_NO_VENDOR = "1";
+        };
+        # The release build bakes upstream's Uptrace DSN into the web client,
+        # and index.html loads the tracing unconditionally, so every browser
+        # opening /web reported page loads and requests to api.uptrace.dev --
+        # the server's opt-in telemetry setting never applied to it. Without a
+        # DSN the client sends its traces to the server it was loaded from.
+        postPatch = old.postPatch or "" + ''
+          substituteInPlace packages/client-web/vite.config.ts \
+            --replace-fail 'process.env.VITE_UPTRACE_DSN || process.env.UPTRACE_DSN || ""' '""'
+        '';
+        # The service only serves $RETROM_WEB_DIR/dist and never runs node, so
+        # the production node_modules (~110M) upstream installs next to it are
+        # dead weight.
+        postInstall = ''
+          mkdir -p $out/share/retrom
+          cp -r packages/client-web/dist $out/share/retrom/
+        '';
+      });
 in
 {
   # Retrom's own module: services.retrom (server) and programs.retrom (desktop
-  # client). It defaults both packages to the flake's builds, made against its
-  # own nixpkgs pin -- the only builds retrom.cachix.org can hold.
+  # client). It defaults both packages to the flake's builds; the server's is
+  # replaced with the patched one above, so it never comes from
+  # retrom.cachix.org.
   imports = [ inputs.retrom.nixosModules.retrom ];
 
   options.services.retrom.igdb.enable = lib.mkOption {
@@ -34,6 +64,8 @@ in
     lib.mkMerge [
       {
         services.retrom = {
+          # Above upstream's mkDefault, below a plain assignment on a host.
+          package = lib.mkOverride 900 retrom-service;
           dataDir = lib.mkDefault "${config.services.media.dataDir}/retrom";
           # Built without the embedded_db feature, so it needs a real server.
           enableDatabase = lib.mkDefault true;
