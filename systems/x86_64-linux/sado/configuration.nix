@@ -138,6 +138,9 @@
       # The name that resolves for every client at home, Flatpaks included
       # (they cannot do mDNS). nginx listens on 8080 next to Traefik.
       nginx.virtualHost = "sado.fritz.box";
+      # Everywhere else, through the tunnel; sign-in is Pocket ID's.
+      publicHost = "rom.${config.services.cloudflared.defaultDomain}";
+      oidc.enable = true;
     };
     # Replaced by RomM, which keeps the library in the ES-DE layout instead of
     # a folder per game. Kept configured in case it comes back.
