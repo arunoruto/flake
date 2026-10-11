@@ -14,5 +14,7 @@ in
 {
   go = callPackage ./go.nix { };
   go-lsp = callPackage ./go.nix { withLsp = true; };
+  node = callPackage ./node.nix { };
+  node-lsp = callPackage ./node.nix { withLsp = true; };
   website = callPackage ./website.nix { };
 }
