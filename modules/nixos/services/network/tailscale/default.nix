@@ -49,8 +49,12 @@
         # *role*, keyed on the server tag — not on "doesn't have desktop":
         # a laptop or workstation without the desktop tag must never route
         # tailnet traffic. Everything else is a plain client.
+        # A subnet router must not accept routes: in an HA pair the other
+        # router's copy of the shared LAN lands in table 52, which outranks
+        # main, so replies to on-LAN clients leave via tailscale0 instead.
+        # Spelled out as =false because `set` leaves omitted flags as-is.
         extraSetFlags = [
-          "--accept-routes"
+          "--accept-routes=${lib.boolToString (cfg.advertiseRoutes == [ ])}"
         ]
         ++ (
           if (config.lib.tags.hasTag "server") then
