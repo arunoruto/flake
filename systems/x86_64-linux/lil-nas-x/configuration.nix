@@ -59,6 +59,9 @@
   networking.hostId = "2dc03b5d";
 
   services = {
+    # Same lab LAN as kuchiki (129.217.143.128/26, gateway .190); advertising
+    # it from both makes them an HA subnet-router pair.
+    tailscale.advertiseRoutes = [ "129.217.143.128/26" ];
     scrutiny.collector = {
       enable = true;
       settings.api.endpoint = "https://scrutiny.bv.e-technik.tu-dortmund.de";
