@@ -39,11 +39,17 @@
         package = pkgs.unstable.tailscale;
         port = tailscale-port;
         useRoutingFeatures = "client";
+        # extraUpFlags only run via tailscaled-autoconnect, which exists only
+        # with an authKeyFile; extraSetFlags run on every activation. So
+        # everything `tailscale set` accepts belongs in extraSetFlags.
+        extraUpFlags = lib.optionals (config.lib.tags.hasTag "server") [
+          "--advertise-tags=tag:connector"
+        ];
         # Advertising (exit node, connector, tailscale-SSH) is a server
         # *role*, keyed on the server tag — not on "doesn't have desktop":
         # a laptop or workstation without the desktop tag must never route
         # tailnet traffic. Everything else is a plain client.
-        extraUpFlags = [
+        extraSetFlags = [
           "--accept-routes"
         ]
         ++ (
@@ -51,22 +57,18 @@
             [
               "--ssh"
               "--advertise-connector"
-              "--advertise-tags=tag:connector"
+              "--advertise-exit-node"
             ]
           else
             [
               "--exit-node-allow-lan-access"
             ]
-        );
-        extraSetFlags =
-          lib.optionals (config.lib.tags.hasTag "server") [
-            "--advertise-exit-node"
-          ]
-          # `set` replaces the whole route list, so this is also what
-          # retracts stale app-connector routes on activation.
-          ++ lib.optional (
-            cfg.advertiseRoutes != [ ]
-          ) "--advertise-routes=${lib.concatStringsSep "," cfg.advertiseRoutes}";
+        )
+        # `set` replaces the whole route list, so this is also what
+        # retracts stale app-connector routes on activation.
+        ++ lib.optional (
+          cfg.advertiseRoutes != [ ]
+        ) "--advertise-routes=${lib.concatStringsSep "," cfg.advertiseRoutes}";
         permitCertUid = if config.services.traefik.enable then "traefik" else null;
       };
 
@@ -82,6 +84,21 @@
           # https://github.com/tailscale/tailscale/issues/4432#issuecomment-1112819111
           checkReversePath = "loose";
         };
+
+        # Forwarding hosts (exit node / subnet router) want UDP GRO forwarding
+        # on their physical NICs: https://tailscale.com/s/ethtool-config-udp-gro
+        networkmanager.dispatcherScripts =
+          lib.mkIf (config.lib.tags.hasTag "server" && config.networking.networkmanager.enable)
+            [
+              {
+                type = "basic";
+                source = pkgs.writeShellScript "tailscale-udp-gro" ''
+                  if [ "$2" = up ] && [ -e "/sys/class/net/$1/device" ]; then
+                    ${lib.getExe pkgs.ethtool} -K "$1" rx-udp-gro-forwarding on rx-gro-list off || true
+                  fi
+                '';
+              }
+            ];
       };
 
       boot.kernel.sysctl = {
