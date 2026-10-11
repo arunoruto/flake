@@ -13,5 +13,6 @@ let
 in
 {
   go = callPackage ./go.nix { };
+  go-lsp = callPackage ./go.nix { withLsp = true; };
   website = callPackage ./website.nix { };
 }
