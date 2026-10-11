@@ -117,6 +117,11 @@
           "/mnt/storage"
           "/mnt/storage/media"
         ];
+        GPU_COLLECTOR = lib.strings.concatStringsSep "," [
+          "nvidia-smi"
+          "intel_gpu_top"
+          # "intel_sysfs"
+        ];
       };
       smartmon = {
         enable = true;
