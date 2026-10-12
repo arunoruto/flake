@@ -113,6 +113,38 @@
             ];
       };
 
+      # --accept-routes puts peer subnet routes in table 52, whose rule
+      # (5270) outranks main — so when a peer advertises the LAN we are
+      # sitting on, replies to LAN neighbours go into the tunnel and
+      # die. Consult main first but ignore its default route, so
+      # directly connected subnets stay local while everything else
+      # (exit node included) still falls through to Tailscale.
+      systemd.services.tailscale-prefer-lan =
+        let
+          rule = "priority 5200 lookup main suppress_prefixlength 0";
+          ip = lib.getExe' pkgs.iproute2 "ip";
+        in
+        {
+          description = "Prefer directly connected routes over Tailscale subnet routes";
+          wantedBy = [ "multi-user.target" ];
+          after = [ "network-pre.target" ];
+          serviceConfig = {
+            Type = "oneshot";
+            RemainAfterExit = true;
+          };
+          script = ''
+            for family in -4 -6; do
+              ${ip} $family rule del ${rule} 2>/dev/null || true
+              ${ip} $family rule add ${rule}
+            done
+          '';
+          preStop = ''
+            for family in -4 -6; do
+              ${ip} $family rule del ${rule} 2>/dev/null || true
+            done
+          '';
+        };
+
       boot.kernel.sysctl = {
         # https://github.com/tailscale/tailscale/issues/3310#issuecomment-1722601407
         "net.ipv4.conf.default.rp_filter" = 2;
