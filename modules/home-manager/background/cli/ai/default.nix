@@ -13,6 +13,8 @@
     ./mods.nix
     ./opencode
     ./pi
+    ./ponytail.nix
+    ./rtk.nix
     ./skills
     ./agents
   ];
