@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installAgentSkills,
   nix-update-script,
   # versionCheckHook,
 }:
@@ -20,11 +21,18 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   dontConfigure = true;
   dontBuild = true;
 
+  nativeBuildInputs = [ installAgentSkills ];
+
+  # The repo ships the same skills in several places (one per agent); the
+  # plugin copies are the complete ones.
+  dontInstallAgentSkills = true;
+
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out
-    cp -r -L $src/plugins/caveman/skills $out/
+    for skill in plugins/caveman/skills/*; do
+      installSkill "$skill"
+    done
 
     runHook postInstall
   '';

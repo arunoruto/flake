@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  installAgentSkills,
   nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -15,13 +16,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-yQ8R2R95QFXjYYbwAN0NdySObo8S2Cf/TecOQ9Ucr/A=";
   };
 
+  # installAgentSkills picks up every SKILL.md folder on its own.
+  nativeBuildInputs = [ installAgentSkills ];
+
   installPhase = ''
     runHook preInstall
-
-    mkdir $out
-
-    cp -r ${finalAttrs.src}/plugins/astral/* $out/
-
     runHook postInstall
   '';
 

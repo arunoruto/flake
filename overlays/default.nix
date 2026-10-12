@@ -67,6 +67,12 @@ rec {
     inherit ((import ../packages final.unstable)) custom;
   };
 
+  # Agent skills under pkgs.agentSkills.*, built against unstable like
+  # pkgs.custom so they share store paths with `nix build .#agentSkills.<pkg>`.
+  agent-skills = final: prev: {
+    inherit ((import ../packages final.unstable)) agentSkills;
+  };
+
   # This one contains whatever you want to overlay
   # You can change versions, add patches, set compilation flags, anything really.
   # https://nixos.wiki/wiki/Overlays
