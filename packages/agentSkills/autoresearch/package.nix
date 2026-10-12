@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  installAgentSkills,
   nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -18,12 +19,16 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-WGVvYGmiC8X5iaJIL29IHfzNEeerQg0ucwlQIGiadbg=";
   };
 
+  nativeBuildInputs = [ installAgentSkills ];
+
+  # One copy of the skill per agent; .agents/ is the agent-neutral one,
+  # which upstream's README installs as-is.
+  dontInstallAgentSkills = true;
+
   installPhase = ''
     runHook preInstall
 
-    mkdir $out
-    shopt -s dotglob
-    cp -r ${finalAttrs.src}/* $out/
+    installSkill .agents/skills/autoresearch
 
     runHook postInstall
   '';

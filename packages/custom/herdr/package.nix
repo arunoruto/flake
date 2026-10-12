@@ -55,6 +55,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     chmod -R u+w "$ZIG_GLOBAL_CACHE_DIR/p"
   '';
 
+  # TODO: on the next update, install the skill with installAgentSkills like
+  # nixpkgs' herdr does (share/skills/herdr/herdr/), matching packages/agentSkills.
   postInstall = ''
     cp SKILL.md $out/
   ''

@@ -17,7 +17,7 @@ and where to start when adding something new.
 | `homes/<user>/` | Per-user Home Manager entry points, auto-discovered for standalone `homeConfigurations`. SSH public keys live in `homes/<user>/keys/`. |
 | `lib/` | Small helper library layered onto `nixpkgs.lib` (directory listing, tag predicate, `eachSystem`). |
 | `overlays/` | Nixpkgs overlays: custom packages, modifications, `pkgs.unstable`, … |
-| `packages/` | Custom packages: `top-level/` (auto-discovered), `custom/` (namespaced under `pkgs.custom`), plus python/kodi/home-assistant scopes and the `docs` book. |
+| `packages/` | Custom packages: `top-level/` (auto-discovered), `custom/` (namespaced under `pkgs.custom`), `agentSkills/` (agent skills under `pkgs.agentSkills`), plus python/kodi/home-assistant scopes and the `docs` book. |
 | `shells/` | Dev shells (`nix develop .#go`, `.#website`, `.#nix`). |
 | `secrets/` | sops-encrypted secrets. Recipients (age keys per user and host) are declared in `secrets/.sops.yaml`. |
 | `scripts/` | Repo tooling (package bump script, CI checks) — driven via the `justfile`. |

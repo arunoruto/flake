@@ -134,6 +134,7 @@
             kodi
             home-assistant
             custom-packages
+            agent-skills
             steamix
           ])
           ++ (with inputs; [ nur.overlays.default ]);

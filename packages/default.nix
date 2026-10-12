@@ -61,6 +61,18 @@ pkgs.lib.makeScope pkgs.newScope (
     );
   }
   // {
+    # Agent Skills (SKILL.md folders) for coding agents, kept apart from the
+    # programs above. Build them with nixpkgs' installAgentSkills hook, which
+    # installs to $out/share/skills/<pname>/<skill>/.
+    agentSkills = pkgs.lib.makeScope pkgs.newScope (
+      self-skills:
+      pkgs.lib.packagesFromDirectoryRecursive {
+        inherit (self-skills) callPackage newScope;
+        directory = ./agentSkills;
+      }
+    );
+  }
+  // {
     custom = pkgs.lib.makeScope pkgs.newScope (
       self-custom:
       let

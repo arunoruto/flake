@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Bump a custom package with nix-update.
-# Usage: scripts/bump-package.sh packages/{custom,top-level}/<pkg>[/package.nix] [extra nix-update flags]
+# Usage: scripts/bump-package.sh packages/{custom,agentSkills,top-level}/<pkg>[/package.nix] [extra nix-update flags]
 set -euo pipefail
 
 # Resolve the flake root from this script's location so the script works
@@ -33,11 +33,13 @@ PACKAGE=$(basename "$PACKAGE_DIR")
 # 4. Determine category and attribute path based on the folder structure
 if [[ "$INPUT_PATH" == *"packages/custom/"* ]]; then
     ATTR_PATH="custom.$PACKAGE"
+elif [[ "$INPUT_PATH" == *"packages/agentSkills/"* ]]; then
+    ATTR_PATH="agentSkills.$PACKAGE"
 elif [[ "$INPUT_PATH" == *"packages/top-level/"* ]]; then
     ATTR_PATH="$PACKAGE"
 else
     echo "Error: Unrecognized package location in path: $INPUT_PATH"
-    echo "Path must contain 'packages/custom/' or 'packages/top-level/'"
+    echo "Path must contain 'packages/custom/', 'packages/agentSkills/' or 'packages/top-level/'"
     exit 1
 fi
 
