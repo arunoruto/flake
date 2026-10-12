@@ -98,6 +98,7 @@ stdenv.mkDerivation {
     nspr
     nss
     pango
+    pipewire
     systemdLibs
   ];
 
