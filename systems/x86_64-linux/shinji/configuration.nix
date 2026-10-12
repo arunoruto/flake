@@ -113,21 +113,27 @@ in
     sabnzbd.enable = true;
     suwayomi-server.enable = false;
 
-    # This host sits on a ~12 Mbit/s upstream, and left uncapped syncthing
-    # takes all of it. That is not just slow, it is self-defeating: the
-    # resulting bufferbloat (RTT measured at 1.7s, ~1.6% loss) was enough to
-    # break tailscaled's long-poll to the coordination server every couple of
-    # minutes, so this host kept being marked offline. Peers that need
-    # endpoint exchange to connect directly — i.e. everyone without a public
-    # IP, such as the arr-hoi box — then never got past a DERP relay, and the
-    # relay was slow enough that large pulls restarted forever: 964 GB
-    # transmitted for a 168 GB folder.
+    # 0 means unlimited. Set explicitly rather than commented out on purpose:
+    # a null/absent value makes the module stop *managing* the key, it does not
+    # reset it, so the 1100 already written into syncthing's own config would
+    # simply have stayed in force while this file implied otherwise.
     #
-    # Capping below line rate keeps the control plane alive, which is what
-    # lets those peers negotiate a direct path at all. In KiB/s despite the
-    # option name (the web UI labels it correctly); 1100 KiB/s is ~9 Mbit/s,
-    # leaving headroom for tailscale, plex and the rest of the house.
-    syncthing.settings.options.maxSendKbps = 1100;
+    # This host sits on a ~12 Mbit/s upstream and uncapped syncthing takes all
+    # of it. That used to be self-defeating: the bufferbloat (RTT measured at
+    # 1.7s, ~1.6% loss) made netcheck intermittently report udp=false to the
+    # coordination server, so peers without a public IP never negotiated a
+    # direct path and stayed on a DERP relay. Capped at 1100 KiB/s (~9 Mbit/s;
+    # the unit is KiB/s despite the option name) that RTT fell to 116ms and
+    # retransmits from 5.7M to ~100.
+    #
+    # Two things changed since, which is why it is worth retrying uncapped:
+    # arr-hoi now has a forwarded port and a genuinely direct path, so it no
+    # longer depends on a healthy control plane to find one; and the far end's
+    # sonarr was deleting syncthing's in-flight .tmp files, which is what was
+    # actually causing transfers to restart forever — the cap was treating a
+    # symptom of that. Watch the direct path holding and the RTT staying low;
+    # if it falls back to DERP, put 1100 back here.
+    syncthing.settings.options.maxSendKbps = 0;
   };
 
   security.pki.certificateFiles = [
