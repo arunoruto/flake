@@ -98,7 +98,7 @@ Options were renamed from `development.*` to `devix.*` (and `autoConfigureEditor
 
 ### Packages
 
-`packages/default.nix` builds a `makeScope`: `top-level/` is auto-discovered via `packagesFromDirectoryRecursive`, `custom/` is namespaced under `pkgs.custom`, plus `python3Packages/`, `kodiPackages/`, and `home-assistant-custom-components/` scopes layered onto their nixpkgs counterparts. Overlays in `overlays/` expose these as `pkgs.<name>` / `pkgs.custom.<name>` and provide `pkgs.unstable`.
+`packages/default.nix` builds a `makeScope`: `top-level/` is auto-discovered via `packagesFromDirectoryRecursive`, `custom/` is namespaced under `pkgs.custom`, `agentSkills/` under `pkgs.agentSkills` (Agent Skills for coding agents; built with nixpkgs' `installAgentSkills` hook, which installs `$out/share/skills/<pname>/<skill>/`; link one into the agents with `ai.skillPackages`), plus `python3Packages/`, `kodiPackages/`, and `home-assistant-custom-components/` scopes layered onto their nixpkgs counterparts. Overlays in `overlays/` expose these as `pkgs.<name>` / `pkgs.custom.<name>` / `pkgs.agentSkills.<name>` and provide `pkgs.unstable`. Skills go in `agentSkills/`, never `top-level/`: they are data for agents, not programs.
 
 `top-level/` is for packages not in nixpkgs yet; once one lands in nixpkgs-unstable it moves to `custom/` (otherwise it shadows the upstream package). `legacyPackages` and `pkgs.custom` are both built against nixpkgs-unstable, so they share store paths. Packages opt into the public Cachix cache with `passthru.cachix = true;` (free licenses and source builds only; see `docs/cachix.md`, `just cachix-sync`).
 
