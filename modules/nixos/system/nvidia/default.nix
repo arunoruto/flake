@@ -2,6 +2,7 @@
   pkgs,
   lib,
   config,
+  options,
   ...
 }:
 {
@@ -12,6 +13,12 @@
     boot.kernelPackages = pkgs.linuxPackages;
 
     services.xserver.videoDrivers = [ "nvidia" ];
+
+    # facter puts every detected GPU driver into the initrd; the proprietary
+    # nvidia module drags its GSP firmware along (~200 MB initrd), which
+    # overflows the ESP. It loads fine from the root fs in stage 2.
+    hardware.facter.detected.boot.graphics.kernelModules =
+      lib.remove "nvidia" options.hardware.facter.detected.boot.graphics.kernelModules.default;
 
     # boot = {
     #   kernelParams = [ "nvidia.NVreg_EnableGpuFirmware=0" ];
