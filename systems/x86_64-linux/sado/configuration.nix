@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  inputs,
   ...
 }:
 {
@@ -253,6 +254,36 @@
     tlp.enable = true;
     power-profiles-daemon.enable = false;
   };
+
+  home-manager.users.${config.users.primaryUser} =
+    { config, ... }:
+    {
+      imports = [ inputs.tapedeck.homeModules.default ];
+      # Decrypted with the user's age key into the user's runtime dir; the
+      # system copy of this secret is root-only.
+      sops.secrets."tokens/plex" = { };
+      programs.tapedeck = {
+        enable = true;
+        settings = {
+          # Kept apart from Lidarr's releases/ and explo's discover/.
+          library = "/mnt/flash/music/tapedeck";
+          listenbrainz = {
+            user = "arunoruto";
+            playlists = [ "weekly-jams" ];
+          };
+          download.format = "opus";
+          sync = {
+            targets = [ "plex" ];
+            # Plex runs natively here, so it sees the same paths: no path_map.
+            plex = {
+              url = "http://127.0.0.1:32400";
+              token_file = config.sops.secrets."tokens/plex".path;
+              section = "Music";
+            };
+          };
+        };
+      };
+    };
 
   sops = {
     # The hub's public key; the agent process reads this one itself.

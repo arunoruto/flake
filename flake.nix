@@ -90,6 +90,10 @@
     # the flake's own pin can match them -- hence no nixpkgs.follows. Bump by
     # editing the tag; the lock action never moves it.
     retrom.url = "github:JMBeresford/retrom/v0.8.4";
+    # ListenBrainz playlists -> tagged library -> Plex. No nixpkgs.follows: its
+    # CI pushes builds against its own pin to arunoruto.cachix.org, so only that
+    # pin gets cache hits.
+    tapedeck.url = "github:arunoruto/tapedeck";
   };
 
   outputs =
