@@ -52,6 +52,12 @@ in
           "root"
           "@wheel"
         ];
+        # Our own cache, system-wide rather than only through flake.nix's
+        # nixConfig, so `nix run github:arunoruto/<repo>` on other flakes hits it too.
+        extra-substituters = [ "https://arunoruto.cachix.org" ];
+        extra-trusted-public-keys = [
+          "arunoruto.cachix.org-1:GQVw1YDtjt0+ElmQifxEI52a0pRVe9/gdcNEr8v8G14="
+        ];
         extra-experimental-features = [
           "nix-command"
           "flakes"

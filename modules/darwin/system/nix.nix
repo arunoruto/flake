@@ -10,6 +10,11 @@ let
       "root"
       "@admin"
     ];
+    # Same as on NixOS: our own cache for other flakes than this one.
+    extra-substituters = lib.mkDefault [ "https://arunoruto.cachix.org" ];
+    extra-trusted-public-keys = lib.mkDefault [
+      "arunoruto.cachix.org-1:GQVw1YDtjt0+ElmQifxEI52a0pRVe9/gdcNEr8v8G14="
+    ];
     extra-experimental-features = lib.mkDefault [
       "nix-command"
       "flakes"
