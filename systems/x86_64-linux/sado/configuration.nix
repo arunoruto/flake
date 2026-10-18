@@ -290,12 +290,7 @@
           };
         };
       };
-      # `td daemon`, syncing every sync.interval (6h by default).
-      services.tapedeck.enable = true;
     };
-  # The daemon is a user unit; without lingering it only runs while mirza
-  # is logged in.
-  users.users.${config.users.primaryUser}.linger = true;
 
   sops = {
     # The hub's public key; the agent process reads this one itself.
