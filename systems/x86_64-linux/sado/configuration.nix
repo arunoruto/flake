@@ -197,14 +197,15 @@
         };
         download.format = "opus";
         # Lidarr's library, read-only: tracks found there aren't downloaded.
-        external = {
-          paths = [
-            "/mnt/flash/music/releases"
-            "/mnt/flash/music/singles"
-          ];
-          scan_interval = "1h";
-          prefer_external = "ask";
-        };
+        # Off for now: db96771 needs ~20 s of CPU per Lidarr FLAC to index it.
+        # external = {
+        #   paths = [
+        #     "/mnt/flash/music/releases"
+        #     "/mnt/flash/music/singles"
+        #   ];
+        #   scan_interval = "1h";
+        #   prefer_external = "ask";
+        # };
         # Song requests: send the bot a link or "Artist - Title".
         telegram = {
           token_file = config.sops.secrets."tokens/telegram/ytdlp".path;
