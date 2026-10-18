@@ -205,6 +205,11 @@
           scan_interval = "1h";
           prefer_external = "ask";
         };
+        # Song requests: send the bot a link or "Artist - Title".
+        telegram = {
+          token_file = config.sops.secrets."tokens/telegram/ytdlp".path;
+          allowed_users = [ 757770344 ];
+        };
         sync = {
           # Not at every boot/restart: each sync also pushes to Plex.
           on_start = false;
@@ -218,7 +223,9 @@
         };
       };
     };
-    ytdlp-bot.enable = true;
+    # Replaced by tapedeck's request bot on the same token; two pollers would
+    # steal each other's updates.
+    ytdlp-bot.enable = false;
     # soulsync.enable = false;
     lidarr = {
       enable = true;
@@ -305,6 +312,11 @@
     secrets."tokens/beszel-marvin".mode = "0444";
     secrets."tokens/beszel-ws" = { };
     secrets."tokens/plex".owner = config.services.tapedeck.user;
+    # The former ytdlp-bot token, now polled by tapedeck.
+    secrets."tokens/telegram/ytdlp" = {
+      owner = config.services.tapedeck.user;
+      restartUnits = [ "tapedeck.service" ];
+    };
     templates."beszel-agent.env".content = ''
       TOKEN=${config.sops.placeholder."tokens/beszel-ws"}
     '';
