@@ -172,7 +172,9 @@
       dataDir = "/mnt/flash/appdata/paperless";
       mediaDir = "/mnt/flash/documents";
     };
-    explo.enable = true;
+    # Replaced by tapedeck (home-manager below), which fetches the same
+    # ListenBrainz playlists into its own library.
+    explo.enable = false;
     ytdlp-bot.enable = true;
     # soulsync.enable = false;
     lidarr = {
@@ -265,11 +267,16 @@
       programs.tapedeck = {
         enable = true;
         settings = {
-          # Kept apart from Lidarr's releases/ and explo's discover/.
+          # Kept apart from Lidarr's releases/.
           library = "/mnt/flash/music/tapedeck";
           listenbrainz = {
             user = "arunoruto";
-            playlists = [ "weekly-jams" ];
+            # The three explo used to fetch.
+            playlists = [
+              "weekly-jams"
+              "weekly-exploration"
+              "daily-jams"
+            ];
           };
           download.format = "opus";
           sync = {
@@ -283,7 +290,12 @@
           };
         };
       };
+      # `td daemon`, syncing every sync.interval (6h by default).
+      services.tapedeck.enable = true;
     };
+  # The daemon is a user unit; without lingering it only runs while mirza
+  # is logged in.
+  users.users.${config.users.primaryUser}.linger = true;
 
   sops = {
     # The hub's public key; the agent process reads this one itself.
