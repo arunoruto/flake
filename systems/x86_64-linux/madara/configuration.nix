@@ -26,6 +26,9 @@
 
   users.primaryUser = "mar";
 
+  # tapedeck remote client: `td` browses and plays sado's library.
+  home-manager.users.${config.users.primaryUser}.programs.tapedeck.enable = true;
+
   boot.binfmt.emulatedSystems = [
     # "x86_64-linux"
     "aarch64-linux"
