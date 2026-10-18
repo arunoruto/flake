@@ -196,6 +196,15 @@
           ];
         };
         download.format = "opus";
+        # Lidarr's library, read-only: tracks found there aren't downloaded.
+        external = {
+          paths = [
+            "/mnt/flash/music/releases"
+            "/mnt/flash/music/singles"
+          ];
+          scan_interval = "1h";
+          prefer_external = "ask";
+        };
         sync = {
           # Not at every boot/restart: each sync also pushes to Plex.
           on_start = false;
