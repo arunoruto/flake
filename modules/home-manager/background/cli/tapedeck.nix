@@ -10,6 +10,6 @@
     # Required by the schema, untouched in remote mode.
     library = lib.mkDefault "/unused";
     listenbrainz.user = lib.mkDefault "arunoruto";
-    remote.url = lib.mkDefault "http://sado:7878";
+    remote.url = lib.mkDefault "http://sado:8687";
   };
 }
