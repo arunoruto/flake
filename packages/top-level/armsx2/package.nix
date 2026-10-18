@@ -14,7 +14,11 @@
   # probe the build machine instead.
   hostPageSize ? if stdenv.hostPlatform.isDarwin then 16384 else 4096,
   hostCacheLineSize ? if hostPageSize == 16384 then 128 else 64,
-  # macOS only: the Xcode whose Metal compiler builds the shaders (see below).
+  # macOS only: build the Metal renderer. Its shaders need Xcode's Metal
+  # compiler and the Nix sandbox off (see below); without it, Vulkan through
+  # MoltenVK is the hardware renderer and the build is pure.
+  withMetal ? false,
+  # The Xcode whose Metal compiler builds the shaders.
   xcodeDeveloperDir ? "/Applications/Xcode.app/Contents/Developer",
 }:
 
@@ -61,7 +65,7 @@ pcsx2.overrideAttrs (
       endif()
       message(STATUS "Determining host cache line size")'
     ''
-    + lib.optionalString isDarwin ''
+    + lib.optionalString (isDarwin && withMetal) ''
       substituteInPlace pcsx2/CMakeLists.txt \
         --replace-fail 'COMMAND xcrun ' 'COMMAND ${xcrun} '
     '';
@@ -95,7 +99,10 @@ pcsx2.overrideAttrs (
         (lib.cmakeBool "ENABLE_TESTS" false)
       ]
       # macdeployqt would copy Qt into the bundle; Nix provides it instead.
-      ++ lib.optionals isDarwin [ (lib.cmakeBool "SKIP_POSTPROCESS_BUNDLE" true) ];
+      ++ lib.optionals isDarwin [
+        (lib.cmakeBool "SKIP_POSTPROCESS_BUNDLE" true)
+        (lib.cmakeBool "USE_METAL" withMetal)
+      ];
 
     # pcsx2 passes each wrapper flag as one space-separated string, which
     # only works when the shell word-splits it; structured attrs don't.
@@ -168,11 +175,19 @@ pcsx2.overrideAttrs (
     };
   }
   // lib.optionalAttrs isDarwin {
-    # Upstream compiles the Metal shaders with Apple's `metal`, which only
-    # ships with Xcode, so this build uses the system Xcode: it needs the
-    # Nix sandbox off or relaxed, and Xcode with its Metal toolchain on the
-    # build machine.
-    __noChroot = true;
+    # tests/ctest/core holds both GS/ and gs/, which merge on a
+    # case-insensitive APFS and change the hash. Only the (disabled) tests
+    # use them; the rest of tests/ stays, as pcsx2-vurunner names it.
+    src = fetchFromGitHub {
+      owner = "armsx2";
+      repo = "armsx2";
+      tag = finalAttrs.version;
+      postFetch = "rm -rf $out/tests/ctest/core/{GS,gs}";
+      hash = "sha256-r7P0fH8mEXn0stlpJL/hBW6vQKwjugYbFyx4Q4VOhxo=";
+    };
+
+    # Adds a USE_METAL option, so the app builds without Xcode.
+    patches = [ ./use-metal-option.patch ];
 
     nativeBuildInputs =
       lib.filter (dep: lib.getName dep != "wrap-gapps-hook") prevAttrs.nativeBuildInputs
@@ -180,17 +195,6 @@ pcsx2.overrideAttrs (
         darwin.autoSignDarwinBinariesHook
         makeWrapper
       ];
-
-    preConfigure = ''
-      # The Metal compiler keeps a cache in $HOME.
-      export HOME=$TMPDIR
-      if ! ${xcrun} metal -v >/dev/null 2>&1; then
-        echo "error: no Metal compiler in ${xcodeDeveloperDir}." >&2
-        echo "Install Xcode, then run 'sudo xcodebuild -license accept' and" >&2
-        echo "'xcodebuild -downloadComponent MetalToolchain'." >&2
-        exit 1
-      fi
-    '';
 
     qtWrapperArgs = [ ];
     preFixup = "";
@@ -210,6 +214,25 @@ pcsx2.overrideAttrs (
 
       # Run the bundle from its own path so it finds its resources.
       makeWrapper $app/Contents/MacOS/ARMSX2 $out/bin/armsx2-qt
+    '';
+  }
+  // lib.optionalAttrs (isDarwin && withMetal) {
+    # Upstream compiles the Metal shaders with Apple's `metal`, which only
+    # ships with Xcode, so this build uses the system Xcode: it needs the
+    # Nix sandbox off or relaxed, and Xcode with its Metal toolchain on the
+    # build machine.
+    __noChroot = true;
+
+    preConfigure = ''
+      # The Metal compiler keeps a cache in $HOME.
+      export HOME=$TMPDIR
+      if ! ${xcrun} metal -v >/dev/null 2>&1; then
+        echo "error: no Metal compiler in ${xcodeDeveloperDir}." >&2
+        echo "Install Xcode, then run 'sudo ${xcodeDeveloperDir}/usr/bin/xcodebuild -license accept'," >&2
+        echo "'sudo ${xcodeDeveloperDir}/usr/bin/xcodebuild -runFirstLaunch' and" >&2
+        echo "'${xcodeDeveloperDir}/usr/bin/xcodebuild -downloadComponent MetalToolchain'." >&2
+        exit 1
+      fi
     '';
   }
 )
