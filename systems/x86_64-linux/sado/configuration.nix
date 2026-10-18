@@ -210,7 +210,8 @@
         # HTTP API for the remote clients on madara/tensa. br0 and tailscale0 are
         # trusted interfaces, so no firewall change. No token: only reading,
         # streaming and scrobbling are reachable; changes stay on sado.
-        server.listen = "0.0.0.0:7878";
+        # 8687: Lidarr + 1, the port tapedeck's docs use.
+        server.listen = "0.0.0.0:8687";
         # Song requests: send the bot a link or "Artist - Title".
         telegram = {
           token_file = config.sops.secrets."tokens/telegram/ytdlp".path;
