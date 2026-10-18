@@ -73,7 +73,13 @@
       ];
       rstp = true;
     };
-    firewall.trustedInterfaces = [ "br0" ];
+    firewall = {
+      trustedInterfaces = [ "br0" ];
+      # tapedeck's API (Subsonic apps, td remote). Avahi publishes wlo1's
+      # address for sado.local too, and wlo1 isn't trusted: phones resolving
+      # to it timed out. Same LAN as br0, so nothing new is exposed.
+      allowedTCPPorts = [ 8687 ];
+    };
     interfaces = {
       br0.useDHCP = true;
     }
@@ -207,8 +213,8 @@
           scan_interval = "1h";
           prefer_external = "ask";
         };
-        # HTTP API for the remote clients on madara/tensa. br0 and tailscale0 are
-        # trusted interfaces, so no firewall change. No token: only reading,
+        # HTTP API for the remote clients on madara/tensa and Subsonic apps,
+        # opened in networking.firewall above. No token: only reading,
         # streaming and scrobbling are reachable; changes stay on sado.
         # 8687: Lidarr + 1, the port tapedeck's docs use.
         server.listen = "0.0.0.0:8687";
