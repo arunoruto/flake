@@ -188,6 +188,8 @@
         library = "/mnt/flash/music/tapedeck";
         listenbrainz = {
           user = "arunoruto";
+          # Lets the daemon submit the listens the remote clients report.
+          token_file = config.sops.secrets."tokens/listenbrainz".path;
           # The three explo used to fetch.
           playlists = [
             "weekly-jams"
@@ -205,6 +207,10 @@
           scan_interval = "1h";
           prefer_external = "ask";
         };
+        # HTTP API for the remote clients on madara/tensa. br0 and tailscale0 are
+        # trusted interfaces, so no firewall change. No token: only reading,
+        # streaming and scrobbling are reachable; changes stay on sado.
+        server.listen = "0.0.0.0:7878";
         # Song requests: send the bot a link or "Artist - Title".
         telegram = {
           token_file = config.sops.secrets."tokens/telegram/ytdlp".path;
@@ -312,6 +318,7 @@
     secrets."tokens/beszel-marvin".mode = "0444";
     secrets."tokens/beszel-ws" = { };
     secrets."tokens/plex".owner = config.services.tapedeck.user;
+    secrets."tokens/listenbrainz".owner = config.services.tapedeck.user;
     # The former ytdlp-bot token, now polled by tapedeck.
     secrets."tokens/telegram/ytdlp" = {
       owner = config.services.tapedeck.user;
