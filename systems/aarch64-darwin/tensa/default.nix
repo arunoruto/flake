@@ -1,4 +1,5 @@
 {
+  config,
   pkgs,
   ...
 }:
@@ -24,6 +25,9 @@
 
   # Primary user configuration (shared between NixOS and Darwin)
   users.primaryUser = "mirza";
+
+  # tapedeck remote client: `td` browses and plays sado's library.
+  home-manager.users.${config.users.primaryUser}.programs.tapedeck.enable = true;
 
   # Stylix theming configuration
   stylix = {

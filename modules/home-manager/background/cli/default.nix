@@ -22,6 +22,7 @@
     ./fzf.nix
     ./misc.nix
     ./serpl.nix
+    ./tapedeck.nix
     ./superfile
     ./yazi.nix
     ./zellij.nix
