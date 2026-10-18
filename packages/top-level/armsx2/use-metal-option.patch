@@ -1,0 +1,199 @@
+diff --git a/cmake/BuildParameters.cmake b/cmake/BuildParameters.cmake
+index ce8cff1..efc5ff6 100644
+--- a/cmake/BuildParameters.cmake
++++ b/cmake/BuildParameters.cmake
+@@ -42,6 +42,11 @@ if(NOT APPLE)
+ 	option(USE_OPENGL "Enable OpenGL GS renderer" ON)
+ endif()
+ option(USE_VULKAN "Enable Vulkan GS renderer" ON)
++if(APPLE)
++	# The Metal shaders are precompiled with Xcode's `metal` compiler. Turning
++	# this off builds without Xcode; Vulkan (MoltenVK) is then the hardware renderer.
++	option(USE_METAL "Enable Metal GS renderer" ON)
++endif()
+ # What the GL renderer asks the host for. Android is GL ES whether this is set
+ # or not; it exists for the other platforms that have only ES - webOS, and the
+ # embedded frontends - where a desktop GL request is refused and the core then
+@@ -367,6 +372,10 @@ if(USE_VULKAN)
+ 	list(APPEND PCSX2_DEFS ENABLE_VULKAN)
+ endif()
+ 
++if(USE_METAL)
++	list(APPEND PCSX2_DEFS ENABLE_METAL)
++endif()
++
+ if(X11_API)
+ 	list(APPEND PCSX2_DEFS X11_API)
+ endif()
+diff --git a/pcsx2-gsrunner/Main.cpp b/pcsx2-gsrunner/Main.cpp
+index a664674..a38bd1c 100644
+--- a/pcsx2-gsrunner/Main.cpp
++++ b/pcsx2-gsrunner/Main.cpp
+@@ -1572,7 +1572,7 @@ bool GSRunner::ParseCommandLineArgs(int argc, char* argv[], VMBootParameters& pa
+ 				else if (StringUtil::Strcasecmp(rname, "vulkan") == 0)
+ 					type = GSRendererType::VK;
+ #endif
+-#ifdef __APPLE__
++#ifdef ENABLE_METAL
+ 				else if (StringUtil::Strcasecmp(rname, "metal") == 0)
+ 					type = GSRendererType::Metal;
+ #endif
+diff --git a/pcsx2-qt/MainWindow.cpp b/pcsx2-qt/MainWindow.cpp
+index cd217dc..122fd2a 100644
+--- a/pcsx2-qt/MainWindow.cpp
++++ b/pcsx2-qt/MainWindow.cpp
+@@ -671,13 +671,13 @@ void MainWindow::createRendererSwitchMenu()
+ #if defined(_WIN32)
+ 		GSRendererType::DX11,
+ 		GSRendererType::DX12,
+-#elif defined(__APPLE__)
++#elif defined(ENABLE_METAL)
+ 		GSRendererType::Metal,
+ #endif
+ #if defined(ENABLE_OPENGL) && !defined(__APPLE__)
+ 		GSRendererType::OGL,
+ #endif
+-#if defined(ENABLE_VULKAN) && !defined(__APPLE__)
++#if defined(ENABLE_VULKAN) && (!defined(__APPLE__) || !defined(ENABLE_METAL))
+ 		GSRendererType::VK,
+ #endif
+ 		GSRendererType::SW,
+diff --git a/pcsx2-qt/Settings/GraphicsSettingsWidget.cpp b/pcsx2-qt/Settings/GraphicsSettingsWidget.cpp
+index fcc3e86..5a050f5 100644
+--- a/pcsx2-qt/Settings/GraphicsSettingsWidget.cpp
++++ b/pcsx2-qt/Settings/GraphicsSettingsWidget.cpp
+@@ -30,11 +30,11 @@ static constexpr RendererInfo s_renderer_info[] = {
+ 	//: Graphics backend/engine type. Leave as-is.
+ 	{QT_TRANSLATE_NOOP("GraphicsSettingsWidget", "OpenGL"), GSRendererType::OGL},
+ #endif
+-#if defined(ENABLE_VULKAN) && !defined(__APPLE__)
++#if defined(ENABLE_VULKAN) && (!defined(__APPLE__) || !defined(ENABLE_METAL))
+ 	//: Graphics backend/engine type. Leave as-is.
+ 	{QT_TRANSLATE_NOOP("GraphicsSettingsWidget", "Vulkan"), GSRendererType::VK},
+ #endif
+-#ifdef __APPLE__
++#ifdef ENABLE_METAL
+ 	//: Graphics backend/engine type. Leave as-is.
+ 	{QT_TRANSLATE_NOOP("GraphicsSettingsWidget", "Metal"), GSRendererType::Metal},
+ #endif
+diff --git a/pcsx2/CMakeLists.txt b/pcsx2/CMakeLists.txt
+index 1ffab45..e726de0 100644
+--- a/pcsx2/CMakeLists.txt
++++ b/pcsx2/CMakeLists.txt
+@@ -1126,7 +1126,7 @@ set(pcsx2InputHeaders
+ 	Input/SDLInputSource.h
+ )
+ 
+-if(APPLE)
++if(USE_METAL)
+ 	list(APPEND pcsx2GSSources
+ 		GS/Renderers/Metal/GSDeviceMTL.mm
+ 		GS/Renderers/Metal/GSMTLDeviceInfo.mm
+@@ -2008,7 +2008,7 @@ function(setup_main_executable target)
+ 	endif()
+ 
+ 	if(APPLE)
+-		if(CMAKE_GENERATOR MATCHES "Xcode")
++		if(USE_METAL AND CMAKE_GENERATOR MATCHES "Xcode")
+ 			# If we're generating an xcode project, you can just add the shaders to the main pcsx2 target and xcode will deal with them properly
+ 			# This will make sure xcode supplies code completion, etc (if you use a custom command, it won't)
+ 			set_target_properties(${target} PROPERTIES
+@@ -2018,7 +2018,7 @@ function(setup_main_executable target)
+ 				target_sources(${target} PRIVATE ${PCSX2_SOURCE_DIR}/${shader})
+ 				set_source_files_properties(${PCSX2_SOURCE_DIR}/${shader} PROPERTIES LANGUAGE METAL)
+ 			endforeach()
+-		else()
++		elseif(USE_METAL)
+ 			function(generateMetallib std triple outputName)
+ 				set(pcsx2GSMetalShaderOut)
+ 				set(flags
+diff --git a/pcsx2/GS/GS.cpp b/pcsx2/GS/GS.cpp
+index 5a1500b..04a63ee 100644
+--- a/pcsx2/GS/GS.cpp
++++ b/pcsx2/GS/GS.cpp
+@@ -31,7 +31,7 @@
+ #include "GS/Renderers/OpenGL/GSDeviceOGL.h"
+ #endif
+ 
+-#ifdef __APPLE__
++#ifdef ENABLE_METAL
+ #include "GS/Renderers/Metal/GSMetalCPPAccessible.h"
+ #endif
+ 
+@@ -121,7 +121,7 @@ static RenderAPI GetAPIForRenderer(GSRendererType renderer)
+ 			return RenderAPI::D3D12;
+ #endif
+ 
+-#ifdef __APPLE__
++#ifdef ENABLE_METAL
+ 		case GSRendererType::Metal:
+ 			return RenderAPI::Metal;
+ #endif
+@@ -150,7 +150,7 @@ static bool OpenGSDevice(GSRendererType renderer, bool clear_state_on_fail, bool
+ 			g_gs_device = std::make_unique<GSDevice12>();
+ 			break;
+ #endif
+-#ifdef __APPLE__
++#ifdef ENABLE_METAL
+ 		case RenderAPI::Metal:
+ 			g_gs_device = std::unique_ptr<GSDevice>(MakeGSDeviceMTL());
+ 			break;
+@@ -941,7 +941,7 @@ std::vector<GSAdapterInfo> GSGetAdapterInfo(GSRendererType renderer)
+ 		break;
+ #endif
+ 
+-#ifdef __APPLE__
++#ifdef ENABLE_METAL
+ 		case GSRendererType::Metal:
+ 		{
+ 			ret = GetMetalAdapterList();
+diff --git a/pcsx2/GS/GSUtil.cpp b/pcsx2/GS/GSUtil.cpp
+index b1a3f8d..25fdc26 100644
+--- a/pcsx2/GS/GSUtil.cpp
++++ b/pcsx2/GS/GSUtil.cpp
+@@ -370,8 +370,14 @@ GSRendererType GSUtil::GetPreferredRenderer()
+ 	if (preferred_renderer == GSRendererType::Auto)
+ 	{
+ #if defined(__APPLE__)
+-		// Mac: Prefer Metal hardware.
++		// Mac: Prefer Metal hardware, else Vulkan through MoltenVK.
++#if defined(ENABLE_METAL)
+ 		preferred_renderer = GSRendererType::Metal;
++#elif defined(ENABLE_VULKAN)
++		preferred_renderer = GSRendererType::VK;
++#else
++		preferred_renderer = GSRendererType::SW;
++#endif
+ #elif defined(_WIN32) && defined(ARCH_ARM64)
+ 		// Default to DX12 on Windows-on-ARM.
+ 		preferred_renderer = GSRendererType::DX12;
+diff --git a/pcsx2/ImGui/FullscreenUI_Settings.cpp b/pcsx2/ImGui/FullscreenUI_Settings.cpp
+index b9fd118..f0585cf 100644
+--- a/pcsx2/ImGui/FullscreenUI_Settings.cpp
++++ b/pcsx2/ImGui/FullscreenUI_Settings.cpp
+@@ -2782,10 +2782,10 @@ void FullscreenUI::DrawGraphicsSettingsPage(SettingsInterface* bsi, bool show_ad
+ #if defined(ENABLE_OPENGL) && !defined(__APPLE__)
+ 		FSUI_NSTR("OpenGL"),
+ #endif
+-#if defined(ENABLE_VULKAN) && !defined(__APPLE__)
++#if defined(ENABLE_VULKAN) && (!defined(__APPLE__) || !defined(ENABLE_METAL))
+ 		FSUI_NSTR("Vulkan"),
+ #endif
+-#ifdef __APPLE__
++#ifdef ENABLE_METAL
+ 		FSUI_NSTR("Metal"),
+ #endif
+ 		FSUI_NSTR("Software Renderer"),
+@@ -2800,10 +2800,10 @@ void FullscreenUI::DrawGraphicsSettingsPage(SettingsInterface* bsi, bool show_ad
+ #if defined(ENABLE_OPENGL) && !defined(__APPLE__)
+ 		"12", //GSRendererType::OGL,
+ #endif
+-#if defined(ENABLE_VULKAN) && !defined(__APPLE__)
++#if defined(ENABLE_VULKAN) && (!defined(__APPLE__) || !defined(ENABLE_METAL))
+ 		"14", //GSRendererType::VK,
+ #endif
+-#ifdef __APPLE__
++#ifdef ENABLE_METAL
+ 		"17", //GSRendererType::Metal,
+ #endif
+ 		"13", //GSRendererType::SW,
