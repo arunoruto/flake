@@ -6,7 +6,11 @@
   ...
 }:
 {
+  imports = [ inputs.tapedeck.nixosModules.default ];
+
   users.primaryUser = "mirza";
+  # td/td tui from the shell use the daemon's DB and socket.
+  users.users.${config.users.primaryUser}.extraGroups = [ "tapedeck" ];
 
   nix = {
     settings = {
@@ -172,9 +176,39 @@
       dataDir = "/mnt/flash/appdata/paperless";
       mediaDir = "/mnt/flash/documents";
     };
-    # Replaced by tapedeck (home-manager below), which fetches the same
-    # ListenBrainz playlists into its own library.
+    # Replaced by tapedeck below, which fetches the same ListenBrainz
+    # playlists into its own library.
     explo.enable = false;
+    tapedeck = {
+      enable = true;
+      # Library files are shared with Plex and Samba through media.
+      extraGroups = [ "media" ];
+      settings = {
+        # Kept apart from Lidarr's releases/.
+        library = "/mnt/flash/music/tapedeck";
+        listenbrainz = {
+          user = "arunoruto";
+          # The three explo used to fetch.
+          playlists = [
+            "weekly-jams"
+            "weekly-exploration"
+            "daily-jams"
+          ];
+        };
+        download.format = "opus";
+        sync = {
+          # Not at every boot/restart: each sync also pushes to Plex.
+          on_start = false;
+          targets = [ "plex" ];
+          # Plex runs natively here, so it sees the same paths: no path_map.
+          plex = {
+            url = "http://127.0.0.1:32400";
+            token_file = config.sops.secrets."tokens/plex".path;
+            section = "Music";
+          };
+        };
+      };
+    };
     ytdlp-bot.enable = true;
     # soulsync.enable = false;
     lidarr = {
@@ -257,45 +291,11 @@
     power-profiles-daemon.enable = false;
   };
 
-  home-manager.users.${config.users.primaryUser} =
-    { config, ... }:
-    {
-      imports = [ inputs.tapedeck.homeModules.default ];
-      # Decrypted with the user's age key into the user's runtime dir; the
-      # system copy of this secret is root-only.
-      sops.secrets."tokens/plex" = { };
-      programs.tapedeck = {
-        enable = true;
-        settings = {
-          # Kept apart from Lidarr's releases/.
-          library = "/mnt/flash/music/tapedeck";
-          listenbrainz = {
-            user = "arunoruto";
-            # The three explo used to fetch.
-            playlists = [
-              "weekly-jams"
-              "weekly-exploration"
-              "daily-jams"
-            ];
-          };
-          download.format = "opus";
-          sync = {
-            targets = [ "plex" ];
-            # Plex runs natively here, so it sees the same paths: no path_map.
-            plex = {
-              url = "http://127.0.0.1:32400";
-              token_file = config.sops.secrets."tokens/plex".path;
-              section = "Music";
-            };
-          };
-        };
-      };
-    };
-
   sops = {
     # The hub's public key; the agent process reads this one itself.
     secrets."tokens/beszel-marvin".mode = "0444";
     secrets."tokens/beszel-ws" = { };
+    secrets."tokens/plex".owner = config.services.tapedeck.user;
     templates."beszel-agent.env".content = ''
       TOKEN=${config.sops.placeholder."tokens/beszel-ws"}
     '';
