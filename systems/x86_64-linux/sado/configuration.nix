@@ -295,13 +295,7 @@
     # The hub's public key; the agent process reads this one itself.
     secrets."tokens/beszel-marvin".mode = "0444";
     secrets."tokens/beszel-ws" = { };
-    # Group-readable: `td` reads the token at startup, also when run from
-    # mirza's shell.
-    secrets."tokens/plex" = {
-      owner = config.services.tapedeck.user;
-      inherit (config.services.tapedeck) group;
-      mode = "0440";
-    };
+    secrets."tokens/plex".owner = config.services.tapedeck.user;
     templates."beszel-agent.env".content = ''
       TOKEN=${config.sops.placeholder."tokens/beszel-ws"}
     '';
