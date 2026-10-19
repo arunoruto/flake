@@ -1,7 +1,7 @@
 # What a `desktop`-tagged host gets: GDM and GNOME by default, the X server
 # with this flake's XKB layout, and the XDG portals (./wayland.nix). The
-# other sessions (hyprland.nix, sway.nix, niri.nix, kodi.nix) switch on with
-# their own upstream toggles.
+# other sessions (hyprland.nix, sway.nix, niri.nix, plasma.nix, kodi.nix)
+# switch on with their own upstream toggles.
 {
   config,
   lib,
@@ -16,6 +16,7 @@
     ./kodi.nix
     ./sway.nix
     ./niri.nix
+    ./plasma.nix
     ./wayland.nix # portals + wl-clipboard
   ];
 

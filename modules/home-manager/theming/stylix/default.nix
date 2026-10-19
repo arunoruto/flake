@@ -133,6 +133,20 @@ in
       );
     })
 
+    # With GNOME and Plasma on one host, Stylix's qt target picks qt6ct +
+    # Kvantum and exports QT_QPA_PLATFORMTHEME/QT_STYLE_OVERRIDE to every
+    # session. Plasma's QML then asks for a "kvantum" Qt Quick style that
+    # does not exist, and the shell draws nothing but a black screen. Use
+    # KDE's platform theme in both sessions instead: it reads the colours
+    # and fonts the KDE target writes to kdeglobals.
+    (lib.mkIf (osConfig.services.desktopManager.plasma6.enable or false) {
+      stylix.targets.qt.enable = false;
+      qt = {
+        enable = true;
+        platformTheme.name = "kde";
+      };
+    })
+
     # Standalone home-manager only: map the theming options onto stylix the
     # same way the NixOS system module does. Under NixOS/Darwin these come
     # from the system, so we must not set them here (osConfig != null).

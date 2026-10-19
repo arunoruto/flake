@@ -84,6 +84,8 @@
   };
   # virtualisation.incus.enable = true;
   services = {
+    # Plasma alongside GNOME (both picked from GDM) while KDE is on trial.
+    desktopManager.plasma6.enable = true;
     printing.enable = true;
     ipp-usb.enable = true; # driverless scanning; turns on SANE too
     nfs.server.enable = true;

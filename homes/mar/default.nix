@@ -23,8 +23,5 @@
         diagnostics = { };
       };
     };
-
-    # Disable KDE/Plasma theming (mar uses GNOME)
-    stylix.targets.kde.enable = false;
   };
 }
