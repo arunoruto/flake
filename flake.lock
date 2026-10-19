@@ -1653,11 +1653,11 @@
         "nixpkgs": "nixpkgs_12"
       },
       "locked": {
-        "lastModified": 1792366470,
-        "narHash": "sha256-ovHgMxGX8FxspPePt7Bj3tVT2fci0GTSvnlWW6MzTrM=",
+        "lastModified": 1792373518,
+        "narHash": "sha256-qIniR72lNtvSoAC4DVFBT4MoEIYSPsV5JTPeyxh/bdI=",
         "owner": "arunoruto",
         "repo": "tapedeck",
-        "rev": "d73698d386d99990f282cafaf58f3a2f99684f32",
+        "rev": "0c2a1cf35bc9bb8f681db6069845f8742efac7d6",
         "type": "github"
       },
       "original": {
