@@ -26,10 +26,11 @@ in
       gtk4.theme = lib.mkDefault null;
     };
 
-    # The session that brings portal backends is the one that turns portals
-    # on; a blanket default elsewhere left hosts without GNOME enabled but
-    # with no backend, which home-manager rejects.
-    xdg.portal = {
+    # Standalone only: under NixOS the system ships the portals and their
+    # per-desktop config (modules/nixos/desktop/wayland.nix). A home-manager
+    # copy repoints NIX_XDG_DESKTOP_PORTAL_DIR at just these two backends,
+    # which hides the KDE portal from a Plasma session on the same host.
+    xdg.portal = lib.mkIf (osConfig == null) {
       enable = lib.mkDefault true;
       extraPortals = with pkgs; [
         xdg-desktop-portal-gtk
