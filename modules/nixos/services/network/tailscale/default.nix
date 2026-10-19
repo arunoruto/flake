@@ -78,6 +78,9 @@
               "--exit-node-allow-lan-access"
             ]
         )
+        # Lets the desktop tray toggles (GNOME's tailscale-qs, Plasma's
+        # ktailctl) switch tailscale without root.
+        ++ lib.optional (config.lib.tags.hasTag "desktop") "--operator=${config.users.primaryUser}"
         # `set` replaces the whole route list, so this is also what
         # retracts stale app-connector routes on activation.
         ++ lib.optional (
