@@ -12,6 +12,7 @@
     ./sway
     ./hyprland
     ./niri
+    ./plasma
 
     ./notifications
   ];
@@ -19,9 +20,9 @@
   options.desktop.enable = lib.mkEnableOption "Enable desktop config";
 
   config = lib.mkIf config.desktop.enable {
-    # GNOME, Hyprland, sway and niri each follow their NixOS session toggle
-    # from inside their own directory -- a host without the session has no
-    # reason to carry its config, services and packages.
+    # GNOME, Plasma, Hyprland, sway and niri each follow their NixOS session
+    # toggle from inside their own directory -- a host without the session
+    # has no reason to carry its config, services and packages.
 
     home.packages =
       (with pkgs; [
