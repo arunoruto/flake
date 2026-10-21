@@ -34,6 +34,8 @@
     image = ../../../modules/home-manager/theming/wallpaper.png;
     base16Scheme = "${pkgs.base16-schemes}/share/themes/gruvbox-dark-hard.yaml";
     polarity = "dark";
+    # No package patching, as on NixOS (modules/nixos/system/theming.nix).
+    overlays.enable = false;
   };
 
   # Tiling window manager. yabai tiles inside native macOS Spaces, so the
