@@ -11,6 +11,7 @@
     ./secrets.nix
     ./tpm
     ./yubikey
+    ../../shared/pki.nix
   ];
 
   secrets.enable = lib.mkDefault true;
