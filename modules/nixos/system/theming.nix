@@ -42,15 +42,17 @@
       polarity = lib.mkDefault "dark";
       # Disable system-level cursor - let home-manager control the cursor
       cursor = lib.mkForce null;
+      # Stylix's overlays patch packages themselves: gnome-shell (the GDM
+      # login screen theme), nixos-icons (a recoloured snowflake, which gdm
+      # and everything built on it pulls in) and gtksourceview{,4,5}. Each
+      # changes hashes that nobody caches, so every nixpkgs bump rebuilt
+      # most of GNOME locally. The home-manager targets theme the user
+      # sessions without touching packages (gtksourceview's stylix.xml goes
+      # to ~/.local/share), so only the login screen falls back to stock.
+      overlays.enable = false;
       targets = {
         # lightdm.enable = true;
         qt.enable = false;
-        # The system-level target overlays gtksourceview{,4,5} with an extra
-        # postFixup, which changes their hashes and forces local rebuilds of
-        # the whole chain (libspelling, gnome-calculator, papers, sushi, ...).
-        # The home-manager target already drops the same stylix.xml into
-        # ~/.local/share/gtksourceview-*/styles, so nothing is lost.
-        gtksourceview.enable = false;
       };
     };
   };
