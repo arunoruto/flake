@@ -97,6 +97,10 @@ in
         iconTheme = lib.mkIf config.theming.icons.enable "candy-icons";
       };
 
+      # KWin's Overview ignores the wheel; scrolling over the wallpaper (or
+      # the top bar's pager) switches desktops instead.
+      desktop.mouseActions.verticalScroll = "switchVirtualDesktop";
+
       kwin = {
         virtualDesktops = {
           number = builtins.length desktops;
@@ -169,6 +173,11 @@ in
               "Meta+Shift+Q"
             ];
             "Expose" = "Meta+,";
+            # Meta alone opens the Overview, as GNOME's Activities.
+            "Overview" = [
+              "Meta"
+              "Meta+W"
+            ];
             "Switch Window Down" = "Meta+J";
             "Switch Window Left" = "Meta+H";
             "Switch Window Right" = "Meta+L";
@@ -184,7 +193,13 @@ in
         ];
         # Meta+<digit> activates task manager entries by default (GNOME's
         # switch-to-application-N, cleared there too).
-        plasmashell = forDesktops (n: lib.nameValuePair "activate task manager entry ${toString n}" [ ]);
+        # The launcher gives Meta up to the Overview (it holds Meta in
+        # kglobalaccel, which beats kwinrc's ModifierOnlyShortcuts).
+        plasmashell =
+          forDesktops (n: lib.nameValuePair "activate task manager entry ${toString n}" [ ])
+          // {
+            "activate application launcher" = "Alt+F1";
+          };
         # GNOME's emoji picker binding, on Plasma's own picker.
         "org.kde.plasma.emojier.desktop"._launch = [
           "Meta+."
@@ -213,9 +228,11 @@ in
         # No click when changing the volume.
         plasmaparc.General.AudioFeedback = false;
         kwinrc = {
-          # Meta alone opens the Overview (GNOME's Activities) rather than the
-          # launcher; the launcher stays on the dock and Alt+F1.
-          ModifierOnlyShortcuts.Meta = "org.kde.kglobalaccel,/component/kwin,org.kde.kglobalaccel.Component,invokeShortcut,Overview";
+          # No sticky edges between monitors (KWin holds the pointer 100px).
+          EdgeBarrier = {
+            EdgeBarrier = 0;
+            CornerBarrier = false;
+          };
           Plugins = {
             kzonesEnabled = true;
             # GNOME's workspaces-only-on-primary (kdeplasma-addons, Plasma 6.6+).
