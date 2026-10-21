@@ -35,11 +35,16 @@
   # whole box rather than fail. Above MemoryHigh the kernel reclaims from the
   # builds first; past MemoryMax it OOM-kills inside this cgroup only, so a
   # too-big build fails and the services keep running.
-  systemd.services.nix-daemon.serviceConfig = {
-    CPUQuota = "200%";
-    MemoryHigh = "5G";
-    MemoryMax = "6G";
-    MemorySwapMax = "2G";
+  systemd = {
+    services.nix-daemon.serviceConfig = {
+      CPUQuota = "200%";
+      MemoryHigh = "5G";
+      MemoryMax = "6G";
+      MemorySwapMax = "2G";
+    };
+    # See the zramSwap note below.
+    oomd.enableUserSlices = true;
+    services.zfs-mount.enable = false;
   };
 
   # Memory exhaustion here never reached the kernel OOM killer: with no swap the
@@ -48,7 +53,6 @@
   # was running but watching no slice -- now kills the worst offender in a user
   # session (where evaluations run) after sustained memory pressure.
   zramSwap.enable = true;
-  systemd.oomd.enableUserSlices = true;
 
   system.tags = [
     "nas"
@@ -63,7 +67,6 @@
     };
     zfs.enable = true;
   };
-  systemd.services.zfs-mount.enable = false;
   networking = {
     hostId = "b9b3aa87";
     bridges.br0 = {
@@ -321,15 +324,17 @@
   };
 
   sops = {
-    # The hub's public key; the agent process reads this one itself.
-    secrets."tokens/beszel-marvin".mode = "0444";
-    secrets."tokens/beszel-ws" = { };
-    secrets."tokens/plex".owner = config.services.tapedeck.user;
-    secrets."tokens/listenbrainz".owner = config.services.tapedeck.user;
-    # The former ytdlp-bot token, now polled by tapedeck.
-    secrets."tokens/telegram/ytdlp" = {
-      owner = config.services.tapedeck.user;
-      restartUnits = [ "tapedeck.service" ];
+    secrets = {
+      # The hub's public key; the agent process reads this one itself.
+      "tokens/beszel-marvin".mode = "0444";
+      "tokens/beszel-ws" = { };
+      "tokens/plex".owner = config.services.tapedeck.user;
+      "tokens/listenbrainz".owner = config.services.tapedeck.user;
+      # The former ytdlp-bot token, now polled by tapedeck.
+      "tokens/telegram/ytdlp" = {
+        owner = config.services.tapedeck.user;
+        restartUnits = [ "tapedeck.service" ];
+      };
     };
     templates."beszel-agent.env".content = ''
       TOKEN=${config.sops.placeholder."tokens/beszel-ws"}
