@@ -36,17 +36,19 @@
   # builds first; past MemoryMax it OOM-kills inside this cgroup only, so a
   # too-big build fails and the services keep running.
   systemd = {
-    services.nix-daemon.serviceConfig = {
-      MemoryHigh = "5G";
-      MemoryMax = "6G";
-      MemorySwapMax = "2G";
+    services = {
+      nix-daemon.serviceConfig = {
+        MemoryHigh = "5G";
+        MemoryMax = "6G";
+        MemorySwapMax = "2G";
+      };
+      # Face/CLIP models load into this one process and peak during the first
+      # library scan; keep a runaway inside its own cgroup.
+      immich-machine-learning.serviceConfig.MemoryMax = "3G";
+      zfs-mount.enable = false;
     };
-    # Face/CLIP models load into this one process and peak during the first
-    # library scan; keep a runaway inside its own cgroup.
-    services.immich-machine-learning.serviceConfig.MemoryMax = "3G";
     # See the zramSwap note below.
     oomd.enableUserSlices = true;
-    services.zfs-mount.enable = false;
   };
 
   # Memory exhaustion here never reached the kernel OOM killer: with no swap the
