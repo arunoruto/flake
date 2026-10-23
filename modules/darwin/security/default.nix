@@ -7,6 +7,5 @@
 {
   imports = [
     ./touchid.nix
-    ../../shared/pki.nix
   ];
 }
