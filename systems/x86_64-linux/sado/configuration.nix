@@ -14,11 +14,12 @@
 
   nix = {
     settings = {
-      max-jobs = 1;
+      # 2 x 2 fills the four cores; memory, not CPU, is the limit here.
+      max-jobs = 2;
       cores = 2;
       # cores/max-jobs only govern *builds*. A switch that is mostly cache hits
       # spends its time decompressing NARs instead, and the defaults (16 and 25)
-      # will saturate all four cores while max-jobs sits at 1 doing nothing.
+      # oversubscribe the four cores.
       max-substitution-jobs = 4;
       http-connections = 8;
     };
@@ -29,19 +30,20 @@
     daemonIOSchedClass = "idle";
   };
 
-  # Hard ceiling for the builds that ignore $NIX_BUILD_CORES anyway: builders are
-  # forked from the daemon, so they land in this unit's cgroup. Memory too: with
+  # Builders are forked from the daemon, so they land in this unit's cgroup. With
   # 11 GiB, a quarter of it held by services, a large build used to freeze the
   # whole box rather than fail. Above MemoryHigh the kernel reclaims from the
   # builds first; past MemoryMax it OOM-kills inside this cgroup only, so a
   # too-big build fails and the services keep running.
   systemd = {
     services.nix-daemon.serviceConfig = {
-      CPUQuota = "200%";
       MemoryHigh = "5G";
       MemoryMax = "6G";
       MemorySwapMax = "2G";
     };
+    # Face/CLIP models load into this one process and peak during the first
+    # library scan; keep a runaway inside its own cgroup.
+    services.immich-machine-learning.serviceConfig.MemoryMax = "3G";
     # See the zramSwap note below.
     oomd.enableUserSlices = true;
     services.zfs-mount.enable = false;
@@ -129,6 +131,12 @@
     cloudflared = {
       enable = true;
       defaultDomain = "arnaut.me";
+      tunnels.${config.networking.hostName}.ingress = [
+        {
+          hostname = "photos.${config.services.cloudflared.defaultDomain}";
+          service = "http://localhost:${toString config.services.immich.port}";
+        }
+      ];
     };
     tailscale.tsidp = {
       enable = false;
@@ -176,10 +184,13 @@
     # default would have started the cluster on 15, which is EOL in 2027.
     postgresql.package = pkgs.postgresql_17;
     # komga.enable = true;
-    # immich = {
-    #   enable = true;
-    #   mediaLocation = "/mnt/flash/photos";
-    # };
+    # Public at photos.arnaut.me through the tunnel. Cloudflare caps request
+    # bodies at 100 MB, so long videos only upload over the LAN URL the app
+    # switches to at home (http://sado.fritz.box:2283).
+    immich = {
+      enable = true;
+      mediaLocation = "/mnt/flash/photos";
+    };
     paperless = {
       enable = true;
       dataDir = "/mnt/flash/appdata/paperless";
