@@ -24,7 +24,6 @@ let
       };
       # Linux-only Stylix targets are disabled on Darwin in
       # modules/home-manager/theming/darwin-targets.nix.
-      programs.opencode.enable = lib.mkDefault true;
     };
   };
 in

@@ -34,7 +34,7 @@
         mcp.enable = true;
         mods.enable = true;
         ollama.defaultPath = "http://madara.king-little.ts.net:11434/v1";
-        opencode.enable = true;
+        opencode.enable = false;
         pi.enable = false;
       };
       home.packages = with pkgs.unstable; [
