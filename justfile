@@ -50,15 +50,28 @@ seenix *roots="/run/current-system":
     echo "wrote $out -- drop it on the path-info JSON lane"
     ( xdg-open https://seenix.dev/ || open https://seenix.dev/ ) >/dev/null 2>&1 || true
 
-# ── fleet (colmena; available on management-tagged hosts) ───────────
+# ── fleet (colmena) ─────────────────────────────────────────────────
+
+# The colmena binary is installed only on management-tagged hosts (see
+# modules/nixos/system/tags/management.nix), so everywhere else these recipes
+# used to die on a missing command. Fall back to this flake's own locked
+# colmena input rather than nixpkgs': --inputs-from resolves `colmena` to the
+# same input the hive is built from, so the binary cannot drift from the
+# deployment options it reads, and it substitutes rather than building (~57 MB
+# once, then it is in the store). Same trick as the facter recipe below.
+#
+# Evaluated once per `just` invocation, not per recipe, so a machine that does
+# carry colmena still uses its own copy.
+_colmena_on_path := `command -v colmena >/dev/null 2>&1 && echo yes || echo no`
+colmena := if _colmena_on_path == "yes" { "colmena" } else { "nix shell --inputs-from . colmena#colmena --command colmena" }
 
 # Deploy hosts with colmena, e.g. `just deploy --on madara`
 deploy *args:
-    colmena apply {{ args }}
+    {{ colmena }} apply {{ args }}
 
 # Deploy all hosts carrying a tag, e.g. `just deploy-tag nas`
 deploy-tag tag *args:
-    colmena apply --on @{{ tag }} {{ args }}
+    {{ colmena }} apply --on @{{ tag }} {{ args }}
 
 # ── updates ─────────────────────────────────────────────────────────
 
