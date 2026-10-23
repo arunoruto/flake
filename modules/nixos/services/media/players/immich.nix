@@ -19,12 +19,9 @@
       in
       {
         immich = {
-          # package = pkgs.unstable.immich;
-          environment = {
-            IMMICH_VERSION = "2.3.1";
-            IMMICH_LOG_LEVEL = "debug";
-            # UPLOAD_LOCATION = lib.mkDefault "${cfg.dataDir}/photos";
-          };
+          # 2.x on stable is EOL and marked insecure (open CVEs); 3.x runs fine
+          # under the stable module, and the vchord extension matches.
+          package = pkgs.unstable.immich;
           host = "0.0.0.0";
           mediaLocation = lib.mkDefault "${cfg.dataDir}/photos";
           accelerationDevices = lib.mkDefault null;
