@@ -122,31 +122,56 @@
       # die. Consult main first but ignore its default route, so
       # directly connected subnets stay local while everything else
       # (exit node included) still falls through to Tailscale.
-      systemd.services.tailscale-prefer-lan =
-        let
-          rule = "priority 5200 lookup main suppress_prefixlength 0";
-          ip = lib.getExe' pkgs.iproute2 "ip";
-        in
-        {
-          description = "Prefer directly connected routes over Tailscale subnet routes";
+      systemd.services = {
+        tailscale-prefer-lan =
+          let
+            rule = "priority 5200 lookup main suppress_prefixlength 0";
+            ip = lib.getExe' pkgs.iproute2 "ip";
+          in
+          {
+            description = "Prefer directly connected routes over Tailscale subnet routes";
+            wantedBy = [ "multi-user.target" ];
+            after = [ "network-pre.target" ];
+            serviceConfig = {
+              Type = "oneshot";
+              RemainAfterExit = true;
+            };
+            script = ''
+              for family in -4 -6; do
+                ${ip} $family rule del ${rule} 2>/dev/null || true
+                ${ip} $family rule add ${rule}
+              done
+            '';
+            preStop = ''
+              for family in -4 -6; do
+                ${ip} $family rule del ${rule} 2>/dev/null || true
+              done
+            '';
+          };
+
+        # Deploys arrive over the tailnet, so restarting tailscaled inside the
+        # activation kills the SSH session driving it; colmena then reports
+        # exit 255 although the switch went through. Leave the daemon alone
+        # during the switch and restart it a minute later, outside any
+        # session. At boot current == booted and nothing happens.
+        tailscaled.restartIfChanged = false;
+        tailscaled-deferred-restart = {
+          description = "Restart tailscaled after a switch, outside the deploy session";
+          restartTriggers = [ config.systemd.units."tailscaled.service".unit ];
           wantedBy = [ "multi-user.target" ];
-          after = [ "network-pre.target" ];
           serviceConfig = {
             Type = "oneshot";
             RemainAfterExit = true;
           };
           script = ''
-            for family in -4 -6; do
-              ${ip} $family rule del ${rule} 2>/dev/null || true
-              ${ip} $family rule add ${rule}
-            done
-          '';
-          preStop = ''
-            for family in -4 -6; do
-              ${ip} $family rule del ${rule} 2>/dev/null || true
-            done
+            if [ "$(readlink /run/current-system)" = "$(readlink /run/booted-system)" ]; then
+              exit 0
+            fi
+            ${lib.getExe' config.systemd.package "systemd-run"} --on-active=60 --collect \
+              ${lib.getExe' config.systemd.package "systemctl"} restart tailscaled.service
           '';
         };
+      };
 
       boot.kernel.sysctl = {
         # https://github.com/tailscale/tailscale/issues/3310#issuecomment-1722601407
@@ -154,41 +179,5 @@
         "net.ipv4.ip_forward" = 1;
         "net.ipv6.conf.all.forwarding" = 1;
       };
-
-      # systemd = {
-      #   # timers.delayed-tailscale-restart = {
-      #   #   wantedBy = [ "sysinit-reactivation.target" ];
-      #   #   timerConfig = {
-      #   #     OnActiveSec = "10m";
-      #   #     Unit = "delayed-tailscale-restart.service";
-      #   #     RemainAfterElapse = false;
-      #   #   };
-      #   # };
-
-      #   # services = {
-      #   #   delayed-tailscale-restart = {
-      #   #     serviceConfig.Type = "oneshot";
-      #   #     script = ''
-      #   #       old_tailscale_path=$(
-      #   #         systemctl show tailscaled.service --property=ExecStart --value |
-      #   #         grep -oP 'path=\K[^;]+'
-      #   #       )
-      #   #       new_tailscale_path=${config.services.tailscale.package}/bin/tailscaled
-
-      #   #       if [ "$old_tailscale_path" != "$new_tailscale_path" ]; then
-      #   #         echo "Tailscale updated "
-      #   #         echo "old: $old_tailscale_path"
-      #   #         echo "new: $new_tailscale_path"
-      #   #         echo "Restarting..."
-      #   #         systemctl restart tailscaled
-      #   #       else
-      #   #         echo "Tailscale version unchanged. No restart needed."
-      #   #       fi
-      #   #     '';
-      #   #   };
-
-      #   #   tailscaled.restartIfChanged = false;
-      #   # };
-      # };
     };
 }
