@@ -271,7 +271,8 @@
     # it has to dial out. Nothing listens here and the firewall stays shut.
     beszel.agent = {
       enable = true;
-      package = pkgs.unstable.beszel;
+      # 0.21.1 parses intel_gpu_top 2.x's comma-less JSON; nixpkgs is on 0.21.0.
+      package = pkgs.custom.beszel;
       environment = {
         LOG_LEVEL = "info";
         HUB_URL = "https://infra.bv.e-technik.tu-dortmund.de";
