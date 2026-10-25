@@ -58,6 +58,9 @@
   # session (where evaluations run) after sustained memory pressure.
   zramSwap.enable = true;
 
+  # Off-site copies of immich's library, pulled by kuchiki and lil-nas-x.
+  backups.photos.source.enable = true;
+
   system.tags = [
     "nas"
     "server"

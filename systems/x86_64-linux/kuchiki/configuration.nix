@@ -7,6 +7,9 @@
 {
   users.primaryUser = "mirza";
 
+  # Pulls sado's immich library nightly; see photo-backup.nix.
+  backups.photos.target.enable = true;
+
   system.tags = [
     "nas"
     "server"

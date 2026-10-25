@@ -9,6 +9,7 @@
     ./hd-idle.nix
     ./homepage.nix
     ./nfs.nix
+    ./photo-backup.nix
     ./samba.nix
 
     ./scrutiny
