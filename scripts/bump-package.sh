@@ -73,8 +73,10 @@ readarray -t UPDATE_ARGS < <(echo "$RAW_JSON" | nix run nixpkgs#jq -- -r '.[1:][
 # 7. Shift the first argument (the path) so $@ only contains extra flags
 shift
 
-# 8. Run nix-update
-nix-update "$PREFIX" \
+# 8. Run nix-update, fetching it when the shell doesn't provide one
+NIX_UPDATE=(nix-update)
+command -v nix-update >/dev/null || NIX_UPDATE=(nix run nixpkgs#nix-update --)
+"${NIX_UPDATE[@]}" "$PREFIX" \
         --flake \
         "${UPDATE_ARGS[@]}" \
         --override-filename "$FLAKE_ROOT/$INPUT_PATH" \
