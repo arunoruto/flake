@@ -67,7 +67,8 @@
   hosts = {
     intel = {
       enable = true;
-      gpu.enable = false;
+      # VA-API/QSV drivers for immich's and Plex's video transcoding.
+      gpu.enable = true;
     };
     zfs.enable = true;
   };
