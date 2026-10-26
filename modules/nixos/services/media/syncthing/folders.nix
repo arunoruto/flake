@@ -5,7 +5,8 @@
 }:
 let
   sadoDeviceId = "5L6CA45-Q2JJ7WK-RYDURDI-MBRGQPB-VTJEZ7U-6M25S3M-YTXBLRR-IVA6PQY";
-  # The off-tailnet *arr box. Not one of our hosts, so it is only ever a peer.
+  # The off-tailnet *arr box these folders are shared out to. Not one of our
+  # hosts, so it is only ever a syncthing peer.
   arrHoiDeviceId = "BAX67OS-4BRORCO-RLKEO5C-GECZD7K-DTLAEI5-DZNF5UN-UP7AFA3-JQ6T6AA";
 in
 {
@@ -27,8 +28,8 @@ in
             ];
             id = sadoDeviceId;
           };
-          # That box is not on our tailnet and has no name we can resolve, so
-          # global discovery is the only way to reach it.
+          # Not on our tailnet and with no name we can resolve, so global
+          # discovery is the only way to reach it.
           devices.arr-hoi = {
             addresses = [ "dynamic" ];
             id = arrHoiDeviceId;
@@ -55,10 +56,11 @@ in
               ignorePerms = true;
               order = "oldestFirst";
             };
-            # That peer's two folders, previously added by hand in the GUI. They
-            # have to live here: `overrideFolders` defaults to true, so
-            # syncthing-init deletes every folder it does not find in this
-            # list on each activation — which unshared these twice already.
+            # The off-tailnet peer's two folders, previously added by hand in
+            # the web GUI. They have to live here: `overrideFolders` defaults
+            # to true, so syncthing-init deletes every folder it does not find
+            # in this list on each activation — which unshared these twice
+            # already.
             #
             # `id` is pinned because the GUI generates a random folder ID and
             # the option otherwise defaults to the attribute name. Letting it
