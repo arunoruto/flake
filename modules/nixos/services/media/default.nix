@@ -13,7 +13,7 @@
     ./reading
     ./syncthing
 
-    ./bosflix.nix
+    ./bosflix
     ./external-drives.nix
     ./sound.nix
   ];

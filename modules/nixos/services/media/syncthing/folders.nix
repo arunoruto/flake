@@ -16,7 +16,11 @@ in
       # SOURCE: shinji (bosflix) — shares out to sado, kuchiki and arr-hoi
       (lib.mkIf config.services.bosflix.enable (
         let
-          drivePath = builtins.toString config.services.bosflix.drivePath;
+          # One spelling of this path, shared with the unit that creates these
+          # directories setgid and with sabnzbd's complete_dir. bosflix asserts
+          # that every folder declared under it is also in
+          # services.bosflix.syncedFolders.
+          inherit (config.services.bosflix) completedPath;
         in
         {
           devices.sado = {
@@ -37,21 +41,21 @@ in
           folders = {
             "mirza-music" = {
               enable = true;
-              path = "${drivePath}/complete/mirza-music";
+              path = "${completedPath}/mirza-music";
               devices = [ "sado" ];
               ignorePerms = true;
               order = "oldestFirst";
             };
             "mirza-shows" = {
               enable = true;
-              path = "${drivePath}/complete/mirza-shows";
+              path = "${completedPath}/mirza-shows";
               devices = [ "kuchiki" ];
               ignorePerms = true;
               order = "oldestFirst";
             };
             "mirza-movies" = {
               enable = true;
-              path = "${drivePath}/complete/mirza-movies";
+              path = "${completedPath}/mirza-movies";
               devices = [ "kuchiki" ];
               ignorePerms = true;
               order = "oldestFirst";
@@ -77,7 +81,7 @@ in
             "tim-shows" = {
               enable = true;
               id = "my3do-g3d9a";
-              path = "${drivePath}/complete/tim-shows";
+              path = "${completedPath}/tim-shows";
               devices = [ "arr-hoi" ];
               ignorePerms = true;
               order = "oldestFirst";
@@ -85,7 +89,7 @@ in
             "tim-movies" = {
               enable = true;
               id = "inepe-nmldy";
-              path = "${drivePath}/complete/tim-movies";
+              path = "${completedPath}/tim-movies";
               devices = [ "arr-hoi" ];
               ignorePerms = true;
               order = "oldestFirst";
