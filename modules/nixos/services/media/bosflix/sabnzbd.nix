@@ -16,6 +16,11 @@ in
     # ../downloaders/sabnzbd.nix forces `configFile = null`, the declarative
     # path is already active, so all of this belongs in `settings`.
     #
+    # Split across two files: host, port and url_base live in
+    # ../downloaders/sabnzbd.nix because aizen reads them to build the public
+    # route, and anything bosflix-shaped — the paths, the categories named
+    # after services.bosflix.syncedFolders — lives here.
+    #
     # The ini is merged at service start from, in order: the live
     # /var/lib/sabnzbd/sabnzbd.ini, then what is generated from here, then
     # `secretFiles` — later wins. So everything below is authoritative and the
@@ -40,10 +45,6 @@ in
       misc = {
         # The *arrs reach this over the tailnet, so it cannot sit on loopback.
         # 8082 is what every download client already points at.
-        host = "0.0.0.0";
-        port = 8082;
-        # Already in use, and what the *arrs are pointed at.
-        url_base = "/sabnzbd";
         # Level 5: web UI and API reachable from non-local addresses, with a
         # login required for anything not local — "not local" being decided
         # from the X-Forwarded-For header, see verify_xff_header below. Level 4
@@ -87,7 +88,7 @@ in
         # configured, so today this list may well be doing nothing; it starts
         # mattering the moment credentials are removed, which is the wrong time
         # to discover it was incomplete.
-        host_whitelist = "shinji, shinji.sparrow-yo.ts.net";
+        host_whitelist = "shinji, shinji.sparrow-yo.ts.net, arr.arnaut.me";
 
         # The live value is 5 while the module defaults to 4, so the merge kept
         # writing 4 and sabnzbd kept converting back to 5 and saving — a config

@@ -81,6 +81,19 @@
           path = "/prowlarr.*";
           service = "http://shinji.${config.services.tailscale.tailnet}.ts.net:${toString config.services.prowlarr.settings.server.port}";
         }
+        # sabnzbd, so the people sharing this box can watch their own
+        # downloads instead of asking. Both halves are the same options
+        # shinji configures the daemon with — see
+        # modules/nixos/services/media/downloaders/sabnzbd.nix, which declares
+        # them outside its enable guard precisely so this host can read them.
+        #
+        # No auth of its own beyond Cloudflare Access on arr.<domain> — see the
+        # inet_exposure comment in ../../../modules/nixos/services/media/bosflix/sabnzbd.nix.
+        {
+          hostname = "arr.${config.services.cloudflared.defaultDomain}";
+          path = "${config.services.sabnzbd.settings.misc.url_base}.*";
+          service = "http://shinji.${config.services.tailscale.tailnet}.ts.net:${toString config.services.sabnzbd.settings.misc.port}";
+        }
       ];
     };
     pocket-id = {
