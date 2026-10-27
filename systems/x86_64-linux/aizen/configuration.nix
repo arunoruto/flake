@@ -56,6 +56,13 @@
       enable = true;
       defaultDomain = "arnaut.me";
       tunnels."${config.networking.hostName}".ingress = [
+        # Into this host's own traefik, which balances homepage across its
+        # replicas. Plain http on the loopback-only `tunnel` entrypoint below;
+        # Cloudflare already terminated TLS.
+        {
+          hostname = "home.${config.services.cloudflared.defaultDomain}";
+          service = "http://localhost:8081";
+        }
         {
           hostname = "arr.${config.services.cloudflared.defaultDomain}";
           path = "/radarr.*";
@@ -119,6 +126,13 @@
         accessLog = {
           format = "common";
         };
+        # cloudflared's way in. 8080 is the insecure dashboard, so 8081; bound
+        # to loopback, and trusting cloudflared's X-Forwarded-For so the access
+        # log shows the real client.
+        entryPoints.tunnel = {
+          address = "127.0.0.1:8081";
+          forwardedHeaders.trustedIPs = [ "127.0.0.1/32" ];
+        };
       };
       dynamicConfigOptions = {
         http = {
@@ -145,6 +159,12 @@
               tls.certresolver = "cf";
               service = "plex";
             };
+            homepage = {
+              rule = "Host(`home.arnaut.me`)";
+              # Only reachable through the tunnel; see entryPoints.tunnel.
+              entrypoints = "tunnel";
+              service = "homepage";
+            };
           };
           middlewares.www-arnaut.redirectregex = {
             regex = "^https://arnaut\\.me/(.*)";
@@ -165,6 +185,26 @@
                   url = "http://kuchiki.sparrow-yo.ts.net:32400";
                 }
               ];
+            };
+            # Round-robin over both replicas; a replica failing the check is
+            # dropped until it passes again.
+            homepage.loadbalancer = {
+              servers =
+                map
+                  (host: {
+                    url = "http://${host}.${config.services.tailscale.tailnet}.ts.net:8082";
+                  })
+                  [
+                    "kuchiki"
+                    "lil-nas-x"
+                  ];
+              healthCheck = {
+                path = "/api/healthcheck";
+                # homepage rejects Hosts outside allowedHosts.
+                hostname = "home.arnaut.me";
+                interval = "10s";
+                timeout = "3s";
+              };
             };
           };
         };

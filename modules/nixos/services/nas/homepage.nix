@@ -5,12 +5,26 @@
   inputs,
   ...
 }:
+let
+  # radarr/sonarr live on kuchiki; every replica queries them over the tailnet.
+  arrHost = "kuchiki";
+in
 {
   config = lib.mkIf config.services.homepage-dashboard.enable {
     services.homepage-dashboard = {
       package = pkgs.unstable.homepage-dashboard;
-      allowedHosts = "kuchiki:8082";
+      # The public name aizen's traefik balances across both instances (it
+      # passes the original Host through), plus this host for tailnet access
+      # by short and full MagicDNS name.
+      allowedHosts =
+        let
+          port = toString config.services.homepage-dashboard.listenPort;
+          host = config.networking.hostName;
+        in
+        "home.arnaut.me,${host}:${port},${host}.${config.services.tailscale.tailnet}.ts.net:${port}";
       widgets = [
+        # Which replica answered - the point of running two behind a balancer.
+        { greeting.text = "served by ${config.networking.hostName}"; }
         {
           datetime = {
             text_size = "xl";
@@ -73,10 +87,10 @@
                 {
                   description = "Movie organizer/manager for usenet and torrent users.";
                   icon = "radarr.png";
-                  href = "http://${config.networking.hostName}:${port}";
+                  href = "http://${arrHost}:${port}";
                   widget = {
                     type = "radarr";
-                    url = "http://localhost:${port}";
+                    url = "http://${arrHost}:${port}";
                     key = "{{HOMEPAGE_FILE_RADARR_KEY}}";
                   };
                 };
@@ -89,10 +103,10 @@
                 {
                   description = "Smart PVR for newsgroup and bittorrent users.";
                   icon = "sonarr.png";
-                  href = "http://${config.networking.hostName}:${port}";
+                  href = "http://${arrHost}:${port}";
                   widget = {
                     type = "sonarr";
-                    url = "http://localhost:${port}";
+                    url = "http://${arrHost}:${port}";
                     key = "{{HOMEPAGE_FILE_SONARR_KEY}}";
                   };
                 };
@@ -135,9 +149,15 @@
         }).outPath
       ];
     };
-    sops.secrets."tokens/finnhub" = {
-      mode = "0666";
-      # inherit (config.services.recyclarr) group;
+    sops.secrets = {
+      "tokens/finnhub" = {
+        mode = "0666";
+        # inherit (config.services.recyclarr) group;
+      };
+      # Declared by the arr modules too where radarr/sonarr run; a replica
+      # elsewhere still needs the keys for the widgets. Same mode as there.
+      "tokens/arr/radarr".mode = "0666";
+      "tokens/arr/sonarr".mode = "0666";
     };
   };
 }

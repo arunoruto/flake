@@ -70,7 +70,8 @@
       settings.api.endpoint = "https://scrutiny.bv.e-technik.tu-dortmund.de";
     };
     # traefik.enable = true;
-    # homepage-dashboard.enable = true;
+    # Second replica behind aizen's traefik (home.arnaut.me).
+    homepage-dashboard.enable = true;
     # media = {
     #   enable = true;
     #   dataDir = "/mnt/storage/appdata";
