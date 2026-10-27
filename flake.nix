@@ -52,7 +52,7 @@
     # Deliberately no nixpkgs.follows: the cache only hits for kernels built
     # against the flake's own pin.
     nixos-raspberrypi.url = "github:nvmd/nixos-raspberrypi/main";
-    colmena.url = "github:zhaofengli/colmena";
+    colmena.url = "github:nix-community/colmena";
     cpu-microcodes = {
       # url = "github:platomav/CPUMicrocodes/ec5200961ecdf78cf00e55d73902683e835edefd";
       url = "github:platomav/CPUMicrocodes";
@@ -349,7 +349,6 @@
     extra-substituters = [
       "https://nix-community.cachix.org"
       "https://cache.nixos-cuda.org"
-      "https://colmena.cachix.org"
       # "https://helix.cachix.org"
       # Our own packages; filled by `nix run .#cachix-sync`.
       "https://arunoruto.cachix.org"
@@ -362,7 +361,6 @@
     extra-trusted-public-keys = [
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       "cache.nixos-cuda.org:74DUi4Ye579gUqzH4ziL9IyiJBlDpMRn9MBN8oNan9M="
-      "colmena.cachix.org-1:7BzpDnjjH8ki2CT3f6GdOk7QAzPOl+1t3LvTLXqYcSg="
       # "helix.cachix.org-1:ejp9KQpR1FBI2onstMQ34yogDm4OgU2ru6lIwPvuCVs="
       "arunoruto.cachix.org-1:GQVw1YDtjt0+ElmQifxEI52a0pRVe9/gdcNEr8v8G14="
       "nixos-raspberrypi.cachix.org-1:4iMO9LXa8BqhU+Rpg6LQKiGa2lsNh/j2oiYLNOQ5sPI="

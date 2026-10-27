@@ -27,7 +27,7 @@ to add a host or user.
 
 - [Stylix](https://github.com/nix-community/stylix) — system-wide theming
 - [Disko](https://github.com/nix-community/disko) — declarative disk partitioning
-- [Colmena](https://github.com/zhaofengli/colmena) — stateless deployment
+- [Colmena](https://github.com/nix-community/colmena) — stateless deployment
 - [Devenv](https://devenv.sh/) — reproducible dev environments
 - [SOPS-nix](https://github.com/Mic92/sops-nix) — secrets management
 - [Lanzaboote](https://github.com/nix-community/lanzaboote) — Secure Boot

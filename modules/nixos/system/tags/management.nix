@@ -2,7 +2,6 @@
   lib,
   config,
   pkgs,
-  inputs,
   ...
 }:
 {
@@ -11,7 +10,7 @@
     # *from* — not laptops, small PCs, or the deploy targets themselves
     # (colmena copies closures over SSH; targets don't need the binary).
     environment.systemPackages = [
-      inputs.colmena.packages.${pkgs.stdenv.hostPlatform.system}.colmena
+      pkgs.unstable.colmena
       pkgs.deploy-rs
     ];
   };
