@@ -235,9 +235,18 @@
         };
         # HTTP API for the remote clients on madara/tensa and Subsonic apps,
         # opened in networking.firewall above. No token: only reading,
-        # streaming and scrobbling are reachable; changes stay on sado.
-        # 8687: Lidarr + 1, the port tapedeck's docs use.
-        server.listen = "0.0.0.0:8687";
+        # streaming, scrobbling and flagging `td lengths` findings are
+        # reachable; `--fix` and every other change stay on sado.
+        server = {
+          # Lidarr + 1, the port tapedeck's docs use.
+          listen = "0.0.0.0:8687";
+          anonymous = [
+            "read"
+            "stream"
+            "listen"
+            "review"
+          ];
+        };
         # Song requests: send the bot a link or "Artist - Title".
         telegram = {
           token_file = config.sops.secrets."tokens/telegram/ytdlp".path;
