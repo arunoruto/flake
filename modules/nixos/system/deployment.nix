@@ -27,7 +27,7 @@
   };
 
   config = {
-    # colmena/deploy-rs binaries live on `management`-tagged hosts (see
+    # The colmena binary lives on `management`-tagged hosts (see
     # ./tags/management.nix); this module only wires the deployment options.
     colmena.deployment.buildOnTarget = lib.mkDefault true;
   };

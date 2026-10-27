@@ -11,7 +11,7 @@ let
     laptop = "portable machine: power tuning, TPM2 + yubikey";
     workstation = "stationary interactive machine: TPM2 + yubikey, remote desktop";
     development = "compilers, language servers, dev tooling";
-    management = "fleet management: colmena / deploy-rs installed";
+    management = "fleet management: colmena installed";
     nas = "storage box: drives, samba, NAS services";
     gaming = "game launchers (steam) and games";
     server = "headless infrastructure box: tailscale exit node/connector/SSH, no sound stack";

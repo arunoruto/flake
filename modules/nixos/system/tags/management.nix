@@ -11,7 +11,6 @@
     # (colmena copies closures over SSH; targets don't need the binary).
     environment.systemPackages = [
       pkgs.unstable.colmena
-      pkgs.deploy-rs
     ];
   };
 }
