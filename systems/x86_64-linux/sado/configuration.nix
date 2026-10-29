@@ -109,6 +109,15 @@
         "ipv4.route-metric" = 2000;
         "ipv6.route-metric" = 2000;
       };
+      # A USB-gadget pwnagotchi hands out DHCP naming itself the gateway (it wants
+      # the host's uplink, it has none), and NetworkManager's ethernet metric of 100
+      # beat br0: every IPv4 connection went into the Pi and died. Keep its routes
+      # last so it only carries its own /28.
+      settings."connection-usb-gadget-lowprio" = {
+        match-device = "driver:cdc_ether";
+        "ipv4.route-metric" = 3000;
+        "ipv6.route-metric" = 3000;
+      };
     };
   };
 
