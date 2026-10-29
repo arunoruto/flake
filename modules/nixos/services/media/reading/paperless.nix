@@ -36,6 +36,8 @@ in
               settings = {
                 PAPERLESS_URL = "https://${url}";
                 PAPERLESS_FORCE_SCRIPT_NAME = lib.mkDefault "/paperless";
+                # Also trims tesseract to these languages instead of all of them
+                PAPERLESS_OCR_LANGUAGE = lib.mkDefault "deu+eng+bos";
                 PAPERLESS_APPS = lib.mkDefault "allauth.socialaccount.providers.openid_connect";
                 PAPERLESS_CSRF_TRUSTED_ORIGINS = lib.strings.concatStringsSep "," [
                   "https://services.arnaut.me"
