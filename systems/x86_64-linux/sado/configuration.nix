@@ -164,7 +164,6 @@
       libraryPath = "/mnt/flash/books";
       branchName = "cryo-${config.networking.hostName}";
     };
-    bindery.enable = true;
     # Games live on flash/games in the ES-DE layout: roms/<system>/<game file>
     # and bios/, also shared over samba. RomM manages the library; ES-DE on
     # the handhelds plays it.
