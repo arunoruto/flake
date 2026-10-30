@@ -1,7 +1,6 @@
 {
   lib,
   config,
-  pkgs,
   ...
 }:
 {
@@ -10,6 +9,8 @@
 
     # Split-screen local coop; added to Steam as a non-Steam shortcut
     # (Gaming Mode wants `--kwin --fullscreen` in its launch options).
-    environment.systemPackages = [ pkgs.partydeck ];
+    # Off for now: it was only a trial, and nothing caches it, so every
+    # 26.05 mass rebuild recompiled it locally.
+    # environment.systemPackages = [ pkgs.partydeck ];
   };
 }
