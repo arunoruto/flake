@@ -101,6 +101,13 @@
     # CI pushes builds against its own pin to arunoruto.cachix.org, so only that
     # pin gets cache hits.
     tapedeck.url = "github:arunoruto/tapedeck";
+    # Paper library (github.com/arunoruto/carrel): CLI, TUI, web UI and a Home
+    # Manager module that watches Downloads. No binary cache, so build it
+    # against our unstable pin rather than pulling a second nixpkgs.
+    carrel = {
+      url = "github:arunoruto/carrel";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
   };
 
   outputs =

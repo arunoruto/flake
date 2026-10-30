@@ -27,7 +27,11 @@
   users.primaryUser = "mar";
 
   # tapedeck remote client: `td` browses and plays sado's library.
-  home-manager.users.${config.users.primaryUser}.programs.tapedeck.enable = true;
+  home-manager.users.${config.users.primaryUser}.programs = {
+    tapedeck.enable = true;
+    # Paper library; config.toml and tokens live outside the repo.
+    carrel.enable = true;
+  };
 
   boot.binfmt.emulatedSystems = [
     # "x86_64-linux"
