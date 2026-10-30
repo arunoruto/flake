@@ -26,11 +26,16 @@
 
   users.primaryUser = "mar";
 
-  # tapedeck remote client: `td` browses and plays sado's library.
-  home-manager.users.${config.users.primaryUser}.programs = {
-    tapedeck.enable = true;
-    # Paper library; config.toml and tokens live outside the repo.
-    carrel.enable = true;
+  home-manager.users.${config.users.primaryUser} = {
+    programs = {
+      # tapedeck remote client: `td` browses and plays sado's library.
+      tapedeck.enable = true;
+      # Paper library; config.toml and tokens live outside the repo.
+      carrel.enable = true;
+    };
+    # Docling extracts paper text better than PyMuPDF. Unstable, as stable's
+    # docling-parse is marked broken; not in the binary cache, so it builds here.
+    services.carrel.docling.package = pkgs.unstable.docling;
   };
 
   boot.binfmt.emulatedSystems = [
