@@ -205,6 +205,8 @@
       enable = true;
       mediaLocation = "/mnt/flash/photos";
     };
+    # Public at recipe.arnaut.me through the tunnel, signed in with Pocket ID.
+    mealie.enable = true;
     paperless = {
       enable = true;
       dataDir = "/mnt/flash/appdata/paperless";

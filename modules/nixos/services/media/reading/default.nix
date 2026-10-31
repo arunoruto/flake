@@ -7,6 +7,7 @@
     ./stump.nix
     ./manga.nix
     ./paperless.nix
+    ./mealie.nix
   ];
 
   assertions = [
