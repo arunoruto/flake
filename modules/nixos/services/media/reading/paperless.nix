@@ -27,7 +27,13 @@ in
               cfg = config.services.media;
             in
             {
-              package = lib.mkDefault pkgs.unstable.paperless-ngx;
+              # ponytail: drop the override once Hydra caches paperless again (a
+              # failing wandb dependency blocked it, 2026-10-30); until then it
+              # builds locally, and its ~11 min test suite (with a timing test
+              # that flakes on sado's eMMC) is skipped.
+              # (Python tests run as the install check; overridePythonAttrs would
+              # drop the .override the paperless module applies on top.)
+              package = lib.mkDefault (pkgs.unstable.paperless-ngx.overrideAttrs { doInstallCheck = false; });
               # package = lib.mkDefault pkgs.paperless-ngx;
               dataDir = lib.mkDefault "${cfg.dataDir}/paperless";
               configureTika = lib.mkDefault true;
