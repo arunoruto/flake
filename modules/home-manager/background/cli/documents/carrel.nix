@@ -19,5 +19,13 @@
       consume.enable = true;
       web.enable = true;
     };
+    # The library for AI agents: search, read papers, propose summaries as drafts.
+    # Off by default; on with `programs.mcp.servers.carrel.enabled = true;`.
+    programs.mcp.servers.carrel = lib.mkIf config.programs.mcp.enable {
+      enabled = lib.mkDefault false;
+      type = "stdio";
+      command = lib.getExe config.services.carrel.package;
+      args = [ "mcp" ];
+    };
   };
 }
