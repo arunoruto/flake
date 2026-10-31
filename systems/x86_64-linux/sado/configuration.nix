@@ -227,6 +227,14 @@
       enable = true;
       dataDir = "/mnt/flash/appdata/paperless";
       mediaDir = "/mnt/flash/documents";
+      # Tika and Gotenberg (~3 GB with LibreOffice and Chromium) run on marvin,
+      # reached through its Tailscale gateway container, not on sado's eMMC.
+      configureTika = false;
+      settings = {
+        PAPERLESS_TIKA_ENABLED = true;
+        PAPERLESS_TIKA_ENDPOINT = "http://marvin-gw.sparrow-yo.ts.net:9998";
+        PAPERLESS_TIKA_GOTENBERG_ENDPOINT = "http://marvin-gw.sparrow-yo.ts.net:3000";
+      };
     };
     # Replaced by tapedeck below, which fetches the same ListenBrainz
     # playlists into its own library.
