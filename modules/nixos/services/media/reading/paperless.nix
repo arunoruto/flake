@@ -36,8 +36,6 @@ in
               settings = {
                 PAPERLESS_URL = "https://${url}";
                 PAPERLESS_FORCE_SCRIPT_NAME = lib.mkDefault "/paperless";
-                # Also trims tesseract to these languages instead of all of them
-                PAPERLESS_OCR_LANGUAGE = lib.mkDefault "deu+eng+bos";
                 PAPERLESS_APPS = lib.mkDefault "allauth.socialaccount.providers.openid_connect";
                 PAPERLESS_CSRF_TRUSTED_ORIGINS = lib.strings.concatStringsSep "," [
                   "https://services.arnaut.me"
@@ -107,7 +105,11 @@ in
         "config/maileroo/username" = { };
         "config/maileroo/password" = { };
       };
+      # PAPERLESS_OCR_LANGUAGE lives here, not in settings: there the module also
+      # rebuilds tesseract with only those languages, which takes paperless-ngx
+      # off the binary cache and rebuilds it (tests and all) on every lock bump.
       templates."${paperless-oidc}".content = ''
+        PAPERLESS_OCR_LANGUAGE=deu+eng+bos
         PAPERLESS_EMAIL_HOST=${config.sops.placeholder."config/maileroo/server"}
         PAPERLESS_EMAIL_PORT=587
         PAPERLESS_EMAIL_USE_TLS=true
