@@ -8,9 +8,19 @@
 {
   imports = [ inputs.tapedeck.nixosModules.default ];
 
-  users.primaryUser = "mirza";
-  # td/td tui from the shell use the daemon's DB and socket.
-  users.users.${config.users.primaryUser}.extraGroups = [ "tapedeck" ];
+  users = {
+    primaryUser = "mirza";
+    users = {
+      # td/td tui from the shell use the daemon's DB and socket.
+      ${config.users.primaryUser}.extraGroups = [ "tapedeck" ];
+      # SMB-only account for Home Assistant's backups; see services.samba below.
+      homeassistant = {
+        isSystemUser = true;
+        group = "homeassistant";
+      };
+    };
+    groups.homeassistant = { };
+  };
 
   nix = {
     settings = {
@@ -36,6 +46,12 @@
   # builds first; past MemoryMax it OOM-kills inside this cgroup only, so a
   # too-big build fails and the services keep running.
   systemd = {
+    # The homeassistant share forces that user, so it has to own the dataset root.
+    tmpfiles.settings.homeassistant."/mnt/flash/homeassistant".d = {
+      user = "homeassistant";
+      group = "homeassistant";
+      mode = "0750";
+    };
     services = {
       nix-daemon.serviceConfig = {
         MemoryHigh = "5G";
@@ -350,7 +366,15 @@
         appdata = {
           path = "/mnt/flash/appdata";
         };
+        # Home Assistant OS's network-storage backup target. Its own login, so
+        # the credentials stored on the HA box reach nothing else here.
+        homeassistant = {
+          path = "/mnt/flash/homeassistant";
+          users = [ "homeassistant" ];
+          browseable = false;
+        };
       };
+      passwordFiles.homeassistant = config.sops.secrets."samba/homeassistant".path;
       disableShares = [
         "appdata"
         "downloads"
@@ -365,6 +389,7 @@
       # The hub's public key; the agent process reads this one itself.
       "tokens/beszel-marvin".mode = "0444";
       "tokens/beszel-ws" = { };
+      "samba/homeassistant" = { };
       "tokens/plex".owner = config.services.tapedeck.user;
       "tokens/listenbrainz".owner = config.services.tapedeck.user;
       # The former ytdlp-bot token, now polled by tapedeck.

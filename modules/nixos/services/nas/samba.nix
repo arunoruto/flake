@@ -20,6 +20,9 @@ let
   tmShares = builtins.attrNames (
     filterAttrs (name: share: share.timeMachine && !(elem name cfg.disableShares)) cfg.directories
   );
+  passwordFiles =
+    cfg.passwordFiles
+    // lib.optionalAttrs (cfg.passwordFile != null) { ${primaryUser} = cfg.passwordFile; };
 in
 {
   options.services.samba = {
@@ -118,6 +121,16 @@ in
 
         When set, a oneshot unit seeds that database before smbd starts,
         making the share user declarative instead of a manual `smbpasswd -a`.
+      '';
+    };
+
+    passwordFiles = mkOption {
+      type = types.attrsOf types.path;
+      default = { };
+      example = lib.literalExpression ''{ homeassistant = config.sops.secrets."samba/homeassistant".path; }'';
+      description = ''
+        Like passwordFile, for further users, keyed by user name. Each must
+        also exist as a Unix user; Samba maps SMB logins onto those.
       '';
     };
 
@@ -229,7 +242,7 @@ in
 
     # Seed Samba's own password database from a secret. smbd reads it at
     # startup, so this has to land first.
-    systemd.services.samba-provision-users = mkIf (cfg.passwordFile != null) {
+    systemd.services.samba-provision-users = mkIf (passwordFiles != { }) {
       description = "Seed the Samba password database";
       wantedBy = [ "multi-user.target" ];
       before = [ "samba-smbd.service" ];
@@ -240,10 +253,14 @@ in
       };
       script = ''
         install -d -m 0700 /var/lib/samba/private
-        pw=$(cat ${toString cfg.passwordFile})
-        printf '%s\n%s\n' "$pw" "$pw" \
-          | ${pkgs.samba}/bin/smbpasswd -s -a ${primaryUser}
-      '';
+      ''
+      + concatStringsSep "\n" (
+        lib.mapAttrsToList (user: file: ''
+          pw=$(cat ${toString file})
+          printf '%s\n%s\n' "$pw" "$pw" \
+            | ${pkgs.samba}/bin/smbpasswd -s -a ${user}
+        '') passwordFiles
+      );
     };
   };
 }
