@@ -26,6 +26,8 @@
         ];
       };
       web.enable = true;
+      # The library is shared through the Garage bucket in config.toml's [remote].
+      sync.enable = true;
     };
     # The library for AI agents: search, read papers, propose summaries as drafts.
     # Off by default; on with `programs.mcp.servers.carrel.enabled = true;`.
