@@ -16,7 +16,15 @@
 
   config = lib.mkIf config.programs.carrel.enable {
     services.carrel = {
-      consume.enable = true;
+      consume = {
+        enable = true;
+        # Google Scholar alerts land in scholar-alerts (a Thunderbird filter saves them as .eml) and become
+        # carrel's recommendations.
+        folders = [
+          "${config.home.homeDirectory}/Downloads"
+          "${config.home.homeDirectory}/Documents/scholar-alerts"
+        ];
+      };
       web.enable = true;
     };
     # The library for AI agents: search, read papers, propose summaries as drafts.
