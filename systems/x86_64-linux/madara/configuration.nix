@@ -31,11 +31,10 @@
       # tapedeck remote client: `td` browses and plays sado's library.
       tapedeck.enable = true;
       # Paper library; config.toml and tokens live outside the repo.
+      # Docling runs as docling-serve on boba's GPU (`docling` in config.toml), not here: its
+      # docling-parse is never in the binary cache, so every nixpkgs bump rebuilt it.
       carrel.enable = true;
     };
-    # Docling extracts paper text better than PyMuPDF. Unstable, as stable's
-    # docling-parse is marked broken; not in the binary cache, so it builds here.
-    services.carrel.docling.package = pkgs.unstable.docling;
   };
 
   boot.binfmt.emulatedSystems = [
