@@ -115,16 +115,6 @@
     });
     networkmanager = {
       unmanaged = map (name: "interface-name:${name}") config.networking.bridges.br0.interfaces;
-      # wlo1 and br0 both sit on the LAN subnet. NetworkManager gives wifi a route
-      # metric of 600, which beats the 1009 dhcpcd assigns br0, so the host answered
-      # br0's own bridge members out over the wifi -- an asymmetric path the AP does
-      # not hairpin, leaving host <-> member traffic dead. Push wifi below br0 so the
-      # wired bridge wins and the path stays symmetric.
-      settings."connection-wifi-lowprio" = {
-        match-device = "type:wifi";
-        "ipv4.route-metric" = 2000;
-        "ipv6.route-metric" = 2000;
-      };
       # A USB-gadget pwnagotchi hands out DHCP naming itself the gateway (it wants
       # the host's uplink, it has none), and NetworkManager's ethernet metric of 100
       # beat br0: every IPv4 connection went into the Pi and died. Keep its routes
@@ -136,6 +126,13 @@
       };
     };
   };
+
+  # Wired only: keep the wifi and bluetooth radios off.
+  hardware.bluetooth.enable = false;
+  boot.blacklistedKernelModules = [
+    "iwlwifi"
+    "btusb"
+  ];
 
   boot.kernelParams = [
     "pcie_aspm=force"
