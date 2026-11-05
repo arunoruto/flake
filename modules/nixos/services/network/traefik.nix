@@ -168,11 +168,36 @@ in
         # tmpfiles.rules = lib.optionals (cfg.staticConfigOptions.providers ? file) [
         #   "d '${cfg.staticConfigOptions.providers.file.directory}' 0700 traefik traefik - -"
         # ];
-        services.traefik.environment = {
-          CF_DNS_API_TOKEN_FILE = config.sops.secrets."config/cloudflare/api_key".path;
-          # CLOUDFLARE_EMAIL = config.sops.secrets."config/cloudflare/email".path;
-          # CLOUDFLARE_API_KEY_FILE = config.sops.secrets."config/cloudflare/api_key".path;
-        };
+        services.traefik = lib.mkMerge [
+          {
+            environment = {
+              CF_DNS_API_TOKEN_FILE = config.sops.secrets."config/cloudflare/api_key".path;
+              # CLOUDFLARE_EMAIL = config.sops.secrets."config/cloudflare/email".path;
+              # CLOUDFLARE_API_KEY_FILE = config.sops.secrets."config/cloudflare/api_key".path;
+            };
+          }
+          # The ts resolver asks tailscaled for each cert once, when the router
+          # appears, and never retries a failure. Started alongside tailscaled at
+          # boot it asked too early ("unexpected output: no delimiter") and served
+          # TRAEFIK DEFAULT CERT until the next restart. Wait only while tailscaled
+          # is still coming up: logged out or stopped it settles on a final state
+          # and Traefik starts straight away, just without the ts certs.
+          (lib.mkIf config.services.tailscale.enable {
+            after = [ "tailscaled.service" ];
+            wants = [ "tailscaled.service" ];
+            preStart = ''
+              for _ in $(seq 60); do
+                state=$(${lib.getExe config.services.tailscale.package} status --json --peers=false 2>/dev/null \
+                  | ${lib.getExe pkgs.jq} -r '.BackendState' 2>/dev/null || true)
+                case "$state" in
+                  "" | NoState | Starting) sleep 1 ;;
+                  *) exit 0 ;;
+                esac
+              done
+              echo "tailscaled still starting after 60s, starting without its certs" >&2
+            '';
+          })
+        ];
       };
       sops = {
         secrets = {
