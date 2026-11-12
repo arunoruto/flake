@@ -69,6 +69,7 @@
       skillPackages.anatomy = "${
         pkgs.agentSkills.anatomy.override { manualOnly = true; }
       }/share/skills/anatomy/anatomy";
+      skillPackages.humanizer = "${pkgs.agentSkills.humanizer}/share/skills/humanizer/humanizer";
 
       skillsExclude = [ "devenv" ];
       skills =
