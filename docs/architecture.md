@@ -104,15 +104,18 @@ from packages, linked without inspecting their contents during evaluation).
 Codex uses Home Manager's `programs.codex` module. Its MCP integration translates
 `programs.mcp.servers`, including disabled servers, HTTP headers and file-backed
 environment variables. `CLAUDE.md` is a fallback for repositories without an
-`AGENTS.md`. Skills follow Home Manager's Codex directory choice: `~/.codex/skills`
+`AGENTS.md`. Codex owns `~/.codex/config.toml` (it writes project trust and
+`/model` there), so the generated settings land in `config-nix.toml` beside it.
+Codex does not read that file yet; merging it into `config.toml` is still open.
+Skills follow Home Manager's Codex directory choice: `~/.codex/skills`
 normally, or `$XDG_CONFIG_HOME/codex/skills` with `home.preferXdgDirectories`.
+On Linux, `bubblewrap` is installed for Codex's sandbox, and the
+`codex-remote-control` user service runs the app server with remote control
+from the store binary; pair a device with `codex remote-control pair`.
 
 The shared `ai.agents` definitions and the RTK/ponytail plugins currently target
 Claude Code and OpenCode. They are not copied into Codex: agent formats, tool
-restrictions and hook interfaces differ. Codex-specific settings belong in
-`programs.codex.settings`; global guidance can use `programs.codex.context`.
-Home Manager manages `config.toml`, so migrate any existing personal settings
-into those options and back up an unmanaged file before the first activation.
+restrictions and hook interfaces differ.
 
 ## devix
 
