@@ -24,7 +24,7 @@
           #   defaultFgColor = [ "#cad3f5" ];
           #   searchingActiveBorderColor = [ "#eed49f" ];
           # };
-          authorColors = {
+          theme.authorColors = {
             "${config.programs.git.settings.user.name}" = config.lib.stylix.colors.withHashtag.base0C;
             "*" = config.lib.stylix.colors.withHashtag.base0D;
           };
