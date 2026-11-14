@@ -100,7 +100,8 @@ in
               manyFiles = true;
             };
             core = {
-              fsmonitor = true;
+              # No fsmonitor: one daemon per worktree, ~38k inotify watches each,
+              # a dozen nixpkgs worktrees exhaust fs.inotify.max_user_watches.
               untrackedCache = true;
               commitGraph = true;
             };
