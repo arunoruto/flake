@@ -24,9 +24,9 @@ let
       pandas
       # plotting
       matplotlib
-      plotly
+      # plotly # pillow 13 in 26.05 breaks imageio tests (plotly -> scikit-image -> imageio)
       pyvista
-      streamlit
+      # streamlit # pins pillow<13; 26.05 ships pillow 13
       # Misc
       # manim
       psutil
@@ -52,8 +52,9 @@ in
       {
         systemPackages =
           (with pkgs; [
-            manim
-            manim-slides
+            # pillow 13 in 26.05 breaks manim's image tests; re-enable once fixed upstream
+            # manim
+            # manim-slides
             mkdocs
           ])
           ++ (with pkgs.unstable; [ uv ])
