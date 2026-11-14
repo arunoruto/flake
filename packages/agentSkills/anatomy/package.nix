@@ -4,8 +4,6 @@
   fetchFromGitHub,
   installAgentSkills,
   nix-update-script,
-  # Only run on an explicit /anatomy, never chosen by the agent on its own.
-  manualOnly ? false,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -29,19 +27,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   # paths; tell the agent how it differs here.
   postPatch = ''
     cat ${./nix-notes.md} >> SKILL.md
-  ''
-  + lib.optionalString manualOnly ''
-    if grep -qE '^(disable-model-invocation|metadata):' SKILL.md; then
-      echo "SKILL.md frontmatter already sets invocation keys; update the patch" >&2
-      exit 1
-    fi
-    awk '/^---$/ && ++n == 2 {
-      print "disable-model-invocation: true"
-      print "metadata:"
-      print "  opencode/slash: \"true\""
-      print "  opencode/autoinvoke: \"false\""
-    } { print }' SKILL.md > SKILL.md.new
-    mv SKILL.md.new SKILL.md
   '';
 
   nativeBuildInputs = [ installAgentSkills ];
