@@ -18,6 +18,7 @@
     ./github-runner.nix
     ./harmonia.nix
     ./ssh.nix
+    ./sure.nix
   ];
 
   services = {
