@@ -7,6 +7,7 @@
 {
   imports = [
     ./claude-code.nix
+    ./codex.nix
     ./copilot.nix
     ./gemini.nix
     ./mcp.nix
@@ -48,6 +49,7 @@
     {
       programs = {
         claude-code.enable = true;
+        codex.enable = true;
         mcp.enable = true;
         # opencode.enable = true;
       };

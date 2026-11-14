@@ -10,7 +10,7 @@
       type = with lib.types; either (attrsOf (either lines path)) path;
       default = { };
       description = ''
-        Shared AI agent skills, consumed by opencode, claude-code, and other agents.
+        Shared AI agent skills, consumed by opencode, claude-code, and codex.
 
         This option can either be:
         - An attribute set defining skills

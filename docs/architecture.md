@@ -94,6 +94,26 @@ system.tags = [ "desktop" "workstation" "development" "management" ];
 - **`development/`** — *policy*: which languages/tools from `modules/devix`
   (the mechanism) are turned on for `development`-tagged hosts.
 
+## AI tooling
+
+Claude Code and Codex are enabled in the background Home Manager configuration,
+using packages from nixpkgs-unstable. Both consume `ai.skills` (the discovered
+repository and module skills) and `ai.skillPackages` (whole skill directories
+from packages, linked without inspecting their contents during evaluation).
+
+Codex uses Home Manager's `programs.codex` module. Its MCP integration translates
+`programs.mcp.servers`, including disabled servers, HTTP headers and file-backed
+environment variables. `CLAUDE.md` is a fallback for repositories without an
+`AGENTS.md`. Skills follow Home Manager's Codex directory choice: `~/.codex/skills`
+normally, or `$XDG_CONFIG_HOME/codex/skills` with `home.preferXdgDirectories`.
+
+The shared `ai.agents` definitions and the RTK/ponytail plugins currently target
+Claude Code and OpenCode. They are not copied into Codex: agent formats, tool
+restrictions and hook interfaces differ. Codex-specific settings belong in
+`programs.codex.settings`; global guidance can use `programs.codex.context`.
+Home Manager manages `config.toml`, so migrate any existing personal settings
+into those options and back up an unmanaged file before the first activation.
+
 ## devix
 
 Development-environment *mechanism*: describe a language once — its language
