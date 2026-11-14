@@ -5,6 +5,13 @@
   osConfig ? null,
   ...
 }:
+let
+  # ponytail: unstable's gstat lacks libgit2 while LIBGIT2_NO_VENDOR is set; nixpkgs master
+  # already adds it, drop this once it reaches nixos-unstable.
+  gstat = pkgs.unstable.nushellPlugins.gstat.overrideAttrs (old: {
+    buildInputs = old.buildInputs ++ [ pkgs.unstable.libgit2 ];
+  });
+in
 {
   programs = {
     nushell = {
@@ -109,7 +116,7 @@
             }
           }
         }
-        plugin add ${lib.getExe pkgs.unstable.nushellPlugins.gstat}
+        plugin add ${lib.getExe gstat}
       ''
       # + lib.optionalString config.skim.enable ''
       #   plugin add ${lib.getExe pkgs.unstable.nushellPlugins.skim}
@@ -128,9 +135,6 @@
   };
 
   home.packages = lib.optionals config.programs.nushell.enable (
-    (with pkgs.unstable.nushellPlugins; [
-      gstat
-    ])
-    ++ lib.optionals config.programs.skim.enable [ pkgs.unstable.nushellPlugins.skim ]
+    [ gstat ] ++ lib.optionals config.programs.skim.enable [ pkgs.unstable.nushellPlugins.skim ]
   );
 }
