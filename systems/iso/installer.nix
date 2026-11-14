@@ -50,6 +50,7 @@ in
 {
   imports = [
     (modulesPath + "/installer/cd-dvd/installation-cd-minimal.nix")
+    ./checksums.nix
   ];
 
   boot.zfs.forceImportRoot = false;
@@ -175,15 +176,4 @@ in
       fi
     '';
   };
-
-  system.build.isoChecksums = pkgs.runCommand "iso-${hostname}-checksums" { } ''
-    mkdir -p $out/iso
-    cp ${config.system.build.isoImage}/iso/*.iso $out/iso/
-    cd $out/iso
-    for iso in *.iso; do
-      sha256sum "$iso" > "$iso.sha256"
-    done
-    cd $out
-    sha256sum iso/*.iso > SHA256SUMS
-  '';
 }

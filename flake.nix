@@ -322,6 +322,7 @@
                     nixfmt-tree
                     sops
                     ssh-to-age
+                    nixos-anywhere # just install
                   ])
                   ++ gitHooksLocal.enabledPackages;
               };

@@ -154,6 +154,37 @@ sha256sum -c SHA256SUMS
 - Use `isoImage.squashfsCompression = "zstd -Xcompression-level 19"` (default) for best compression
 - Add `isoImage.compressImage = true` for an extra `.zst` layer (slower build, smaller file)
 
-## Generic minimal ISO
+## Remote install with nixos-anywhere (`iso-anywhere`)
 
-The flake also has a barebones ISO at `systems/iso/default.nix` that imports the standard `installation-cd-minimal` with `helix` added. Not registered as a nixosConfiguration — build it directly if needed.
+The per-host ISOs above install the system fine, but the host's sops identity
+(its SSH host key, see `modules/nixos/security/secrets.nix`) is only created
+on first boot, so it cannot decrypt `passwords/<user>` until it has been added
+to `secrets/.sops.yaml` and the secrets rekeyed. `just install` closes that gap
+by handing the host its key *before* `nixos-install`:
+
+```bash
+just iso anywhere                         # once: one generic ISO for every host
+# boot the target from it, then from a machine that can decrypt the secrets:
+just install <hostname> root@installer.local
+```
+
+- `iso-anywhere` (`systems/iso/anywhere.nix`) is the stock minimal installer
+  plus root's SSH keys (`homes/{mar,mirza}/keys`), mDNS as `installer.local`
+  and `nixos-facter`. It embeds no flake and no closure, so it never goes
+  stale. Any other NixOS installer works too (log in, `passwd`, pass its IP).
+- `just install` takes the host key from `secrets/host-keys.yaml` (encrypted
+  to the user keys only; no host can read another host's key), or mints and
+  stores one on the first install. It registers the key as a recipient in
+  `secrets/.sops.yaml` (replacing a stale one), rekeys `secrets.yaml`, then
+  runs nixos-anywhere with the key in `--extra-files`. Reinstalls keep the
+  same SSH fingerprint and sops identity.
+- nixos-anywhere builds the closure locally, runs disko (**wipes the disks**),
+  regenerates `facter.json` from the target into the repo (hosts that carry
+  one), installs and reboots. The first boot decrypts the user password; no
+  post-install step.
+- Extra SSH arguments go into `addr`, e.g.
+  `just install <host> "-p 2222 root@10.0.0.5"`.
+- Commit the changed `secrets/.sops.yaml`, `secrets/secrets.yaml`,
+  `secrets/host-keys.yaml` and `facter.json` afterwards.
+- lanzaboote hosts (yhwach) still need the per-host ISO's secure-boot step:
+  nixos-anywhere does not create the PKI bundle.

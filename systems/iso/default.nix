@@ -22,7 +22,13 @@ let
     };
 in
 {
-  isoConfigurations = lib.listToAttrs (
-    map (hostname: lib.nameValuePair "iso-${hostname}" (mkIso hostname)) hosts
-  );
+  isoConfigurations =
+    lib.listToAttrs (map (hostname: lib.nameValuePair "iso-${hostname}" (mkIso hostname)) hosts)
+    // {
+      # Host-agnostic installer for nixos-anywhere (`just install`).
+      iso-anywhere = lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [ ./anywhere.nix ];
+      };
+    };
 }

@@ -135,6 +135,45 @@ docs-build:
 iso target:
     nix build .#iso-{{ target }} -o result-iso-{{ target }}
 
+# ── install ─────────────────────────────────────────────────────────
+
+# Boot the target into any NixOS installer (`just iso anywhere` is made for
+# it) and pass where it answers, e.g. root@installer.local. The host's SSH key
+# is its sops identity: it is kept in secrets/host-keys.yaml (minted on the
+# first install, reused on reinstalls) and placed on the target before
+# nixos-install, so the first boot already decrypts passwords and secrets.
+# Hosts with a facter.json get it regenerated from the target hardware.
+
+# Install a host with nixos-anywhere — WIPES the target's disks (disko)
+[linux]
+install target addr:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    dir=$(echo systems/*-linux/{{ target }})
+    [[ -d $dir ]] || { echo "no host '{{ target }}' under systems/*-linux/" >&2; exit 1; }
+    tmp=$(mktemp -d)
+    trap 'rm -rf "$tmp"' EXIT
+    install -d -m755 "$tmp/etc/ssh"
+    key=$tmp/etc/ssh/ssh_host_ed25519_key
+    store=secrets/host-keys.yaml
+    if sops -d --extract '["{{ target }}"]' "$store" > "$key" 2>/dev/null; then
+      echo "reusing the stored host key of {{ target }}"
+    else
+      rm -f "$key"
+      ssh-keygen -q -t ed25519 -N '' -C "root@{{ target }}" -f "$key"
+      # Fails (and aborts) unless we can decrypt the store ourselves.
+      sops --config secrets/.sops.yaml set "$store" '["{{ target }}"]' "$(jq -Rs . < "$key")"
+      echo "minted a host key for {{ target }}, stored in $store"
+    fi
+    chmod 600 "$key"
+    ssh-keygen -y -f "$key" > "$key.pub"
+    just _sops-recipient {{ target }} "$(ssh-to-age < "$key.pub")"
+    hw=()
+    if [[ -f $dir/facter.json ]]; then
+      hw=(--generate-hardware-config nixos-facter "$dir/facter.json")
+    fi
+    nixos-anywhere --flake .#{{ target }} --extra-files "$tmp" "${hw[@]}" {{ addr }}
+
 # ── hardware ────────────────────────────────────────────────────────
 
 # Regenerate after any hardware change. A stale report describes the machine
@@ -172,38 +211,46 @@ secrets-rekey:
 
 # The host's age key is derived from its SSH ed25519 host key — the same key
 # sops-nix decrypts with (sshKeyPaths) — so the host only has to be reachable.
-# `addr` defaults to the hostname; pass e.g. root@10.0.0.5 for a fresh install.
+# `addr` defaults to the hostname. A host that is already a recipient gets its
+# key replaced, e.g. after a reinstall that minted a new host key.
 
 # Register a host as a sops recipient and re-encrypt the secrets for it
 secrets-add-host target addr=target:
+    just _sops-recipient {{ target }} "$(ssh-keyscan -t ed25519 '{{ addr }}' 2>/dev/null | ssh-to-age)"
+
+_sops-recipient target key:
     #!/usr/bin/env bash
     set -euo pipefail
     file=secrets/.sops.yaml
-    if grep -q "&{{ target }} " "$file"; then
-      echo "{{ target }} is already a recipient in $file" >&2
-      exit 1
+    [[ "{{ key }}" == age1* ]] || { echo "not an age key: '{{ key }}'" >&2; exit 1; }
+    if grep -q "^      - &{{ target }} {{ key }}$" "$file"; then
+      echo "{{ target }} is already a recipient"
+      exit 0
+    elif grep -q "^      - &{{ target }} " "$file"; then
+      sed -i "s|^\(      - &{{ target }} \).*|\1{{ key }}|" "$file"
+      echo "replaced the key of {{ target }} ({{ key }})"
+    else
+      # Append the anchor to the end of the `&hosts` list and an alias to the
+      # end of the first creation rule's (secrets.yaml) age list; both are the
+      # last 6/10-space list item before the next less-indented line. Later
+      # rules (host-keys.yaml) are users-only and must stay that way.
+      awk -v host="{{ target }}" -v key="{{ key }}" '
+        function flush() {
+          if (section == "hosts") print "      - &" host " " key
+          if (section == "age")   print "          - *" host
+          section = ""
+        }
+        /^  - &hosts / { print; section = "hosts"; next }
+        /^      - age:/ && !seen_age { print; section = "age"; seen_age = 1; next }
+        section == "hosts" && !/^      - / { flush() }
+        section == "age"   && !/^          - / { flush() }
+        { print }
+        END { flush() }
+      ' "$file" > "$file.tmp"
+      mv "$file.tmp" "$file"
+      echo "added {{ target }} ({{ key }})"
     fi
-    key=$(ssh-keyscan -t ed25519 "{{ addr }}" 2>/dev/null | ssh-to-age)
-    [[ $key == age1* ]] || { echo "could not derive an age key from {{ addr }}" >&2; exit 1; }
-    # Append the anchor to the end of the `&hosts` list and an alias to the
-    # end of the creation rule's age list (both are the last 6/10-space list
-    # item before the next less-indented line).
-    awk -v host="{{ target }}" -v key="$key" '
-      function flush() {
-        if (section == "hosts") print "      - &" host " " key
-        if (section == "age")   print "          - *" host
-        section = ""
-      }
-      /^  - &hosts / { print; section = "hosts"; next }
-      /^      - age:/ { print; section = "age"; next }
-      section == "hosts" && !/^      - / { flush() }
-      section == "age"   && !/^          - / { flush() }
-      { print }
-      END { flush() }
-    ' "$file" > "$file.tmp"
-    mv "$file.tmp" "$file"
-    echo "added {{ target }} ($key)"
-    sops --config secrets/.sops.yaml updatekeys -y secrets/secrets.yaml
+    sops --config "$file" updatekeys -y secrets/secrets.yaml
 
 # ── hygiene ─────────────────────────────────────────────────────────
 
