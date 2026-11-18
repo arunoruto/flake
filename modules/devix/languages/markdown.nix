@@ -2,11 +2,6 @@
 
 {
   lsps = {
-    marksman = {
-      enable = true;
-      package = pkgs.marksman;
-    };
-
     markdown-oxide = {
       enable = true;
       package = pkgs.markdown-oxide;
@@ -32,7 +27,6 @@
 
   language = {
     lspServers = [
-      "marksman"
       "markdown-oxide"
       "iwe"
     ];
@@ -41,7 +35,7 @@
     insertSpaces = true;
   };
 
-  # The devix markdown LSPs (marksman/markdown-oxide/iwe) are Helix/OpenCode-only;
+  # The devix markdown LSPs (markdown-oxide/iwe) are Helix/OpenCode-only;
   # Zed uses its own default Markdown servers ("...").
   consumerMeta.zed = {
     name = "Markdown";
