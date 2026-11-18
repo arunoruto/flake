@@ -19,9 +19,10 @@
     homebrew = {
       # enable = true;
       # casks = config.darwin.homebrew.casks;
+      casks = [ "font-fira-code" ];
       masApps = lib.optionalAttrs config.services.tailscale.enable {
         Tailscale = 1475387142;
-        FluffyChat = 1551469600;
+        # FluffyChat = 1551469600;
       };
       user = lib.mkDefault config.users.primaryUser;
     };
