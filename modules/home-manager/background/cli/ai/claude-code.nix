@@ -36,6 +36,7 @@
           );
       agents = config.ai.agentsClaude;
       skills = config.ai.skills;
+      rules.commit-attribution = ./commit-attribution.md;
 
     };
   };

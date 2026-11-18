@@ -83,23 +83,23 @@ provided changes.
    - Trailer: Every commit message MUST include an `Assisted-by` trailer
      in the footer identifying the AI system(s) that helped produce the
      commit. This is mandated by the nixpkgs automation/AI policy.
-   - Format: Follow the Linux kernel convention for AI tool attribution:
+   - Format: Use the tool's display name followed by its actual model:
 
      ```
-     Assisted-by: <agent_name>:<model_version>
+     Assisted-by: Agent Name (Model Name)
      ```
 
-   - Agent Name: Use the name of this AI tool (e.g. "opencode",
-     "claude", "copilot"). Infer this from your identity or system
-     prompt metadata.
-   - Model Version: Use the specific model identifier (e.g.
-     "gpt-4o", "claude-3-opus", "deepseek-v4-pro"). Get this from
-     your model name in the system environment.
+   - Agent Name: Use the tool's display name, such as "Claude Code",
+     "Codex", or "OpenCode".
+   - Model Name: Use the actual model identity supplied by the session.
+     Do not copy the model from an example or infer it from a configured
+     default. If it is unavailable, use `Assisted-by: Agent Name`.
+   - Preserve human co-author trailers.
    - Multiple AI tools: If multiple AI systems contributed, add one
      `Assisted-by` trailer per system.
    - Note: A `Co-authored-by` trailer does NOT satisfy nixpkgs policy.
    - Example:
 
      ```
-     Assisted-by: opencode:deepseek-v4-pro
+     Assisted-by: Claude Code (Claude Opus 5.5)
      ```

@@ -101,6 +101,13 @@ using packages from nixpkgs-unstable. Both consume `ai.skills` (the discovered
 repository and module skills) and `ai.skillPackages` (whole skill directories
 from packages, linked without inspecting their contents during evaluation).
 
+Commit attribution uses `Assisted-by: Agent Name (Model Name)`, with the actual
+session model. The shared `commit-attribution.md` is loaded globally as a Claude
+rule and as Codex's `AGENTS.md`, so the format applies without invoking a skill.
+Both commit skills use the same convention. Claude's literal `attribution.commit`
+setting is left unset so the guidance can follow model changes and its mutable
+`settings.json` stays writable.
+
 Codex uses Home Manager's `programs.codex` module. Its MCP integration translates
 `programs.mcp.servers`, including disabled servers, HTTP headers and file-backed
 environment variables. `CLAUDE.md` is a fallback for repositories without an

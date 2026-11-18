@@ -15,6 +15,7 @@ in
       # environment variables into Codex's native MCP configuration.
       enableMcpIntegration = true;
       skills = config.ai.skills;
+      context = builtins.readFile ./commit-attribution.md;
       settings = {
         project_doc_fallback_filenames = [ "CLAUDE.md" ];
         # Auto-review: sandboxed by default, escalations judged by a reviewer
