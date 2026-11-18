@@ -1,6 +1,5 @@
 {
   lib,
-  pkgs,
   config,
   ...
 }:
@@ -9,9 +8,6 @@
   # ];
 
   config = lib.mkIf config.hosts.desktop.enable {
-    home.packages = with pkgs.unstable; [
-      en-croissant
-    ];
     # programs = {
     #   chess-tui = {
     #     enable = true;
