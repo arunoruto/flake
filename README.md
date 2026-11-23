@@ -1,3 +1,5 @@
+
+
 # Mirza's Nix Config
 
 <p align="center">
@@ -21,10 +23,10 @@ sudo nixos-rebuild switch --accept-flake-config --flake ~/.config/flake#<device-
 ### Darwin
 
 ```sh
-sudo nix run nix-darwin/nix-darwin-<version>#darwin-rebuild -- switch
+sudo nix run nix-darwin/nix-darwin-<version>#darwin-rebuild -- switch --flake ~/.config/flake#<device-name>
 ```
 
-Replace `<version>` with the nix-darwin release (e.g., `25.11`).
+Replace `<version>` with the nix-darwin release (e.g., `25.11`) and `<device-name>` with your macOS host.
 
 ### Home Manager
 
