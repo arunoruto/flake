@@ -37,6 +37,12 @@ let
       pkgs.nvd
     ];
     text = ''
+      # Check in with Gatus first, even when nothing changed: its heartbeat
+      # alerts when a host stops getting here (services/gatus.nix).
+      curl -fsS --max-time 20 -X POST -H "Authorization: Bearer $(<"$CREDENTIALS_DIRECTORY/heartbeat")" \
+        "${cfg.heartbeatUrl}/api/v1/endpoints/upgrades_${host}/external?success=true" >/dev/null ||
+        echo "gatus check-in failed" >&2
+
       old=$(<"$RUNTIME_DIRECTORY/old")
       new=$(readlink -f /run/current-system)
       [[ $old != "$new" ]] || exit 0
@@ -105,6 +111,11 @@ in
       default = "main";
       description = "Branch the hosts upgrade from.";
     };
+    heartbeatUrl = lib.mkOption {
+      type = lib.types.str;
+      default = "http://aizen.${config.services.tailscale.tailnet}.ts.net:8090";
+      description = "Gatus that each successful upgrade checks in with (services.gatus.upgradeHeartbeats).";
+    };
     backup = {
       sqliteDatabases = lib.mkOption {
         type = lib.types.listOf lib.types.str;
@@ -149,14 +160,20 @@ in
         persistent = true;
       };
 
-      sops.secrets."tokens/ntfy/upgrade" = { };
+      sops.secrets = {
+        "tokens/ntfy/upgrade" = { };
+        "tokens/gatus/heartbeat" = { };
+      };
 
       # The upstream unit is already after/wants network-online.target.
       systemd.services.nixos-upgrade = {
         unitConfig.OnFailure = [ "nixos-upgrade-failed.service" ];
         serviceConfig = {
           ExecCondition = lib.getExe guard;
-          LoadCredential = [ ntfyCredential ];
+          LoadCredential = [
+            ntfyCredential
+            "heartbeat:${config.sops.secrets."tokens/gatus/heartbeat".path}"
+          ];
           # Holds the pre-upgrade system path for the report.
           RuntimeDirectory = "nixos-upgrade";
           ExecStartPre = [
