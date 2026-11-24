@@ -65,13 +65,25 @@ seenix *roots="/run/current-system":
 _colmena_on_path := `command -v colmena >/dev/null 2>&1 && echo yes || echo no`
 colmena := if _colmena_on_path == "yes" { "colmena" } else { "nix shell --inputs-from . colmena#colmena --command colmena" }
 
-# Deploy hosts with colmena, e.g. `just deploy --on madara`
-deploy *args:
+# Hosts auto-upgrade from GitHub and skip any host running a commit GitHub
+# lacks (see docs/auto-upgrade.md), so deploys refuse unpushed work.
+_pushed:
+    git diff --quiet HEAD || { echo "uncommitted changes: commit them, or use deploy-dirty" >&2; exit 1; }
+    test -z "$(git ls-files --others --exclude-standard)" || { echo "untracked files: commit or remove them, or use deploy-dirty" >&2; exit 1; }
+    git push
+
+# Push, then deploy hosts with colmena, e.g. `just deploy --on madara`
+deploy *args: _pushed
     {{ colmena }} apply {{ args }}
 
-# Deploy all hosts carrying a tag, e.g. `just deploy-tag nas`
-deploy-tag tag *args:
+# Push, then deploy all hosts carrying a tag, e.g. `just deploy-tag nas`
+deploy-tag tag *args: _pushed
     {{ colmena }} apply --on @{{ tag }} {{ args }}
+
+# Deploy the working tree as-is, for experiments
+deploy-dirty *args:
+    @echo "warning: deploying unpushed changes; auto-upgrade skips these hosts (and notifies) until they run a pushed commit" >&2
+    {{ colmena }} apply {{ args }}
 
 # ── updates ─────────────────────────────────────────────────────────
 
