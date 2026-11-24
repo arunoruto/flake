@@ -1,55 +1,169 @@
 name: Update Lockfile
 
+# Bumps flake.lock on a branch, builds every NixOS host against it, and
+# squash-merges the PR only if all of them build. The hosts pull main at
+# 05:00 local time (system/upgrade.nix), so this has to land first.
+
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 4 * * *" # daily at 04:00 UTC
+    # 01:17 UTC = 02:17 CET / 03:17 CEST: done before the hosts' 05:00 in
+    # either season. Off the hour, where GitHub delays scheduled runs least.
+    - cron: "17 1 * * *"
 
 permissions:
   contents: write
+  pull-requests: write
 
 concurrency:
   group: update-lockfile
   cancel-in-progress: false
 
+env:
+  BRANCH: update-flake-lock
+
 jobs:
-  lockfile:
-    name: Update Lockfile
+  update:
+    name: Update flake.lock
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 15
+    outputs:
+      changed: ${{ steps.push.outputs.changed }}
+      base: ${{ steps.push.outputs.base }}
+      hosts: ${{ steps.hosts.outputs.hosts }}
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      - name: Set Swap Space
-        uses: pierotofy/set-swap-space@master
-        with:
-          swap-size-gb: 10
-      - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@main
-        with:
-          logger: pretty
-      - name: Update flake.lock
-        run: nix flake update --accept-flake-config
-      - name: Check for changes
-        id: diff
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@main
+      - run: nix flake update --accept-flake-config
+      - name: Push to ${{ env.BRANCH }}
+        id: push
         run: |
+          echo "base=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
           if git diff --quiet -- flake.lock; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "changed=true" >> "$GITHUB_OUTPUT"
+            exit 0
           fi
-      # Same gate as check.yaml; see the comment there for why not `nix flake check`.
-      - name: Evaluate configurations
-        if: steps.diff.outputs.changed == 'true'
-        run: ./scripts/eval-all.sh --workers 3
-      - name: Formatting
-        if: steps.diff.outputs.changed == 'true'
-        run: nix build --accept-flake-config -L .#checks.x86_64-linux.pre-commit-check
-      - name: Commit and push
-        if: steps.diff.outputs.changed == 'true'
-        run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add flake.lock
-          git commit -m "chore: update flake.lock"
-          git push
+          git commit -m "chore: update flake.lock" -- flake.lock
+          git push --force origin "HEAD:refs/heads/$BRANCH"
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+      # One matrix entry per systems/<arch>-linux/<host>; aarch64 builds
+      # natively on GitHub's ARM runners.
+      - name: List hosts
+        id: hosts
+        run: |
+          hosts=$(for dir in systems/*-linux/*/; do
+            dir=${dir%/}
+            runner=ubuntu-latest
+            [[ $dir == systems/aarch64-linux/* ]] && runner=ubuntu-24.04-arm
+            jq -nc --arg host "${dir##*/}" --arg runner "$runner" '{$host, $runner}'
+          done | jq -sc .)
+          echo "hosts=$hosts" >> "$GITHUB_OUTPUT"
+
+  # Darwin, home-manager and dev shells, which the build matrix does not cover.
+  # Not `nix flake check`: see check.yaml.
+  eval:
+    name: Evaluate all configurations
+    needs: update
+    if: needs.update.outputs.changed == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.BRANCH }}
+      - uses: pierotofy/set-swap-space@master
+        with:
+          swap-size-gb: 10
+      - uses: DeterminateSystems/nix-installer-action@main
+      - run: ./scripts/eval-all.sh --workers 3
+      - run: nix build --accept-flake-config -L .#checks.x86_64-linux.pre-commit-check
+
+  build:
+    name: Build ${{ matrix.host }}
+    needs: update
+    if: needs.update.outputs.changed == 'true'
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJSON(needs.update.outputs.hosts) }}
+    env:
+      HOST: ${{ matrix.host }}
+      ATTR: nixosConfigurations.${{ matrix.host }}.config.system.build.toplevel
+    steps:
+      # Desktop closures outgrow the runner's ~14 GB of free disk.
+      - uses: wimpysworld/nothing-but-nix@main
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.BRANCH }}
+      - uses: DeterminateSystems/nix-installer-action@main
+      - name: Build new system
+        run: nix build --accept-flake-config -L --out-link new ".#$ATTR"
+      - name: Build current system
+        continue-on-error: true # a host new to this run has no current system
+        run: nix build --accept-flake-config --out-link old "github:${{ github.repository }}/${{ needs.update.outputs.base }}#$ATTR"
+      - name: Diff
+        if: always()
+        run: |
+          mkdir -p diff
+          if [[ ! -e new ]]; then
+            echo "build failed" > "diff/$HOST"
+          elif [[ ! -e old ]]; then
+            echo "new host, nothing to compare" > "diff/$HOST"
+          else
+            nix run --inputs-from . nixpkgs#nvd -- --color never diff old new > "diff/$HOST"
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: diff-${{ matrix.host }}
+          path: diff/
+
+  merge:
+    name: Open PR, merge if every host built
+    needs: [update, eval, build]
+    if: always() && needs.update.outputs.changed == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GH_TOKEN: ${{ github.token }}
+      ALL_BUILT: ${{ needs.eval.result == 'success' && needs.build.result == 'success' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: diff-*
+          path: diff
+          merge-multiple: true
+      - name: Write PR body
+        run: |
+          {
+            echo "Automated \`nix flake update\`. Evaluation: **${{ needs.eval.result }}**, builds: **${{ needs.build.result }}**."
+            echo "Merged automatically only if every host builds. [Run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"
+            echo
+            for f in diff/*; do
+              echo "<details><summary><b>${f#diff/}</b></summary>"
+              echo
+              echo '```'
+              head -c 6000 "$f"
+              echo '```'
+              echo "</details>"
+            done
+          } > body.md
+      - name: Open or update PR
+        run: |
+          if gh pr view "$BRANCH" --json state --jq .state | grep -qx OPEN; then
+            gh pr edit "$BRANCH" --body-file body.md
+          else
+            gh pr create --head "$BRANCH" --base main --title "chore: update flake.lock" --body-file body.md
+          fi
+      - name: Merge
+        run: |
+          if [[ $ALL_BUILT != true ]]; then
+            echo "::error::not every host built; leaving the PR open"
+            exit 1
+          fi
+          gh pr merge "$BRANCH" --squash --delete-branch --subject "chore: update flake.lock"
