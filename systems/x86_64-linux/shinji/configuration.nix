@@ -27,6 +27,67 @@ in
     devmon.enable = true; # automount external drives
     xserver.desktopManager.kodi.enable = true;
     home-assistant.enable = false;
+    frigate = {
+      enable = true;
+      vaapiDriver = "iHD";
+      preCheckConfig = ''
+        export FRIGATE_CAM_HOST=192.0.2.1 FRIGATE_CAM_USER=user FRIGATE_CAM_PASSWORD=pass
+        export FRIGATE_MQTT_HOST=192.0.2.3 FRIGATE_MQTT_USER=user FRIGATE_MQTT_PASSWORD=pass
+        export FRIGATE_LENOVO_DISPLAY_HOST=192.0.2.2 FRIGATE_LENOVO_DISPLAY_USER=user FRIGATE_LENOVO_DISPLAY_PASSWORD=pass
+      '';
+      # Lenovo 8" smart display running lanovo (stream server: Settings →
+      # Connected services → Camera stream). Detection only sees anything while
+      # the physical shutter is open. The IP needs a router reservation.
+      settings.cameras.lenovo_display =
+        let
+          rtsp = "rtsp://{FRIGATE_LENOVO_DISPLAY_USER}:{FRIGATE_LENOVO_DISPLAY_PASSWORD}@{FRIGATE_LENOVO_DISPLAY_HOST}:8554";
+        in
+        {
+          ffmpeg.inputs = [
+            {
+              path = "${rtsp}/main";
+              roles = [ "record" ];
+            }
+            {
+              path = "${rtsp}/sub";
+              roles = [ "detect" ];
+            }
+          ];
+        };
+      settings.auth.enabled = false;
+      # Port stays Frigate's default 1883: it's an int field, so it can't take
+      # an env placeholder like the rest.
+      settings.mqtt = {
+        enabled = true;
+        host = "{FRIGATE_MQTT_HOST}";
+        user = "{FRIGATE_MQTT_USER}";
+        password = "{FRIGATE_MQTT_PASSWORD}";
+      };
+      # Tapo C200: streams on 554, ONVIF (pan/tilt) on 2020, both using the
+      # camera account set in the Tapo app.
+      settings.cameras.living_room =
+        let
+          rtsp = "rtsp://{FRIGATE_CAM_USER}:{FRIGATE_CAM_PASSWORD}@{FRIGATE_CAM_HOST}:554";
+        in
+        {
+          ffmpeg.inputs = [
+            {
+              path = "${rtsp}/stream1";
+              roles = [ "record" ];
+            }
+            {
+              path = "${rtsp}/stream2";
+              roles = [ "detect" ];
+            }
+          ];
+          onvif = {
+            host = "{FRIGATE_CAM_HOST}";
+            port = 2020;
+            user = "{FRIGATE_CAM_USER}";
+            password = "{FRIGATE_CAM_PASSWORD}";
+          };
+        };
+    };
     zigbee2mqtt = {
       enable = false;
       settings.serial = {
@@ -136,6 +197,13 @@ in
     syncthing.settings.options.maxSendKbps = 0;
   };
 
+  networking.firewall.interfaces.eno1.allowedTCPPorts = [ 8971 ]; # frigate
+
+  # Frigate substitutes {FRIGATE_*} from the environment only.
+  systemd.services.frigate.serviceConfig.EnvironmentFile = [
+    config.sops.templates."frigate.env".path
+  ];
+
   security.pki.certificateFiles = [
     ./rhtv.pem
   ];
@@ -155,6 +223,29 @@ in
   };
 
   sops = {
+    secrets.frigate-cam-host.sopsFile = ../../../secrets/frigate-shinji.yaml;
+    secrets.frigate-cam-user.sopsFile = ../../../secrets/frigate-shinji.yaml;
+    secrets.frigate-cam-password.sopsFile = ../../../secrets/frigate-shinji.yaml;
+    secrets.frigate-mqtt-host.sopsFile = ../../../secrets/frigate-shinji.yaml;
+    secrets.frigate-mqtt-user.sopsFile = ../../../secrets/frigate-shinji.yaml;
+    secrets.frigate-mqtt-password.sopsFile = ../../../secrets/frigate-shinji.yaml;
+    secrets.frigate-lenovo-display-host.sopsFile = ../../../secrets/frigate-shinji.yaml;
+    secrets.frigate-lenovo-display-user.sopsFile = ../../../secrets/frigate-shinji.yaml;
+    secrets.frigate-lenovo-display-password.sopsFile = ../../../secrets/frigate-shinji.yaml;
+    templates."frigate.env" = {
+      content = ''
+        FRIGATE_CAM_HOST=${config.sops.placeholder.frigate-cam-host}
+        FRIGATE_CAM_USER=${config.sops.placeholder.frigate-cam-user}
+        FRIGATE_CAM_PASSWORD=${config.sops.placeholder.frigate-cam-password}
+        FRIGATE_MQTT_HOST=${config.sops.placeholder.frigate-mqtt-host}
+        FRIGATE_MQTT_USER=${config.sops.placeholder.frigate-mqtt-user}
+        FRIGATE_MQTT_PASSWORD=${config.sops.placeholder.frigate-mqtt-password}
+        FRIGATE_LENOVO_DISPLAY_HOST=${config.sops.placeholder.frigate-lenovo-display-host}
+        FRIGATE_LENOVO_DISPLAY_USER=${config.sops.placeholder.frigate-lenovo-display-user}
+        FRIGATE_LENOVO_DISPLAY_PASSWORD=${config.sops.placeholder.frigate-lenovo-display-password}
+      '';
+      restartUnits = [ "frigate.service" ];
+    };
     # The hub's public key; the agent process reads this one itself.
     secrets."tokens/beszel-marvin".mode = "0444";
     secrets."tokens/beszel-ws" = { };

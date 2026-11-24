@@ -15,6 +15,7 @@
 
     ./bosflix
     ./external-drives.nix
+    ./frigate.nix
     ./sound.nix
   ];
 
