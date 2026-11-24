@@ -10,7 +10,11 @@ in
 {
   config = lib.mkIf config.programs.codex.enable {
     programs.codex = {
-      package = pkgs.unstable.codex;
+      # Installed on development hosts only: nixpkgs bundles a voice runtime
+      # (gstreamer, pulseaudio, python) that adds ~800 MiB to a server. The
+      # config and skills are still written everywhere, for
+      # `nix run nixpkgs#codex`.
+      package = if config.hosts.development.enable then pkgs.unstable.codex else null;
       # Home Manager translates disabled servers, HTTP headers and file-backed
       # environment variables into Codex's native MCP configuration.
       enableMcpIntegration = true;
@@ -32,14 +36,16 @@ in
     # Remote control (pair with `codex remote-control pair`) from the store
     # binary: `codex remote-control start` would copy Codex into
     # ~/.codex/packages, outside any GC root, and run it detached.
-    systemd.user.services.codex-remote-control = lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
-      Unit.Description = "Codex app-server with remote control";
-      Service = {
-        ExecStart = "${lib.getExe config.programs.codex.package} app-server --remote-control --listen unix://";
-        Restart = "on-failure";
-      };
-      Install.WantedBy = [ "default.target" ];
-    };
+    systemd.user.services.codex-remote-control =
+      lib.mkIf (pkgs.stdenv.hostPlatform.isLinux && config.programs.codex.package != null)
+        {
+          Unit.Description = "Codex app-server with remote control";
+          Service = {
+            ExecStart = "${lib.getExe config.programs.codex.package} app-server --remote-control --listen unix://";
+            Restart = "on-failure";
+          };
+          Install.WantedBy = [ "default.target" ];
+        };
 
     # Link packaged skills directly: inspecting store paths through the skills
     # option would require building their packages during evaluation.
