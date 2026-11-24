@@ -91,7 +91,14 @@ in
 
     programs.nh = {
       enable = true;
-      package = pkgs.unstable.nh;
+      # On NixOS this one comes first on PATH, so it has to be the system's
+      # (stable) nh: nh 4.5 activates through `systemd-run --output=cat`, which
+      # the stable systemd does not have. Elsewhere no systemd is involved.
+      package =
+        if osConfig != null && pkgs.stdenv.hostPlatform.isLinux then
+          osConfig.programs.nh.package
+        else
+          pkgs.unstable.nh;
       # clean = {
       #   enable = true;
       #   extraArgs = "--keep-since 4d --keep 3";
