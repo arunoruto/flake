@@ -31,7 +31,9 @@ in
 
     programs.nh = {
       enable = true;
-      package = pkgs.unstable.nh;
+      # Stable, to match the stable systemd: nh 4.5 activates through
+      # `systemd-run --output=cat`, which needs systemd 261 (26.05 has 260).
+      package = pkgs.nh;
       clean = {
         enable = clean_nh_over_nix;
         extraArgs = "--keep-since 4d --keep 3";
