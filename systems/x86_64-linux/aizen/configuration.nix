@@ -124,6 +124,64 @@
         "sado.arnaut.me"
         # services.arnaut.me is in sado's ingress but has no DNS record.
       ];
+      # The apps themselves. Publicly, Cloudflare Access answers for the *arrs,
+      # so only a direct check sees whether they are up.
+      tailnetChecks =
+        let
+          # Every *arr serves an unauthenticated /ping under its url base.
+          arr = name: host: port: {
+            inherit name host port;
+            path = "/${name}/ping";
+            body = "[BODY].status == OK";
+          };
+          plex = host: {
+            name = "plex";
+            inherit host;
+            port = 32400;
+            path = "/identity";
+          };
+        in
+        [
+          (arr "radarr" "kuchiki" 7878)
+          (arr "sonarr" "kuchiki" 8989)
+          (arr "lidarr" "sado" 8686)
+          (arr "prowlarr" "shinji" 9696)
+          {
+            name = "bazarr";
+            host = "kuchiki";
+            port = 6767;
+            path = "/bazarr/api/system/ping";
+            body = "[BODY].status == OK";
+          }
+          {
+            name = "immich";
+            host = "sado";
+            port = 2283;
+            path = "/api/server/ping";
+            body = "[BODY].res == pong";
+          }
+          {
+            name = "jellyfin";
+            host = "kuchiki";
+            port = 8096;
+            path = "/health";
+            body = "[BODY] == Healthy";
+          }
+          {
+            name = "sabnzbd";
+            host = "shinji";
+            port = 8902;
+            path = "/nzb/api?mode=version";
+          }
+          {
+            name = "qbittorrent";
+            host = "shinji";
+            port = 8901;
+          }
+          (plex "kuchiki")
+          (plex "sado")
+          (plex "shinji")
+        ];
       # Hosts already rolled out to; add each one as it is deployed.
       upgradeHeartbeats = [
         "aizen"

@@ -24,6 +24,36 @@ in
         at all fails.
       '';
     };
+    tailnetChecks = lib.mkOption {
+      type = lib.types.listOf (
+        lib.types.submodule {
+          options = {
+            name = lib.mkOption { type = lib.types.str; };
+            host = lib.mkOption {
+              type = lib.types.str;
+              description = "Tailnet machine name; also the group on the status page.";
+            };
+            port = lib.mkOption { type = lib.types.port; };
+            path = lib.mkOption {
+              type = lib.types.str;
+              default = "/";
+            };
+            body = lib.mkOption {
+              type = lib.types.nullOr lib.types.str;
+              default = null;
+              example = "[BODY].status == OK";
+              description = "Extra Gatus condition on the response, beyond HTTP 200.";
+            };
+          };
+        }
+      );
+      default = [ ];
+      description = ''
+        Apps checked directly over the tailnet every 5 minutes, bypassing
+        Cloudflare (Access would answer for them publicly). Separate from
+        httpChecks, so a dead app and a dead tunnel are different alerts.
+      '';
+    };
     upgradeHeartbeats = lib.mkOption {
       type = lib.types.listOf lib.types.str;
       default = [ ];
@@ -62,19 +92,28 @@ in
             success-threshold = 2;
           };
         };
-        endpoints = map (host: {
-          name = host;
-          group = "public";
-          url = "https://${host}";
-          interval = "5m";
-          # CONNECTED too: a DNS or connection failure has no status, which
-          # would pass `< 500` on its own.
-          conditions = [
-            "[CONNECTED] == true"
-            "[STATUS] < 500"
-          ];
-          alerts = alert { };
-        }) cfg.httpChecks;
+        endpoints =
+          map (host: {
+            name = host;
+            group = "public";
+            url = "https://${host}";
+            interval = "5m";
+            # CONNECTED too: a DNS or connection failure has no status, which
+            # would pass `< 500` on its own.
+            conditions = [
+              "[CONNECTED] == true"
+              "[STATUS] < 500"
+            ];
+            alerts = alert { };
+          }) cfg.httpChecks
+          ++ map (check: {
+            inherit (check) name;
+            group = check.host;
+            url = "http://${check.host}.${config.services.tailscale.tailnet}.ts.net:${toString check.port}${check.path}";
+            interval = "5m";
+            conditions = [ "[STATUS] == 200" ] ++ lib.optional (check.body != null) check.body;
+            alerts = alert { };
+          }) cfg.tailnetChecks;
         # Pushed to at /api/v1/endpoints/upgrades_<host>/external.
         external-endpoints = map (host: {
           name = host;

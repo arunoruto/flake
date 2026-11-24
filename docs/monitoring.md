@@ -15,6 +15,13 @@ Both lists live in `systems/x86_64-linux/aizen/configuration.nix`:
   5 minutes. A check passes if the server answers with anything below 500
   (login redirects and 401s count as up). No answer, or Cloudflare's 502/530
   for a dead origin or tunnel, fails. It alerts after 3 failures in a row.
+- **`services.gatus.tailnetChecks`**: the apps themselves, checked directly
+  over the tailnet every 5 minutes and grouped by host on the status page
+  (radarr, sonarr, lidarr, prowlarr and bazarr's `/ping`, Immich's
+  `/api/server/ping`, Plex's `/identity` on each host, Jellyfin, SABnzbd,
+  qBittorrent). These matter because publicly, Cloudflare Access answers for
+  `arr.arnaut.me` and stays green even when the *arrs are down. A broken
+  tunnel and a broken app also show up as separate alerts.
 - **`services.gatus.upgradeHeartbeats`**: hosts whose `nixos-upgrade` checks in
   after every successful run (see [Automatic upgrades](./auto-upgrade.md)). A
   host with no check-in for 26 hours, because it skipped, failed or never
@@ -27,6 +34,8 @@ which costs gigabytes of memory on every evaluation.
 ## Adding things
 
 - A new public service: add its hostname to `httpChecks`.
+- A new app: add it to `tailnetChecks` with its host, port and health path,
+  plus a `body` condition if it has a real health response.
 - A host rolled out to auto-upgrades: add it to `upgradeHeartbeats` after its
   first deploy. Before that it never checks in and would alert.
 
