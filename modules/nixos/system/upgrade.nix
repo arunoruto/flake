@@ -4,11 +4,29 @@
 {
   config,
   lib,
+  pkgs,
   self,
   ...
 }:
 let
   cfg = config.system.autoUpgrade;
+  host = config.networking.hostName;
+  # Topic URL (https://ntfy.sh/<secret topic>) that skips and failures go to.
+  ntfyCredential = "ntfy:${config.sops.secrets."tokens/ntfy/upgrade".path}";
+
+  guard = pkgs.writeShellApplication {
+    name = "nixos-upgrade-guard";
+    runtimeInputs = [
+      pkgs.curl
+      pkgs.jq
+    ];
+    runtimeEnv = {
+      REPO = cfg.repo;
+      BRANCH = cfg.branch;
+      HOST = host;
+    };
+    text = builtins.readFile ./upgrade-guard.sh;
+  };
 in
 {
   options.system.autoUpgrade = {
@@ -45,6 +63,30 @@ in
         dates = "05:00";
         randomizedDelaySec = "30min";
         persistent = true;
+      };
+
+      sops.secrets."tokens/ntfy/upgrade" = { };
+
+      # The upstream unit is already after/wants network-online.target.
+      systemd.services.nixos-upgrade = {
+        unitConfig.OnFailure = [ "nixos-upgrade-failed.service" ];
+        serviceConfig = {
+          ExecCondition = lib.getExe guard;
+          LoadCredential = [ ntfyCredential ];
+        };
+      };
+
+      systemd.services.nixos-upgrade-failed = {
+        description = "Report a failed nixos-upgrade";
+        path = [ pkgs.curl ];
+        serviceConfig = {
+          Type = "oneshot";
+          LoadCredential = [ ntfyCredential ];
+        };
+        script = ''
+          curl -fsS --max-time 20 -H "Title: nixos-upgrade failed on ${host}" -H "Tags: rotating_light" \
+            -d "See: journalctl -u nixos-upgrade -b" "$(<"$CREDENTIALS_DIRECTORY/ntfy")"
+        '';
       };
     })
   ];
