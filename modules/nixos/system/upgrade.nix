@@ -140,6 +140,8 @@ in
         # module already adds --refresh for flakes.
         flake = "github:${cfg.repo}/${cfg.branch}#${config.networking.hostName}";
         flags = [ "--print-build-logs" ];
+        # --upgrade updates channels; a flake system has none and only warns.
+        upgrade = false;
         # Local time. CI starts at 01:17 UTC, so its merge lands before this
         # in both CET and CEST.
         dates = "05:00";
