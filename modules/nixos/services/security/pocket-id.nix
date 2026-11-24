@@ -50,6 +50,9 @@ in
         };
       };
     };
+    system.autoUpgrade.backup.sqliteDatabases = [
+      "${config.services.pocket-id.dataDir}/data/pocket-id.db"
+    ];
     sops = {
       secrets = {
         "services/pocket-id/encryption-key" = { };

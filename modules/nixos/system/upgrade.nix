@@ -27,6 +27,50 @@ let
     };
     text = builtins.readFile ./upgrade-guard.sh;
   };
+
+  # A rollback restores the old code, not data an app has already migrated,
+  # so take a copy just before each upgrade. Services add their own data
+  # (pocket-id.nix, immich.nix, stump.nix); a failed backup fails the upgrade.
+  bk = cfg.backup;
+  pg = config.services.postgresqlBackup;
+  pgUnits = lib.optionals pg.enable (
+    if pg.backupAll then
+      [ "postgresqlBackup.service" ]
+    else
+      map (db: "postgresqlBackup-${db}.service") pg.databases
+  );
+  backupDir = "/var/backup/pre-upgrade";
+  backup = pkgs.writeShellApplication {
+    name = "nixos-upgrade-backup";
+    runtimeInputs = [
+      pkgs.sqlite
+      config.systemd.package
+    ]
+    ++ lib.optional (bk.zfsDatasets != [ ]) config.boot.zfs.package;
+    text = ''
+      # Oneshot units: `start` returns once the dump is written.
+      units=(${lib.escapeShellArgs pgUnits})
+      for unit in "''${units[@]}"; do
+        systemctl start "$unit"
+      done
+
+      mkdir -p ${backupDir}
+      dbs=(${lib.escapeShellArgs bk.sqliteDatabases})
+      for db in "''${dbs[@]}"; do
+        dest="${backupDir}/$(basename "$db")"
+        if [[ -e $dest ]]; then mv "$dest" "$dest.prev"; fi
+        sqlite3 "$db" ".backup '$dest'"
+      done
+
+      stamp=$(date -u +%Y%m%dT%H%M%SZ)
+      datasets=(${lib.escapeShellArgs bk.zfsDatasets})
+      for ds in "''${datasets[@]}"; do
+        zfs snapshot "$ds@pre-upgrade-$stamp"
+        zfs list -H -t snapshot -d 1 -o name -s creation "$ds" | grep '@pre-upgrade-' |
+          head -n -${toString bk.keepSnapshots} | xargs -r -n1 zfs destroy
+      done
+    '';
+  };
 in
 {
   options.system.autoUpgrade = {
@@ -39,6 +83,23 @@ in
       type = lib.types.str;
       default = "main";
       description = "Branch the hosts upgrade from.";
+    };
+    backup = {
+      sqliteDatabases = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
+        description = "SQLite databases copied to ${backupDir}/<file name> before each upgrade (the previous copy is kept as .prev).";
+      };
+      zfsDatasets = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
+        description = "ZFS datasets snapshotted as <dataset>@pre-upgrade-<UTC time> before each upgrade, after the database dumps.";
+      };
+      keepSnapshots = lib.mkOption {
+        type = lib.types.ints.positive;
+        default = 7;
+        description = "How many pre-upgrade snapshots to keep per dataset.";
+      };
     };
   };
 
@@ -73,6 +134,9 @@ in
         serviceConfig = {
           ExecCondition = lib.getExe guard;
           LoadCredential = [ ntfyCredential ];
+          ExecStartPre = lib.mkIf (pgUnits != [ ] || bk.sqliteDatabases != [ ] || bk.zfsDatasets != [ ]) (
+            lib.getExe backup
+          );
         };
       };
 

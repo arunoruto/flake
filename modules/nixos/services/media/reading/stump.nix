@@ -56,6 +56,7 @@
       };
 
       users.users.stump.extraGroups = [ "media" ];
+      system.autoUpgrade.backup.sqliteDatabases = [ "${config.services.stump.configLocation}/stump.db" ];
     })
   ];
 }

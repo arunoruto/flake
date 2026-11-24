@@ -46,6 +46,11 @@
           # };
           openFirewall = lib.mkDefault cfg.openFirewall;
         };
+        # Dumped nightly and before every auto-upgrade (system/upgrade.nix).
+        postgresqlBackup = lib.mkIf config.services.immich.database.enable {
+          enable = true;
+          databases = [ config.services.immich.database.name ];
+        };
         # tailscale.serve = {
         #   enable = true;
         #   config =

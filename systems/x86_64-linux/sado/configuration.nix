@@ -76,6 +76,9 @@
 
   # Off-site copies of immich's library, pulled by kuchiki and lil-nas-x.
   backups.photos.source.enable = true;
+  # App state on the pool (mealie, paperless, romm, ...), snapshotted before
+  # every auto-upgrade.
+  system.autoUpgrade.backup.zfsDatasets = [ "flash/appdata" ];
 
   system.tags = [
     "nas"
