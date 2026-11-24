@@ -6,6 +6,7 @@
 - [Building ISOs](./iso.md)
 - [Secrets (sops-nix)](./sops.md)
 - [Binary cache (Cachix)](./cachix.md)
+- [Automatic upgrades](./auto-upgrade.md)
 - [Determinate Nix](./determinate-nix.md)
 - [Storage](./storage/index.md)
   - [Btrfs](./storage/btrfs.md)
