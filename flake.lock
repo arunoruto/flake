@@ -1714,11 +1714,11 @@
         "nixpkgs": "nixpkgs_12"
       },
       "locked": {
-        "lastModified": 1793846750,
-        "narHash": "sha256-f4dAdxo0Dg1qXLaGrMIlPKPOKC8GkOR+BDxr+LuD674=",
+        "lastModified": 1795564185,
+        "narHash": "sha256-8NUdfSTrmUe1xNBQujKBdrz2qhf/7WxQrgZO1D/3Sh0=",
         "owner": "arunoruto",
         "repo": "tapedeck",
-        "rev": "616097f3614d815e5b77586e1857361df6c9384d",
+        "rev": "5dd8ffa430085bca9a1938456c607fa58918f63e",
         "type": "github"
       },
       "original": {
