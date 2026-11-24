@@ -18,9 +18,10 @@
       services.sabnzbd.settings.misc = {
         # The *arrs reach this over the tailnet, so it cannot sit on loopback.
         host = "0.0.0.0";
-        # 8082 is what every download client already points at; the module
-        # would otherwise default to 8080.
-        port = 8082;
+        # Next to qbittorrent's 8901, clear of the crowded 808x range (Frigate
+        # hardcodes its live-view websocket to 8082); the module would
+        # otherwise default to 8080.
+        port = 8902;
         # The public path, generic on purpose rather than "/sabnzbd" — it is
         # the contract the shared bookmark and aizen's ingress agree on, and
         # it should not have to change if the downloader does.

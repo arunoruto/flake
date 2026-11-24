@@ -44,7 +44,6 @@ in
     services.sabnzbd.settings = {
       misc = {
         # The *arrs reach this over the tailnet, so it cannot sit on loopback.
-        # 8082 is what every download client already points at.
         # Level 5: web UI and API reachable from non-local addresses, with a
         # login required for anything not local — "not local" being decided
         # from the X-Forwarded-For header, see verify_xff_header below. Level 4

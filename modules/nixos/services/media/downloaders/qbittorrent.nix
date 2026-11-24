@@ -7,7 +7,8 @@
 {
   config = lib.mkIf config.services.qbittorrent.enable {
     services.qbittorrent = {
-      webuiPort = 8081;
+      # Downloaders live at 8901/8902 (sabnzbd), clear of the crowded 808x range.
+      webuiPort = 8901;
       # settings = {
       #   "Connection\Port\Range\Min" = 49160;
       #   "Connection\Port\Range\Max" = 49200;
