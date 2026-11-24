@@ -1,7 +1,7 @@
 name: Update Lockfile
 
 # Bumps flake.lock on a branch, builds every NixOS host against it, and
-# squash-merges the PR only if all of them build. The hosts pull main at
+# pushes it to main only if all of them build. The hosts pull main at
 # 05:00 local time (system/upgrade.nix), so this has to land first.
 
 on:
@@ -13,7 +13,6 @@ on:
 
 permissions:
   contents: write
-  pull-requests: write
 
 concurrency:
   group: update-lockfile
@@ -122,48 +121,46 @@ jobs:
           name: diff-${{ matrix.host }}
           path: diff/
 
-  merge:
-    name: Open PR, merge if every host built
+  publish:
+    name: Push to main if every host built
     needs: [update, eval, build]
     if: always() && needs.update.outputs.changed == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    env:
-      GH_TOKEN: ${{ github.token }}
-      ALL_BUILT: ${{ needs.eval.result == 'success' && needs.build.result == 'success' }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main
       - uses: actions/download-artifact@v4
         with:
           pattern: diff-*
           path: diff
           merge-multiple: true
-      - name: Write PR body
+      - name: Summary
         run: |
           {
-            echo "Automated \`nix flake update\`. Evaluation: **${{ needs.eval.result }}**, builds: **${{ needs.build.result }}**."
-            echo "Merged automatically only if every host builds. [Run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"
-            echo
+            echo "Evaluation: **${{ needs.eval.result }}**, builds: **${{ needs.build.result }}**."
             for f in diff/*; do
               echo "<details><summary><b>${f#diff/}</b></summary>"
               echo
               echo '```'
-              head -c 6000 "$f"
+              cat "$f"
               echo '```'
               echo "</details>"
             done
-          } > body.md
-      - name: Open or update PR
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Push
+        if: needs.eval.result == 'success' && needs.build.result == 'success'
         run: |
-          if gh pr view "$BRANCH" --json state --jq .state | grep -qx OPEN; then
-            gh pr edit "$BRANCH" --body-file body.md
-          else
-            gh pr create --head "$BRANCH" --base main --title "chore: update flake.lock" --body-file body.md
-          fi
-      - name: Merge
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch origin "$BRANCH"
+          # main may have moved during the builds; the lock commit replays cleanly.
+          git cherry-pick "origin/$BRANCH"
+          git push origin HEAD:main
+          git push origin --delete "$BRANCH"
+      - name: Not pushed
+        if: needs.eval.result != 'success' || needs.build.result != 'success'
         run: |
-          if [[ $ALL_BUILT != true ]]; then
-            echo "::error::not every host built; leaving the PR open"
-            exit 1
-          fi
-          gh pr merge "$BRANCH" --squash --delete-branch --subject "chore: update flake.lock"
+          echo "::error::not every host built; main keeps the old lock"
+          exit 1

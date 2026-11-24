@@ -1,5 +1,5 @@
-# Every NixOS host upgrades itself from GitHub: CI bumps flake.lock in a PR,
-# builds every host and merges it before the hosts wake up. See
+# Every NixOS host upgrades itself from GitHub: CI bumps flake.lock, builds
+# every host and pushes it to main before the hosts wake up. See
 # docs/auto-upgrade.md. Opt a host out with `system.autoUpgrade.enable = false;`.
 {
   config,
@@ -26,6 +26,27 @@ let
       HOST = host;
     };
     text = builtins.readFile ./upgrade-guard.sh;
+  };
+
+  # After a switch, push what changed (nvd) to ntfy. A new commit alone
+  # changes only the revision stamp; that is not worth a notification.
+  report = pkgs.writeShellApplication {
+    name = "nixos-upgrade-report";
+    runtimeInputs = [
+      pkgs.curl
+      pkgs.nvd
+    ];
+    text = ''
+      old=$(<"$RUNTIME_DIRECTORY/old")
+      new=$(readlink -f /run/current-system)
+      [[ $old != "$new" ]] || exit 0
+      diff=$(nvd --color never diff "$old" "$new" 2>&1) || diff="nvd failed: $diff"
+      if [[ $diff == *"No version or selection state changes"* ]]; then exit 0; fi
+      # ntfy turns messages over 4 KiB into attachments.
+      curl -fsS --max-time 20 -H "Title: ${host} upgraded" -H "Tags: package" \
+        -d "''${diff:0:3800}" "$(<"$CREDENTIALS_DIRECTORY/ntfy")" >/dev/null ||
+        echo "ntfy notification failed" >&2
+    '';
   };
 
   # A rollback restores the old code, not data an app has already migrated,
@@ -134,9 +155,15 @@ in
         serviceConfig = {
           ExecCondition = lib.getExe guard;
           LoadCredential = [ ntfyCredential ];
-          ExecStartPre = lib.mkIf (pgUnits != [ ] || bk.sqliteDatabases != [ ] || bk.zfsDatasets != [ ]) (
+          # Holds the pre-upgrade system path for the report.
+          RuntimeDirectory = "nixos-upgrade";
+          ExecStartPre = [
+            "${pkgs.bash}/bin/bash -c 'readlink -f /run/current-system > \"$RUNTIME_DIRECTORY/old\"'"
+          ]
+          ++ lib.optional (pgUnits != [ ] || bk.sqliteDatabases != [ ] || bk.zfsDatasets != [ ]) (
             lib.getExe backup
           );
+          ExecStartPost = lib.getExe report;
         };
       };
 

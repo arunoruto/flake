@@ -8,9 +8,9 @@ but never over a change that was deployed by hand and not pushed yet.
 1. **01:17 UTC — CI** (`.github/workflows/update.yaml`) runs `nix flake update`
    and force-pushes the result to the `update-flake-lock` branch. It then builds
    every host's `system.build.toplevel` in a matrix (`pi` on a native ARM
-   runner), evaluates everything else with `scripts/eval-all.sh`, and opens or
-   updates a PR whose body has an `nvd diff` per host. The PR is squash-merged
-   **only if every host built**; otherwise it stays open and the hosts keep
+   runner) and evaluates everything else with `scripts/eval-all.sh`. The run's
+   summary page has an `nvd diff` per host. The lock commit is pushed to `main`
+   **only if every host built**. Otherwise the run fails and the hosts keep
    running yesterday's `main`.
 2. **05:00 local (± 30 min) — each host** runs `nixos-upgrade.service`
    (`modules/nixos/system/upgrade.nix`):
@@ -27,6 +27,9 @@ but never over a change that was deployed by hand and not pushed yet.
      `flash/appdata`; the newest 7 are kept). If the backup fails, the upgrade
      does not run.
    - **ExecStart**: `nixos-rebuild switch --refresh --flake github:arunoruto/flake/main#<host>`.
+   - **ExecStartPost**: if any package version changed, sends the
+     `nvd diff` (old → new system) to ntfy as "<host> upgraded". A new commit
+     that only changes the revision stamp stays silent.
    - **OnFailure**: `nixos-upgrade-failed.service` sends an ntfy notification.
 
 Notifications go to the URL in the sops secret `tokens/ntfy/upgrade`
