@@ -103,6 +103,33 @@
         }
       ];
     };
+    # Off-site from the home hosts, so it still alerts when home is down.
+    # Tailnet only (tailscale0 is trusted): http://aizen.<tailnet>.ts.net:8090
+    gatus = {
+      enable = true;
+      httpChecks = [
+        # Through this host's traefik.
+        "arnaut.me"
+        "id.arnaut.me"
+        "home.arnaut.me"
+        "arr.arnaut.me"
+        "bosflix.arnaut.me"
+        "whoami.arnaut.me"
+        "derper.arnaut.me"
+        # Through sado's tunnel.
+        "photos.arnaut.me"
+        "rom.arnaut.me"
+        "library.arnaut.me"
+        "recipe.arnaut.me"
+        "sado.arnaut.me"
+        # services.arnaut.me is in sado's ingress but has no DNS record.
+      ];
+      # Hosts already rolled out to; add each one as it is deployed.
+      upgradeHeartbeats = [
+        "aizen"
+        "shinji"
+      ];
+    };
     pocket-id = {
       enable = true;
       settings.APP_URL = "https://id.arnaut.me";

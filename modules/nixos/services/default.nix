@@ -15,6 +15,7 @@
     ./tuning
     ./virtualization
 
+    ./gatus.nix
     ./github-runner.nix
     ./harmonia.nix
     ./ssh.nix
