@@ -55,6 +55,15 @@
 
       systemd.services.sabnzbd.serviceConfig.UMask = "0002";
 
+      services.gatus.tailnetChecks = [
+        {
+          name = "sabnzbd";
+          group = "downloads";
+          inherit (config.services.sabnzbd.settings.misc) port;
+          path = "${config.services.sabnzbd.settings.misc.url_base}/api?mode=version";
+        }
+      ];
+
       users.users.sabnzbd.extraGroups = lib.optionals (config.users.groups ? "media") [
         config.users.groups.media.name
       ];

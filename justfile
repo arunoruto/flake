@@ -287,3 +287,8 @@ prune-agents *flags:
 # prints one `<attr> <drvPath>` line per configuration
 eval-all *flags:
     ./scripts/eval-all.sh {{ flags }}
+
+# Collect every host's Gatus checks into the file aizen reads (CI does this
+# with every lock bump). One host at a time, so fine on small machines too.
+gatus-checks:
+    ./scripts/gatus-checks.sh

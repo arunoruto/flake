@@ -25,26 +25,33 @@ jobs:
   update:
     name: Update flake.lock
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
     outputs:
       changed: ${{ steps.push.outputs.changed }}
       base: ${{ steps.push.outputs.base }}
       hosts: ${{ steps.hosts.outputs.hosts }}
+    env:
+      CHECKS: modules/nixos/services/gatus-checks.json
     steps:
       - uses: actions/checkout@v4
       - uses: DeterminateSystems/nix-installer-action@main
       - run: nix flake update --accept-flake-config
+      # The checks each host's modules declare, for aizen's Gatus; see
+      # modules/nixos/services/gatus.nix. Goes through the same build gate.
+      - run: ./scripts/gatus-checks.sh
       - name: Push to ${{ env.BRANCH }}
         id: push
         run: |
           echo "base=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
-          if git diff --quiet -- flake.lock; then
+          if git diff --quiet -- flake.lock "$CHECKS"; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
+          msg="chore: update flake.lock"
+          git diff --quiet -- flake.lock && msg="chore: regenerate gatus checks"
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git commit -m "chore: update flake.lock" -- flake.lock
+          git commit -m "$msg" -- flake.lock "$CHECKS"
           git push --force origin "HEAD:refs/heads/$BRANCH"
           echo "changed=true" >> "$GITHUB_OUTPUT"
       # One matrix entry per systems/<arch>-linux/<host>; aarch64 builds

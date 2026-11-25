@@ -28,5 +28,16 @@
       ++ lib.optionals (config.users.groups ? "render") [
         config.users.groups.render.name
       ];
+
+    # The module has no port option; 8096 is jellyfin's own default.
+    services.gatus.tailnetChecks = [
+      {
+        name = "jellyfin";
+        group = "media";
+        port = 8096;
+        path = "/health";
+        body = "[BODY] == Healthy";
+      }
+    ];
   };
 }

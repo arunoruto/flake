@@ -1,0 +1,98 @@
+[
+  {
+    "body": "[BODY].status == OK",
+    "group": "arr",
+    "host": "kuchiki",
+    "name": "bazarr",
+    "path": "/bazarr/api/system/ping",
+    "port": 6767
+  },
+  {
+    "body": "[BODY].status == OK",
+    "group": "arr",
+    "host": "sado",
+    "name": "lidarr",
+    "path": "/lidarr/ping",
+    "port": 8686
+  },
+  {
+    "body": "[BODY].status == OK",
+    "group": "arr",
+    "host": "shinji",
+    "name": "prowlarr",
+    "path": "/prowlarr/ping",
+    "port": 9696
+  },
+  {
+    "body": "[BODY].status == OK",
+    "group": "arr",
+    "host": "kuchiki",
+    "name": "radarr",
+    "path": "/radarr/ping",
+    "port": 7878
+  },
+  {
+    "body": "[BODY].status == OK",
+    "group": "arr",
+    "host": "kuchiki",
+    "name": "sonarr",
+    "path": "/sonarr/ping",
+    "port": 8989
+  },
+  {
+    "body": null,
+    "group": "downloads",
+    "host": "shinji",
+    "name": "qbittorrent",
+    "path": "/",
+    "port": 8901
+  },
+  {
+    "body": null,
+    "group": "downloads",
+    "host": "shinji",
+    "name": "sabnzbd",
+    "path": "/nzb/api?mode=version",
+    "port": 8902
+  },
+  {
+    "body": "[BODY].res == pong",
+    "group": "media",
+    "host": "sado",
+    "name": "immich",
+    "path": "/api/server/ping",
+    "port": 2283
+  },
+  {
+    "body": "[BODY] == Healthy",
+    "group": "media",
+    "host": "kuchiki",
+    "name": "jellyfin",
+    "path": "/health",
+    "port": 8096
+  },
+  {
+    "body": null,
+    "group": "media",
+    "host": "kuchiki",
+    "name": "plex",
+    "path": "/identity",
+    "port": 32400
+  },
+  {
+    "body": null,
+    "group": "media",
+    "host": "sado",
+    "name": "plex",
+    "path": "/identity",
+    "port": 32400
+  },
+  {
+    "body": null,
+    "group": "media",
+    "host": "shinji",
+    "name": "plex",
+    "path": "/identity",
+    "port": 32400
+  }
+]

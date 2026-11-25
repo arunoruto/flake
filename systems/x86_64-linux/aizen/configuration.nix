@@ -124,71 +124,8 @@
         "sado.arnaut.me"
         # services.arnaut.me is in sado's ingress but has no DNS record.
       ];
-      # The apps themselves. Publicly, Cloudflare Access answers for the *arrs,
-      # so only a direct check sees whether they are up.
-      tailnetChecks =
-        let
-          # Every *arr serves an unauthenticated /ping under its url base.
-          arr = name: host: port: {
-            inherit name host port;
-            group = "arr";
-            path = "/${name}/ping";
-            body = "[BODY].status == OK";
-          };
-          plex = host: {
-            name = "plex";
-            group = "media";
-            inherit host;
-            port = 32400;
-            path = "/identity";
-          };
-        in
-        [
-          (arr "radarr" "kuchiki" 7878)
-          (arr "sonarr" "kuchiki" 8989)
-          (arr "lidarr" "sado" 8686)
-          (arr "prowlarr" "shinji" 9696)
-          {
-            name = "bazarr";
-            host = "kuchiki";
-            group = "arr";
-            port = 6767;
-            path = "/bazarr/api/system/ping";
-            body = "[BODY].status == OK";
-          }
-          {
-            name = "immich";
-            host = "sado";
-            group = "media";
-            port = 2283;
-            path = "/api/server/ping";
-            body = "[BODY].res == pong";
-          }
-          {
-            name = "jellyfin";
-            host = "kuchiki";
-            group = "media";
-            port = 8096;
-            path = "/health";
-            body = "[BODY] == Healthy";
-          }
-          {
-            name = "sabnzbd";
-            host = "shinji";
-            group = "downloads";
-            port = 8902;
-            path = "/nzb/api?mode=version";
-          }
-          {
-            name = "qbittorrent";
-            host = "shinji";
-            group = "downloads";
-            port = 8901;
-          }
-          (plex "kuchiki")
-          (plex "sado")
-          (plex "shinji")
-        ];
+      # The apps themselves come from their own modules, via
+      # modules/nixos/services/gatus-checks.json; see docs/monitoring.md.
       # Hosts already rolled out to; add each one as it is deployed.
       upgradeHeartbeats = [
         "aizen"

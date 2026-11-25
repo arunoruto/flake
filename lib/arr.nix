@@ -70,6 +70,18 @@ lib: {
             ];
           };
           traefik.dynamicConfigOptions = lib.arr.traefikTailscaleConfig serviceName config;
+          # Unauthenticated health endpoint under the url base; bazarr's sits
+          # deeper than the servarr ones.
+          gatus.tailnetChecks = [
+            {
+              name = serviceName;
+              group = "arr";
+              port = lib.arr.servicePort serviceName config;
+              path =
+                lib.arr.urlBase serviceName + (if serviceName == "bazarr" then "/api/system/ping" else "/ping");
+              body = "[BODY].status == OK";
+            }
+          ];
         };
       }
 

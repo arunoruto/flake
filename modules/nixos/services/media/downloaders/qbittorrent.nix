@@ -22,6 +22,14 @@
 
     systemd.services.qbittorrent.serviceConfig.UMask = "0002";
 
+    services.gatus.tailnetChecks = [
+      {
+        name = "qbittorrent";
+        group = "downloads";
+        port = config.services.qbittorrent.webuiPort;
+      }
+    ];
+
     users.users.qbittorrent.extraGroups = lib.optionals (config.users.groups ? "media") [
       config.users.groups.media.name
     ];

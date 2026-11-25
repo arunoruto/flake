@@ -22,6 +22,15 @@
       config.users.groups.media.name
     ];
 
+    services.gatus.tailnetChecks = [
+      {
+        name = "plex";
+        group = "media";
+        port = 32400;
+        path = "/identity";
+      }
+    ];
+
     # Nothing here configures VAAPI on purpose. Plex ships its own AMD driver
     # and downloads it under `Plex Media Server/Drivers/rsv-*`, symlinked into
     # `Cache/va-dri-linux-x86_64`, which it then points the transcoder at by

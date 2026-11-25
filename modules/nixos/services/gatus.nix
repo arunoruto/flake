@@ -1,7 +1,11 @@
 # Gatus with this repo's defaults: SQLite history, alerts to the ntfy topic
-# the auto-upgrades use, and two plain lists for what to watch. The lists are
-# written out on the monitoring host on purpose: reading them from every other
-# host's config would evaluate the whole fleet inside this one.
+# the auto-upgrades use, and what to watch.
+#
+# App checks are declared by each service's own module, on the host it runs on
+# (services.gatus.tailnetChecks, like the traefik routers). The monitoring host
+# cannot read them from there without evaluating every other host inside its
+# own config, so scripts/gatus-checks.sh collects them into gatus-checks.json
+# (CI regenerates it with every lock bump) and the monitoring host reads that.
 {
   config,
   lib,
@@ -31,6 +35,8 @@ in
             name = lib.mkOption { type = lib.types.str; };
             host = lib.mkOption {
               type = lib.types.str;
+              default = config.networking.hostName;
+              defaultText = lib.literalExpression "config.networking.hostName";
               description = "Tailnet machine name.";
             };
             group = lib.mkOption {
@@ -58,9 +64,14 @@ in
       );
       default = [ ];
       description = ''
-        Apps checked directly over the tailnet every 5 minutes, bypassing
-        Cloudflare (Access would answer for them publicly). Separate from
-        httpChecks, so a dead app and a dead tunnel are different alerts.
+        Apps on this host, checked directly over the tailnet every 5 minutes by
+        the monitoring host, bypassing Cloudflare (Access would answer for them
+        publicly). Separate from httpChecks, so a dead app and a dead tunnel are
+        different alerts.
+
+        Set by each service's module, on any host and whether or not Gatus
+        runs there. They reach the monitoring host through gatus-checks.json:
+        run `just gatus-checks` after changing one, or wait for CI.
       '';
     };
     upgradeHeartbeats = lib.mkOption {
@@ -122,7 +133,7 @@ in
             interval = "5m";
             conditions = [ "[STATUS] == 200" ] ++ lib.optional (check.body != null) check.body;
             alerts = alert { };
-          }) cfg.tailnetChecks;
+          }) (lib.importJSON ./gatus-checks.json);
         # Pushed to at /api/v1/endpoints/upgrades_<host>/external.
         external-endpoints = map (host: {
           name = host;

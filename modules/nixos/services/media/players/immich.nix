@@ -46,6 +46,15 @@
           # };
           openFirewall = lib.mkDefault cfg.openFirewall;
         };
+        gatus.tailnetChecks = [
+          {
+            name = "immich";
+            group = "media";
+            inherit (config.services.immich) port;
+            path = "/api/server/ping";
+            body = "[BODY].res == pong";
+          }
+        ];
         # Dumped nightly and before every auto-upgrade (system/upgrade.nix).
         postgresqlBackup = lib.mkIf config.services.immich.database.enable {
           enable = true;
