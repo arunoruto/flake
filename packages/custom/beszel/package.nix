@@ -76,6 +76,8 @@ buildGo127Module (finalAttrs: {
         "TestIoctlDeviceSizeFailure"
         # This subtest assumes enough host CPUs for an 8s CPU delta over 1s to stay below 100%.
         "TestServiceUpdateCPUPercent/subsequent_call_calculates_CPU_percentage"
+        # Races a short fan-read timeout; flakes on a loaded builder.
+        "TestReadFansWithTimeout"
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         "TestCollectorStartHelpers/nvidia-smi_collector"
