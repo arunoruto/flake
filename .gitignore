@@ -1,3 +1,5 @@
+.env
+
 .devenv
 
 # cachix/git-hooks: This file is auto-generated from the Nix configuration and doesn't need to be committed.
