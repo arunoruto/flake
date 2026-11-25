@@ -31,7 +31,16 @@ in
             name = lib.mkOption { type = lib.types.str; };
             host = lib.mkOption {
               type = lib.types.str;
-              description = "Tailnet machine name; also the group on the status page.";
+              description = "Tailnet machine name.";
+            };
+            group = lib.mkOption {
+              type = lib.types.nullOr lib.types.str;
+              default = null;
+              example = "media";
+              description = ''
+                Group on the status page. Unset, the check is grouped by host;
+                set, the host moves into its name ("plex (sado)").
+              '';
             };
             port = lib.mkOption { type = lib.types.port; };
             path = lib.mkOption {
@@ -107,8 +116,8 @@ in
             alerts = alert { };
           }) cfg.httpChecks
           ++ map (check: {
-            inherit (check) name;
-            group = check.host;
+            name = if check.group == null then check.name else "${check.name} (${check.host})";
+            group = if check.group == null then check.host else check.group;
             url = "http://${check.host}.${config.services.tailscale.tailnet}.ts.net:${toString check.port}${check.path}";
             interval = "5m";
             conditions = [ "[STATUS] == 200" ] ++ lib.optional (check.body != null) check.body;

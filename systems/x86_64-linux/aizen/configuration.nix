@@ -131,11 +131,13 @@
           # Every *arr serves an unauthenticated /ping under its url base.
           arr = name: host: port: {
             inherit name host port;
+            group = "arr";
             path = "/${name}/ping";
             body = "[BODY].status == OK";
           };
           plex = host: {
             name = "plex";
+            group = "media";
             inherit host;
             port = 32400;
             path = "/identity";
@@ -149,6 +151,7 @@
           {
             name = "bazarr";
             host = "kuchiki";
+            group = "arr";
             port = 6767;
             path = "/bazarr/api/system/ping";
             body = "[BODY].status == OK";
@@ -156,6 +159,7 @@
           {
             name = "immich";
             host = "sado";
+            group = "media";
             port = 2283;
             path = "/api/server/ping";
             body = "[BODY].res == pong";
@@ -163,6 +167,7 @@
           {
             name = "jellyfin";
             host = "kuchiki";
+            group = "media";
             port = 8096;
             path = "/health";
             body = "[BODY] == Healthy";
@@ -170,12 +175,14 @@
           {
             name = "sabnzbd";
             host = "shinji";
+            group = "downloads";
             port = 8902;
             path = "/nzb/api?mode=version";
           }
           {
             name = "qbittorrent";
             host = "shinji";
+            group = "downloads";
             port = 8901;
           }
           (plex "kuchiki")

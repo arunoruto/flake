@@ -16,10 +16,11 @@ Both lists live in `systems/x86_64-linux/aizen/configuration.nix`:
   (login redirects and 401s count as up). No answer, or Cloudflare's 502/530
   for a dead origin or tunnel, fails. It alerts after 3 failures in a row.
 - **`services.gatus.tailnetChecks`**: the apps themselves, checked directly
-  over the tailnet every 5 minutes and grouped by host on the status page
-  (radarr, sonarr, lidarr, prowlarr and bazarr's `/ping`, Immich's
+  over the tailnet every 5 minutes, grouped by function on the status page
+  (arr, media, downloads, with the host in the name: "plex (sado)"). They are
+  radarr, sonarr, lidarr, prowlarr and bazarr's `/ping`, Immich's
   `/api/server/ping`, Plex's `/identity` on each host, Jellyfin, SABnzbd,
-  qBittorrent). These matter because publicly, Cloudflare Access answers for
+  qBittorrent. These matter because publicly, Cloudflare Access answers for
   `arr.arnaut.me` and stays green even when the *arrs are down. A broken
   tunnel and a broken app also show up as separate alerts.
 - **`services.gatus.upgradeHeartbeats`**: hosts whose `nixos-upgrade` checks in
