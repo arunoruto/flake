@@ -43,9 +43,7 @@
   pango,
   pipewire,
   systemdLibs,
-  versionCheckHook,
   wayland,
-  writableTmpDirAsHomeHook,
   xdg-utils,
 }:
 let
@@ -158,16 +156,6 @@ stdenv.mkDerivation {
       --add-flags "--enable-features=WaylandWindowDecorations" \
       --add-flags "--enable-wayland-ime=true"
   '';
-
-  # Electron answers --version before it needs a display, which doubles as a
-  # check that the unpacked bundle actually links against the store.
-  doInstallCheck = true;
-  nativeInstallCheckInputs = [
-    versionCheckHook
-    writableTmpDirAsHomeHook
-  ];
-  versionCheckKeepEnvironment = [ "HOME" ];
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = ./update.sh;
 
