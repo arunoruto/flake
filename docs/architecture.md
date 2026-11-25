@@ -44,8 +44,7 @@ flake.nix
   over the shared one. This is the only way to set it: `pkgs` is instantiated in
   `systems/default.nix` outside the module system, so a host cannot use
   `nixpkgs.config` in its `configuration.nix` (the nixpkgs module rejects it).
-  See `systems/x86_64-linux/kyuubi/nixpkgs.nix`, which permits an insecure
-  Broadcom wifi driver for that host alone.
+  No host uses one at the moment.
 - `users.primaryUser` **must** be set in every host config; the user account itself comes from `modules/nixos/users/` (or `modules/darwin/users/`).
 - Standalone `homeConfigurations.<user>` (for non-NixOS machines) are generated from the `homes/<user>/` directories, independent of any host.
 

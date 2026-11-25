@@ -12,18 +12,6 @@ in
 {
   users.primaryUser = "mar";
 
-  # hardware-configuration.nix pulls in `broadcom_sta` for this machine's wifi.
-  # The driver is unmaintained and carries known vulnerabilities; it is allowed
-  # through ./nixpkgs.nix — by pname, so it survives nixpkgs and kernel bumps.
-  # Nothing forces a re-look any more, so surface it on every rebuild instead.
-  warnings = [
-    ''
-      kyuubi: the broadcom_sta wifi driver is flagged insecure upstream and is
-      permitted unconditionally in systems/x86_64-linux/kyuubi/nixpkgs.nix.
-      Drop both once the adapter is replaced or the driver is fixed.
-    ''
-  ];
-
   gui.enable = true; # Enable GUI programs (browsers, etc.)
   system.tags = [ "workstation" ];
 
