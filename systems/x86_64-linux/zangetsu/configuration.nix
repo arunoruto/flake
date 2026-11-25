@@ -63,8 +63,8 @@
       intel-vaapi-driver # LIBVA_DRIVER_NAME=i965 (older but works better for Firefox/Chromium)
       libva-vdpau-driver
       libvdpau-va-gl
-      # https://nixos.wiki/wiki/Intel_Graphics
-      unstable.vpl-gpu-rt
+      # vpl-gpu-rt comes from hosts.intel (modules/nixos/system/intel/gpu.nix);
+      # a second copy from unstable collides in the graphics-drivers env.
     ];
   };
   environment.sessionVariables = {
