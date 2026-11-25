@@ -19,5 +19,7 @@
   boot.kernelParams = [ "usbcore.usbfs_memory_mb=1000" ];
   services.udev.extraRules = ''
     SUBSYSTEM=="usb", ATTRS{idVendor}=="199e", MODE="0660", GROUP="video", TAG+="uaccess"
+    # Starlight Xpress filter wheel (USB HID, specpol talks to it via /dev/hidrawN)
+    KERNEL=="hidraw*", ATTRS{idVendor}=="1278", ATTRS{idProduct}=="0920", MODE="0660", GROUP="video", TAG+="uaccess"
   '';
 }
