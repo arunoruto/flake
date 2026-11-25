@@ -168,6 +168,11 @@
         "/mnt/flash/games/bios"
       ];
     };
+    esphome = {
+      enable = true;
+      address = "0.0.0.0";
+      openFirewall = true;
+    };
     cloudflared = {
       enable = true;
       defaultDomain = "arnaut.me";
