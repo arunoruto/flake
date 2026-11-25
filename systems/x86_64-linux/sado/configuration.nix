@@ -141,6 +141,15 @@
     "pcie_aspm=force"
     "pcie_aspm.policy=powersupersave"
   ];
+  # powertop --auto-tune puts every PCI device on runtime PM, the I226s too.
+  # A few seconds after a cable is pulled igc suspends the NIC and relies on a
+  # link-change wakeup that never arrives here: replugging left enp1s0 dark
+  # until a reboot. Keep the NICs awake; the rest of the tuning stays.
+  powerManagement.powertop.postStart = ''
+    for dev in /sys/bus/pci/drivers/igc/0000:*; do
+      echo on > "$dev/power/control"
+    done
+  '';
 
   services.journald.extraConfig = ''
     SystemMaxUse=500M
