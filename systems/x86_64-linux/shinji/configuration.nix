@@ -6,11 +6,40 @@
 }:
 let
   target-folder = "/media/downloads";
+
+  # Tapo C200: streams on 554, ONVIF (pan/tilt) on 2020, both using the
+  # camera account set in the Tapo app.
+  tapoC200 =
+    host:
+    let
+      rtsp = "rtsp://{FRIGATE_CAM_USER}:{FRIGATE_CAM_PASSWORD}@${host}:554";
+    in
+    {
+      ffmpeg.inputs = [
+        {
+          path = "${rtsp}/stream1";
+          roles = [ "record" ];
+        }
+        {
+          path = "${rtsp}/stream2";
+          roles = [ "detect" ];
+        }
+      ];
+      onvif = {
+        inherit host;
+        port = 2020;
+        user = "{FRIGATE_CAM_USER}";
+        password = "{FRIGATE_CAM_PASSWORD}";
+      };
+    };
 in
 {
   users.primaryUser = "mirza";
 
   system.tags = [ "server" ];
+
+  # Codex remote control here too, despite the ~1 GiB it brings to a server.
+  home-manager.users.${config.users.primaryUser}.programs.codex.remoteControl = true;
 
   colmena.deployment = {
     targetHost = config.networking.hostName;
@@ -32,6 +61,7 @@ in
       vaapiDriver = "iHD";
       preCheckConfig = ''
         export FRIGATE_CAM_HOST=192.0.2.1 FRIGATE_CAM_USER=user FRIGATE_CAM_PASSWORD=pass
+        export FRIGATE_TAPO_2_HOST=192.0.2.4
         export FRIGATE_MQTT_HOST=192.0.2.3 FRIGATE_MQTT_USER=user FRIGATE_MQTT_PASSWORD=pass
         export FRIGATE_LENOVO_DISPLAY_HOST=192.0.2.2 FRIGATE_LENOVO_DISPLAY_USER=user FRIGATE_LENOVO_DISPLAY_PASSWORD=pass
       '';
@@ -64,30 +94,8 @@ in
           user = "{FRIGATE_MQTT_USER}";
           password = "{FRIGATE_MQTT_PASSWORD}";
         };
-        # Tapo C200: streams on 554, ONVIF (pan/tilt) on 2020, both using the
-        # camera account set in the Tapo app.
-        cameras.living_room =
-          let
-            rtsp = "rtsp://{FRIGATE_CAM_USER}:{FRIGATE_CAM_PASSWORD}@{FRIGATE_CAM_HOST}:554";
-          in
-          {
-            ffmpeg.inputs = [
-              {
-                path = "${rtsp}/stream1";
-                roles = [ "record" ];
-              }
-              {
-                path = "${rtsp}/stream2";
-                roles = [ "detect" ];
-              }
-            ];
-            onvif = {
-              host = "{FRIGATE_CAM_HOST}";
-              port = 2020;
-              user = "{FRIGATE_CAM_USER}";
-              password = "{FRIGATE_CAM_PASSWORD}";
-            };
-          };
+        cameras.living_room = tapoC200 "{FRIGATE_CAM_HOST}";
+        cameras.tapo_c200_2 = tapoC200 "{FRIGATE_TAPO_2_HOST}";
       };
     };
     zigbee2mqtt = {
@@ -229,6 +237,7 @@ in
       lib.genAttrs
         [
           "frigate-cam-host"
+          "frigate-tapo-2-host"
           "frigate-cam-user"
           "frigate-cam-password"
           "frigate-mqtt-host"
@@ -249,6 +258,7 @@ in
     templates."frigate.env" = {
       content = ''
         FRIGATE_CAM_HOST=${config.sops.placeholder.frigate-cam-host}
+        FRIGATE_TAPO_2_HOST=${config.sops.placeholder.frigate-tapo-2-host}
         FRIGATE_CAM_USER=${config.sops.placeholder.frigate-cam-user}
         FRIGATE_CAM_PASSWORD=${config.sops.placeholder.frigate-cam-password}
         FRIGATE_MQTT_HOST=${config.sops.placeholder.frigate-mqtt-host}

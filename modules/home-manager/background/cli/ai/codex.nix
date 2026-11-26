@@ -8,13 +8,28 @@ let
   configDir = if config.home.preferXdgDirectories then "${config.xdg.configHome}/codex" else ".codex";
 in
 {
+  options.programs.codex.remoteControl = lib.mkOption {
+    type = lib.types.bool;
+    default = config.hosts.development.enable;
+    defaultText = lib.literalExpression "config.hosts.development.enable";
+    description = ''
+      Run the Codex app-server with remote control as a user service. Installs
+      Codex, so on a server it brings the voice runtime along (~1 GiB).
+    '';
+  };
+
   config = lib.mkIf config.programs.codex.enable {
     programs.codex = {
-      # Installed on development hosts only: nixpkgs bundles a voice runtime
-      # (gstreamer, pulseaudio, python) that adds ~800 MiB to a server. The
-      # config and skills are still written everywhere, for
-      # `nix run nixpkgs#codex`.
-      package = if config.hosts.development.enable then pkgs.unstable.codex else null;
+      # Installed on development hosts, or where remote control runs: nixpkgs
+      # bundles a voice runtime (gstreamer, pulseaudio, python) that adds
+      # ~800 MiB to a server, and it cannot be built without it short of
+      # compiling Codex. The config and skills are still written everywhere,
+      # for `nix run nixpkgs#codex`.
+      package =
+        if config.hosts.development.enable || config.programs.codex.remoteControl then
+          pkgs.unstable.codex
+        else
+          null;
       # Home Manager translates disabled servers, HTTP headers and file-backed
       # environment variables into Codex's native MCP configuration.
       enableMcpIntegration = true;
@@ -37,7 +52,7 @@ in
     # binary: `codex remote-control start` would copy Codex into
     # ~/.codex/packages, outside any GC root, and run it detached.
     systemd.user.services.codex-remote-control =
-      lib.mkIf (pkgs.stdenv.hostPlatform.isLinux && config.programs.codex.package != null)
+      lib.mkIf (pkgs.stdenv.hostPlatform.isLinux && config.programs.codex.remoteControl)
         {
           Unit.Description = "Codex app-server with remote control";
           Service = {
