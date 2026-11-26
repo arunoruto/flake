@@ -64,7 +64,9 @@ in
       };
 
       # send only: the pulls reuse sanoid's snapshots (--no-sync-snap)
-      # and never create or destroy anything here.
+      # and never create or destroy anything here. An incremental `zfs send -I`
+      # takes temporary holds on the snapshots it streams, so it needs hold too;
+      # a hold can only keep a snapshot from being destroyed.
       systemd.services.zfs-allow-syncoid-pull = {
         wantedBy = [ "multi-user.target" ];
         after = [ "zfs.target" ];
@@ -73,7 +75,7 @@ in
           Type = "oneshot";
           RemainAfterExit = true;
         };
-        script = "zfs allow ${sourceUser} send ${sourceDataset}";
+        script = "zfs allow ${sourceUser} send,hold ${sourceDataset}";
       };
     })
 
